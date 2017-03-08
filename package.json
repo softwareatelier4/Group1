@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "DEBUG='jobadvisor' ./bin/www",
-    "test": "npm run test-mocha && npm start"
+    "test": "npm run test-mocha && npm start",
+    "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/placeholder --colors --reporter mocha-jenkins-reporter"
   },
   "author": "Group 1",
   "license": "MIT",
@@ -19,6 +20,12 @@
     "method-override": "^2.3.5",
     "mongodb": "^2.2.22",
     "mongoose": "^4.1.11",
-    "morgan": "^1.6.1"
+    "morgan": "^1.6.1",
+    "supertest": "^1.1.0",
+    "mocha-jenkins-reporter":"^0.3.6"
+  },
+  "devDependencies": {
+        "nightwatch": "^0.8.6",
+        "should": "^4.0.4"
   }
 }
