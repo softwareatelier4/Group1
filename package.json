@@ -1,0 +1,24 @@
+ {
+  "name": "jobadvisor",
+  "version": "0.0.0",
+  "description": "JobAdvisor - Software Engineering Atelier 2017",
+  "main": "app.js",
+  "scripts": {
+    "start": "DEBUG='jobadvisor' ./bin/www",
+    "test": "npm run test-mocha && npm start"
+  },
+  "author": "Group 1",
+  "license": "MIT",
+  "dependencies": {
+    "adaro": "^1.0.0",
+    "body-parser": "^1.14.1",
+    "debug": "^2.2.0",
+    "dustjs-helpers": "^1.7.3",
+    "dustjs-linkedin": "^2.7.2",
+    "express": "^4.13.3",
+    "method-override": "^2.3.5",
+    "mongodb": "^2.2.22",
+    "mongoose": "^4.1.11",
+    "morgan": "^1.6.1"
+  }
+}

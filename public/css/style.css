@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.title {
+  display: flex;
+  height: 100%;
+  justify-content: space-around;
+  text-align: center;
+}
