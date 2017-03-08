@@ -1,6 +1,6 @@
 npm install
-npm run test-mocha
 npm start &
+npm run test-mocha
 # node seed.js
 # ./nightwatch
 pkill "jobadvisor"
