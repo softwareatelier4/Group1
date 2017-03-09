@@ -1,19 +1,18 @@
 'use strict';
 
 var should = require('should');
-var config = require('./../config');
+var app = require('../../app');
 var request = require('supertest');
 
-describe('Placeholder test: ', function(done) {
+describe('Placeholder test: ', function() {
   // should.exist(1);
-  it('should get answer 200 on GET /', function(done){
-  	request(config.baseURL)
+  it('app should get answer 200 on GET /', function(done){
+  	request(app)
   	  .get('/')
   	  .expect(200)
   	  .end(function(err,res) {
-  	    if (err) return done(err);
-
-  	    done();
+  	    if (err) done(err);
+  	    else done();
   	  });
   });
 });
