@@ -1,7 +1,8 @@
 'use strict';
 
 var should = require('should');
-var app = require('../../app');
+var config = require('../config');
+var app = require(config.projectRoot + '/app');
 var request = require('supertest');
 
 describe('Placeholder test: ', function() {
