@@ -4,9 +4,11 @@
   "description": "JobAdvisor - Software Engineering Atelier 2017",
   "main": "app.js",
   "scripts": {
+    "install": "chmod -R u+x ./bin/ && ./bin/installSeleniumAndChromeWebDriver",
     "start": "DEBUG='jobadvisor' ./bin/www",
-    "test": "npm run test-mocha && npm start",
-    "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/placeholder --colors --reporter mocha-jenkins-reporter"
+    "test": "npm run test-mocha && npm start | ./nightwatch",
+    "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/placeholder-test --colors --reporter mocha-jenkins-reporter",
+    "test-nightwatch": "./nightwatch"
   },
   "author": "Group 1",
   "license": "MIT",
