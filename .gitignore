@@ -4,4 +4,4 @@ jenkins-test-results.xml
 phantomjsdriver.log
 coverage/cobertura-coverage.xml
 coverage/coverage.json
-test/nighwatch-reports/
+test/nightwatch-reports/
