@@ -39,13 +39,13 @@ var dropDb = module.exports.dropDb = function dropDb(done){
 module.exports.connectAndDropDb = function connectAndDropDb(done){
   //check if connection has opened but is not ready yet
   if (mongoose.connection && mongoose.connection.readyState ==2){
-    console.log('#######' + config.mongoURL+mongoDbName);
-    mongoose.createConnection(config.mongoURL+mongoDbName, function(err){
+    console.log('#######' + config.mongoUrl+config.mongoDbName);
+    mongoose.createConnection(config.mongoUrl+config.mongoDbName, function(err){
       if(err) return done(err);
       dropDb(done);
     });
   }else{
-    mongoose.connect(config.mongoURL+mongoDbName, function(err){
+    mongoose.connect(config.mongoUrl+config.mongoDbName, function(err){
       if (err) {
         //if connection is already open it's fine
         if(err.message !== 'Trying to open unclosed connection.'){

@@ -18,16 +18,16 @@ require ('./Freelance');
 const Review = exports.Review = new mongoose.Schema({
 		author 	: { type: String, required: true },
 		text 	: { type: String, default: "No text." },
-		score 	: { type: Integer },
+		score 	: { type: Number },
 		target 	: { type: ObjectID, ref: "Freelance", required: true }
 });
 
 
 Review.pre('save', function (next) {
-	if (score > 5){
-		score=5;
-	} else if (score<0) {
-		score=0;
+	if (this.score > 5){
+		this.score=5;
+	} else if (this.score<0) {
+		this.score=0;
 	}
 	next();
 });

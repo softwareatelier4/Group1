@@ -23,17 +23,17 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		address 	: { type: String },
 		email	 	: { type: String, required: true },
 		phone	 	: { type: String },
-		avgScore 	: { type: Integer },
+		avgScore 	: { type: Number },
 		reviews 	: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags 		: [{ type: String, default: [] }]
 });
 
 
 Freelance.pre('save', function (next) {
-	if (avgScore > 5){
-		avgScore=5;
-	} else if (avgScore<0) {
-		avgScore=0;
+	if (this.avgScore > 5){
+		this.avgScore=5;
+	} else if (this.avgScore<0) {
+		this.avgScore=0;
 		//maybe a problem with default -1 value of review, to check later.
 	}
 	next();
