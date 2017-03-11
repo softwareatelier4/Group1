@@ -1,7 +1,6 @@
 /** 
 * Standalond db seed
 */
-console.log(__dirname)
 var seed = require('./seed_data/seedDb').seed;
 
 seed(function(err, seedData){

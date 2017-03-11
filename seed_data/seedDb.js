@@ -1,7 +1,7 @@
 'use strict';
 
 var config = require('../config');
-var utis = require('./utils')
+var utils = require('./utils')
 
 //load model
 var mongoose = require('mongoose');
@@ -25,11 +25,11 @@ var seedModel = function(idx, done){
   }
 
   var modelName = seedData[idx].name;
-  console.log(modelName);
   models[modelName].create(seedData[idx].data, function(err){
     if (err) done (err);
 
     //seed next model
+    console.log(modelName + " OK");
     seedModel(++idx, done)
   });
 }
@@ -38,7 +38,7 @@ var seedModel = function(idx, done){
 * This is where everything starts
 */
 module.exports.seed = function (done){
-  utis.connectAndDropDb(function(err){
+  utils.connectAndDropDb(function(err){
     if(err) return done(err);
     seedModel(0, done);
   });
