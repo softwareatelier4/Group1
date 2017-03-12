@@ -16,21 +16,21 @@
 'use strict';
 const mongoose = require('mongoose');
 const ObjectID = mongoose.Schema.Types.ObjectId;
-require ('./Review');
+require('./Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
-		name			: { type: String, required: true },
-		address		: { type: String },
-		email			: { type: String, required: true },
-		phone			: { type: String },
-		avgScore 	: { type: Number },
-		reviews		: [{ type: ObjectID, ref: "Review", default: [] }],
-		tags			: [{ type: String, default: [] }],
+		name : { type: String, required: true },
+		address : { type: String },
+		email : { type: String, required: true },
+		phone : { type: String },
+		avgScore : { type: Number },
+		reviews : [{ type: ObjectID, ref: "Review", default: [] }],
+		tags : [{ type: String, default: [] }],
 });
 
 
 Freelance.pre('save', function (next) {
-	if (this.avgScore > 5){
+	if (this.avgScore > 5) {
 		this.avgScore = 5;
 	} else if (this.avgScore < 0) {
 		this.avgScore = 0;

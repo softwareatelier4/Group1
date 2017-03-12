@@ -37,10 +37,7 @@ function(req, res){
 // Initialize routers here
 var routers = require('./routes/routers');
 app.use('/', routers.root);
-// app.use('/albums', routers.albums);
-// app.use('/artists', routers.artists);
-// app.use('/tracks', routers.tracks);
-// app.use('/users', routers.users);
+app.use('/freelance', routers.freelance);
 
 module.exports = app;
 process.title = 'jobadvisor'
