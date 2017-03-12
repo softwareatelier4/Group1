@@ -5,16 +5,10 @@
 
 var mongoose = require('mongoose');
 
-// require('./Album');
-// require('./Artist');
-// require('./Playlist');
-// require('./Track');
-// require('./User');
+require('./Freelance');
+require('./Review');
 
 module.exports = {
-  // 'Album' : mongoose.model('Album'),
-  // 'Artist' : mongoose.model('Artist'),
-  // 'Playlist' : mongoose.model('Playlist'),
-  // 'Track' : mongoose.model('Track'),
-  // 'User' : mongoose.model('User')
+	'Freelance'  : mongoose.model('Freelance'),
+	'Review'     : mongoose.model('Review')
 }
