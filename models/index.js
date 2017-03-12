@@ -9,6 +9,6 @@ require('./Freelance');
 require('./Review');
 
 module.exports = {
-	'Freelance'	: mongoose.model('Freelance'),
-	'Review'		: mongoose.model('Review')
+	'Freelance'  : mongoose.model('Freelance'),
+	'Review'     : mongoose.model('Review')
 }
