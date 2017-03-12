@@ -26,7 +26,11 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		avgScore : { type: Number },
 		reviews : [{ type: ObjectID, ref: "Review", default: [] }],
 		tags : [{ type: String, default: [] }],
-});
+	},
+	{
+		versionKey: false,
+	}
+);
 
 
 Freelance.pre('save', function (next) {

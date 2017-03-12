@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
   else {
     res.sendStatus(404);
   }
-
 });
+
 /** router for /users */
 module.exports = router;

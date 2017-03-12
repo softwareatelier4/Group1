@@ -20,8 +20,11 @@ const Review = exports.Review = new mongoose.Schema({
 		text 	: { type: String, default: "No text." },
 		score 	: { type: Number },
 		target 	: { type: ObjectID, ref: "Freelance", required: true },
-});
-
+	},
+	{
+		versionKey: false,
+	}
+);
 
 Review.pre('save', function (next) {
 	if (this.score > 5){

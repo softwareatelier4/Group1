@@ -6,19 +6,16 @@ var router = express.Router();
 var middleware =  require('../middleware');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
-var Freelance = mongoose.model('Freelance');
 var rootUrl = require("../../config").url;
+const Freelance = mongoose.model('Freelance');
 
-//fields we don't want to show to the client
-var fieldsFilter = { '__v': 0 };
-
-//supported methods
+// Supported methods.
+router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
-router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
-//get freelance
+// GET:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
-  Freelance.findById(req.params.freelanceid, fieldsFilter).lean().exec(function(err, freelance){
+  Freelance.findById(req.params.freelanceid).lean().exec(function(err, freelance){
     if (err) {
       res.status(500).end();
     }
@@ -36,6 +33,30 @@ router.get('/:freelanceid', function(req, res, next) {
     }
   });
 });
+
+// POST
+router.post('/', function(req, res, next) {
+  const newFreelance = new Freelance(req.body);
+  newFreelance.save(function(err, saved) {
+    if (err) {
+      res.status(400).json(formatErrorMessage(err));
+    }
+    res.json(saved);
+  })
+});
+
+// Create JSON error message in case mongoose fails.
+function formatErrorMessage(err) {
+  let reason = err.message;
+  let errorKeys = Object.keys(err.errors);
+  let errorJSON = { "reason" : reason };
+  let errors = [];
+  for (let error of errorKeys) {
+    errors.push(err.errors[error].message);
+  }
+  errorJSON.errors = errors;
+  return errorJSON;
+}
 
 //add self link to returned freelance
 function addLinks(freelance){
