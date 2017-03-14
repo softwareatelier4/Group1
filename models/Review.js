@@ -5,7 +5,7 @@
 * text							String			Text of the review.
 * score							Integer			Score of the review, goes from 1-5. Required.
 * target						ObjectID		Freelancer affected by review.
-*
+* date							Date			date of the review, default now.
 *
 * _id (ObjectID) will be added automatically by mongoose if not specified
 */
@@ -20,6 +20,7 @@ const Review = exports.Review = new mongoose.Schema({
 		text 	: { type: String, default: "No text." },
 		score 	: { type: Number },
 		target 	: { type: ObjectID, ref: "Freelance", required: true },
+		date	: { type: Date, default: Date.now },
 	},
 	{
 		versionKey: false,
