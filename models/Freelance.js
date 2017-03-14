@@ -19,7 +19,8 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require('./Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
-		name			: { type: String, required: true },
+		firstName		: { type: String, required: true },
+		familyName		: { type: String, required: true },
 		address			: { type: String },
 		email			: { type: String, required: true },
 		phone			: { type: String },

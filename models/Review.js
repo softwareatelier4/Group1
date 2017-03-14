@@ -19,7 +19,6 @@ const Review = exports.Review = new mongoose.Schema({
 		author 	: { type: String, required: true },
 		text 	: { type: String, default: "No text." },
 		score 	: { type: Number },
-		target 	: { type: ObjectID, ref: "Freelance", required: true },
 		date	: { type: Date, default: Date.now },
 	},
 	{
