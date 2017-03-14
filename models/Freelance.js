@@ -23,7 +23,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		address			: { type: String },
 		email			: { type: String, required: true },
 		phone			: { type: String },
-		price			: { type: Object },
+		price			: { type: Object, required: true },
 		avgScore 		: { type: Number },
 		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags			: [{ type: String, default: [] }],
@@ -42,13 +42,13 @@ Freelance.pre('save', function (next) {
 
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
-	if (!price.hasOwnProperty('min') && price.hasOwnProperty('max')){
-		price = {min: 0, max: 0};
+	if (!this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max')){
+		this.price = {min: 0, max: 0};
 	}
-	if((price.min<0)){
-		price.min=0;
-	} else if( price.max<0 || price.max < price.min){
-		price.max=price.min;
+	if((this.price.min<0)){
+		this.price.min=0;
+	} else if( this.price.max<0 || this.price.max < this.price.min){
+		this.price.max=this.price.min;
 	}
 
 	next();

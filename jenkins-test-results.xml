@@ -1,12 +1,16 @@
 <testsuites name="Mocha Tests">
-  <testsuite name="Placeholder test: " tests="1" errors="0" failures="0" skipped="0" timestamp="2017-03-14T14:42:21" time="0.062">
-    <testcase classname="Placeholder test: " name="app should get answer 200 on GET /" time="0.052">
+  <testsuite name="Placeholder test: " tests="1" errors="0" failures="0" skipped="0" timestamp="2017-03-14T15:46:49" time="0.063">
+    <testcase classname="Placeholder test: " name="app should get answer 200 on GET /" time="0.054">
     </testcase>
   </testsuite>
-  <testsuite name="Freelance Construction and creation
- Freelance model definition" tests="1" errors="0" failures="0" skipped="0" timestamp="2017-03-14T14:42:21" time="0.001">
-    <testcase classname="Freelance Construction and creation
- Freelance model definition" name="should have a constructor" time="0.001">
+  <testsuite name="Freelance Model  Freelance model definition" tests="1" errors="0" failures="0" skipped="0" timestamp="2017-03-14T15:46:49" time="0.001">
+    <testcase classname="Freelance Model  Freelance model definition" name="should have a constructor">
+    </testcase>
+  </testsuite>
+  <testsuite name="Freelance Model  When creating a new freelance" tests="2" errors="0" failures="0" skipped="0" timestamp="2017-03-14T15:46:49" time="0.081">
+    <testcase classname="Freelance Model  When creating a new freelance" name="should create an instance of the right type" time="0.002">
+    </testcase>
+    <testcase classname="Freelance Model  When creating a new freelance" name="should persist a freelance with valid properties" time="0.069">
     </testcase>
   </testsuite>
 </testsuites>
