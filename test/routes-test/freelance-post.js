@@ -7,17 +7,24 @@ var request = require('supertest');
 
 describe('Freelance-post test: ', function() {
   // TEST: correct post.
-  it('app should get answer 200 on POST /freelance', function(done) {
+  it('app should get answer 201 on POST /freelance', function(done) {
     request(app)
     .post('/freelance')
-    .send({"name" : "Patrick Balestra", "email" : "user@email.com"})
+    .send({
+      "firstName" : "Patrick",
+      "familyName" : "Balestra",
+      "email" : "user@email.com",
+      "price" : {},
+    })
     .expect(201)
     .end(function(err, res) {
       if (err) {
         done(err);
       } else {
-        res.body.should.have.property("name", "Patrick Balestra");
+        res.body.should.have.property("firstName", "Patrick");
+        res.body.should.have.property("familyName", "Balestra");
         res.body.should.have.property("email", "user@email.com");
+        res.body.should.have.property("price");
         done();
       }
     });
@@ -33,7 +40,7 @@ describe('Freelance-post test: ', function() {
       if (err) {
         done(err);
       } else {
-        res.should.have.property("text", "{\"reason\":\"Freelance validation failed\",\"errors\":[\"Path `name` is required.\"]}")
+        res.body.should.have.property("reason", "Freelance validation failed");
         done();
       }
     });
@@ -49,7 +56,7 @@ describe('Freelance-post test: ', function() {
       if (err) {
         done(err);
       } else {
-        res.should.have.property("text", "{\"reason\":\"Freelance validation failed\",\"errors\":[\"Path `email` is required.\"]}")
+        res.body.should.have.property("reason", "Freelance validation failed");
         done();
       }
     });

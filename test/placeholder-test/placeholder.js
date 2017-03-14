@@ -6,7 +6,6 @@ var app = require(config.projectRoot + '/app');
 var request = require('supertest');
 
 describe('Placeholder test: ', function() {
-  // should.exist(1);
   it('app should get answer 200 on GET /', function(done){
   	request(app)
   	  .get('/')

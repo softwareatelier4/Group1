@@ -43,7 +43,7 @@ Freelance.pre('save', function (next) {
 
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
-	if (!this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max')) {
+	if (!(this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max'))) {
 		this.price = {min: 0, max: 0};
 	}
 	if (this.price.min < 0) {
