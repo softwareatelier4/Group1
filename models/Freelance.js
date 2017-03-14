@@ -6,7 +6,7 @@
 * email						String			Email of the freelance. Required
 * phone						String			Phone of the freelance
 * avgScore					Integer			Average score of all reviews
-* priceRange				String			Price range of the freelance e.g. 12-24.-/h
+* price						Object			Price range of the freelance e.g. {min: 12, max: 24}
 * reviews					[ObjectID]		Array containing IDs of all reviews
 * tags						Array			Array of Strings. Tags used for search
 *
@@ -20,23 +20,37 @@ require ('./Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
 		name			: { type: String, required: true },
-		address		: { type: String },
+		address			: { type: String },
 		email			: { type: String, required: true },
 		phone			: { type: String },
-		avgScore 	: { type: Number },
-		reviews		: [{ type: ObjectID, ref: "Review", default: [] }],
+		price			: { type: Object },
+		avgScore 		: { type: Number },
+		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags			: [{ type: String, default: [] }],
 });
 
 
 Freelance.pre('save', function (next) {
+
+	//review between 0 and 5
 	if (this.avgScore > 5){
 		this.avgScore = 5;
 	} else if (this.avgScore < 0) {
 		this.avgScore = 0;
 		//maybe a problem with default -1 value of review, to check later.
 	}
-	next();
+
+	//we check that price has both a min and a max
+	//and that they are both above 0; in particular, max must be > min
+	if (!((price.hasOwnProperty('min') && (price.hasOwnProperty('max'))){
+		price = {min: 0, max: 0};
+	}
+	if((price.min<0)){
+		price.min=0;
+	} else if( price.max<0 || price.max < price.min){
+		price.max=price.min;
+	}
+
 });
 
 //register model for schema
