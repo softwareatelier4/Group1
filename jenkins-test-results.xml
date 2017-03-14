@@ -1,6 +1,0 @@
-<testsuites name="Mocha Tests">
-  <testsuite name="Placeholder test: " tests="1" errors="0" failures="0" skipped="0" timestamp="2017-03-09T15:38:13" time="0.062">
-    <testcase classname="Placeholder test: " name="app should get answer 200 on GET /" time="0.051">
-    </testcase>
-  </testsuite>
-</testsuites>
