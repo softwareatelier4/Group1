@@ -44,3 +44,14 @@ module.exports.dropDbAndCloseConnection = function dropDbAndCloseConnection(done
     });
   });
 }
+
+/** 
+* Drops the database
+*/
+var dropDb = module.exports.dropDb = function dropDb(done){
+  //drop database
+  mongoose.connection.db.dropDatabase( function(err){
+    if(err) return done(err);
+    done();
+  });
+}
