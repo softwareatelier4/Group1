@@ -52,7 +52,7 @@ router.post('/:freelanceid/review', function(req, res, next) {
       if (err) {
         res.status(400).json({
           message: "Could not save Review to in Freelance."
-        })
+        });
       }
     });
   });
