@@ -8,39 +8,42 @@ var ObjectId = mongoose.Types.ObjectId;
 var freelancers = {
   name : 'Freelance', // this is the name of the model in mongoose
   data : [
-      {
-           "_id"        : "5837133bcb98f316ac473853",
-           "name"       : "Freelance A",
-           "address"    : "Caltgadira 116, 6883 Novazzano",
-           "email"      : "noneme@icloud.com",
-           "phone"      : "032 332 42 72",
-           "avgScore"   : 0,
-           "price" 		: {min:10, max:20},
-           "reviews"    : ["5866a6162d6c4804f847ea3b", "5866a5cc2d6c4804f847ea38"],
-           "tags"       : ["testTag1", "testTag2", "testTag3"]
-		  },
-      {
-           "_id"        : "5837133bcb98f316ac473850",
-           "name"       : "Freelance B",
-           "address"    : "Strickstrasse 64, 8005 Zuerich",
-           "email"      : "mschilli@mac.com",
-           "phone"      : "043 861 88 44",
-           "avgScore"   : 2,
-           "price" 		: {min:50, max:100},
-		   "reviews"    : ["5866a5cb2d6c4804f847ea37", "5866a5cb2d6c4804f847ea36"],
-           "tags"       : ["testTag1", "testTag3", "testTag4"]
-      },
-      {
-           "_id"        : "5837133bcb98f316ac473852",
-           "name"       : "Freelance C",
-           "address"    : "Postfach 139, 3473 Alchenstorf",
-           "email"      : "thassine@gmail.com",
-           "phone"      : "034 353 66 82",
-           "avgScore"   : 4,
-           "price" 		: {min:5, max:15},
-           "reviews"    : ["5866a41c2d6c4804f847ea33"],
-           "tags"       : ["testTag1", "testTag5", "testTag6"]
-      }
+    {
+      "_id"         : "5837133bcb98f316ac473853",
+      "firstName"   : "John",
+      "familyName"  : "Smith",
+      "address"     : "Caltgadira 116, 6883 Novazzano",
+      "email"       : "noneme@icloud.com",
+      "phone"       : "032 332 42 72",
+      "avgScore"    : 0,
+      "price"       : { min : 10, max : 20 },
+      "reviews"     : ["5866a6162d6c4804f847ea3b", "5866a5cc2d6c4804f847ea38"],
+      "tags"        : ["testTag1", "testTag2", "testTag3"]
+    },
+    {
+      "_id"         : "5837133bcb98f316ac473850",
+      "firstName"   : "Isaac",
+      "familyName"  : "Asimov",
+      "address"     : "Strickstrasse 64, 8005 Zuerich",
+      "email"       : "mschilli@mac.com",
+      "phone"       : "043 861 88 44",
+      "avgScore"    : 2,
+      "price"       : { min : 50, max : 100 },
+      "reviews"     : ["5866a5cb2d6c4804f847ea37", "5866a5cb2d6c4804f847ea36"],
+      "tags"        : ["testTag1", "testTag3", "testTag4"]
+    },
+    {
+      "_id"         : "5837133bcb98f316ac473852",
+      "firstName"   : "J.R.R.",
+      "familyName"  : "Tolkien",
+      "address"     : "Postfach 139, 3473 Alchenstorf",
+      "email"       : "thassine@gmail.com",
+      "phone"       : "034 353 66 82",
+      "avgScore"    : 4,
+      "price"       : { min : 5, max : 15 },
+      "reviews"     : ["5866a41c2d6c4804f847ea33"],
+      "tags"        : ["testTag1", "testTag5", "testTag6"]
+    }
   ]
 }
 
@@ -78,7 +81,6 @@ var reviews = {
       "text"    : "",
       "score"   : 0,
     },
-
 	]
 }
 
