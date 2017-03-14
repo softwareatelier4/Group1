@@ -39,6 +39,23 @@ router.get('/:freelanceid', function(req, res, next) {
 // POST freelance/:freelanceid/review
 router.post('/:freelanceid/review', function(req, res, next) {
   const newReview = new Review(req.body);
+  Freelance.findById(req.params.freelanceid, function(err, freelance) {
+    if (err) return next(err);
+    if (!freelance) {
+      res.status(404).json({
+        message: "Freelance not found with the given id."
+      });
+      return;
+    }
+    freelance.reviews.push(newReview);
+    freelance.save(function(err, saved) {
+      if (err) {
+        res.status(400).json({
+          message: "Could not save Review to in Freelance."
+        })
+      }
+    });
+  });
   newReview.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
