@@ -11,7 +11,7 @@ describe('Freelance-post test: ', function() {
     request(app)
     .post('/freelance')
     .send({"name" : "Patrick Balestra", "email" : "user@email.com"})
-    .expect(200)
+    .expect(201)
     .end(function(err, res) {
       if (err) {
         done(err);

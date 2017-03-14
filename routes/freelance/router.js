@@ -42,7 +42,7 @@ router.post('/', function(req, res, next) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
     }
-    res.json(saved);
+    res.status(201).json(saved);
   })
 });
 
