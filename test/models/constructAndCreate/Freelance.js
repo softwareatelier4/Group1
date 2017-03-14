@@ -1,0 +1,1 @@
+/* tests for constructor and creation of Freelance */
