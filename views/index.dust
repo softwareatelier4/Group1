@@ -2,15 +2,29 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>React Hello 2 World</title>
+    <title>JobAdvisor</title>
+    <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
 
     <!--
     React container
     -->
-    <div id='root'></div>
+    <div id='root'>
+      <div id="title">JobAdvisor</div>
+      <div id="search-container">
+        <input id="search-name" placeholder="Search" />
+        <button id="search-btn">Search</button>
+      </div>
+      <div id="filters-container">
 
+      </div>
+      <div id="freelancers-container">
+        <div class="freelancer-card">1</div>
+        <div class="freelancer-card">2</div>
+        <div class="freelancer-card">3</div>
+      </div>
+    </div>
     <!--
     For ease of use, we are including the React, ReactDOM and Babel CDN
     builds to make getting started as fast as possible.
@@ -23,6 +37,7 @@
     This is where you link to your React code. Can be .js or .jsx
     extension, doesn't really matter.
     -->
-    <script src="components/test.js" type="text/babel"></script>
+    <!-- <script src="components/test.js" type="text/babel"></script> -->
+    <script src="components/homepage.js" type="text/babel"></script>
   </body>
 </html>

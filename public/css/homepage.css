@@ -1,0 +1,45 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: ghostwhite;
+}
+
+#root {
+  margin: 50px 20%;
+}
+
+#title {
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+#search-container {
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+#filters-container {
+  margin-bottom: 50px;
+  background-color: lightblue;
+  height: 100px;
+}
+
+#freelancers-container {
+  background-color: lightgreen;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.freelancer-card {
+  width: 80%;
+  height: 50px;
+  text-align: center;
+  margin: 20px 0;
+  border: 1px solid black;
+}
