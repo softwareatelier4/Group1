@@ -20,7 +20,7 @@ const Review = exports.Review = new mongoose.Schema({
 		text 	: { type: String, default: "No text." },
 		score 	: { type: Number },
 		target 	: { type: ObjectID, ref: "Freelance", required: true },
-		date	: { type: date, default Date.now },
+		date	: { type: Date, default: Date.now },
 });
 
 

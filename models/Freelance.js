@@ -42,7 +42,7 @@ Freelance.pre('save', function (next) {
 
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
-	if (!((price.hasOwnProperty('min') && (price.hasOwnProperty('max'))){
+	if (!price.hasOwnProperty('min') && price.hasOwnProperty('max')){
 		price = {min: 0, max: 0};
 	}
 	if((price.min<0)){
@@ -50,6 +50,8 @@ Freelance.pre('save', function (next) {
 	} else if( price.max<0 || price.max < price.min){
 		price.max=price.min;
 	}
+
+	next();
 
 });
 
