@@ -46,9 +46,14 @@ class FreelancerView extends React.Component {
   render () {
     return (
       <div className="freelancer-view">
-        <Name first={this.props.first} last={this.props.last}/>
-        <div>{this.props.category}</div>
-        <span>Average Score: {this.props.avgScore} in 5</span>
+        <div className="freelancer-header">
+          <div className="picture-placeholder"></div>
+          <div className="freelancer-header-info">
+            <Name first={this.props.first} last={this.props.last}/>
+            <div>{this.props.category}</div>
+            <span>Average Score: {this.props.avgScore} in 5</span>
+          </div>
+        </div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
       </div>
     );
