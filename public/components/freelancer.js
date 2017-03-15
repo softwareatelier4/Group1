@@ -1,48 +1,48 @@
-// var Name = React.createClass({
-//   render: function () {
-//     return <h1>{this.props.first} {this.props.last}</h1>;
-//   }
-// });
+'use strict';
 
-console.log(window.location.pathname.split( '/' )[1])
-ajaxRequest("GET", "/freelancer"+window.location.pathname.split( '/' )[1], {}, renderComponent);
+let freelancerId = window.location.pathname.split( '/' )[1];
+ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
 
 function renderComponent(data) {
-  ReactDOM.render(<View
-    first="Lara" last="jfida"
-    category="Programming"
-    phone="3331231234"
-    address="Via del kiwi 7, Hawaii, 1234"
-    avgScore="4.0"/>,
+  ReactDOM.render(
+    <FreelancerView
+      first={data.name} last="TODO"
+      category="TODO"
+      phone={data.phone}
+      address={data.address}
+      email={data.email}
+      avgScore={data.avgScore}
+    />,
 
     document.getElementById('root')
   );
 }
 
 class Name extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {props};
-  // }
-
   render () {
     return (<h1>{this.props.first} {this.props.last}</h1>);
   }
 }
 
-var Contact = React.createClass({
-  render: function () {
-    return <span>{this.props.phone}</span>;
+class Contact extends React.Component {
+  render () {
+    return (
+      <address>
+        <span>{this.props.phone}</span>
+        <span>{this.props.address}</span>
+        <span>{this.props.email}</span>
+      </address>
+    );
   }
-});
+}
 
-var View = React.createClass({
-  render: function () {
+class FreelancerView extends React.Component {
+  render () {
     return <div>
         <Name first={this.props.first} last={this.props.last}/>
         <span>{this.props.category}</span>
         <span>Average Score: {this.props.avgScore} in 5</span>
-        <Contact phone={this.props.phone} address={this.props.address}/>
+        <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
       </div>
   }
-});
+}
