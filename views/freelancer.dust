@@ -2,11 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/freelancer.css">
+
   </head>
   <body>
 
     <!-- React container -->
-    <div id='root'></div>
+    <div id='freelancer-root'></div>
 
     <!--
     For ease of use, we are including the React, ReactDOM and Babel CDN

@@ -1,20 +1,25 @@
 'use strict';
 
+/**
+ * Freelancer View Components
+ * CSS styling in css/freelancer.css
+ */
+
 let freelancerId = window.location.pathname.split( '/' )[1];
 ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
 
 function renderComponent(data) {
   ReactDOM.render(
     <FreelancerView
-      first={data.name} last="TODO"
-      category="TODO"
+      first={data.firstName} last={data.familyName}
+      category="TODO-category"
       phone={data.phone}
       address={data.address}
       email={data.email}
       avgScore={data.avgScore}
     />,
 
-    document.getElementById('root')
+    document.getElementById('freelancer-root')
   );
 }
 
@@ -37,12 +42,15 @@ class Contact extends React.Component {
 }
 
 class FreelancerView extends React.Component {
+
   render () {
-    return <div>
+    return (
+      <div className="freelancer-view">
         <Name first={this.props.first} last={this.props.last}/>
-        <span>{this.props.category}</span>
+        <div>{this.props.category}</div>
         <span>Average Score: {this.props.avgScore} in 5</span>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
       </div>
+    );
   }
 }

@@ -1,0 +1,9 @@
+.freelancer-view {
+  width: 100%;
+  background-color: #f00;
+}
+
+address {
+  display: flex;
+  flex-direction: column;
+}
