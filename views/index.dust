@@ -6,38 +6,24 @@
     <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
-
-    <!--
-    React container
-    -->
     <div id='root'>
+      <!-- Title -->
       <div id="title">JobAdvisor</div>
+      <!-- Search -->
       <div id="search-container">
-        <input id="search-name" placeholder="Search" />
+        <input id="search-name" placeholder="Who" />
         <button id="search-btn">Search</button>
       </div>
-      <div id="filters-container">
-
-      </div>
-      <div id="freelancers-container">
-        <div class="freelancer-card">1</div>
-        <div class="freelancer-card">2</div>
-        <div class="freelancer-card">3</div>
-      </div>
+      <!-- Filters -->
+      <div id="filters-container"></div>
+      <!-- Freelancers -->
+      <div id="react-freelancers-container"></div>
     </div>
-    <!--
-    For ease of use, we are including the React, ReactDOM and Babel CDN
-    builds to make getting started as fast as possible.
-    -->
+    <!-- React -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>
     <script src="../js/browser.min.js"></script>
-
-    <!--
-    This is where you link to your React code. Can be .js or .jsx
-    extension, doesn't really matter.
-    -->
-    <!-- <script src="components/test.js" type="text/babel"></script> -->
+    <!-- Scripts -->
     <script src="components/homepage.js" type="text/babel"></script>
   </body>
 </html>

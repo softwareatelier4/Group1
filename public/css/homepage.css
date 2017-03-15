@@ -23,10 +23,23 @@ body {
   justify-content: center;
 }
 
+#search-name {
+  width: 20%;
+  height: 30px;
+}
+
+#search-btn {
+
+}
+
 #filters-container {
   margin-bottom: 50px;
   background-color: lightblue;
   height: 100px;
+}
+
+#react-freelancers-container {
+
 }
 
 #freelancers-container {
