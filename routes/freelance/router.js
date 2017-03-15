@@ -17,7 +17,7 @@ router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); /
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
   if (ObjectId.isValid(req.params.freelanceid)) {
-    Freelance.findById(req.params.freelanceid).lean().exec(function(err, freelance){
+    Freelance.findById(req.params.freelanceid).populate('reviews').exec(function(err, freelance){
       if (err) {
         res.status(400).json(utils.formatErrorMessage(err));
       }
@@ -53,6 +53,7 @@ router.post('/:freelanceid/review', function(req, res, next) {
         res.status(400).json({
           message: "Could not save Review to in Freelance."
         });
+        return;
       }
     });
   });
