@@ -17,7 +17,7 @@ const Tag = exports.Tag = new mongoose.Schema({
 	}
 );
 
-Tag.pre('save', function (next) {
+Tag.pre('save', function(next) {
 
 	next();
 });

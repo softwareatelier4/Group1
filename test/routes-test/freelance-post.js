@@ -21,6 +21,7 @@ describe('Freelance-post test: ', function() {
     .send({
       "firstName" : "Patrick",
       "familyName" : "Balestra",
+      "title" : "Human Being",
       "email" : "user@email.com",
       "price" : {},
     })
@@ -32,6 +33,7 @@ describe('Freelance-post test: ', function() {
         res.body.should.have.property("firstName", "Patrick");
         res.body.should.have.property("familyName", "Balestra");
         res.body.should.have.property("email", "user@email.com");
+        res.body.should.have.property("title", "Human Being");
         res.body.should.have.property("price");
         done();
       }
@@ -48,7 +50,7 @@ describe('Freelance-post test: ', function() {
       if (err) {
         done(err);
       } else {
-        res.body.should.have.property("errors", ["Path `price` is required.", "Path `familyName` is required.", "Path `firstName` is required."]);
+        res.body.should.have.property("errors", ["Path `title` is required.", "Path `firstName` is required."]);
         done();
       }
     });
@@ -64,7 +66,7 @@ describe('Freelance-post test: ', function() {
       if (err) {
         done(err);
       } else {
-        res.body.should.have.property("errors", ["Path `price` is required.", "Path `email` is required.", "Path `familyName` is required."]);
+        res.body.should.have.property("errors", ["Path `email` is required.", "Path `title` is required."]);
         done();
       }
     });
@@ -77,7 +79,8 @@ it('app should get answer 201 on POST /freelance/:freelanceid/review', function(
   .post('/freelance/' + seedData[0].data[0]._id.toString() + '/review')
   .send({
     "author" : "Patrick",
-    "text" : "This is a comment."
+    "text" : "This is a comment.",
+    "score" : 0
   })
   .expect(201)
   .end(function(err, res) {

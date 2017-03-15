@@ -28,17 +28,17 @@ const Review = exports.Review = new mongoose.Schema({
 	}
 );
 
-Review.pre('save', function (next) {
+Review.pre('save', function(next) {
 	if (this.score > 5){
 		this.score = 5;
 	} else if (this.score < 0) {
 		this.score = 0;
 	}
 
-	if (this.text !== undefined){
+	if (this.text !== undefined) {
 		let length = this.text.length;
 
-		if(length>1000){
+		if(length > 1000) {
 			this.text = this.text.substring(0, 999);
 		}
 	}
