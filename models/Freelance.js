@@ -19,19 +19,20 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require ('./Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
-		firstName		: { type: String, required: true },
-		familyName		: { type: String, required: true },
-		title			: { type: String },
+		firstName			: { type: String, required: true },
+		familyName		: { type: String },
+		title					: { type: String },
+		category			: { type: String },
 		description		: { type: String },
-		urlPic			: { type: String },
-		address			: { type: String },
-		email			: { type: String, required: true },
-		phone			: { type: String },
-		price			: { type: Object },
+		urlPic				: { type: String },
+		address				: { type: String },
+		email					: { type: String, required: true },
+		phone					: { type: String },
+		price					: { type: Object },
 		//we recompute this on every review
-		avgScore 		: { type: Number },
-		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
-		tags			: [{ type: ObjectID, default: [] }],
+		avgScore 			: { type: Number },
+		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
+		tags					: [{ type: ObjectID, default: [] }],
 		//maybe add category
 	},
 	{
