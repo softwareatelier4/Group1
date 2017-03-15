@@ -9,6 +9,8 @@ let freelancerId = window.location.pathname.split( '/' )[1];
 ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
 
 function renderComponent(data) {
+
+  // freelancer info
   ReactDOM.render(
     <FreelancerView
       first={data.firstName} last={data.familyName}
@@ -20,6 +22,26 @@ function renderComponent(data) {
     />,
 
     document.getElementById('freelancer-root')
+  );
+
+  // reviews
+  const reviews = data.reviews;
+  const listReviews = reviews.map((review, index) =>
+    <Review
+      key={index}
+      author={review.author}
+      text={review.text}
+      score={review.score}
+      date={review.date}
+    />
+  );
+
+  ReactDOM.render(
+    <div className="freelancer-reviews">
+      {listReviews}
+    </div>,
+
+    document.getElementById('freelancer-reviews-root')
   );
 }
 
@@ -56,6 +78,19 @@ class FreelancerView extends React.Component {
         </div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
       </div>
+    );
+  }
+}
+
+class Review extends React.Component {
+  render () {
+    return (
+      <article>
+        <span>{this.props.author}</span>
+        <span>{this.props.date}</span>
+        <span>{this.props.score}</span>
+        <div>{this.props.text}</div>
+      </article>
     );
   }
 }
