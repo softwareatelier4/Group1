@@ -21,13 +21,18 @@ require ('./Review');
 const Freelance = exports.Freelance = new mongoose.Schema({
 		firstName		: { type: String, required: true },
 		familyName		: { type: String, required: true },
+		title			: { type: String },
+		description		: { type: String },
+		urlPic			: { type: String },
 		address			: { type: String },
 		email			: { type: String, required: true },
 		phone			: { type: String },
-		price			: { type: Object, required: true },
+		price			: { type: Object },
+		//we recompute this on every review
 		avgScore 		: { type: Number },
 		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags			: [{ type: String, default: [] }],
+		//maybe add category
 	},
 	{
 		versionKey	: false,
@@ -38,23 +43,30 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 Freelance.pre('save', function (next) {
 
 	//review between 0 and 5
-	if (this.avgScore > 5) {
-		this.avgScore = 5;
-	} else if (this.avgScore < 0) {
-		this.avgScore = 0;
-		//maybe a problem with default -1 value of review, to check later.
+	if ( this.avgScore !== undefined ){
+		if (this.avgScore > 5) {
+			this.avgScore = 5;
+		} else if (this.avgScore < 0) {
+			this.avgScore = 0;
+		}
 	}
+
 
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
-	if (!(this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max'))) {
-		this.price = {min: 0, max: 0};
+	//maybe in future
+	if ( this.price !== undefined ){
+		if ((this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max'))) {
+			if (this.price.min < 0) {
+				this.price.min = 0;
+			} else if (this.price.max < 0 || this.price.max < this.price.min) {
+				this.price.max = this.price.min;
+			}
+		} else{
+			this.price = {min:0, max:0};
+		}
 	}
-	if (this.price.min < 0) {
-		this.price.min = 0;
-	} else if (this.price.max < 0 || this.price.max < this.price.min) {
-		this.price.max = this.price.min;
-	}
+
 
 	next();
 

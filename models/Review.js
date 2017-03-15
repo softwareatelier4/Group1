@@ -16,9 +16,11 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require ('./Freelance');
 
 const Review = exports.Review = new mongoose.Schema({
+	//in future maybe add User and author is ObjectID ref User
 		author 	: { type: String, required: true },
-		text 	: { type: String, default: "No text." },
-		score 	: { type: Number },
+		title 	: { type: String },
+		text 	: { type: String },
+		score 	: { type: Number, required: true },
 		date	: { type: Date, default: Date.now },
 	},
 	{
@@ -32,6 +34,15 @@ Review.pre('save', function (next) {
 	} else if (this.score < 0) {
 		this.score = 0;
 	}
+
+	if (this.text !== undefined){
+		let length = text.length
+
+		if(length>1000){
+			this.text = this.text.substring(0, 999);
+		}
+	}
+
 	next();
 });
 
