@@ -1,0 +1,8 @@
+node_modules/
+bower_components/
+jenkins-test-results.xml 
+phantomjsdriver.log
+coverage/cobertura-coverage.xml
+coverage/coverage.json
+test/nightwatch-reports/
+npm-debug.log
