@@ -55,9 +55,9 @@ class Contact extends React.Component {
   render () {
     return (
       <address>
-        <span>{this.props.phone}</span>
-        <span>{this.props.address}</span>
-        <span>{this.props.email}</span>
+        <span>Phone: <a>{this.props.phone}</a></span>
+        <span>Address: <a>{this.props.address}</a></span>
+        <span>Email: <a>{this.props.email}</a></span>
       </address>
     );
   }
@@ -86,10 +86,12 @@ class Review extends React.Component {
   render () {
     return (
       <article>
-        <span>{this.props.author}</span>
-        <span>{this.props.date}</span>
-        <span>{this.props.score}</span>
-        <div>{this.props.text}</div>
+        <div className="review-header">
+          <span className="review-author">{this.props.author}</span>
+          <span className="review-date">Date: {this.props.date}</span>
+          <span className="review-score">Score: {this.props.score}/5</span>
+        </div>
+        <div className="review-text">{this.props.text}</div>
       </article>
     );
   }
