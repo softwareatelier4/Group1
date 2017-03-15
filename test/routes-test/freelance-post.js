@@ -11,7 +11,7 @@ var request = require('supertest');
 
 describe('Freelance-post test: ', function() {
 
-  // before(seed);
+  before(seed);
   // after(utils.dropDb);
 
   // TEST: correct post.
@@ -38,7 +38,7 @@ describe('Freelance-post test: ', function() {
     });
   });
 
-  // TEST: not correct post: path "name" is required.
+  // TEST: not correct post: missing required properties.
   it('app should get answer 400 on POST /freelance', function(done) {
     request(app)
     .post('/freelance')
@@ -48,33 +48,52 @@ describe('Freelance-post test: ', function() {
       if (err) {
         done(err);
       } else {
-        res.body.should.have.property("reason", "Freelance validation failed");
+        res.body.should.have.property("errors", ["Path `price` is required.", "Path `familyName` is required.", "Path `firstName` is required."]);
         done();
       }
     });
   });
 
-  // TEST: not correct post: path "email" is required.
+  // TEST: not correct post: missing required properties.
   it('app should get answer 400 on POST /freelance', function(done) {
     request(app)
     .post('/freelance')
-    .send({"name" : "Patrick Balestra"})
+    .send({"firstName" : "Patrick"})
     .expect(400)
     .end(function(err, res) {
       if (err) {
         done(err);
       } else {
-        res.body.should.have.property("reason", "Freelance validation failed");
+        res.body.should.have.property("errors", ["Path `price` is required.", "Path `email` is required.", "Path `familyName` is required."]);
         done();
       }
     });
   });
 });
 
-// function seed(done) {
-//   //seed the db
-//   seedDb.seed(function(err, seedData) {
-//     if (err) return done(err);
-//     done();
-//   });
-// }
+// TEST: correct post of a review.
+it('app should get answer 201 on POST /freelance/:freelanceid/review', function(done) {
+  request(app)
+  .post('/freelance/' + seedData[0].data[0]._id.toString() + '/review')
+  .send({
+    "author" : "Patrick",
+    "text" : "This is a comment."
+  })
+  .expect(201)
+  .end(function(err, res) {
+    if (err) {
+      done(err);
+    } else {
+      res.should.have.property("text");
+      done();
+    }
+  });
+});
+
+function seed(done) {
+  //seed the db
+  seedDb.seed(function(err, seedData) {
+    if (err) return done(err);
+    done();
+  });
+}
