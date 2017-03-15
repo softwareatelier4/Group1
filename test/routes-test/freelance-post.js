@@ -3,9 +3,17 @@
 var should = require('should');
 var config = require('../config');
 var app = require(config.projectRoot + '/app');
+var seedData = require('../../seed_data/seedData');
+var seedDb = require('../../seed_data/seedDb');
+var utils = require('../../seed_data/utils');
+var freelanceutils = require('./utils');
 var request = require('supertest');
 
 describe('Freelance-post test: ', function() {
+
+  // before(seed);
+  // after(utils.dropDb);
+
   // TEST: correct post.
   it('app should get answer 201 on POST /freelance', function(done) {
     request(app)
@@ -62,3 +70,11 @@ describe('Freelance-post test: ', function() {
     });
   });
 });
+
+// function seed(done) {
+//   //seed the db
+//   seedDb.seed(function(err, seedData) {
+//     if (err) return done(err);
+//     done();
+//   });
+// }

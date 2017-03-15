@@ -17,7 +17,7 @@ var freelancers = {
       "phone"       : "032 332 42 72",
       "avgScore"    : 0,
       "price"       : { min : 10, max : 20 },
-      "reviews"     : ["5866a6162d6c4804f847ea3b", "5866a5cc2d6c4804f847ea38"],
+      "reviews"     : ["5866a5cc2d6c4804f847ea38", "5866a6162d6c4804f847ea3b"],
       "tags"        : ["testTag1", "testTag2", "testTag3"]
     },
     {
