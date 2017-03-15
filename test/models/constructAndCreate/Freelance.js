@@ -61,7 +61,8 @@ describe('Freelance Model ', function(done){
 
     it ('should persist a freelance with valid properties', function(done){
       var freelance = new Freelance();
-      freelance.name = 'Mark Knopfler';
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer'
       freelance.email = 'ripperoni@pepe.pe';
       freelance.price = {min: 20, max: 100};
       freelance.save(function(err, saved){

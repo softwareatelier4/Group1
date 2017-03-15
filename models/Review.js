@@ -36,7 +36,7 @@ Review.pre('save', function (next) {
 	}
 
 	if (this.text !== undefined){
-		let length = text.length
+		let length = this.text.length;
 
 		if(length>1000){
 			this.text = this.text.substring(0, 999);

@@ -31,7 +31,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		//we recompute this on every review
 		avgScore 		: { type: Number },
 		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
-		tags			: [{ type: String, default: [] }],
+		tags			: [{ type: ObjectID, default: [] }],
 		//maybe add category
 	},
 	{
