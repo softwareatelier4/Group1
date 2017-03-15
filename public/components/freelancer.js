@@ -4,6 +4,21 @@
 //   }
 // });
 
+console.log(window.location.pathname.split( '/' )[1])
+ajaxRequest("GET", "/freelancer"+window.location.pathname.split( '/' )[1], {}, renderComponent);
+
+function renderComponent(data) {
+  ReactDOM.render(<View
+    first="Lara" last="jfida"
+    category="Programming"
+    phone="3331231234"
+    address="Via del kiwi 7, Hawaii, 1234"
+    avgScore="4.0"/>,
+
+    document.getElementById('root')
+  );
+}
+
 class Name extends React.Component {
   // constructor(props) {
   //   super(props);
@@ -31,13 +46,3 @@ var View = React.createClass({
       </div>
   }
 });
-
-ReactDOM.render(<View
-  first="Lara" last="jfida"
-  category="Programming"
-  phone="3331231234"
-  address="Via del kiwi 7, Hawaii, 1234"
-  avgScore="4.0"/>,
-
-  document.getElementById('root')
-);
