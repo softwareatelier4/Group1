@@ -26,7 +26,7 @@ describe('Freelance-get test: ', function() {
         .expect(200)
         .end(function(err, res) {
           var freelance = JSON.parse(res.text) || {};
-          freelanceutils.checkFreelanceInfoInResponse(freelance,seedData[0].data[0]);
+          freelanceutils.checkFreelanceInfoInResponse(freelance, seedData[0].data[0]);
           done();
         });
     });
