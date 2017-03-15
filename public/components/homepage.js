@@ -8,13 +8,19 @@ class FreelancerCard extends React.Component {
 
 class FreelancersContainer extends React.Component {
   render() {
+    let freelancers = [];
+    for (let i = 0; i < this.props.freelancers.length; ++i) {
+      freelancers.push(<FreelancerCard name={this.props.freelancers[i]} key={i} />);
+    }
     return (
       <div id="freelancers-container">
-        <FreelancerCard name="X" />
-        <FreelancerCard name="Y" />
+        {freelancers}
       </div>
     );
   }
 }
 
-ReactDOM.render(<FreelancersContainer />, document.getElementById('react-freelancers-container'));
+let list = [ 'a', 'b', 'c' ];
+
+ReactDOM.render(<FreelancersContainer freelancers={list} />,
+                document.getElementById('react-freelancers-container'));

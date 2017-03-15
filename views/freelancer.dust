@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+
+    <!-- React container -->
+    <div id='root'></div>
+
+    <!--
+    For ease of use, we are including the React, ReactDOM and Babel CDN
+    builds to make getting started as fast as possible.
+    -->
+    <script src="js/react-15.0.1.js"></script>
+    <script src="js/react-dom-15.0.1.js"></script>
+    <script src="js/browser.min.js"></script>
+
+    <script src="js/ajax.js"></script>
+    <!--
+    This is where you link to your React code. Can be .js or .jsx
+    extension, doesn't really matter.
+    -->
+    <script src="components/freelancer.js" type="text/babel"></script>
+  </body>
+</html>
