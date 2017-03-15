@@ -1,7 +1,9 @@
+echo "Node version:"
+node --version
 npm install
-node seed.js
+# node seed.js
 npm run test-mocha
 npm start &
-# node seed.js
+node seed.js
 ./nightwatch
 pkill "jobadvisor"

@@ -5,3 +5,4 @@ phantomjsdriver.log
 coverage/cobertura-coverage.xml
 coverage/coverage.json
 test/nightwatch-reports/
+npm-debug.log

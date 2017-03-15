@@ -1,4 +1,4 @@
-/** @module users/router */
+/** @module root/router */
 'use strict';
 
 var express = require('express');
@@ -10,7 +10,7 @@ var rootUrl = require("../../config").url;
 //supported methods
 router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
-//list users
+//return index
 router.get('/', function(req, res, next) {
   if (req.accepts('text/html')) {
     res.render('index', {
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
   else {
     res.sendStatus(404);
   }
-
 });
+
 /** router for /users */
 module.exports = router;
