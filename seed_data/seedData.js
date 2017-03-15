@@ -13,9 +13,9 @@ var freelancers = {
       "firstName"   : "John",
       "familyName"  : "Smith",
       "title"       : "President Candidate",
-      "category"    : "Category A",
+      "category"    : "58c9af65fc13ae4760000001",
       "description" : "I like potatoes",
-      "urlPicture"      : "",
+      "urlPicture"  : "",
       "address"     : "Caltgadira 116, 6883 Novazzano",
       "email"       : "noneme@icloud.com",
       "phone"       : "032 332 42 72",
@@ -29,9 +29,9 @@ var freelancers = {
       "firstName"   : "Isaac",
       "familyName"  : "Asimov",
       "title"       : "Writer",
-      "category"    : "Category B",
+      "category"    : "58c9af65fc13ae4760000001",
       "description" : "I like tomatoes",
-      "urlPicture"      : "",
+      "urlPicture"  : "",
       "address"     : "Strickstrasse 64, 8005 Zuerich",
       "email"       : "mschilli@mac.com",
       "phone"       : "043 861 88 44",
@@ -45,9 +45,9 @@ var freelancers = {
       "firstName"   : "J.R.R.",
       "familyName"  : "Tolkien",
       "title"       : "Blogger",
-      "category"    : "Category B",
+      "category"    : "58c9b0affc13ae4760000009",
       "description" : "I like snails",
-      "urlPicture"      : "",
+      "urlPicture"  : "",
       "address"     : "Postfach 139, 3473 Alchenstorf",
       "email"       : "thassine@gmail.com",
       "phone"       : "034 353 66 82",
@@ -107,9 +107,25 @@ var tags = {
     {
       "_id"         : "585eaac6f1dc05033ee9ce97",
       "tagName"     : "testTag1",
-      "freelancers" : ["5837133bcb98f316ac473853", "5837133bcb98f316ac473850", "5837133bcb98f316ac473852"]
+      "freelancers" : ["5837133bcb98f316ac473853", "5837133bcb98f316ac473850"]
     }
   ] 
+}
+
+var categories = {
+  name : 'Category',
+  data : [
+    {
+      "_id"           : "58c9af65fc13ae4760000001",
+      "categoryName"  : "testCategory 1",
+      "freelancers"   : ["5837133bcb98f316ac473853", "5837133bcb98f316ac473850", "5837133bcb98f316ac473852"]
+    },
+    {
+      "_id"           : "58c9b0affc13ae4760000009",
+      "categoryName"  : "testCategory 2",
+      "freelancers"   : ["5837133bcb98f316ac473852"]
+    }
+  ]
 }
 
 

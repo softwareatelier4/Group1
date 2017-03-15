@@ -1,4 +1,9 @@
 /** @module models/Tag
+* The Tag Model
+* Schema:
+* tagName        String     Name of the Tag. Required.
+* freelancers    Array      Freelancers listed under this tag.
+*
 * _id (ObjectID) will be added automatically by mongoose if not specified
 */
 

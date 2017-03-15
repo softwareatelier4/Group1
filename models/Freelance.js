@@ -1,11 +1,16 @@
 /** @module models/Freelance
 * The Freelance Model
 * Schema:
-* name						String			Name of the Freelance. Required.     //maybe also name company
+* firstName				String			Name of the Freelance. Required.     //maybe also name company
+* familyName			String 			Family name of the freelancer
+* title						String 			Title that appears in the search result of freelancer. Required.
+* category 				ObjectID 		One of the possible categories for search
+* description			String 			description of the freelancer
+* urlPicture			String 			Url of page picture
 * address					String			Address of the Freelance
 * email						String			Email of the freelance. Required
 * phone						String			Phone of the freelance
-* avgScore					Integer			Average score of all reviews
+* avgScore				Integer			Average score of all reviews
 * price						Object			Price range of the freelance e.g. {min: 12, max: 24}
 * reviews					[ObjectID]		Array containing IDs of all reviews
 * tags						Array			Array of Strings. Tags used for search
@@ -18,12 +23,13 @@ const mongoose = require('mongoose');
 const ObjectID = mongoose.Schema.Types.ObjectId;
 require('./Review');
 require('./Tag');
+require('./Category');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
 		firstName			: { type: String, required: true },
 		familyName		: { type: String },
 		title					: { type: String, required: true },
-		category			: { type: String },
+		category			: { type: ObjectID, ref: "Category" },
 		description		: { type: String },
 		urlPicture		: { type: String },
 		address				: { type: String },
