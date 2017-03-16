@@ -3,6 +3,7 @@
 */
 
 var config = require('../config')
+var should = require('should');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
@@ -31,6 +32,77 @@ var dropDb = module.exports.dropDb = function dropDb(done){
     if(err) return done(err);
     done();
   });
+}
+
+/** 
+* Checks if an error is thrown when a model's property is null undefined or empty
+*/
+module.exports.errorIfNullUndefinedOrEmpty = function errorIfNullUndefinedOrEmpty(obj, prop, done){
+  //check undefined
+  obj[prop] = undefined;
+  obj.save(function(err, saved){
+   checkValidationErrorFields(err, prop);
+    
+    //check null
+    obj[prop] = null;
+    obj.save(function(err, saved){
+      checkValidationErrorFields(err, prop);
+      
+      //check empty
+      obj[prop] = '';
+      obj.save(function(err, saved){
+        checkValidationErrorFields(err, prop);
+
+        done();
+      });
+    });
+  });
+}
+
+/** 
+* Goes through a Mongoose ValidationError error to check specific properties
+*/
+var checkValidationErrorFields = module.exports.checkValidationErrorFields = function checkValidationErrorFields(err, prop){
+  should.exist(err, 'There should be an error');
+  err.name.should.equal('ValidationError');
+  var propError = err.errors[prop];
+  should.exist(propError, 'err.errors.' + prop + ' should exist');
+  propError.name.should.equal('ValidatorError');
+  propError.message.should.equal('Path `' + prop + '` is required.');
+}
+
+
+/** 
+* Checks if an error is thrown when a model's property is null or undefined
+*/
+module.exports.errorIfNullOrUndefined = function errorIfNullOrUndefined(obj, prop, done){
+  //check undefined
+  obj[prop] = undefined;
+  obj.save(function(err, saved){
+   checkValidationErrorFields(err, prop)
+    
+    //check null
+    obj[prop] = null;
+    obj.save(function(err, saved){
+      checkValidationErrorFields(err, prop);
+      
+      done();
+    });
+  });
+}
+
+/**
+* Goes through a Mongoose CastError error to check specific properties
+*/
+var checkCastErrorFields = module.exports.checkValidationErrorFields = function checkValidationErrorFields(err, prop, kind){
+  var kind = kind || "ObjectID";
+  should.exist(err, 'There should be an error');
+  should.exist(err.errors[prop], 'There should be an err.errors[' + prop + ']');
+
+  var err2Check =  err.errors[prop];
+  err2Check.name.should.equal('CastError');
+  err2Check.kind.should.equal(kind);
+  err2Check.path.should.equal(prop);
 }
 
 /** 

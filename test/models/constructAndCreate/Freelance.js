@@ -60,7 +60,7 @@ describe('Freelance Model ', function(done){
     });
 
     it ('should persist a freelance with valid properties', function(done){
-      var freelance = new Freelance();
+      let freelance = new Freelance();
       freelance.firstName = 'Mark';
       freelance.familyName = 'Knopfer';
       freelance.title = 'I am alive yeah';
@@ -71,6 +71,98 @@ describe('Freelance Model ', function(done){
       freelance.save(function(err, saved){
         should.not.exist(err, 'No error should occur');
         saved.should.eql(freelance);
+        done();
+      });
+    });
+
+    it('should fail if firstName is empty, null, or undefined', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = "suka";
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      utils.errorIfNullUndefinedOrEmpty(freelance, 'firstName', done );
+    });
+
+        it('should fail if title is empty, null, or undefined', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = "Bob";
+      freelance.title = null;
+      freelance.email = "hue@lul.ch";
+      utils.errorIfNullUndefinedOrEmpty(freelance, 'title', done );
+    });
+
+      it('should fail if email is empty, null, or undefined', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = "Bob";
+      freelance.title = "photographer"
+      freelance.email = "";
+      utils.errorIfNullUndefinedOrEmpty(freelance, 'email', done );
+    });
+
+      it ('should bound over 5 avgScore to 5', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.price = {min: 20, max: 100};
+      freelance.review = [];
+      freelance.tags = [];
+      freelance.avgScore = 500;
+      freelance.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        freelance.avgScore.should.equal(5);
+        done();
+      });
+    });
+
+      it ('should bound less than 0 avgScore to 0', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.price = {min: 20, max: 100};
+      freelance.review = [];
+      freelance.tags = [];
+      freelance.avgScore = -32;
+      freelance.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        freelance.avgScore.should.equal(0);
+        done();
+      });
+    });
+
+      it('if reviews is empty; null; or undefined, it should get assigned the value []',
+      function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.price = {min: 20, max: 100};
+      freelance.tags = [];
+      freelance.avgScore = 0;
+      freelance.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        freelance.reviews.isMongooseArray.should.equal(true);
+        done();
+      });
+    });
+
+      it('if tags is empty; null; or undefined, it should get assigned the value []',
+      function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.price = {min: 20, max: 100};
+      freelance.review = [];
+      freelance.avgScore = 0;
+      freelance.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        freelance.tags.isMongooseArray.should.equal(true);
         done();
       });
     });
