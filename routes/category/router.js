@@ -1,12 +1,12 @@
 /** @module category/router */
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var middleware =  require('../middleware');
+const express = require('express');
+const router = express.Router();
+const middleware =  require('../middleware');
 const utils = require('../utils');
-var mongoose = require('mongoose');
-var ObjectId = mongoose.Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
 
 // Supported methods.
@@ -14,7 +14,7 @@ router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
 // GET /category/
 router.get('/', function(req, res, next) {
-    Category.find({}).lean().exec(function(err, categories) {
+    Category.find().lean().exec(function(err, categories) {
       if (err) {
         res.status(400).json(utils.formatErrorMessage(err));
       }
