@@ -26,7 +26,7 @@ describe('Search test: ', function() {
         .end(function(err, res) {
           const results = JSON.parse(res.text) || [];
           results.forEach(function(freelance) {
-            freelanceutils.checkFreelanceInfoInResponse(freelance, seedData[0].data[1]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[1]);
           });
           done();
         });
