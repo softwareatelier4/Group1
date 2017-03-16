@@ -42,7 +42,7 @@ router.get('/:freelanceid', function(req, res, next) {
         });
       }
     }
-  } else res.sendStatus(404);
+  } else res.sendStatus(400);
 });
 
 // POST freelance/:freelanceid/review
