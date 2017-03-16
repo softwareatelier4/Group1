@@ -57,7 +57,7 @@ function renderComponent(data) {
 
 class Name extends React.Component {
   render () {
-    return (<h1>{this.props.first} {this.props.last}</h1>);
+    return (<h1 className="freelancer-header-name">{this.props.first} {this.props.last}</h1>);
   }
 }
 
@@ -83,7 +83,7 @@ class FreelancerView extends React.Component {
           last={this.props.last}
           title={this.props.title}
           category={this.props.category}
-          score={this.props.avgScore}
+          avgScore={this.props.avgScore}
           price={this.props.price}
         />
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
@@ -100,10 +100,10 @@ class FreelancerHeader extends React.Component {
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-header-info">
+          <h1>{this.props.title}</h1>
           <Name first={this.props.first} last={this.props.last}/>
-          <span>{this.props.title}</span>
           <span>{this.props.category}</span>
-          <span>Average Score: {this.props.avgScore} in 5</span>
+          <span>Average Score: {this.props.avgScore}/5</span>
           <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
         </div>
       </div>
