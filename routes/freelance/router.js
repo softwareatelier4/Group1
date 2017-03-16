@@ -16,9 +16,10 @@ router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); /
 
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
-  // distinguish between raw and ajax GET request (to render page or return JSON)
-  if(req.headers.ajax) {
-    if (ObjectId.isValid(req.params.freelanceid)) {
+
+  if (ObjectId.isValid(req.params.freelanceid)) {
+    // distinguish between raw and ajax GET request (to render page or return JSON)
+    if(req.headers.ajax) {
       Freelance.findById(req.params.freelanceid).populate('reviews').populate('tags').populate('category').exec(function(err, freelance){
         if (err) {
           res.status(400).json(utils.formatErrorMessage(err));
@@ -34,18 +35,14 @@ router.get('/:freelanceid', function(req, res, next) {
           res.json(freelance).end();
         }
       });
+    } else {
+      if (req.accepts('text/html')) {
+        res.render('freelancer', {
+          title: "JobAdvisor" ,
+        });
+      }
     }
-    else res.sendStatus(400);
-  } else {
-    if (req.accepts('text/html')) {
-      res.render('freelancer', {
-        title: "JobAdvisor" ,
-      });
-    }
-    else {
-      res.sendStatus(404);
-    }
-  }
+  } else res.sendStatus(404);
 });
 
 // POST freelance/:freelanceid/review
