@@ -12,7 +12,7 @@ function renderComponent(data) {
   const tags = data.tags;
   const listTags = tags.map((tag, index) =>
     <li key={index}>
-      {tag}
+      {tag.tagName}
     </li>
   );
 

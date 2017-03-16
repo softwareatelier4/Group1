@@ -19,7 +19,7 @@ router.get('/:freelanceid', function(req, res, next) {
   // distinguish between raw and ajax GET request (to render page or return JSON)
   if(req.headers.ajax) {
     if (ObjectId.isValid(req.params.freelanceid)) {
-      Freelance.findById(req.params.freelanceid).populate('reviews').exec(function(err, freelance){
+      Freelance.findById(req.params.freelanceid).populate('reviews').populate('tags').populate('category').exec(function(err, freelance){
         if (err) {
           res.status(400).json(utils.formatErrorMessage(err));
         }
