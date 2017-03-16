@@ -9,6 +9,10 @@ body, h1 {
   font-family: helvetica, sans-serif;
 }
 
+html {
+  background-color: #f7f7f7;
+}
+
 .title {
   display: flex;
   height: 100%;

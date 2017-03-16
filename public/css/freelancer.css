@@ -2,7 +2,6 @@
 /* freelancer main card */
 
 .freelancer-view {
-  width: 100%;
   margin: 10vh 10vw 5vh 10vw;
   width: auto;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -36,11 +35,15 @@
   flex-direction: column;
   margin-left: 20px;
   align-content: flex-end;
-  padding-bottom: 30px;
+  font-weight: lighter;
 }
 
 .freelancer-header-info > h1, .freelancer-header-info > div, .freelancer-header-info > span {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+h1.freelancer-header-name {
+  font-weight: lighter;
 }
 
 address {
@@ -49,10 +52,15 @@ address {
   padding: 20px;
   color: #222;
   font-style: normal;
+  border-bottom: 1px solid #ddd;
 }
 
 address span {
   margin-bottom: 3px;
+}
+
+.freelancer-description {
+  padding: 20px;
 }
 
 
@@ -95,7 +103,7 @@ article {
 }
 
 .review-author {
-  font-size: 2em;
+  font-size: 1.2em;
   color: #F44336;
   flex-basis: 100%;
   margin-bottom: 10px;

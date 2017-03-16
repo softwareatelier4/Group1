@@ -56,13 +56,13 @@ function renderComponent(data) {
 }
 
 class Name extends React.Component {
-  render () {
-    return (<h1>{this.props.first} {this.props.last}</h1>);
+  render() {
+    return (<h1 className="freelancer-header-name">{this.props.first} {this.props.last}</h1>);
   }
 }
 
 class Contact extends React.Component {
-  render () {
+  render() {
     return (
       <address>
         <span>Phone: <a>{this.props.phone}</a></span>
@@ -74,7 +74,7 @@ class Contact extends React.Component {
 }
 
 class FreelancerView extends React.Component {
-  render () {
+  render() {
     return (
       <div className="freelancer-view">
         <FreelancerHeader
@@ -83,11 +83,11 @@ class FreelancerView extends React.Component {
           last={this.props.last}
           title={this.props.title}
           category={this.props.category}
-          score={this.props.avgScore}
+          avgScore={this.props.avgScore}
           price={this.props.price}
         />
-        <div>{this.props.description}</div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
+        <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags}/>
       </div>
     );
@@ -95,15 +95,15 @@ class FreelancerView extends React.Component {
 }
 
 class FreelancerHeader extends React.Component {
-  render () {
+  render() {
     return (
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-header-info">
+          <h1>{this.props.title}</h1>
           <Name first={this.props.first} last={this.props.last}/>
-          <span>{this.props.title}</span>
           <span>{this.props.category}</span>
-          <span>Average Score: {this.props.avgScore} in 5</span>
+          <span>Average Score: {this.props.avgScore}/5</span>
           <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
         </div>
       </div>
@@ -112,7 +112,7 @@ class FreelancerHeader extends React.Component {
 }
 
 class Review extends React.Component {
-  render () {
+  render() {
     return (
       <article>
         <div className="review-header">
@@ -127,7 +127,7 @@ class Review extends React.Component {
 }
 
 class Tags extends React.Component {
-  render () {
+  render() {
     return (
       <ul className="tag-list">
         {this.props.tags}
