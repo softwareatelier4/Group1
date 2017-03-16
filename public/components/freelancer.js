@@ -1,20 +1,57 @@
 'use strict';
 
-let freelancerId = window.location.pathname.split( '/' )[1];
-ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
+/**
+ * Freelancer View Components
+ * CSS styling in css/freelancer.css
+ */
+
+ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
+  // freelancer info
+  const tags = data.tags;
+  const listTags = tags.map((tag, index) =>
+    <li key={index}>
+      {tag.tagName}
+    </li>
+  );
+
   ReactDOM.render(
     <FreelancerView
-      first={data.name} last="TODO"
-      category="TODO"
+      first={data.firstName}
+      last={data.familyName}
+      title={data.title}
+      category={data.category}
+      avgScore={data.avgScore}
+      price={data.price}
+      description={data.description}
       phone={data.phone}
       address={data.address}
       email={data.email}
-      avgScore={data.avgScore}
+      tags={listTags}
     />,
 
-    document.getElementById('root')
+    document.getElementById('freelancer-root')
+  );
+
+  // reviews
+  const reviews = data.reviews;
+  const listReviews = reviews.map((review, index) =>
+    <Review
+      key={index}
+      author={review.author}
+      text={review.text}
+      score={review.score}
+      date={review.date}
+    />
+  );
+
+  ReactDOM.render(
+    <div className="freelancer-reviews">
+      {listReviews}
+    </div>,
+
+    document.getElementById('freelancer-reviews-root')
   );
 }
 
@@ -28,9 +65,9 @@ class Contact extends React.Component {
   render () {
     return (
       <address>
-        <span>{this.props.phone}</span>
-        <span>{this.props.address}</span>
-        <span>{this.props.email}</span>
+        <span>Phone: <a>{this.props.phone}</a></span>
+        <span>Address: <a>{this.props.address}</a></span>
+        <span>Email: <a href={"mailto:" + this.props.email}>{this.props.email}</a></span>
       </address>
     );
   }
@@ -38,11 +75,47 @@ class Contact extends React.Component {
 
 class FreelancerView extends React.Component {
   render () {
-    return <div>
-        <Name first={this.props.first} last={this.props.last}/>
-        <span>{this.props.category}</span>
-        <span>Average Score: {this.props.avgScore} in 5</span>
+    return (
+      <div className="freelancer-view">
+        <div className="freelancer-header">
+          <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
+          <div className="freelancer-header-info">
+            <Name first={this.props.first} last={this.props.last}/>
+            <span>{this.props.title}</span>
+            <span>{this.props.category}</span>
+            <span>Average Score: {this.props.avgScore} in 5</span>
+            <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
+          </div>
+        </div>
+        <div>{this.props.description}</div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
+        <Tags tags={this.props.tags}/>
       </div>
+    );
+  }
+}
+
+class Review extends React.Component {
+  render () {
+    return (
+      <article>
+        <div className="review-header">
+          <span className="review-author">{this.props.author}</span>
+          <span className="review-date">Date: {this.props.date}</span>
+          <span className="review-score">Score: {this.props.score}/5</span>
+        </div>
+        <div className="review-text">{this.props.text}</div>
+      </article>
+    );
+  }
+}
+
+class Tags extends React.Component {
+  render () {
+    return (
+      <ul className="tag-list">
+        {this.props.tags}
+      </ul>
+    )
   }
 }

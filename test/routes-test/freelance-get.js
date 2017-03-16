@@ -22,11 +22,12 @@ describe('Freelance-get test: ', function() {
       request(app)
         .get('/freelance/' + seedData[0].data[0]._id.toString())
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json' )
         .expect(200)
         .end(function(err, res) {
           var freelance = JSON.parse(res.text) || {};
-          freelanceutils.checkFreelanceInfoInResponse(freelance,seedData[0].data[0]);
+          freelanceutils.checkFreelanceInfoInResponse(freelance, seedData[0].data[0]);
           done();
         });
     });
@@ -35,6 +36,7 @@ describe('Freelance-get test: ', function() {
       request(app)
         .get('/freelance/' + ObjectId().toString())
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect(404, done);
     });
 
@@ -42,6 +44,7 @@ describe('Freelance-get test: ', function() {
       request(app)
         .get('/freelance/' + 'literally_anything_which_is_not_in_the_correct_format')
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect(400, done);
     });
 
@@ -49,6 +52,7 @@ describe('Freelance-get test: ', function() {
       request(app)
         .head('/freelance/' + seedData[0].data[0]._id.toString()) // valid id
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect(405, done);
     });
 

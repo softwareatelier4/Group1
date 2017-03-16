@@ -1,3 +1,7 @@
+'use strict';
+
+ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
+
 class FreelancerCard extends React.Component {
   render() {
       return (
