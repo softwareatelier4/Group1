@@ -5,8 +5,7 @@
  * CSS styling in css/freelancer.css
  */
 
-let freelancerId = window.location.pathname.split( '/' )[1];
-ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
+ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
 
