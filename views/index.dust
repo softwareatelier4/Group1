@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>JobAdvisor</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
@@ -10,15 +11,14 @@
       <!-- Title -->
       <div id="title">JobAdvisor</div>
       <!-- Search -->
-      <div id="search-container">
-        <input id="search-name" placeholder="Who" />
-        <button id="search-btn">Search</button>
-      </div>
+      <div id="react-search-container"></div>
       <!-- Filters -->
-      <div id="filters-container"></div>
+      <div id="react-filters-container"></div>
       <!-- Freelancers -->
       <div id="react-freelancers-container"></div>
     </div>
+    <!-- Utils -->
+    <script src="../js/ajax.js"></script>
     <!-- React -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>
