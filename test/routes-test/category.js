@@ -26,7 +26,7 @@ describe('Category test: ', function() {
         .set('Accept', 'application/json')
         .expect(404, done);
     });
-    
+
     before(seed);
     after(utils.dropDb);
 
