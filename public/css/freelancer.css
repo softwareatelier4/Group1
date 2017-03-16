@@ -104,3 +104,19 @@ article {
 .review-date, .review-score{
   color: #888;
 }
+
+ul.tag-list {
+  display: flex;
+  list-style: none;
+  padding: 0 20px 20px 20px;
+  margin: 0;
+}
+
+ul.tag-list li {
+  padding: 5px 15px;
+  margin-right: 10px;
+  background-color: rgba(244, 67, 54, 0.9);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.7em;
+}
