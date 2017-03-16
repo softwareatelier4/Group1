@@ -1,7 +1,5 @@
 'use strict';
 
-ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
-
 class FreelancerCard extends React.Component {
   render() {
       return (
@@ -26,5 +24,10 @@ class FreelancersContainer extends React.Component {
 
 let list = [ 'a', 'b', 'c' ];
 
-ReactDOM.render(<FreelancersContainer freelancers={list} />,
-                document.getElementById('react-freelancers-container'));
+function renderComponent(data) {
+  ReactDOM.render(<FreelancersContainer freelancers={list} />,
+                  document.getElementById('react-freelancers-container'));
+}
+
+//ajaxRequest("GET", "/search", { ajax : true }, {}, renderComponent);
+renderComponent();

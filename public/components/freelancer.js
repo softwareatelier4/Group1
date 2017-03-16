@@ -21,7 +21,7 @@ function renderComponent(data) {
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category={data.category}
+      category={data.category.categoryName}
       avgScore={data.avgScore}
       price={data.price}
       description={data.description}
@@ -77,21 +77,37 @@ class FreelancerView extends React.Component {
   render () {
     return (
       <div className="freelancer-view">
-        <div className="freelancer-header">
-          <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
-          <div className="freelancer-header-info">
-            <Name first={this.props.first} last={this.props.last}/>
-            <span>{this.props.title}</span>
-            <span>{this.props.category}</span>
-            <span>Average Score: {this.props.avgScore} in 5</span>
-            <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
-          </div>
-        </div>
+        <FreelancerHeader
+          urlPicture={this.props.urlPicture}
+          first={this.props.first}
+          last={this.props.last}
+          title={this.props.title}
+          category={this.props.category}
+          score={this.props.avgScore}
+          price={this.props.price}
+        />
         <div>{this.props.description}</div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
         <Tags tags={this.props.tags}/>
       </div>
     );
+  }
+}
+
+class FreelancerHeader extends React.Component {
+  render () {
+    return (
+      <div className="freelancer-header">
+        <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
+        <div className="freelancer-header-info">
+          <Name first={this.props.first} last={this.props.last}/>
+          <span>{this.props.title}</span>
+          <span>{this.props.category}</span>
+          <span>Average Score: {this.props.avgScore} in 5</span>
+          <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
+        </div>
+      </div>
+  );
   }
 }
 
