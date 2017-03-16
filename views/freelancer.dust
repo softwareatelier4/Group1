@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/freelancer.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/freelancer.css">
   </head>
   <body>
 
@@ -13,14 +13,14 @@
 
 
     <!-- Utils -->
-    <script src="js/ajax.js"></script>
+    <script src="../js/ajax.js"></script>
 
     <!-- React libraries -->
-    <script src="js/react-15.0.1.js"></script>
-    <script src="js/react-dom-15.0.1.js"></script>
-    <script src="js/browser.min.js"></script>
+    <script src="../js/react-15.0.1.js"></script>
+    <script src="../js/react-dom-15.0.1.js"></script>
+    <script src="../js/browser.min.js"></script>
 
     <!-- React component rendering -->
-    <script src="components/freelancer.js" type="text/babel"></script>
+    <script src="../components/freelancer.js" type="text/babel"></script>
   </body>
 </html>

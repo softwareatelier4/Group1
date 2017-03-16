@@ -22,18 +22,5 @@ router.get('/', function(req, res, next) {
   }
 });
 
-// to test freelancer view
-router.get('/:id', function(req, res, next) {
-  if (req.accepts('text/html')) {
-    res.render('freelancer', {
-      title: "JobAdvisor",
-    });
-  }
-  else {
-    res.sendStatus(404);
-  }
-});
-
-
-/** router for /users */
+/** router for root */
 module.exports = router;
