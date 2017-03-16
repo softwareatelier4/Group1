@@ -8,11 +8,12 @@
 ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
-
   // freelancer info
   ReactDOM.render(
     <FreelancerView
-      first={data.firstName} last={data.familyName}
+      first={data.firstName}
+      last={data.familyName}
+      title={data.title}
       category="TODO-category"
       phone={data.phone}
       address={data.address}
@@ -63,15 +64,15 @@ class Contact extends React.Component {
 }
 
 class FreelancerView extends React.Component {
-
   render () {
     return (
       <div className="freelancer-view">
         <div className="freelancer-header">
-          <div className="picture-placeholder"></div>
+          <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
           <div className="freelancer-header-info">
             <Name first={this.props.first} last={this.props.last}/>
-            <div>{this.props.category}</div>
+            <span>{this.props.title}</span>
+            <span>{this.props.category}</span>
             <span>Average Score: {this.props.avgScore} in 5</span>
           </div>
         </div>
