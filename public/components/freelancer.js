@@ -21,7 +21,7 @@ function renderComponent(data) {
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category={data.category}
+      category={data.category.categoryName}
       avgScore={data.avgScore}
       price={data.price}
       description={data.description}

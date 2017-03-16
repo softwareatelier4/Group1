@@ -134,5 +134,6 @@ var seedData = [];
 seedData.push(freelancers);
 seedData.push(reviews);
 seedData.push(tags);
+seedData.push(categories);
 
 module.exports = seedData;
