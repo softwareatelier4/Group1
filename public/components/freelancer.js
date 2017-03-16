@@ -56,13 +56,13 @@ function renderComponent(data) {
 }
 
 class Name extends React.Component {
-  render () {
+  render() {
     return (<h1 className="freelancer-header-name">{this.props.first} {this.props.last}</h1>);
   }
 }
 
 class Contact extends React.Component {
-  render () {
+  render() {
     return (
       <address>
         <span>Phone: <a>{this.props.phone}</a></span>
@@ -74,7 +74,7 @@ class Contact extends React.Component {
 }
 
 class FreelancerView extends React.Component {
-  render () {
+  render() {
     return (
       <div className="freelancer-view">
         <FreelancerHeader
@@ -95,7 +95,7 @@ class FreelancerView extends React.Component {
 }
 
 class FreelancerHeader extends React.Component {
-  render () {
+  render() {
     return (
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -112,7 +112,7 @@ class FreelancerHeader extends React.Component {
 }
 
 class Review extends React.Component {
-  render () {
+  render() {
     return (
       <article>
         <div className="review-header">
@@ -127,7 +127,7 @@ class Review extends React.Component {
 }
 
 class Tags extends React.Component {
-  render () {
+  render() {
     return (
       <ul className="tag-list">
         {this.props.tags}
