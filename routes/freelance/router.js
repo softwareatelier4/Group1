@@ -12,7 +12,17 @@ const Review = mongoose.model('Review');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete later
 router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+
+// GET /freelance/new
+router.get('/new', function(req, res, next) {
+  if (req.accepts('text/html')) {
+    res.render('freelancer-create', {
+      title: "JobAdvisor - Create Freelancer Profile" ,
+    });
+  } else res.sendStatus(400);
+});
 
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
