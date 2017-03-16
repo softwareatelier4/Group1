@@ -1,9 +1,6 @@
 /** @module test/freelance/utils
 * Utilities for the routes tests
 */
-const mongoose = require('mongoose');
-const assert = require('assert');
-const ObjectId = mongoose.Types.ObjectId;
 
 'use strict';
 
@@ -34,11 +31,10 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
         }); break;
 
         case "category": // Test for category in a freelance
-        responseObj.tags.forEach(function(tag) {
-          tag.should.have.property("_id");
-          tag.should.have.property("freelancers");
-          tag.should.have.property("categoryName");
-        }); break;
+        responseObj.category.should.have.property("_id");
+        responseObj.category.should.have.property("freelancers");
+        responseObj.category.should.have.property("categoryName");
+        break;
 
         default: break;
       }
@@ -61,8 +57,8 @@ module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(re
       responseObj.should.have.property(key, freelance[key]);
 		}
 	});
-}						
-			
+}
+
 module.exports.checkCategoryInfoInResponse = function checkCategoryInfoInResponse(responseObj, category) {
   Object.keys(category).forEach(function(key) {
     // check validity of Freelance linked
