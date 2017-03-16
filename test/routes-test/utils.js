@@ -4,6 +4,10 @@
 
 'use strict';
 
+const mongoose = require('mongoose');
+const assert = require('assert');
+const ObjectId = mongoose.Types.ObjectId;
+
 module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInResponse(responseObj, freelance){
   var populated = ["reviews", "tags", "category"];
   Object.keys(freelance).forEach(function(key) {
@@ -33,5 +37,17 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
       }
 
     }
+  });
+}
+
+module.exports.checkCategoryInfoInResponse = function checkCategoryInfoInResponse(responseObj, category){
+  Object.keys(category).forEach(function(key) {
+    // check validity of Freelance linked
+    if (key == 'freelancers') {
+      responseObj.freelancers.forEach(function(freelanceid) {
+        assert.equal(ObjectId.isValid(freelanceid), true);
+      });
+    }
+    responseObj.should.have.property(key);
   });
 }
