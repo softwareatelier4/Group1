@@ -11,6 +11,13 @@ ajaxRequest("GET", "/freelance/" + freelancerId, {}, renderComponent);
 function renderComponent(data) {
 
   // freelancer info
+  const tags = data.tags;
+  const listTags = tags.map((tag, index) =>
+    <li key={index}>
+      {tag}
+    </li>
+  );
+
   ReactDOM.render(
     <FreelancerView
       first={data.firstName} last={data.familyName}
@@ -19,6 +26,7 @@ function renderComponent(data) {
       address={data.address}
       email={data.email}
       avgScore={data.avgScore}
+      tags={listTags}
     />,
 
     document.getElementById('freelancer-root')
@@ -64,7 +72,6 @@ class Contact extends React.Component {
 }
 
 class FreelancerView extends React.Component {
-
   render () {
     return (
       <div className="freelancer-view">
@@ -77,6 +84,7 @@ class FreelancerView extends React.Component {
           </div>
         </div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
+        <Tags tags={this.props.tags}/>
       </div>
     );
   }
@@ -94,5 +102,15 @@ class Review extends React.Component {
         <div className="review-text">{this.props.text}</div>
       </article>
     );
+  }
+}
+
+class Tags extends React.Component {
+  render () {
+    return (
+      <ul className="tag-list">
+        {this.props.tags}
+      </ul>
+    )
   }
 }
