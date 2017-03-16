@@ -21,11 +21,13 @@ function renderComponent(data) {
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category="TODO-category"
+      category={data.category}
+      avgScore={data.avgScore}
+      price={data.price}
+      description={data.description}
       phone={data.phone}
       address={data.address}
       email={data.email}
-      avgScore={data.avgScore}
       tags={listTags}
     />,
 
@@ -65,7 +67,7 @@ class Contact extends React.Component {
       <address>
         <span>Phone: <a>{this.props.phone}</a></span>
         <span>Address: <a>{this.props.address}</a></span>
-        <span>Email: <a>{this.props.email}</a></span>
+        <span>Email: <a href={"mailto:" + this.props.email}>{this.props.email}</a></span>
       </address>
     );
   }
@@ -82,8 +84,10 @@ class FreelancerView extends React.Component {
             <span>{this.props.title}</span>
             <span>{this.props.category}</span>
             <span>Average Score: {this.props.avgScore} in 5</span>
+            <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
           </div>
         </div>
+        <div>{this.props.description}</div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
         <Tags tags={this.props.tags}/>
       </div>
