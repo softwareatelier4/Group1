@@ -17,7 +17,7 @@ describe('Search test: ', function() {
     before(seed);
     after(utils.dropDb);
 
-    it('Should return the correct data', function(done) {
+    it('Should respond with a 200 and return the correct data', function(done) {
       request(app)
         .get('/search?keyword=asim')
         .set('Accept', 'application/json')
@@ -30,6 +30,38 @@ describe('Search test: ', function() {
           });
           done();
         });
+    });
+
+    it('Should respond with a 200 and return two results for two matches', function(done) {
+      request(app)
+        .get('/search?keyword=toes')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text) || [];
+          results.length.should.equal(2);
+          done();
+        });
+    });
+
+    it('should respond with a 200 even if there are no results', function(done) {
+      request(app)
+        .get('/search?keyword=a_string_that_will_never_be_found_anywhere')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text);
+          results.should.be.empty;
+          done();
+        });
+    });
+
+    it('should respond with a 405 if the method is not GET or OPTIONS', function(done) {
+      request(app)
+        .head('/search/')
+        .set('Accept', 'application/json')
+        .expect(405, done);
     });
 
   });

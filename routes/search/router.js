@@ -26,11 +26,6 @@ router.get('/', function(req, res, next) {
   Freelance.find({ $or : query }).exec(function(err, results) {
     if (err) {
       res.status(400).json(err);
-    } else if (!results) {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Not Found",
-      });
     } else {
       results.forEach(function(freelance) {
         utils.addLinks(freelance, "freelance");
