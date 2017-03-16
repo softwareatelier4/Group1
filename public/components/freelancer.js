@@ -86,8 +86,8 @@ class FreelancerView extends React.Component {
           score={this.props.avgScore}
           price={this.props.price}
         />
-        <div>{this.props.description}</div>
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
+        <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags}/>
       </div>
     );

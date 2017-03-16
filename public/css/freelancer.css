@@ -36,11 +36,11 @@
   flex-direction: column;
   margin-left: 20px;
   align-content: flex-end;
-  padding-bottom: 30px;
+  font-weight: lighter;
 }
 
 .freelancer-header-info > h1, .freelancer-header-info > div, .freelancer-header-info > span {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 address {
@@ -49,10 +49,15 @@ address {
   padding: 20px;
   color: #222;
   font-style: normal;
+  border-bottom: 1px solid #ddd;
 }
 
 address span {
   margin-bottom: 3px;
+}
+
+.freelancer-description {
+  padding: 20px;
 }
 
 
