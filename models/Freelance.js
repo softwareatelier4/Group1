@@ -1,11 +1,16 @@
 /** @module models/Freelance
 * The Freelance Model
 * Schema:
-* name						String			Name of the Freelance. Required.     //maybe also name company
+* firstName				String			Name of the Freelance. Required.     //maybe also name company
+* familyName			String 			Family name of the freelancer
+* title						String 			Title that appears in the search result of freelancer. Required.
+* category 				ObjectID 		One of the possible categories for search
+* description			String 			description of the freelancer
+* urlPicture			String 			Url of page picture
 * address					String			Address of the Freelance
 * email						String			Email of the freelance. Required
 * phone						String			Phone of the freelance
-* avgScore					Integer			Average score of all reviews
+* avgScore				Integer			Average score of all reviews
 * price						Object			Price range of the freelance e.g. {min: 12, max: 24}
 * reviews					[ObjectID]		Array containing IDs of all reviews
 * tags						Array			Array of Strings. Tags used for search
@@ -16,18 +21,26 @@
 'use strict';
 const mongoose = require('mongoose');
 const ObjectID = mongoose.Schema.Types.ObjectId;
-require ('./Review');
+require('./Review');
+require('./Tag');
+require('./Category');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
-		firstName		: { type: String, required: true },
-		familyName		: { type: String, required: true },
-		address			: { type: String },
-		email			: { type: String, required: true },
-		phone			: { type: String },
-		price			: { type: Object, required: true },
-		avgScore 		: { type: Number },
-		reviews			: [{ type: ObjectID, ref: "Review", default: [] }],
-		tags			: [{ type: String, default: [] }],
+		firstName			: { type: String, required: true },
+		familyName		: { type: String },
+		title					: { type: String, required: true },
+		category			: { type: ObjectID, ref: "Category" },
+		description		: { type: String },
+		urlPicture		: { type: String },
+		address				: { type: String },
+		email					: { type: String, required: true },
+		phone					: { type: String },
+		price					: { type: Object },
+		//we recompute this on every review
+		avgScore 			: { type: Number },
+		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
+		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
+		//maybe add category
 	},
 	{
 		versionKey	: false,
@@ -38,23 +51,30 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 Freelance.pre('save', function (next) {
 
 	//review between 0 and 5
-	if (this.avgScore > 5) {
-		this.avgScore = 5;
-	} else if (this.avgScore < 0) {
-		this.avgScore = 0;
-		//maybe a problem with default -1 value of review, to check later.
+	if (this.avgScore !== undefined){
+		if (this.avgScore > 5) {
+			this.avgScore = 5;
+		} else if (this.avgScore < 0) {
+			this.avgScore = 0;
+		}
 	}
+
 
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
-	if (!(this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max'))) {
-		this.price = {min: 0, max: 0};
+	//maybe in future
+	if (this.price !== undefined) {
+		if ((this.price.hasOwnProperty('min') && this.price.hasOwnProperty('max'))) {
+			if (this.price.min < 0) {
+				this.price.min = 0;
+			} else if (this.price.max < 0 || this.price.max < this.price.min) {
+				this.price.max = this.price.min;
+			}
+		} else {
+			this.price = {min:0, max:0};
+		}
 	}
-	if (this.price.min < 0) {
-		this.price.min = 0;
-	} else if (this.price.max < 0 || this.price.max < this.price.min) {
-		this.price.max = this.price.min;
-	}
+
 
 	next();
 
