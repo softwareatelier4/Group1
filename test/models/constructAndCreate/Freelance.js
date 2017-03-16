@@ -61,9 +61,13 @@ describe('Freelance Model ', function(done){
 
     it ('should persist a freelance with valid properties', function(done){
       var freelance = new Freelance();
-      freelance.name = 'Mark Knopfler';
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
       freelance.email = 'ripperoni@pepe.pe';
       freelance.price = {min: 20, max: 100};
+      freelance.review = [];
+      freelance.tags = [];
       freelance.save(function(err, saved){
         should.not.exist(err, 'No error should occur');
         saved.should.eql(freelance);

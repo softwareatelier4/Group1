@@ -7,8 +7,8 @@
     "install": "chmod -R u+x ./bin/ && ./bin/installSeleniumAndChromeWebDriver",
     "start": "DEBUG='jobadvisor' ./bin/www",
     "start:dev": "DEBUG='jobadvisor' nodemon ./bin/www -e html,css,dust",
-    "test": "npm run test-mocha && npm start & ./nightwatch && pkill jobadvisor && echo FINISHED",
-    "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/* --colors --reporter mocha-jenkins-reporter",
+    "test": "sh test_no_download.sh",
+    "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/* --recursive --colors --reporter mocha-jenkins-reporter",
     "test-nightwatch": "./nightwatch"
   },
   "author": "Group 1",
