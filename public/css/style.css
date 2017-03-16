@@ -2,8 +2,13 @@
   box-sizing: border-box;
 }
 
-body {
+body, h1 {
   margin: 0;
+  font-family: helvetica, sans-serif;
+}
+
+html {
+  background-color: #f7f7f7;
 }
 
 .title {

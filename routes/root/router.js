@@ -7,10 +7,10 @@ var middleware =  require('../middleware');
 var rootUrl = require("../../config").url;
 
 
-//supported methods
+// supported methods
 router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
-//return index
+// list users
 router.get('/', function(req, res, next) {
   if (req.accepts('text/html')) {
     res.render('index', {
