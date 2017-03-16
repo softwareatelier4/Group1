@@ -33,9 +33,21 @@
 .freelancer-header-info {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
-  align-content: flex-end;
+  flex-wrap: wrap;
+  margin: 0 20px;
+  padding-right: 20px;
   font-weight: lighter;
+  flex-grow: 1;
+}
+
+.freelancer-title {
+  color: #F44336;
+  align-self: flex-start;
+  margin: -20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 0 2px 0 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
 .freelancer-header-info > h1, .freelancer-header-info > div, .freelancer-header-info > span {
@@ -100,6 +112,7 @@ article {
   border-left: 5px solid #F44336;
   padding: 10px 20px;
   color: #444;
+  line-height: 1.3em;
 }
 
 .review-author {
