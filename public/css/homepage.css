@@ -24,6 +24,14 @@ body {
 #search-container {
   margin-bottom: 50px;
   display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#search-bar {
+  width: 100%;
+  display: flex;
   justify-content: center;
 }
 
@@ -38,6 +46,7 @@ body {
 
 #search-warning {
   color: red;
+  margin-top: 20px;
 }
 
 #filters-container {

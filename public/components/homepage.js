@@ -6,8 +6,10 @@ let locationsTemp = [
   "Mendrisio"
 ];
 
+// Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
+    // Function triggers only on button click (!e.keyCode) or enter key pressed
     if (!e.keyCode || e.keyCode == 13) {
       let searchWarning = document.getElementById('search-warning');
       let searchName = document.getElementById('search-name').value;
@@ -31,24 +33,28 @@ class SearchContainer extends React.Component {
   render() {
     return (
       <div id="search-container">
-        <input id="search-name" placeholder="Who?" onKeyDown={this.searchRequest} />
-        <button id="search-btn" onClick={this.searchRequest}>Search</button>
+        <div id="search-bar">
+          <input id="search-name" placeholder="What service do you need?" onKeyDown={this.searchRequest} />
+          <button id="search-btn" onClick={this.searchRequest}>Search</button>
+        </div>
         <div id="search-warning"></div>
       </div>
     );
   }
 }
 
+// Container for all filters
 class FiltersContainer extends React.Component {
   render() {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
-      let name = this.props.categories[i].categoryName;
-      categories.push(<option value={name} key={i}>{name}</option>);
+      let category = this.props.categories[i].categoryName;
+      categories.push(<option value={category} key={i}>{category}</option>);
     }
     let locations = [];
     for (let i = 0; i < this.props.locations.length; ++i) {
-      locations.push(<option value={this.props.locations[i]} key={i}>{this.props.locations[i]}</option>);
+      let location = this.props.locations[i]
+      locations.push(<option value={location} key={i}>{location}</option>);
     }
     return (<div id="filters-container">
       <div id="filters">
@@ -71,6 +77,7 @@ class FiltersContainer extends React.Component {
   }
 }
 
+// Button that redirects to `add freelancer form`
 class FreelancerCreateBtn extends React.Component {
   redirectFreelancerForm() {
     document.location = '/freelance/new';
@@ -80,12 +87,7 @@ class FreelancerCreateBtn extends React.Component {
   }
 }
 
-class FreelancerName extends React.Component {
-  render () {
-    return (<h2>{this.props.first} {this.props.last}</h2>);
-  }
-}
-
+// Card which displays a freelancer's information
 class FreelancerCard extends React.Component {
   redirectFreelancer(freelancer) {
     return function() {
@@ -93,35 +95,39 @@ class FreelancerCard extends React.Component {
     }
   }
   render () {
+    let avgScore = !isNaN(this.props.avgScore) ? this.props.avgScore : '-';
+    let price = this.props.price ? this.props.price.min + ' - ' + this.props.price.max + " CHF" : '-';
     return (
       <div className="freelancer-card" onClick={this.redirectFreelancer(this)}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
           <h1>{this.props.title}</h1>
-          <FreelancerName first={this.props.first} last={this.props.last}/>
+          <h2>{this.props.firstName} {this.props.familyName}</h2>
           <span>{this.props.category}</span>
-          <span>Average Score: {this.props.avgScore} in 5</span>
-          <span>Price range: {this.props.price ? this.props.price.min + " - " + this.props.price.max + " CHF" : " - "}</span>
+          <span>Average Score: {avgScore} / 5</span>
+          <span>Price range: {price}</span>
         </div>
       </div>
     );
   }
 }
 
+// Container for all FreelancerCards
 class FreelancersContainer extends React.Component {
   render() {
     let freelancers = [];
     for (let i = 0; i < this.props.freelancers.length; ++i) {
+      let freelancer = this.props.freelancers[i];
       freelancers.push(<FreelancerCard
-        urlPicture={this.props.freelancers[i].urlPicture}
-        first={this.props.freelancers[i].firstName}
-        last={this.props.freelancers[i].familyName}
-        title={this.props.freelancers[i].title}
-        category={this.props.freelancers[i].category.categoryName}
-        avgScore={this.props.freelancers[i].avgScore}
-        price={this.props.freelancers[i].price}
-        _id={this.props.freelancers[i]._id}
-        key={i}
+        urlPicture = {freelancer.urlPicture}
+        firstName  = {freelancer.firstName}
+        familyName = {freelancer.familyName}
+        title      = {freelancer.title}
+        category   = {freelancer.category.categoryName}
+        avgScore   = {freelancer.avgScore}
+        price      = {freelancer.price}
+        _id        = {freelancer._id}
+        key        = {i}
         />);
     }
     return (
@@ -132,6 +138,7 @@ class FreelancersContainer extends React.Component {
   }
 }
 
+// Hide a freelancer card if the filters don't match the attributes
 function applyFilters() {
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
@@ -168,7 +175,6 @@ function renderFreelancerCreateBtn() {
 }
 
 function renderFreelancers(freelancers) {
-  console.log(freelancers);
   ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
   applyFilters();
 }
