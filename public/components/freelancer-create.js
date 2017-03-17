@@ -5,6 +5,16 @@
  * CSS styling in css/freelancer-create.css
  */
 
+/* Label model for paper input:
+ *
+ * <div class="group">
+ *   <input type="text" required>
+ *   <span class="highlight"></span>
+ *   <span class="bar"></span>
+ *   <label>Name</label>
+ * </div>
+ */
+
 
 class CreationForm extends React.Component {
   constructor(props) {
@@ -22,7 +32,7 @@ class CreationForm extends React.Component {
       if(this.refs[field].value) {
         formData[field] = this.refs[field].value;
         let temp = this.state.color;
-        temp[field] = "inherit";
+        temp[field] = "#F44336";
         this.setState({ color: temp });
       } else {
         let temp = this.state.color;
@@ -36,17 +46,38 @@ class CreationForm extends React.Component {
   render() {
     return (
         <div className="freelancer-form">
+          <div className="freelancer-form-header">
+            <h1>Get started by creating your freelancer profile </h1>
+          </div>
           <form onSubmit={this.handleSubmit}>
-            <label style={{color: this.state.color.firstName || "inherit"}}>
-              First Name: <input ref="firstName" className="first-name" name="first-name"/>
-            </label>
-            <label style={{color: this.state.color.familyName || "inherit"}}>
-              Family Name: <input ref="familyName" className="family-name" name="family-name"/>
-            </label>
-            <label style={{color: this.state.color.title || "inherit"}}>
-              Job title: <input ref="title" className="job-title" name="job-title"/>
-            </label>
-            <label style={{color: this.state.color.category || "inherit"}}>
+
+            <div className="names-input">
+              <div className="group">
+                <input ref="firstName" className="first-name" name="first-name" type="text" required/>
+                <span className="bar"></span>
+                <label style={{color: this.state.color.firstName}}>
+                  First Name
+                </label>
+              </div>
+
+              <div className="group">
+                <input ref="familyName" className="family-name" name="family-name" type="text" required/>
+                <span className="bar"></span>
+                <label style={{color: this.state.color.firstName}}>
+                  Family Name
+                </label>
+              </div>
+            </div>
+
+            <div className="group">
+              <input ref="job-title" className="job-title" name="job-title" type="text" required/>
+              <span className="bar"></span>
+              <label style={{color: this.state.color.firstName}}>
+                Job Title
+              </label>
+            </div>
+
+            <label className="category-selector" style={{color: this.state.color.category}}>
               Job category:
               <select ref="category">
                 <option value="selected">Please select a job category</option>
@@ -55,15 +86,30 @@ class CreationForm extends React.Component {
               </select>
             </label>
 
-            <label style={{color: this.state.color.address || "inherit"}}>
-              Address: <input ref="address" className="address" name="address"/>
-            </label>
-            <label style={{color: this.state.color.phone || "inherit"}}>
-              Phone: <input ref="phone" className="phone" name="phone"/>
-            </label>
-            <label style={{color: this.state.color.email || "inherit"}}>
-              Email: <input ref="email" className="email" name="email"/>
-            </label>
+            <div className="group">
+              <input ref="address" className="address" name="address" type="text" required/>
+              <span className="bar"></span>
+              <label style={{color: this.state.color.firstName}}>
+                Address
+              </label>
+            </div>
+
+            <div className="group">
+              <input ref="phone" className="phone" name="phone" type="text" required/>
+              <span className="bar"></span>
+              <label style={{color: this.state.color.firstName}}>
+                Phone
+              </label>
+            </div>
+
+            <div className="group">
+              <input ref="email" className="email" name="email" type="text" required/>
+              <span className="bar"></span>
+              <label style={{color: this.state.color.firstName}}>
+                Email
+              </label>
+            </div>
+
             <input type="submit" value="Submit"/>
           </form>
         </div>

@@ -1,4 +1,134 @@
+/**
+ * Freelancer Creation View Styling
+ * js components in components/freelancer-creat.js
+ */
+
+
+/* freelancer create form */
+
+.freelancer-form {
+  margin: 10vh 10vw 5vh 10vw;
+  width: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+.freelancer-form-header {
+  padding: 20px;
+  color: #fff;
+  background-color: #F44336;
+  font-weight: 100;
+  border-radius: 2px 2px 0 0;
+  text-align: center;
+}
+
+.freelancer-form-header h1 {
+  font-weight: lighter;
+}
+
 .freelancer-form form {
   display: flex;
   flex-direction: column;
+  padding: 20px;
+}
+
+.names-input {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  margin-right: -20px;
+}
+
+.names-input .group {
+  margin-right: 20px;
+  width: 50%;
+}
+
+
+/* freelancer form label (courtesy of codeopen.io user )
+ * NOTE: possibly move this code to an external css file if form input
+ * fields will be used in other components outside of freelancer-create.js
+ */
+
+.group {
+  position: relative;
+  margin-bottom:45px;
+}
+
+/* form starting stylings ------------------------------- */
+
+input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #757575;
+}
+
+input:focus {
+  outline:none;
+}
+
+/* LABEL ======================================= */
+
+.group label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+/* active state */
+
+input:focus ~ label, input:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #F44336;
+}
+
+.category-selector {
+  padding: 10px 10px 10px 5px;
+  margin-bottom: 45px;
+}
+
+/* BOTTOM BARS ================================= */
+
+.bar {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.bar:before, .bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #F44336;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.bar:before {
+  left: 50%;
+}
+
+.bar:after {
+  right: 50%;
+}
+
+/* active state */
+
+input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width: 50%;
 }
