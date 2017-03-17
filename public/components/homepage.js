@@ -1,38 +1,5 @@
 'use strict';
 
-let listTemp = [
-  {
-    urlPicture: "",
-    first: "Mich",
-    last: "Lustro",
-    title: "USI student",
-    category: "??",
-    score: "10",
-    price: { min: 20, max: 50 },
-    _id: "a"
-  },
-  {
-    urlPicture: "",
-    first: "Ame",
-    last: "Zucc",
-    title: "USI student",
-    category: "??",
-    score: "10",
-    price: { min: 10, max: 1024 },
-    _id: "b"
-  },
-  {
-    urlPicture: "",
-    first: "Ame",
-    last: "Zucc",
-    title: "USI student",
-    category: "??",
-    score: "10",
-    price: { min: 10, max: 1024 },
-    _id: "c"
-  }
-];
-
 let categoriesTemp = [
   "Informatics",
   "Management"
@@ -81,7 +48,8 @@ class FiltersContainer extends React.Component {
   render() {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
-      categories.push(<option value={this.props.categories[i]} key={i}>{this.props.categories[i]}</option>);
+      let name = this.props.categories[i].categoryName;
+      categories.push(<option value={name} key={i}>{name}</option>);
     }
     let locations = [];
     for (let i = 0; i < this.props.locations.length; ++i) {
@@ -117,7 +85,7 @@ class FreelancerName extends React.Component {
 class FreelancerCard extends React.Component {
   redirectFreelancer(freelancer) {
     return function() {
-      document.location = `/freelancer/${freelancer._id}`;
+      document.location = `/freelance/${freelancer._id}`;
     }
   }
   render () {
@@ -143,11 +111,11 @@ class FreelancersContainer extends React.Component {
     for (let i = 0; i < this.props.freelancers.length; ++i) {
       freelancers.push(<FreelancerCard
         urlPicture={this.props.freelancers[i].urlPicture}
-        first={this.props.freelancers[i].first}
-        last={this.props.freelancers[i].last}
+        first={this.props.freelancers[i].firstName}
+        last={this.props.freelancers[i].familyName}
         title={this.props.freelancers[i].title}
-        category={this.props.freelancers[i].category}
-        score={this.props.freelancers[i].avgScore}
+        category={this.props.freelancers[i].category.categoryName}
+        avgScore={this.props.freelancers[i].avgScore}
         price={this.props.freelancers[i].price}
         _id={this.props.freelancers[i]._id}
         key={i}
@@ -163,7 +131,7 @@ class FreelancersContainer extends React.Component {
 
 function renderPage(data) {
   renderSearch();
-  ajaxRequest("GET", "/filters", { ajax : true }, {}, renderFilters);
+  ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
 }
 
@@ -171,12 +139,12 @@ function renderSearch() {
   ReactDOM.render(<SearchContainer />, document.getElementById('react-search-container'));
 }
 
-function renderFilters(data) {
-  ReactDOM.render(<FiltersContainer categories={categoriesTemp} locations={locationsTemp} />, document.getElementById('react-filters-container'));
+function renderFilters(categories) {
+  ReactDOM.render(<FiltersContainer categories={categories} locations={locationsTemp} />, document.getElementById('react-filters-container'));
 }
 
-function renderFreelancers(data) {
-  ReactDOM.render(<FreelancersContainer freelancers={listTemp} />, document.getElementById('react-freelancers-container'));
+function renderFreelancers(freelancers) {
+  ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
 }
 
 renderPage();

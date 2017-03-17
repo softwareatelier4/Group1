@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
     { title : regex },
     { description : regex }
   ]
-  Freelance.find({ $or : query }).exec(function(err, results) {
+  Freelance.find({ $or : query }).populate('category').exec(function(err, results) {
     if (err) {
       res.status(400).json(err);
     } else {

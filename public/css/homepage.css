@@ -4,7 +4,7 @@ html {
 
 body {
   margin: 0;
-  background-color: ghostwhite;
+  /*background-color: ghostwhite;*/
 }
 
 #root {
@@ -38,7 +38,7 @@ body {
 
 #filters-container {
   margin-bottom: 50px;
-  background-color: lightblue;
+  /*background-color: lightblue;*/
 }
 
 #filters {
@@ -50,7 +50,7 @@ body {
 }
 
 #freelancers-container {
-  background-color: lightgreen;
+  /*background-color: lightgreen;*/
   display: flex;
   flex-flow: column;
   align-items: center;
