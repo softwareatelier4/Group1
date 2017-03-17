@@ -37,15 +37,6 @@ describe('Review Model ', function(done){
       utils.connectAndDropDb(function(err){
         if (err) return done(err);
       done();
-
-    //     freelance = new Freelance({
-    //       name : 'Mark Knopfler',
-    //       email : 'ripperoni@pepe.pe'
-    //     });
-
-    //     freelance.save(function(err,save){
-    //       if (err) return done(err);
-    //     });
       });
     });
 
@@ -120,19 +111,20 @@ describe('Review Model ', function(done){
 //maybe fix dis
 
 
-    //   it('if date is empty; null; or undefined, it should get assigned the value Date.now',
-    //   function(done){
-	// 	  let review = new Review();
-	// 	  review.author = 'Bob Knopfler';
-	// 	  review.title = 'Sweet product';
-	// 	  review.text = 'GG, well played';
-	// 	  review.score = 1;
-    //   review.save(function(err, saved){
-    //     should.not.exist(err, 'No error should occur');
-    //     review.date.should.equal(Date.now().toLocaleString());
-    //     done();
-    //   });
-    // });
+      it('if date is empty; null; or undefined, it should get assigned the value Date.now ± 1s',
+      function(done){
+		  let review = new Review();
+		  review.author = 'Bob Knopfler';
+		  review.title = 'Sweet product';
+		  review.text = 'GG, well played';
+		  review.score = 1;
+      review.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        let diff = Date.now() - saved.date.getTime();
+        diff.should.be.below(1000);
+        done();
+      });
+    });
 
 	it('if text is bigger than 1000 characters, it should be saved as only the first 1000 characters',
 	function(done){
