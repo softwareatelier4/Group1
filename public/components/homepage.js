@@ -71,6 +71,15 @@ class FiltersContainer extends React.Component {
   }
 }
 
+class FreelancerCreateBtn extends React.Component {
+  redirectFreelancerForm() {
+    document.location = '/freelance';
+  }
+  render () {
+    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm}>Add a new freelancer</button>);
+  }
+}
+
 class FreelancerName extends React.Component {
   render () {
     return (<h2>{this.props.first} {this.props.last}</h2>);
@@ -142,6 +151,7 @@ function applyFilters() {
 function renderPage(data) {
   renderSearch();
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
+  renderFreelancerCreateBtn();
   ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
 }
 
@@ -151,6 +161,10 @@ function renderSearch() {
 
 function renderFilters(categories) {
   ReactDOM.render(<FiltersContainer categories={categories} locations={locationsTemp} />, document.getElementById('react-filters-container'));
+}
+
+function renderFreelancerCreateBtn() {
+  ReactDOM.render(<FreelancerCreateBtn />, document.getElementById('react-freelancer-create-btn'));
 }
 
 function renderFreelancers(freelancers) {

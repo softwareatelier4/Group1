@@ -14,6 +14,8 @@
       <div id="react-search-container"></div>
       <!-- Filters -->
       <div id="react-filters-container"></div>
+      <!-- Create -->
+      <div id="react-freelancer-create-btn"></div>
       <!-- Freelancers -->
       <div id="react-freelancers-container"></div>
     </div>
