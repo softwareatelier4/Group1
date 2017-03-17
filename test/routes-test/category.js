@@ -4,29 +4,23 @@
 
 'use strict';
 
-var mongoose   = require('mongoose');
-var ObjectId   = mongoose.Types.ObjectId;
+const mongoose   = require('mongoose');
+const ObjectId   = mongoose.Types.ObjectId;
+const Category = mongoose.model('Category');
 
-var should = require('should');
-var config = require('../config');
-var app = require(config.projectRoot + '/app');
-var seedData = require('../../seed_data/seedData');
-var seedDb = require('../../seed_data/seedDb');
-var utils = require('../../seed_data/utils');
-var routersutils = require('./utils');
-var request = require('supertest');
+const should = require('should');
+const config = require('../config');
+const app = require(config.projectRoot + '/app');
+const seedData = require('../../seed_data/seedData');
+const seedDb = require('../../seed_data/seedDb');
+const utils = require('../../seed_data/utils');
+const routersutils = require('./utils');
+const request = require('supertest');
 
 describe('Category test: ', function() {
 
   describe('GET /category/', function(){
 
-    it('should respond with a 404 if there are no categories', function(done) {
-      request(app)
-        .get('/')
-        .set('Accept', 'application/json')
-        .expect(404, done);
-    });
-    
     before(seed);
     after(utils.dropDb);
 
@@ -47,8 +41,17 @@ describe('Category test: ', function() {
 
     it('should respond with a 405 if the the method is not GET or OPTIONS', function(done) {
       request(app)
-        .post('/')
+        .post('/category/')
         .expect(405, done);
+    });
+
+    it('should respond with a 404 if there are no categories', function(done) {
+      Category.remove().exec(function() {
+        request(app)
+          .get('/category/')
+          .set('Accept', 'application/json')
+          .expect(404, done);
+      });
     });
 
   });

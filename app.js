@@ -38,6 +38,7 @@ function(req, res){
 var routers = require('./routes/routers');
 app.use('/', routers.root);
 app.use('/freelance', routers.freelance);
+app.use('/search', routers.search);
 app.use('/category', routers.category);
 
 module.exports = app;
