@@ -55,6 +55,22 @@ var freelancers = {
       "price"       : { min : 5, max : 15 },
       "reviews"     : ["5866a41c2d6c4804f847ea33"],
       "tags"        : ["585eaac6f1dc05033ee9ce97"]
+    },
+    {
+      "_id"         : "5837133bcb98f316cc473853",
+      "firstName"   : "J.R.R.",
+      "familyName"  : "Smith",
+      "title"       : "Blogger",
+      "category"    : "58c9af65fc13ae4760000001",
+      "description" : "I like snails",
+      "urlPicture"  : "",
+      "address"     : "Postfach 139, 3473 Alchenstorf",
+      "email"       : "thassine@gmail.com",
+      "phone"       : "034 353 66 82",
+      "avgScore"    : 4,
+      "price"       : { min : 5, max : 15 },
+      "reviews"     : ["5866a41c2d6c4804f847ea33"],
+      "tags"        : ["585eaac6f1dc05033ee9ce97"]
     }
   ]
 }
@@ -109,7 +125,7 @@ var tags = {
       "tagName"     : "testTag1",
       "freelancers" : ["5837133bcb98f316ac473853", "5837133bcb98f316ac473850"]
     }
-  ] 
+  ]
 }
 
 var categories = {

@@ -1,14 +1,9 @@
 'use strict';
 
-let categoriesTemp = [
-  "Informatics",
-  "Management"
-];
-
 let locationsTemp = [
   "Bellinzona",
   "Lugano",
-  "Mendrision"
+  "Mendrisio"
 ];
 
 class SearchContainer extends React.Component {
@@ -27,9 +22,9 @@ class SearchContainer extends React.Component {
       searchWarning.innerHTML = "";
       let category = document.getElementById('filter-category-dropdown').value;
       let location = document.getElementById('filter-location-dropdown').value;
-      let query = `/search?keyword=${searchName}`
-        + (category ? `&category=${category}` : '')
-        + (location ? `&location=${location}` : '');
+      let query = `/search?keyword=${searchName}`;
+        // + (category ? `&category=${category}` : '')
+        // + (location ? `&location=${location}` : '');
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -85,11 +80,10 @@ class FreelancerName extends React.Component {
 class FreelancerCard extends React.Component {
   redirectFreelancer(freelancer) {
     return function() {
-      document.location = `/freelance/${freelancer._id}`;
+      document.location = `/freelance/${freelancer.props._id}`;
     }
   }
   render () {
-    this._id = this.props._id;
     return (
       <div className="freelancer-card" onClick={this.redirectFreelancer(this)}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -129,6 +123,22 @@ class FreelancersContainer extends React.Component {
   }
 }
 
+function applyFilters() {
+  let freelancers = document.getElementsByClassName('freelancer-card');
+  let category = document.getElementById('filter-category-dropdown').value;
+  let location = document.getElementById('filter-location-dropdown').value;
+  for (let freelancer of freelancers) {
+    let fCategory = freelancer.children[1].children[2].innerHTML;
+    //let fLocation = freelancer.children[1].children[?].innerHTML;
+    if (category && category !== fCategory) {//||
+        //(location && location !== fLocation)) {
+      freelancer.style.display = 'none';
+    } else {
+      freelancer.style.display = 'flex';
+    }
+  }
+}
+
 function renderPage(data) {
   renderSearch();
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
@@ -145,6 +155,7 @@ function renderFilters(categories) {
 
 function renderFreelancers(freelancers) {
   ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
+  applyFilters();
 }
 
 renderPage();
