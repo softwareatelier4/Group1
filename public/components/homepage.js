@@ -101,7 +101,7 @@ class FreelancerCard extends React.Component {
           <FreelancerName first={this.props.first} last={this.props.last}/>
           <span>{this.props.category}</span>
           <span>Average Score: {this.props.avgScore} in 5</span>
-          <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
+          <span>Price range: {this.props.price ? this.props.price.min + " - " + this.props.price.max + " CHF" : " - "}</span>
         </div>
       </div>
     );
@@ -168,6 +168,7 @@ function renderFreelancerCreateBtn() {
 }
 
 function renderFreelancers(freelancers) {
+  console.log(freelancers);
   ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
   applyFilters();
 }
