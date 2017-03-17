@@ -73,9 +73,12 @@ input:focus {
 
 /* LABEL ======================================= */
 
-.group label {
+label {
   color: #999;
-  font-size: 18px;
+  font-size: 1.2em;
+}
+
+.group label {
   font-weight: normal;
   position: absolute;
   pointer-events: none;
@@ -97,6 +100,10 @@ input:focus ~ label, input:valid ~ label {
 .category-selector {
   padding: 10px 10px 10px 5px;
   margin-bottom: 45px;
+}
+
+.category-selector select {
+  margin-left: 1em;
 }
 
 /* BOTTOM BARS ================================= */

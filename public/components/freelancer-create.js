@@ -15,32 +15,36 @@
  * </div>
  */
 
+ajaxRequest("GET", "/category", { ajax : true }, {}, renderComponent);
+
+function renderComponent(data) {
+  const categories = data;
+  const listCategories = categories.map((category, index) =>
+    <option key={index} value={category._id}>{category.categoryName}</option>
+  );
+
+  ReactDOM.render(
+   <CreationForm categories={listCategories}/>,
+   document.getElementById('freelancer-root')
+  );
+}
 
 class CreationForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.labelColors = {};
-    this.state = { color : {} };
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
 
+    console.log("MIUMIU");
     const formData = {};
     for (const field in this.refs) {
-      if(this.refs[field].value) {
-        formData[field] = this.refs[field].value;
-        let temp = this.state.color;
-        temp[field] = "#F44336";
-        this.setState({ color: temp });
-      } else {
-        let temp = this.state.color;
-        temp[field] = "red";
-        this.setState({ color: temp });
-      }
+      formData[field] = this.refs[field].value;
     }
-    //ajaxRequest("POST", "/freelance", {}, formData, console.log);
+    console.log(formData);
+    ajaxRequest("POST", "/freelance", {}, formData, console.log);
   }
 
   render() {
@@ -55,7 +59,7 @@ class CreationForm extends React.Component {
               <div className="group">
                 <input ref="firstName" className="first-name" name="first-name" type="text" required/>
                 <span className="bar"></span>
-                <label style={{color: this.state.color.firstName}}>
+                 <label>
                   First Name
                 </label>
               </div>
@@ -63,33 +67,33 @@ class CreationForm extends React.Component {
               <div className="group">
                 <input ref="familyName" className="family-name" name="family-name" type="text" required/>
                 <span className="bar"></span>
-                <label style={{color: this.state.color.firstName}}>
+                 <label>
                   Family Name
                 </label>
               </div>
             </div>
 
             <div className="group">
-              <input ref="job-title" className="job-title" name="job-title" type="text" required/>
+              <input ref="title" className="job-title" name="job-title" type="text" required/>
               <span className="bar"></span>
-              <label style={{color: this.state.color.firstName}}>
+               <label>
                 Job Title
               </label>
             </div>
 
-            <label className="category-selector" style={{color: this.state.color.category}}>
+            <label className="category-selector">
               Job category:
               <select ref="category">
-                <option value="selected">Please select a job category</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
+                <option value="selected" disabled>Please select a job category</option>
+                {this.props.categories}
               </select>
+
             </label>
 
             <div className="group">
               <input ref="address" className="address" name="address" type="text" required/>
               <span className="bar"></span>
-              <label style={{color: this.state.color.firstName}}>
+              <label>
                 Address
               </label>
             </div>
@@ -97,7 +101,7 @@ class CreationForm extends React.Component {
             <div className="group">
               <input ref="phone" className="phone" name="phone" type="text" required/>
               <span className="bar"></span>
-              <label style={{color: this.state.color.firstName}}>
+              <label>
                 Phone
               </label>
             </div>
@@ -105,7 +109,7 @@ class CreationForm extends React.Component {
             <div className="group">
               <input ref="email" className="email" name="email" type="text" required/>
               <span className="bar"></span>
-              <label style={{color: this.state.color.firstName}}>
+              <label>
                 Email
               </label>
             </div>
@@ -116,8 +120,3 @@ class CreationForm extends React.Component {
     );
   }
 }
-
-ReactDOM.render(
- <CreationForm />,
- document.getElementById('freelancer-root')
-);
