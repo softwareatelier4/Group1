@@ -73,7 +73,7 @@ class FiltersContainer extends React.Component {
 
 class FreelancerCreateBtn extends React.Component {
   redirectFreelancerForm() {
-    document.location = '/freelance';
+    document.location = '/freelance/new';
   }
   render () {
     return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm}>Add a new freelancer</button>);
