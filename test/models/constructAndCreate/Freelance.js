@@ -1,8 +1,9 @@
 /* tests for constructor and creation of Freelance */
+'use strict';
 
 //connect to DB
 const mongoose   = require('mongoose');
-mongoose.Promise = require('bluebird'); 
+mongoose.Promise = require('bluebird');
 
 const should = require('should');
 const config = require('../../config');
@@ -44,7 +45,7 @@ describe('Freelance Model ', function(done){
     //       name : 'Mark Knopfler',
     //       email : 'ripperoni@pepe.pe'
     //     });
-        
+
     //     freelance.save(function(err,save){
     //       if (err) return done(err);
     //     });
@@ -169,5 +170,3 @@ describe('Freelance Model ', function(done){
 
   });
 });
-
-

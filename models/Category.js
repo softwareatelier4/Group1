@@ -22,7 +22,6 @@ const Category = exports.Category = new mongoose.Schema({
 );
 
 Category.pre('save', function(next) {
-
   next();
 });
 

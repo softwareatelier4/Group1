@@ -1,4 +1,5 @@
 /* tests for constructor and creation of Review */
+'use strict';
 
 //connect to DB
 const mongoose   = require('mongoose');
