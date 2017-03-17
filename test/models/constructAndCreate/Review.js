@@ -8,6 +8,7 @@ const should = require('should');
 const config = require('../../config');
 var projectRoot = config.projectRoot;
 const utils = require(projectRoot +'/seed_data/utils');
+const modelsutils = require('../utils');
 
 require(projectRoot + '/models/Review');
 
@@ -118,12 +119,7 @@ describe('Review Model ', function(done){
 		  review.title = 'Sweet product';
 		  review.text = 'GG, well played';
 		  review.score = 1;
-      review.save(function(err, saved){
-        should.not.exist(err, 'No error should occur');
-        let diff = Date.now() - saved.date.getTime();
-        diff.should.be.below(1000);
-        done();
-      });
+      modelsutils.checkDateCreatedWithin(review, 'date', 1000, done);
     });
 
 	it('if text is bigger than 1000 characters, it should be saved as only the first 1000 characters',
