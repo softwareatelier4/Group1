@@ -44,18 +44,27 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
 
 module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(responseObj, freelance) {
   Object.keys(freelance).forEach(function(key) {
-    if (key == "tags") {
+    switch (key) {
+      case 'tags': // Test for tags IDs in a freelance
       responseObj.tags.forEach(function(tag) {
         assert.equal(ObjectId.isValid(tag), true);
-      });
-    } else if (key == "reviews") {
-      // Test for reviews in a freelance
+      }); break;
+
+      case 'reviews': // Test for reviews IDs in a freelance
       responseObj.reviews.forEach(function(review) {
         assert.equal(ObjectId.isValid(review), true);
-      });
-    } else {
+      }); break;
+
+      case 'category': // Test for category info in a freelance
+      responseObj.category.should.have.property("_id");
+      responseObj.category.should.have.property("freelancers");
+      responseObj.category.should.have.property("categoryName");
+      break;
+
+      default:
       responseObj.should.have.property(key, freelance[key]);
-		}
+      break;
+    }
 	});
 }
 

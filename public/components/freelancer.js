@@ -78,7 +78,7 @@ class FreelancerView extends React.Component {
     return (
       <div className="freelancer-view">
         <FreelancerHeader
-          urlPicture={this.props.urlPicture}
+          urlPicture={this.props.urlPicture || ""}
           first={this.props.first}
           last={this.props.last}
           title={this.props.title}
@@ -95,7 +95,15 @@ class FreelancerView extends React.Component {
 }
 
 class FreelancerHeader extends React.Component {
+
   render() {
+    let price;
+    if(!this.props.price) {
+      price = "";
+    } else {
+      price = "Price range: " + this.props.price.min + " - " + this.props.price.max + " CHF";
+    }
+
     return (
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -104,7 +112,7 @@ class FreelancerHeader extends React.Component {
           <Name first={this.props.first} last={this.props.last}/>
           <span>{this.props.category}</span>
           <span>Average Score: {this.props.avgScore}/5</span>
-          <span>Price range: {this.props.price.min + " - " + this.props.price.max + " CHF"}</span>
+          {price}
         </div>
       </div>
   );
