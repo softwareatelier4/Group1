@@ -76,6 +76,40 @@
   margin-bottom:45px;
 }
 
+/* category selector */
+
+.category-selector {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 0 0;
+  margin-bottom: 40px;
+  margin-top: -22px;
+  border-bottom: 1px solid #757575;
+}
+
+.category-selector select {
+  margin: 10px 10px 0 -3px;
+  font-family: inherit!;
+  font-size: 18px;
+}
+
+.category-selector label {
+  font-size: 14px;
+  color: #F44336;
+  margin-left: 5px;
+}
+
+select {
+  height: 31px;
+  border: none;
+  background-color: inherit;
+  font-size: 1em;
+}
+
+select:focus {
+  outline: none;
+}
+
 /* form starting stylings ------------------------------- */
 
 input {
@@ -115,15 +149,6 @@ input:focus ~ label, input:valid ~ label {
   top: -20px;
   font-size: 14px;
   color: #F44336;
-}
-
-.category-selector {
-  padding: 10px 10px 10px 5px;
-  margin-bottom: 45px;
-}
-
-.category-selector select {
-  margin-left: 1em;
 }
 
 /* BOTTOM BARS ================================= */

@@ -14,6 +14,17 @@
  * </div>
  */
 
+/* Orignial category selector:
+  *
+  * <label className="category-selector">
+  *   Job category:
+  *   <select ref="category">
+  *     <option value="selected" disabled>Please select a job category</option>
+  *     {this.props.categories}
+  *   </select>
+  * </label>
+  */
+
 ajaxRequest("GET", "/category", { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
@@ -80,14 +91,16 @@ class CreationForm extends React.Component {
               </label>
             </div>
 
-            <label className="category-selector">
-              Job category:
+            <div className="category-selector">
+              <span className="bar"></span>
+              <label>
+                Job Category
+              </label>
               <select ref="category">
                 <option value="selected" disabled>Please select a job category</option>
                 {this.props.categories}
               </select>
-
-            </label>
+            </div>
 
             <div className="group">
               <input ref="address" className="address" name="address" type="text" required/>
