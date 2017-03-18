@@ -9,7 +9,6 @@
  *
  * <div class="group">
  *   <input type="text" required>
- *   <span class="highlight"></span>
  *   <span class="bar"></span>
  *   <label>Name</label>
  * </div>
@@ -114,7 +113,7 @@ class CreationForm extends React.Component {
               </label>
             </div>
 
-            <input type="submit" value="Submit"/>
+            <input className="submit-button" type="submit" value="Submit"/>
           </form>
         </div>
     );
