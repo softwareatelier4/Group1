@@ -14,17 +14,6 @@
  * </div>
  */
 
-/* Orignial category selector:
-  *
-  * <label className="category-selector">
-  *   Job category:
-  *   <select ref="category">
-  *     <option value="selected" disabled>Please select a job category</option>
-  *     {this.props.categories}
-  *   </select>
-  * </label>
-  */
-
 ajaxRequest("GET", "/category", { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
@@ -48,13 +37,14 @@ class CreationForm extends React.Component {
   handleSubmit(evt) {
     evt.preventDefault();
 
-    console.log("MIUMIU");
     const formData = {};
     for (const field in this.refs) {
       formData[field] = this.refs[field].value;
     }
-    console.log(formData);
-    ajaxRequest("POST", "/freelance", {}, formData, console.log);
+
+    ajaxRequest("POST", "/freelance", {}, formData, function(data) {
+      window.location = "/freelance/" + data._id;
+    });
   }
 
   render() {
