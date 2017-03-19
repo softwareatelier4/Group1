@@ -9,7 +9,6 @@
  *
  * <div class="group">
  *   <input type="text" required>
- *   <span class="highlight"></span>
  *   <span class="bar"></span>
  *   <label>Name</label>
  * </div>
@@ -38,85 +37,88 @@ class CreationForm extends React.Component {
   handleSubmit(evt) {
     evt.preventDefault();
 
-    console.log("MIUMIU");
     const formData = {};
     for (const field in this.refs) {
       formData[field] = this.refs[field].value;
     }
-    console.log(formData);
-    ajaxRequest("POST", "/freelance", {}, formData, console.log);
+
+    ajaxRequest("POST", "/freelance", {}, formData, function(data) {
+      window.location = "/freelance/" + data._id;
+    });
   }
 
   render() {
     return (
-        <div className="freelancer-form">
-          <div className="freelancer-form-header">
-            <h1>Get started by creating your freelancer profile </h1>
-          </div>
-          <form onSubmit={this.handleSubmit}>
+      <div className="freelancer-form">
+        <div className="freelancer-form-header">
+          <h1>Get started by creating your freelancer profile </h1>
+        </div>
+        <form onSubmit={this.handleSubmit}>
 
-            <div className="names-input">
-              <div className="group">
-                <input ref="firstName" className="first-name" name="first-name" type="text" required/>
-                <span className="bar"></span>
-                 <label>
-                  First Name
-                </label>
-              </div>
-
-              <div className="group">
-                <input ref="familyName" className="family-name" name="family-name" type="text" required/>
-                <span className="bar"></span>
-                 <label>
-                  Family Name
-                </label>
-              </div>
-            </div>
-
+          <div className="names-input">
             <div className="group">
-              <input ref="title" className="job-title" name="job-title" type="text" required/>
+              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
               <span className="bar"></span>
                <label>
-                Job Title
+                First Name
               </label>
             </div>
 
-            <label className="category-selector">
-              Job category:
-              <select ref="category">
-                <option value="selected" disabled>Please select a job category</option>
-                {this.props.categories}
-              </select>
+            <div className="group">
+              <input ref="familyName" className="family-name" name="family-name" type="text" />
+              <span className="bar"></span>
+               <label>
+                Family Name
+              </label>
+            </div>
+          </div>
 
+          <div className="group">
+            <input ref="title" className="job-title" name="job-title" type="text" required/>
+            <span className="bar"></span>
+             <label>
+              Job Title
             </label>
+          </div>
 
-            <div className="group">
-              <input ref="address" className="address" name="address" type="text" required/>
-              <span className="bar"></span>
-              <label>
-                Address
-              </label>
-            </div>
+          <div className="category-selector">
+            <span className="bar"></span>
+            <label>
+              Job Category
+            </label>
+            <select ref="category">
+              <option selected disabled hidden>Please select a job category</option>
+              {this.props.categories}
+            </select>
+          </div>
 
-            <div className="group">
-              <input ref="phone" className="phone" name="phone" type="text" required/>
-              <span className="bar"></span>
-              <label>
-                Phone
-              </label>
-            </div>
+          <div className="group">
+            <input ref="address" className="address" name="address" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Address
+            </label>
+          </div>
 
-            <div className="group">
-              <input ref="email" className="email" name="email" type="text" required/>
-              <span className="bar"></span>
-              <label>
-                Email
-              </label>
-            </div>
+          <div className="group">
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}'/>
+            <span className="bar"></span>
+            <label>
+              Phone
+            </label>
+          </div>
 
-            <input type="submit" value="Submit"/>
-          </form>
-        </div>
+          <div className="group">
+            <input ref="email" className="email" name="email" type="email" required/>
+            <span className="bar"></span>
+            <label>
+              Email
+            </label>
+          </div>
+
+          <input className="submit-button" type="submit" value="Submit"/>
+        </form>
+      </div>
     );
   }
 }

@@ -7,7 +7,7 @@
 /* freelancer create form */
 
 .freelancer-form {
-  margin: 10vh 10vw 5vh 10vw;
+  margin: 10vh 10vw 5vh;
   width: auto;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   border-radius: 2px;
@@ -45,6 +45,26 @@
   width: 50%;
 }
 
+/* submit button */
+
+.submit-button {
+  background-color: #f44336;
+  color: #fff;
+  border-radius: 2px;
+  border-style: none;
+  width: 17%;
+  align-self: flex-end;
+}
+
+.submit-button:hover {
+  background-color: #d73a2f;
+}
+
+.submit-button:hover:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  background-color: #f44336;
+}
+
 
 /* freelancer form label (courtesy of codeopen.io user )
  * NOTE: possibly move this code to an external css file if form input
@@ -53,7 +73,41 @@
 
 .group {
   position: relative;
-  margin-bottom:45px;
+  margin-bottom: 45px;
+}
+
+/* category selector */
+
+.category-selector {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 0 0;
+  margin-bottom: 40px;
+  margin-top: -22px;
+  border-bottom: 1px solid #757575;
+}
+
+.category-selector select {
+  margin: 10px 10px 0 -3px;
+  font-family: inherit!;
+  font-size: 18px;
+}
+
+.category-selector label {
+  font-size: 14px;
+  color: #F44336;
+  margin-left: 5px;
+}
+
+select {
+  height: 31px;
+  border: none;
+  background-color: inherit;
+  font-size: 1em;
+}
+
+select:focus {
+  outline: none;
 }
 
 /* form starting stylings ------------------------------- */
@@ -95,15 +149,6 @@ input:focus ~ label, input:valid ~ label {
   top: -20px;
   font-size: 14px;
   color: #F44336;
-}
-
-.category-selector {
-  padding: 10px 10px 10px 5px;
-  margin-bottom: 45px;
-}
-
-.category-selector select {
-  margin-left: 1em;
 }
 
 /* BOTTOM BARS ================================= */
