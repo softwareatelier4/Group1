@@ -1,5 +1,7 @@
 /* Utilities for the models tests */
 
+'use strict';
+
 var config = require('../config')
 var should = require('should');
 var mongoose = require('mongoose');
