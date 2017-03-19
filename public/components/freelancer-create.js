@@ -49,76 +49,76 @@ class CreationForm extends React.Component {
 
   render() {
     return (
-        <div className="freelancer-form">
-          <div className="freelancer-form-header">
-            <h1>Get started by creating your freelancer profile </h1>
-          </div>
-          <form onSubmit={this.handleSubmit}>
+      <div className="freelancer-form">
+        <div className="freelancer-form-header">
+          <h1>Get started by creating your freelancer profile </h1>
+        </div>
+        <form onSubmit={this.handleSubmit}>
 
-            <div className="names-input">
-              <div className="group">
-                <input ref="firstName" className="first-name" name="first-name" type="text" required/>
-                <span className="bar"></span>
-                 <label>
-                  First Name
-                </label>
-              </div>
-
-              <div className="group">
-                <input ref="familyName" className="family-name" name="family-name" type="text" required/>
-                <span className="bar"></span>
-                 <label>
-                  Family Name
-                </label>
-              </div>
-            </div>
-
+          <div className="names-input">
             <div className="group">
-              <input ref="title" className="job-title" name="job-title" type="text" required/>
+              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
               <span className="bar"></span>
                <label>
-                Job Title
-              </label>
-            </div>
-
-            <div className="category-selector">
-              <span className="bar"></span>
-              <label>
-                Job Category
-              </label>
-              <select ref="category">
-                <option value="selected" disabled>Please select a job category</option>
-                {this.props.categories}
-              </select>
-            </div>
-
-            <div className="group">
-              <input ref="address" className="address" name="address" type="text" required/>
-              <span className="bar"></span>
-              <label>
-                Address
+                First Name
               </label>
             </div>
 
             <div className="group">
-              <input ref="phone" className="phone" name="phone" type="text" required/>
+              <input ref="familyName" className="family-name" name="family-name" type="text" />
               <span className="bar"></span>
-              <label>
-                Phone
+               <label>
+                Family Name
               </label>
             </div>
+          </div>
 
-            <div className="group">
-              <input ref="email" className="email" name="email" type="text" required/>
-              <span className="bar"></span>
-              <label>
-                Email
-              </label>
-            </div>
+          <div className="group">
+            <input ref="title" className="job-title" name="job-title" type="text" required/>
+            <span className="bar"></span>
+             <label>
+              Job Title
+            </label>
+          </div>
 
-            <input className="submit-button" type="submit" value="Submit"/>
-          </form>
-        </div>
+          <div className="category-selector">
+            <span className="bar"></span>
+            <label>
+              Job Category
+            </label>
+            <select ref="category">
+              <option selected disabled hidden>Please select a job category</option>
+              {this.props.categories}
+            </select>
+          </div>
+
+          <div className="group">
+            <input ref="address" className="address" name="address" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Address
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}'/>
+            <span className="bar"></span>
+            <label>
+              Phone
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="email" className="email" name="email" type="email" required/>
+            <span className="bar"></span>
+            <label>
+              Email
+            </label>
+          </div>
+
+          <input className="submit-button" type="submit" value="Submit"/>
+        </form>
+      </div>
     );
   }
 }

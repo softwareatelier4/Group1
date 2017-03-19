@@ -7,7 +7,7 @@
 /* freelancer create form */
 
 .freelancer-form {
-  margin: 10vh 10vw 5vh 10vw;
+  margin: 10vh 10vw 5vh;
   width: auto;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   border-radius: 2px;
@@ -73,7 +73,7 @@
 
 .group {
   position: relative;
-  margin-bottom:45px;
+  margin-bottom: 45px;
 }
 
 /* category selector */
