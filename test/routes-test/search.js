@@ -32,15 +32,15 @@ describe('Search test: ', function() {
         });
     });
 
-    it('Should respond with a 200 and return two results for two matches', function(done) {
+    it('Should respond with a 200 and return multiple results for "Mar"', function(done) {
       request(app)
-        .get('/search?keyword=toes')
+        .get('/search?keyword=Mar')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
           const results = JSON.parse(res.text) || [];
-          results.length.should.equal(2);
+          results.length.should.be.greaterThan(1);
           done();
         });
     });

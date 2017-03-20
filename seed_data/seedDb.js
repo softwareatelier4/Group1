@@ -40,6 +40,7 @@ var seedModel = function(idx, done){
 module.exports.seed = function (done){
   utils.connectAndDropDb(function(err){
     if(err) return done(err);
+    console.log('== START SEEDING ==');
     seedModel(0, done);
   });
 }
