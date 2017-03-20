@@ -9,7 +9,7 @@ module.exports.checkDateCreatedWithin = function checkDateCreatedWithin(obj, pro
 
   obj.save(function(err, saved){
       should.not.exist(err, 'No error should occur');
-      let diff = Date.now() - saved[prop].getTime();
+      var diff = Date.now() - saved[prop].getTime();
       diff.should.be.below(max);
       done();
   });
