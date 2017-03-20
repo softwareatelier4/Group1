@@ -5,6 +5,7 @@ var JobListing = mongoose.model('Freelance');
 var Review = mongoose.model('Review');
 var ObjectId = mongoose.Types.ObjectId;
 
+
 /* NEW SEED */
 var freelancers = require('./freelancesData');
 var freelancersSize = freelancers.data.length;
@@ -38,7 +39,6 @@ for (var i = freelancersSize - 1; i >= 0; i--) {
     tags.data[n].freelancers.push(freelancers.data[i]['_id']);
   }
 }
-
 // dump(freelancers.data);
 
 function dump(data){

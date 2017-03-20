@@ -2,27 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>React Hello 2 World</title>
+    <title>JobAdvisor</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
-
-    <!--
-    React container
-    -->
-    <div id='root'></div>
-
-    <!--
-    For ease of use, we are including the React, ReactDOM and Babel CDN
-    builds to make getting started as fast as possible.
-    -->
+    <div id='root'>
+      <!-- Title -->
+      <div id="title">JobAdvisor</div>
+      <!-- Search -->
+      <div id="react-search-container"></div>
+      <!-- Filters -->
+      <div id="react-filters-container"></div>
+      <!-- Create -->
+      <div id="react-freelancer-create-btn"></div>
+      <!-- Freelancers -->
+      <div id="react-freelancers-container"></div>
+    </div>
+    <!-- Utils -->
+    <script src="../js/ajax.js"></script>
+    <!-- React -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>
     <script src="../js/browser.min.js"></script>
-
-    <!--
-    This is where you link to your React code. Can be .js or .jsx
-    extension, doesn't really matter.
-    -->
-    <script src="components/test.js" type="text/babel"></script>
+    <!-- Scripts -->
+    <script src="components/homepage.js" type="text/babel"></script>
   </body>
 </html>

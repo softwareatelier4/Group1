@@ -12,7 +12,17 @@ const Review = mongoose.model('Review');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete later
 router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+
+// GET /freelance/new
+router.get('/new', function(req, res, next) {
+  if (req.accepts('text/html')) {
+    res.render('freelancer-create', {
+      title: "JobAdvisor - Create Freelancer Profile" ,
+    });
+  } else res.sendStatus(400);
+});
 
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
@@ -23,25 +33,21 @@ router.get('/:freelanceid', function(req, res, next) {
       Freelance.findById(req.params.freelanceid).populate('reviews tags category').exec(function(err, freelance){
         if (err) {
           res.status(400).json(utils.formatErrorMessage(err));
-        }
-        else if (!freelance) {
+        } else if (!freelance) {
           res.status(404).json({
             statusCode: 404,
             message: "Not Found",
           });
-        }
-        else {
+        } else {
           utils.addLinks(freelance, "freelance");
           res.json(freelance).end();
         }
       });
-    } else {
-      if (req.accepts('text/html')) {
-        res.render('freelancer', {
-          title: "JobAdvisor" ,
-        });
-      }
-    }
+    } else if (req.accepts('text/html')) {
+			res.render('freelancer', {
+				title: "JobAdvisor" ,
+			});
+    } else res.sendStatus(400);
   } else res.sendStatus(400);
 });
 

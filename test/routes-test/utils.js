@@ -4,7 +4,11 @@
 
 'use strict';
 
-module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInResponse(responseObj, freelance){
+const mongoose = require('mongoose');
+const assert = require('assert');
+const ObjectId = mongoose.Types.ObjectId;
+
+module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInResponse(responseObj, freelance) {
   var populated = ["reviews", "tags", "category"];
   Object.keys(freelance).forEach(function(key) {
     if (populated.indexOf(key) == -1) {
@@ -19,19 +23,59 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
           review.should.have.property("text");
         }); break;
 
-        case "tags":// Test for tags in a freelance
+        case "tags": // Test for tags in a freelance
         responseObj.tags.forEach(function(tag) {
           tag.should.have.property("_id");
           tag.should.have.property("freelancers");
           tag.should.have.property("tagName");
         }); break;
 
-        case "tags":// Test for category in a freelance
-        /* not there yet */ break;
+        case "category": // Test for category in a freelance
+        responseObj.category.should.have.property("_id");
+        responseObj.category.should.have.property("freelancers");
+        responseObj.category.should.have.property("categoryName");
+        break;
 
         default: break;
       }
-
     }
+  });
+}
+
+module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(responseObj, freelance) {
+  Object.keys(freelance).forEach(function(key) {
+    switch (key) {
+      case 'tags': // Test for tags IDs in a freelance
+      responseObj.tags.forEach(function(tag) {
+        assert.equal(ObjectId.isValid(tag), true);
+      }); break;
+
+      case 'reviews': // Test for reviews IDs in a freelance
+      responseObj.reviews.forEach(function(review) {
+        assert.equal(ObjectId.isValid(review), true);
+      }); break;
+
+      case 'category': // Test for category info in a freelance
+      responseObj.category.should.have.property("_id");
+      responseObj.category.should.have.property("freelancers");
+      responseObj.category.should.have.property("categoryName");
+      break;
+
+      default:
+      responseObj.should.have.property(key, freelance[key]);
+      break;
+    }
+	});
+}
+
+module.exports.checkCategoryInfoInResponse = function checkCategoryInfoInResponse(responseObj, category) {
+  Object.keys(category).forEach(function(key) {
+    // check validity of Freelance linked
+    if (key == 'freelancers') {
+      responseObj.freelancers.forEach(function(freelanceid) {
+        assert.equal(ObjectId.isValid(freelanceid), true);
+      });
+    }
+    responseObj.should.have.property(key);
   });
 }
