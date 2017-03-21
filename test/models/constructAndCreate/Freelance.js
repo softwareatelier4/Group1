@@ -54,13 +54,13 @@ describe('Freelance Model ', function(done){
 
     after(utils.dropDbAndCloseConnection);
 
-    it('should create an instance of the right type', function(){
+    it('should create an instance of the right type', function() {
       var freelance = new Freelance();
       freelance.constructor.name.should.equal('model');
       freelance.should.be.instanceof(Freelance);
     });
 
-    it ('should persist a freelance with valid properties', function(done){
+    it ('should persist a freelance with valid properties', function(done) {
       let freelance = new Freelance();
       freelance.firstName = 'Mark';
       freelance.familyName = 'Knopfer';
@@ -76,7 +76,7 @@ describe('Freelance Model ', function(done){
       });
     });
 
-    it('should fail if firstName is empty, null, or undefined', function(done){
+    it('should fail if firstName is empty, null, or undefined', function(done) {
       let freelance = new Freelance();
       freelance.firstName = "suka";
       freelance.title = 'I am alive yeah';
@@ -84,7 +84,7 @@ describe('Freelance Model ', function(done){
       utils.errorIfNullUndefinedOrEmpty(freelance, 'firstName', done );
     });
 
-        it('should fail if title is empty, null, or undefined', function(done){
+        it('should fail if title is empty, null, or undefined', function(done) {
       let freelance = new Freelance();
       freelance.firstName = "Bob";
       freelance.title = null;
@@ -92,7 +92,7 @@ describe('Freelance Model ', function(done){
       utils.errorIfNullUndefinedOrEmpty(freelance, 'title', done );
     });
 
-      it('should fail if email is empty, null, or undefined', function(done){
+      it('should fail if email is empty, null, or undefined', function(done) {
       let freelance = new Freelance();
       freelance.firstName = "Bob";
       freelance.title = "photographer"
@@ -100,7 +100,7 @@ describe('Freelance Model ', function(done){
       utils.errorIfNullUndefinedOrEmpty(freelance, 'email', done );
     });
 
-      it ('should bound over 5 avgScore to 5', function(done){
+      it ('should bound over 5 avgScore to 5', function(done) {
       let freelance = new Freelance();
       freelance.firstName = 'Mark';
       freelance.familyName = 'Knopfer';
@@ -117,7 +117,7 @@ describe('Freelance Model ', function(done){
       });
     });
 
-      it ('should bound less than 0 avgScore to 0', function(done){
+      it ('should bound less than 0 avgScore to 0', function(done) {
       let freelance = new Freelance();
       freelance.firstName = 'Mark';
       freelance.familyName = 'Knopfer';

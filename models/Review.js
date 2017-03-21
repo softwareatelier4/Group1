@@ -16,7 +16,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require ('./Freelance');
 
 const Review = exports.Review = new mongoose.Schema({
-	//in future maybe add User and author is ObjectID ref User
+		//in future maybe add User and author is ObjectID ref User
 		author 	: { type: String, required: true },
 		title 	: { type: String },
 		text 	: { type: String },
@@ -38,7 +38,7 @@ Review.pre('save', function(next) {
 	if (this.text !== undefined) {
 		let length = this.text.length;
 
-		if(length > 1000) {
+		if (length > 1000) {
 			this.text = this.text.substring(0, 999);
 		}
 	}

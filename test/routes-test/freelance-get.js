@@ -14,7 +14,7 @@ var request = require('supertest');
 
 describe('Freelance-get test: ', function() {
 
-  describe('GET /freelance/:freelanceid', function(){
+  describe('GET /freelance/:freelanceid', function() {
     before(seed);
     after(utils.dropDb);
 
@@ -23,7 +23,7 @@ describe('Freelance-get test: ', function() {
         .get('/freelance/' + seedData[0].data[0]._id.toString())
         .set('Accept', 'application/json')
         .set('Ajax', 'true')
-        .expect('Content-Type', /json/, 'it should respond with json' )
+        .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
           var freelance = JSON.parse(res.text) || {};

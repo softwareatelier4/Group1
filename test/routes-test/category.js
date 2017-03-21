@@ -19,7 +19,7 @@ const request = require('supertest');
 
 describe('Category test: ', function() {
 
-  describe('GET /category/', function(){
+  describe('GET /category/', function() {
 
     before(seed);
     after(utils.dropDb);

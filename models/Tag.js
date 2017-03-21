@@ -14,7 +14,7 @@ require ('./Freelance');
 
 const Tag = exports.Tag = new mongoose.Schema({
 	//in future maybe add User and author is ObjectID ref User
-		tagName 		: { type: String, required: true },
+		tagName 			: { type: String, required: true },
 		freelancers 	: [{ type: ObjectID, ref: 'Freelance', default:[] }],
 	},
 	{

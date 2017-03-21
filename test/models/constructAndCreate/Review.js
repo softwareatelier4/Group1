@@ -16,8 +16,8 @@ require(projectRoot + '/models/Review');
 describe('Review Model ', function(done){
 
   // Freelance constructor test
-  describe('Review model definition', function(){
-    it('should have a constructor', function(){
+  describe('Review model definition', function() {
+    it('should have a constructor', function() {
       var Review;
       try {
         Review = mongoose.model('Review');
@@ -30,13 +30,13 @@ describe('Review Model ', function(done){
     })
   });
 
-  describe('When creating a new review', function(done){
+  describe('When creating a new review', function(done) {
     var Review = mongoose.model('Review');
     // var freelance;
 
     before(function(done){
       //connect and drop db
-      utils.connectAndDropDb(function(err){
+      utils.connectAndDropDb(function(err) {
         if (err) return done(err);
       done();
       });
@@ -44,13 +44,13 @@ describe('Review Model ', function(done){
 
     after(utils.dropDbAndCloseConnection);
 
-    it('should create an instance of the right type', function(){
+    it('should create an instance of the right type', function() {
       var review = new Review();
       review.constructor.name.should.equal('model');
       review.should.be.instanceof(Review);
     });
 
-    it ('should persist a review with valid properties', function(done){
+    it ('should persist a review with valid properties', function(done) {
       let review = new Review();
       review.author = 'Bob Knopfler';
       review.title = 'Sweet product';
@@ -64,7 +64,7 @@ describe('Review Model ', function(done){
       });
     });
 
-    it('should fail if author is empty, null, or undefined', function(done){
+    it('should fail if author is empty, null, or undefined', function(done) {
 		  let review = new Review();
       review.title = 'Sweet product';
       review.text = 'GG, well played';
@@ -73,7 +73,7 @@ describe('Review Model ', function(done){
       utils.errorIfNullUndefinedOrEmpty(review, 'author', done );
     });
 
-    it('should fail if title is empty, null, or undefined', function(done){
+    it('should fail if title is empty, null, or undefined', function(done) {
   	  let review = new Review();
   	  review.author = 'Bob Knopfler';
   	  review.title = 'Sweet product';
@@ -82,7 +82,7 @@ describe('Review Model ', function(done){
       utils.errorIfNullUndefinedOrEmpty(review, 'score', done );
     });
 
-    it ('should bound over 5 avgScore to 5', function(done){
+    it ('should bound over 5 avgScore to 5', function(done) {
 		  let review = new Review();
 		  review.author = 'Bob Knopfler';
 		  review.title = 'Sweet product';
@@ -96,7 +96,7 @@ describe('Review Model ', function(done){
       });
     });
 
-    it ('should bound less than 0 avgScore to 0', function(done){
+    it ('should bound less than 0 avgScore to 0', function(done) {
 		  let review = new Review();
 		  review.author = 'Bob Knopfler';
 		  review.title = 'Sweet product';
