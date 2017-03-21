@@ -39,6 +39,12 @@ for (var i = freelancersSize - 1; i >= 0; i--) {
     tags.data[n].freelancers.push(freelancers.data[i]['_id']);
   }
 }
+// hardcode the location
+var locations = ["Lugano", "Bellinzona", "Mendrisio"];
+for (var i = freelancers.data.length - 1; i >= 0; i--) {
+  var rndl = Math.floor(Math.random() * locations.length);
+  freelancers.data[i].address = locations[rndl];
+}
 // dump(freelancers.data);
 
 function dump(data){
