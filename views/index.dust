@@ -1,22 +1,31 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
   <head>
-    <title>{title}</title>
-    <link rel='stylesheet' href='/css/style.css' />
+    <meta charset="utf-8">
+    <title>JobAdvisor</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
-    <h1 class="heading">{title}</h1>
-    <h3>Resources</h3>
-    <ul class="links">
-    {#links}
-      <li class="link">
-        <span class="rel">{rel}</span> 
-        <a href="{href}">{href}</a>
-      </li>
-    {/links}
-    </ul>
-    <p>Note that the resources response bodies are in JSON format with <code>Content-Type: application/json</code>
-    </p>
-    
+    <div id='root'>
+      <!-- Title -->
+      <div id="title">JobAdvisor</div>
+      <!-- Search -->
+      <div id="react-search-container"></div>
+      <!-- Filters -->
+      <div id="react-filters-container"></div>
+      <!-- Create -->
+      <div id="react-freelancer-create-btn"></div>
+      <!-- Freelancers -->
+      <div id="react-freelancers-container"></div>
+    </div>
+    <!-- Utils -->
+    <script src="../js/ajax.js"></script>
+    <!-- React -->
+    <script src="../js/react-15.0.1.js"></script>
+    <script src="../js/react-dom-15.0.1.js"></script>
+    <script src="../js/browser.min.js"></script>
+    <!-- Scripts -->
+    <script src="components/homepage.js" type="text/babel"></script>
   </body>
 </html>

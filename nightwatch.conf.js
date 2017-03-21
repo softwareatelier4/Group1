@@ -1,10 +1,10 @@
 module.exports = {
-  "src_folders" : ["./test/ex5"],
+  "src_folders" : ["./test/nightwatch-tests"],
   "output_folder" : "./test/nightwatch-reports",
   "custom_commands_path" : "",
   "custom_assertions_path" : "",
   "globals_path" : "",
-  
+
   "selenium" : {
     "start_process" : true,
     "server_path" : "./selenium-server-standalone-2.48.2.jar",
@@ -12,7 +12,7 @@ module.exports = {
     "host" : "127.0.0.1",
     "port" : 4444,
   },
-  
+
   "test_settings" : {
     "default" : {
       "launch_url" : require('./config').url,
@@ -29,7 +29,7 @@ module.exports = {
         "acceptSslCerts": true
       }
     },
-    
+
     "firefox" : {
       "desiredCapabilities": {
         "browserName": "firefox",
