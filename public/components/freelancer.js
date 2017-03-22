@@ -108,12 +108,12 @@ class FreelancerHeader extends React.Component {
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-header-info">
-          <h1>{this.props.title}</h1>
           <Name first={this.props.first} last={this.props.last}/>
-          <span>{this.props.category}</span>
+          <span className="freelancer-header-title">{this.props.title}</span>
           <span>Average Score: {this.props.avgScore}/5</span>
           {price}
         </div>
+        <span className="freelancer-category">{this.props.category}</span>
       </div>
   );
   }
