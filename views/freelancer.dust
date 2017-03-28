@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="../css/freelancer.css">
   </head>
   <body>
+    <div id='topbar'>
+      <!-- Title -->
+      <div id="react-title"></div>
+      <!-- Create -->
+      <div id="react-freelancer-home-btn"></div>
+    </div>
 
     <!-- React container -->
     <div id='freelancer-root'></div>
@@ -23,5 +29,7 @@
 
     <!-- React component rendering -->
     <script src="../components/freelancer.js" type="text/babel"></script>
+    <script src="../components/topbar.js" type="text/babel"></script>
+
   </body>
 </html>

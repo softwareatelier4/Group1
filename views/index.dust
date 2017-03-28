@@ -9,7 +9,7 @@
   <body>
     <div id='topbar'>
       <!-- Title -->
-      <div id="title">JobAdvisor</div>
+      <div id="react-title"></div>
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>
@@ -31,5 +31,7 @@
     <script src="../js/browser.min.js"></script>
     <!-- Scripts -->
     <script src="components/homepage.js" type="text/babel"></script>
+    <script src="components/topbar.js" type="text/babel"></script>
+
   </body>
 </html>
