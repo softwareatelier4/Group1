@@ -13,10 +13,7 @@ class SearchContainer extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       let searchWarning = document.getElementById('search-warning');
       let searchName = document.getElementById('search-name').value;
-      if (searchName.length < 3) {
-        searchWarning.innerHTML = "At least 3 characters needed.";
-        return;
-      }
+      
       if (searchName.match(/[^A-Za-z ]/)) {
         searchWarning.innerHTML = "Only alphabetic characters allowed.";
         return;

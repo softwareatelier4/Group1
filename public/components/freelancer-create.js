@@ -101,7 +101,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}'/>
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
             <span className="bar"></span>
             <label>
               Phone
