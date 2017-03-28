@@ -15,22 +15,6 @@ body {
   align-items: center;
 }
 
-#topbar{
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  background-color: #F44336;
-  margin-bottom: 50px;
-}
-
-#title {
-  font-size: 3em;
-  text-align: center;
-  color: white;
-  margin-left: 20px;
-  padding: 5px 0;
-}
-
 #search-and-filters {
   display: flex;
   flex-flow: column;
@@ -120,6 +104,7 @@ body {
 
 #freelancer-create-btn:hover {
   background-color: #c9372c;
+  pointer: cursor;
 }
 
 #root > * {

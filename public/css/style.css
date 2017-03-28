@@ -19,3 +19,45 @@ html {
   justify-content: space-around;
   text-align: center;
 }
+
+#topbar{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  background-color: #F44336;
+  margin-bottom: 50px;
+}
+
+#react-title {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Topbar */
+#title {
+  font-size: 3em;
+  text-align: center;
+  color: white;
+  margin-left: 20px;
+  padding: 5px 0;
+}
+
+a#title {
+  text-decoration: none;
+}
+
+#freelancer-home-btn {
+  width: 100%;
+  height: 65px;
+  background-color: #F44336;
+  border: 0px;
+  border-left: 1px solid white;
+  color: white;
+  font-size: 1em;
+}
+
+#freelancer-home-btn:hover {
+  background-color: #c9372c;
+  pointer: cursor;
+}
+/* End topbar */
