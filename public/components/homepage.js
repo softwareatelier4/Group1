@@ -159,7 +159,7 @@ function renderPage(data) {
   renderSearch();
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   renderFreelancerCreateBtn();
-  ajaxRequest("GET", "/search", { ajax : true }, {}, sortFreelancers);
+  ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
 }
 
 function renderSearch() {
@@ -174,7 +174,8 @@ function renderFreelancerCreateBtn() {
   ReactDOM.render(<FreelancerCreateBtn />, document.getElementById('react-freelancer-create-btn'));
 }
 
-function sortFreelancers(freelancers) {
+function renderFreelancers(freelancers) {
+  // Sort by distance
   freelancers.sort(function(a, b) {
     if (a.distance < b.distance) {
       return -1;
@@ -183,11 +184,6 @@ function sortFreelancers(freelancers) {
     }
     return 0;
   });
-
-  renderFreelancers(freelancers);
-}
-
-function renderFreelancers(freelancers) {
   ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
   applyFilters();
 }
