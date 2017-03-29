@@ -6,6 +6,7 @@ let locationsTemp = [
   "Mendrisio"
 ];
 
+
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -13,7 +14,7 @@ class SearchContainer extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       let searchWarning = document.getElementById('search-warning');
       let searchName = document.getElementById('search-name').value;
-      
+
       if (searchName.match(/[^A-Za-z ]/)) {
         searchWarning.innerHTML = "Only alphabetic characters allowed.";
         return;
@@ -103,6 +104,7 @@ class FreelancerCard extends React.Component {
           <span>{this.props.category}</span>
           <span>Average Score: {avgScore} / 5</span>
           <span>Price range: {price}</span>
+          <span>Distance: {this.props.distance}</span>
         </div>
       </div>
     );
@@ -123,6 +125,7 @@ class FreelancersContainer extends React.Component {
         category   = {freelancer.category.categoryName}
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
+        distance   = {freelancer.distance}
         _id        = {freelancer._id}
         key        = {i}
         />);
@@ -156,7 +159,7 @@ function renderPage(data) {
   renderSearch();
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   renderFreelancerCreateBtn();
-  ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+  ajaxRequest("GET", "/search", { ajax : true }, {}, sortFreelancers);
 }
 
 function renderSearch() {
@@ -169,6 +172,19 @@ function renderFilters(categories) {
 
 function renderFreelancerCreateBtn() {
   ReactDOM.render(<FreelancerCreateBtn />, document.getElementById('react-freelancer-create-btn'));
+}
+
+function sortFreelancers(freelancers) {
+  freelancers.sort(function(a, b) {
+    if (a.distance < b.distance) {
+      return -1;
+    } else if (a.distance > b.distance) {
+      return 1;
+    }
+    return 0;
+  });
+
+  renderFreelancers(freelancers);
 }
 
 function renderFreelancers(freelancers) {
