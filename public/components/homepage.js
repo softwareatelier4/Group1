@@ -15,7 +15,7 @@ class SearchContainer extends React.Component {
       let searchWarning = document.getElementById('search-warning');
       let searchName = document.getElementById('search-what').value;
       if (searchName.match(/[^A-Za-z ]/)) {
-        searchWarning.innerHTML = "Only alphabetic characters allowed.";
+        searchWarning.innerHTML = 'Only alphabetic characters allowed.';
         return;
       }
       searchWarning.innerHTML = '';
@@ -57,14 +57,14 @@ class FiltersContainer extends React.Component {
       <div id="filters">
         <div id="filter-category">
           <span>Category: </span>
-          <select id="filter-category-dropdown" defaultValue="">
+          <select id="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}
           </select>
         </div>
         <div id="filter-location">
           <span>Location: </span>
-          <select id="filter-location-dropdown" defaultValue="">
+          <select id="filter-location-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anywhere</option>
             {locations}
           </select>
@@ -86,14 +86,33 @@ class FreelancerCreateBtn extends React.Component {
 
 // Card which displays a freelancer's information
 class FreelancerCard extends React.Component {
-  formatDistance(distance) {
-    let formatted;
-    if (!distance || distance !== Number.MAX_SAFE_INTEGER) {
-      formatted = distance / 1000 + ' km';
+  formatAvgScore(avgScore) {
+    if (isNaN(avgScore)) {
+      return '-';
     } else {
-      formatted = '-';
+      return avgScore;
     }
-    return formatted;
+  }
+  formatPrice(price) {
+    if (price) {
+      return price.min + ' - ' + price.max + ' CHF';
+    } else {
+      return '-';
+    }
+  }
+  formatDistance(distance) {
+    if (!distance || distance !== Number.MAX_SAFE_INTEGER) {
+      return (distance / 1000).toFixed(2) + ' km';
+    } else {
+      return '-';
+    }
+  }
+  formatDuration(duration) {
+    if (!duration || duration !== Number.MAX_SAFE_INTEGER) {
+      return ', ' + (duration / 3600).toFixed(2) + ' h';
+    } else {
+      return '';
+    }
   }
   redirectFreelancer(freelancer) {
     return function() {
@@ -101,8 +120,6 @@ class FreelancerCard extends React.Component {
     }
   }
   render () {
-    let avgScore = !isNaN(this.props.avgScore) ? this.props.avgScore : '-';
-    let price = this.props.price ? this.props.price.min + ' - ' + this.props.price.max + " CHF" : '-';
     return (
       <div className="freelancer-card" onClick={this.redirectFreelancer(this)}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -110,9 +127,9 @@ class FreelancerCard extends React.Component {
           <h1>{this.props.title}</h1>
           <h2>{this.props.firstName} {this.props.familyName}</h2>
           <span>{this.props.category}</span>
-          <span>Average Score: {avgScore} / 5</span>
-          <span>Price range: {price}</span>
-          <span>Distance: {this.formatDistance(this.props.distance)}</span>
+          <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
+          <span>Price range: {this.formatPrice(this.props.price)}</span>
+          <span>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
       </div>
     );
@@ -134,6 +151,7 @@ class FreelancersContainer extends React.Component {
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
         distance   = {freelancer.distance}
+        duration   = {freelancer.duration}
         _id        = {freelancer._id}
         key        = {i}
         />);
