@@ -57,14 +57,14 @@ class FiltersContainer extends React.Component {
       <div id="filters">
         <div id="filter-category">
           <span>Category: </span>
-          <select id="filter-category-dropdown" defaultValue="">
+          <select id="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}
           </select>
         </div>
         <div id="filter-location">
           <span>Location: </span>
-          <select id="filter-location-dropdown" defaultValue="">
+          <select id="filter-location-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anywhere</option>
             {locations}
           </select>
