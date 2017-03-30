@@ -70,6 +70,7 @@ class FiltersContainer extends React.Component {
           </select>
         </div>
         <input id="filter-distance-temp" placeholder="Distance in km" type="text" onKeyDown={filterDistanceTest} />
+        <input id="filter-duration-temp" placeholder="Duration in minutes" type="text" onKeyDown={filterDistanceTest} />
       </div>
     </div>);
   }
@@ -122,7 +123,7 @@ class FreelancerCard extends React.Component {
   }
   render () {
     return (
-      <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance}>
+      <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance} data-duration={this.props.duration}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
           <h1>{this.props.title}</h1>
@@ -177,12 +178,15 @@ function applyFilters() {
   let category = document.getElementById('filter-category-dropdown').value;
   let location = document.getElementById('filter-location-dropdown').value;
   let distance = Number(document.getElementById('filter-distance-temp').value) * 1000;
+  let duration = Number(document.getElementById('filter-duration-temp').value) * 60;
   for (let freelancer of freelancers) {
     let fCategory = freelancer.getAttribute('data-category');
     let fDistance = Number(freelancer.getAttribute('data-distance'));
+    let fDuration = Number(freelancer.getAttribute('data-duration'));
     //let fLocation = freelancer.getAttribute('data-location');
     if ((category && category !== fCategory) ||
-        (distance && fDistance > distance)) {//||
+        (distance && fDistance > distance)   ||
+        (duration && fDuration > duration)) {//||
         //(location && location !== fLocation)) {
       freelancer.style.display = 'none';
     } else {
