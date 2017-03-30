@@ -19,14 +19,61 @@ describe('Search test: ', function() {
 
     it('Should respond with a 200 and return the correct data', function(done) {
       request(app)
-        .get('/search?keyword=asim')
+        .get('/search?keyword=larson')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
           const results = JSON.parse(res.text) || [];
+          results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[1]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelance.should.have.property("distance", Number.MAX_SAFE_INTEGER);
+            freelance.should.have.property("duration", Number.MAX_SAFE_INTEGER);
+          });
+          done();
+        });
+    });
+
+    it('Should respond with a 200 and return the correct data with distance information', function(done) {
+      request(app)
+        .get('/search?keyword=larson&origin=Bellinzona+Switzerland')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text) || [];
+          results.length.should.be.greaterThan(0);
+          results.forEach(function(freelance) {
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelance.should.have.property("distance");
+            freelance.distance.should.not.be.lessThan(0);
+            freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.should.have.property("duration");
+            freelance.duration.should.not.be.lessThan(0);
+            freelance.duration.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+          });
+          done();
+        });
+    });
+
+    it('Should respond with a 200 and return the correct data with distance information', function(done) {
+      request(app)
+        .get('/search?keyword=larson&origin=Lugano+Switzerland')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text) || [];
+          results.length.should.be.greaterThan(0);
+          results.forEach(function(freelance) {
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelance.should.have.property("distance");
+            freelance.distance.should.not.be.lessThan(0);
+            freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.should.have.property("duration");
+            freelance.duration.should.not.be.lessThan(0);
+            freelance.duration.should.be.lessThan(Number.MAX_SAFE_INTEGER);
           });
           done();
         });
