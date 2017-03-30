@@ -69,6 +69,7 @@ class FiltersContainer extends React.Component {
             {locations}
           </select>
         </div>
+        <input id="filter-distance-temp" placeholder="Distance in km" type="text" onKeyDown={filterDistanceTest} />
       </div>
     </div>);
   }
@@ -121,7 +122,7 @@ class FreelancerCard extends React.Component {
   }
   render () {
     return (
-      <div className="freelancer-card" onClick={this.redirectFreelancer(this)}>
+      <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
           <h1>{this.props.title}</h1>
@@ -164,15 +165,24 @@ class FreelancersContainer extends React.Component {
   }
 }
 
+function filterDistanceTest(e) {
+  if (e.keyCode && e.keyCode == 13) {
+    applyFilters();
+  }
+}
+
 // Hide a freelancer card if the filters don't match the attributes
 function applyFilters() {
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
   let location = document.getElementById('filter-location-dropdown').value;
+  let distance = Number(document.getElementById('filter-distance-temp').value) * 1000;
   for (let freelancer of freelancers) {
-    let fCategory = freelancer.children[1].children[2].innerHTML;
-    //let fLocation = freelancer.children[1].children[?].innerHTML;
-    if (category && category !== fCategory) {//||
+    let fCategory = freelancer.getAttribute('data-category');
+    let fDistance = Number(freelancer.getAttribute('data-distance'));
+    //let fLocation = freelancer.getAttribute('data-location');
+    if ((category && category !== fCategory) ||
+        (distance && fDistance > distance)) {//||
         //(location && location !== fLocation)) {
       freelancer.style.display = 'none';
     } else {
