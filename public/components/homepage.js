@@ -13,18 +13,16 @@ class SearchContainer extends React.Component {
     // Function triggers only on button click (!e.keyCode) or enter key pressed
     if (!e.keyCode || e.keyCode == 13) {
       let searchWarning = document.getElementById('search-warning');
-      let searchName = document.getElementById('search-name').value;
-
+      let searchName = document.getElementById('search-what').value;
       if (searchName.match(/[^A-Za-z ]/)) {
         searchWarning.innerHTML = "Only alphabetic characters allowed.";
         return;
       }
-      searchWarning.innerHTML = "";
-      let category = document.getElementById('filter-category-dropdown').value;
-      let location = document.getElementById('filter-location-dropdown').value;
+      searchWarning.innerHTML = '';
       let query = `/search?keyword=${searchName}`;
-        // + (category ? `&category=${category}` : '')
-        // + (location ? `&location=${location}` : '');
+      let origin = document.getElementById('search-where').value;
+      if (origin)
+        query += `&origin=${origin}`;
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -32,7 +30,8 @@ class SearchContainer extends React.Component {
     return (
       <div id="search-container">
         <div id="search-bar">
-          <input id="search-name" placeholder="What service do you need?" onKeyDown={this.searchRequest} />
+          <input id="search-what" placeholder="What?" onKeyDown={this.searchRequest} />
+          <input id="search-where" placeholder="Where?" onKeyDown={this.searchRequest} />
           <button id="search-btn" onClick={this.searchRequest}>Search</button>
         </div>
         <div id="search-warning"></div>
@@ -87,6 +86,15 @@ class FreelancerCreateBtn extends React.Component {
 
 // Card which displays a freelancer's information
 class FreelancerCard extends React.Component {
+  formatDistance(distance) {
+    let formatted;
+    if (!distance || distance !== Number.MAX_SAFE_INTEGER) {
+      formatted = distance / 1000 + ' km';
+    } else {
+      formatted = '-';
+    }
+    return formatted;
+  }
   redirectFreelancer(freelancer) {
     return function() {
       document.location = `/freelance/${freelancer.props._id}`;
@@ -104,7 +112,7 @@ class FreelancerCard extends React.Component {
           <span>{this.props.category}</span>
           <span>Average Score: {avgScore} / 5</span>
           <span>Price range: {price}</span>
-          <span>Distance: {this.props.distance}</span>
+          <span>Distance: {this.formatDistance(this.props.distance)}</span>
         </div>
       </div>
     );

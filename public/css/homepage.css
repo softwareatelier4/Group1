@@ -35,21 +35,28 @@ body {
   justify-content: center;
 }
 
-#search-name {
+#search-what,
+#search-where {
   padding: 10px;
   border: none;
   border-bottom: solid 2px #c9c9c9;
   transition: border 0.3s;
   outline: none;
-  width: 400px;
+  width: 250px;
   height: 60px;
   font-size: 1.2em;
 }
 
-#search-name:focus,
-#search-name.focus {
+#search-what:focus,
+#search-what.focus,
+#search-where:focus,
+#search-where.focus {
   border-bottom: solid 2px #969696;
   outline: none;
+}
+
+#search-where {
+  margin-left: 20px;
 }
 
 #search-btn {

@@ -69,14 +69,21 @@ router.get('/', function(req, res, next) {
       results.forEach(function(freelance) {
         utils.addLinks(freelance, "freelance");
         destinations.push(freelance.address);
+				freelance.distance = Number.MAX_SAFE_INTEGER;
+				freelance.duration = Number.MAX_SAFE_INTEGER;
       });
 
-      // Google distance request
+			if (!req.query.origin) {
+				res.json(results).end();
+				return;
+			}
+
+			// Google distance request
       let googleMapsClient = GoogleMaps.createClient({
         key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
       });
       googleMapsClient.distanceMatrix({
-        origins: [ 'Lugano, Switzerland' ],
+        origins: [ req.query.origin ],
         destinations: destinations
       }, function(err, response) {
         if (!err) {
