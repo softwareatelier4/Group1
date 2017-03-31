@@ -131,6 +131,12 @@ body {
   cursor: pointer;
 }
 
+#freelancer-create-btn:focus {
+  outline: none;
+  background-color: var(--background);
+}
+
+
 #root > * {
   /*background-color: lightgreen;*/
   width: 100%;
@@ -139,7 +145,6 @@ body {
 #freelancers-container {
   /*background-color: lightgreen;*/
   width: 100%;
-  margin-top: 50px;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -178,11 +183,15 @@ body {
   flex-direction: column;
   margin-left: 20px;
   align-content: flex-end;
-  padding-bottom: 30px;
 }
 
 .freelancer-card-info > h1,
+.freelancer-card-info > h2,
 .freelancer-card-info > div,
 .freelancer-card-info > span {
   padding-bottom: 10px;
+}
+
+.freelancer-card-info > h2 {
+  margin: 0;
 }
