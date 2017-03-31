@@ -65,7 +65,7 @@ class CreationForm extends React.Component {
             </div>
 
             <div className="group">
-              <input ref="familyName" className="family-name" name="family-name" type="text" />
+              <input ref="familyName" className="family-name" name="family-name" type="text"/>
               <span className="bar"></span>
                <label>
                 Family Name

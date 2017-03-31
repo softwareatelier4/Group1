@@ -9,7 +9,7 @@
 .freelancer-form {
   margin: 10vh 10vw 5vh;
   width: auto;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  box-shadow: var(--box-shadow-material);
   border-radius: 2px;
   background-color: var(--basic-white);
 }
@@ -57,12 +57,12 @@
 }
 
 .submit-button:hover {
-  background-color: #d73a2f;
+  background-color: var(--home-search-button-border-hover);
+  cursor: pointer;
 }
 
 .submit-button:hover:active {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  background-color: var(--accent-color);
+  box-shadow: var(--box-shadow-material);
 }
 
 
@@ -84,7 +84,7 @@
   padding: 0 10px 0 0;
   margin-bottom: 40px;
   margin-top: -22px;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid var(--form-input-border);
 }
 
 .category-selector select {
@@ -118,7 +118,7 @@ input {
   display: block;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid var(--form-input-border);
 }
 
 input:focus {
@@ -128,8 +128,8 @@ input:focus {
 /* LABEL ======================================= */
 
 label {
-  color: #999;
-  font-size: 1.2em;
+  color: var(--form-label-color);
+  font-size: var(--input-font-size);
 }
 
 .group label {
@@ -145,7 +145,7 @@ label {
 
 /* active state */
 
-input:focus ~ label, input:valid ~ label {
+input:focus ~ label {
   top: -20px;
   font-size: 14px;
   color: var(--accent-color);

@@ -15,13 +15,28 @@ html {
 
 /* Global variables */
 * {
+  /* Colors */
   --accent-color: #F44336; /* change hover color accordingly */
   --accent-hover: #c9372c;
   --basic-white: #fff;
   --background: #f7f7f7;
+  --home-search-border: #c9c9c9;
+  --home-search-border-focus: #969696;
+  --home-search-button-border: #d83838;
+  --home-search-button-border-hover: #b72f2f;
+  --form-label-color: #999;
+  --form-input-border: #757575;
+
+  /* Shadows */
   --box-shadow-material: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   --box-shadow-material-hover: 0 4px 6px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   --box-shadow-material-card-hover: 0px 6px 17px 0px rgba(0,0,0,0.25);
+
+  /* Font sizes */
+  --title-font-size: 3em;
+  --input-font-size: 1.2;
+  --tag-font-size: 0.7;
+  --general-bigger-font-size: 1.2em;
 }
 
 .title {
@@ -45,6 +60,16 @@ html {
 }
 
 /* Topbar */
+
+#topbar{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  background-color: var(--accent-color);
+  margin-bottom: 50px;
+  box-shadow: var(--box-shadow-material);
+}
+
 #title {
   font-size: 3em;
   text-align: center;
@@ -60,15 +85,15 @@ a#title {
 #freelancer-home-btn {
   width: 100%;
   height: 65px;
-  background-color: var(--accent-color);
+  background-color: var(--basic-white);
+  color: var(--accent-color);
   border: 0px;
-  border-left: 1px solid white;
-  color: white;
-  font-size: 1em;
+  font-size: 1.2em;
+  padding: 20px;
 }
 
 #freelancer-home-btn:hover {
-  background-color: var(--accent-hover);
-  pointer: cursor;
+  box-shadow: var(--box-shadow-material-hover);
+  cursor: pointer;
 }
 /* End topbar */

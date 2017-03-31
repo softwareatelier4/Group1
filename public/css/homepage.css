@@ -14,17 +14,8 @@ body {
   align-items: center;
 }
 
-#topbar{
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  background-color: var(--accent-color);
-  margin-bottom: 50px;
-  box-shadow: var(--box-shadow-material);
-}
-
 #title {
-  font-size: 3em;
+    font-size: var(--title-font-size);
   text-align: center;
   color: white;
   margin-left: 20px;
@@ -55,19 +46,19 @@ body {
 #search-where {
   padding: 10px;
   border: none;
-  border-bottom: solid 2px #c9c9c9;
+  border-bottom: solid 2px var(--home-search-border);
   transition: border 0.3s;
   outline: none;
   width: 250px;
   height: 60px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
 }
 
 #search-what:focus,
 #search-what.focus,
 #search-where:focus,
 #search-where.focus {
-  border-bottom: solid 2px #969696;
+  border-bottom: solid 2px var(--home-search-border-focus);
   outline: none;
 }
 
@@ -78,17 +69,23 @@ body {
 #search-btn {
   margin-left: 20px;
   width: 100px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
   border: 0;
   background-color: var(--accent-color);
   color: white;
-  border-bottom: solid 4px #d83838;
+  border-bottom: solid 4px var(--home-search-button-border);
   outline: none;
+  cursor: pointer;
 }
 
 #search-btn:hover {
   background-color: var(--accent-hover);
-  border-bottom: solid 4px #b72f2f;
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+#search-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
 }
 
 #search-warning {
@@ -120,7 +117,7 @@ body {
   background-color: var(--basic-white);
   color: var(--accent-color);
   border: 0px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
   padding: 20px;
 }
 
@@ -210,11 +207,11 @@ body {
 
 /* Category corner */
 .category {
-  color: #F44336;
+  color: var(--accent-color);
   align-self: flex-start;
   margin: -20px;
   padding: 10px;
-  background-color: #fff;
+  background-color: var(--basic-white);
   border-radius: 0 2px 0 10px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
