@@ -82,7 +82,7 @@ class FreelancerCreateBtn extends React.Component {
     document.location = '/freelance/new';
   }
   render () {
-    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm}>Add a freelancer</button>);
+    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm} type="submit">Add a Freelancer</button>);
   }
 }
 
