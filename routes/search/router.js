@@ -17,23 +17,37 @@ router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 router.get('/', function(req, res, next) {
   const keyword = req.query.keyword;
   const regex = new RegExp(keyword, "i");
-  const query = [
+  let query = [
     { firstName : regex },
     { familyName : regex },
     { title : regex },
-    { description : regex }
-  ]
-  Freelance.find({ $or : query }).populate('category').exec(function(err, results) {
-    if (err) {
-      res.status(400).json(err);
-    } else {
-      results.forEach(function(freelance) {
-        utils.addLinks(freelance, "freelance");
-      });
-      res.json(results).end();
-    }
+    { description : regex },
+    { address : regex },
+    { email : regex },
+    { phone : regex },
+    { price : regex },
+  ];
+
+  utils.searchInTags(regex, function(ids) {
+    ids.forEach(function(id) {
+      query.push({ _id : id});
+    });
+
+    Freelance.find({ $or : query }).populate('category').exec(function(err, results) {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        results.forEach(function(freelance) {
+          utils.addLinks(freelance, "freelance");
+        });
+        res.json(results).end();
+      }
+    });
   });
+
 });
+
+
 
 /** router for search */
 module.exports = router;

@@ -1,6 +1,8 @@
 'use strict';
 
 const config = require('../config');
+const mongoose = require('mongoose');
+const Tag = mongoose.model('Tag');
 
 module.exports = {
 
@@ -24,5 +26,19 @@ module.exports = {
       "href" : config.url + "/" + type + "/" + object._id
     }];
   },
+
+  searchInTags : function(regex, done) {
+    var freelancer_ids = [];
+    Tag.find({ tagName : regex }).exec(function(err, results) {
+      if (results) {
+        results.forEach(function(tag) {
+          tag.freelancers.forEach(function(id) {
+            freelancer_ids.push(id);
+          });
+        });
+      }
+      done(freelancer_ids);
+    });
+  }
 
 }
