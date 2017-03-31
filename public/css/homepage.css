@@ -88,7 +88,7 @@ body {
 }
 
 #search-btn:hover {
-  background-color: #c9372c;
+  background-color: var(--accent-hover);
   border-bottom: solid 4px #b72f2f;
 }
 

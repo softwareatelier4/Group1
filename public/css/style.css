@@ -10,13 +10,15 @@ body, h1 {
 }
 
 html {
-  background-color: #f7f7f7;
+  background-color: var(--background);
 }
 
 /* Global variables */
 * {
-  --accent-color: #F44336;
+  --accent-color: #F44336; /* change hover color accordingly */
+  --accent-hover: #c9372c;
   --basic-white: #fff;
+  --background: #f7f7f7;
 }
 
 .title {
@@ -30,7 +32,7 @@ html {
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   margin-bottom: 50px;
 }
 
@@ -55,7 +57,7 @@ a#title {
 #freelancer-home-btn {
   width: 100%;
   height: 65px;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   border: 0px;
   border-left: 1px solid white;
   color: white;
@@ -63,7 +65,7 @@ a#title {
 }
 
 #freelancer-home-btn:hover {
-  background-color: #c9372c;
+  background-color: var(--accent-hover);
   pointer: cursor;
 }
 /* End topbar */
