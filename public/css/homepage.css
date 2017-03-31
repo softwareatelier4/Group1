@@ -15,6 +15,22 @@ body {
   align-items: center;
 }
 
+#topbar{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  background-color: var(--accent-color);
+  margin-bottom: 50px;
+}
+
+#title {
+  font-size: 3em;
+  text-align: center;
+  color: white;
+  margin-left: 20px;
+  padding: 5px 0;
+}
+
 #search-and-filters {
   display: flex;
   flex-flow: column;
@@ -64,7 +80,7 @@ body {
   width: 100px;
   font-size: 1.2em;
   border: 0;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   color: white;
   border-bottom: solid 4px #d83838;
   outline: none;
@@ -102,7 +118,7 @@ body {
 #freelancer-create-btn {
   width: 100%;
   height: 65px;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   border: 0px;
   border-left: 1px solid white;
   color: white;
@@ -130,12 +146,12 @@ body {
 
 .freelancer-card {
   width: 100%;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   display: flex;
   flex-direction: row;
   margin-bottom: 50px;
   padding: 20px;
-  color: #fff;
+  color: var(--basic-white);
   border-radius: 2px 2px 0px 0px;
 }
 

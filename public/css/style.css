@@ -13,6 +13,12 @@ html {
   background-color: #f7f7f7;
 }
 
+/* Global variables */
+* {
+  --accent-color: #F44336;
+  --basic-white: #fff;
+}
+
 .title {
   display: flex;
   height: 100%;

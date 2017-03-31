@@ -11,13 +11,13 @@
   width: auto;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   border-radius: 2px;
-  background-color: #fff;
+  background-color: var(--basic-white);
 }
 
 .freelancer-form-header {
   padding: 20px;
-  color: #fff;
-  background-color: #F44336;
+  color: var(--basic-white);
+  background-color: var(--accent-color);
   font-weight: 100;
   border-radius: 2px 2px 0 0;
   text-align: center;
@@ -48,8 +48,8 @@
 /* submit button */
 
 .submit-button {
-  background-color: #f44336;
-  color: #fff;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
   border-radius: 2px;
   border-style: none;
   width: 17%;
@@ -62,7 +62,7 @@
 
 .submit-button:hover:active {
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  background-color: #f44336;
+  background-color: var(--accent-color);
 }
 
 
@@ -95,7 +95,7 @@
 
 .category-selector label {
   font-size: 14px;
-  color: #F44336;
+  color: var(--accent-color);
   margin-left: 5px;
 }
 
@@ -148,7 +148,7 @@ label {
 input:focus ~ label, input:valid ~ label {
   top: -20px;
   font-size: 14px;
-  color: #F44336;
+  color: var(--accent-color);
 }
 
 /* BOTTOM BARS ================================= */
@@ -165,7 +165,7 @@ input:focus ~ label, input:valid ~ label {
   width: 0;
   bottom: 1px;
   position: absolute;
-  background: #F44336;
+  background: var(--accent-color);
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
