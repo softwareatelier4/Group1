@@ -35,7 +35,7 @@
 .picture-placeholder > img {
   width: 100%;
   height: 100%;
-  display: none; // To remove
+  display: none; /* To remove */
 }
 
 .freelancer-header-info {
