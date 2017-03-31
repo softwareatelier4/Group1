@@ -16,8 +16,6 @@ module.exports = {
       .waitForElementVisible('body', 1000)
       .waitForElementVisible('span.freelancer-header-title', 1000)
       .assert.containsText('span.freelancer-header-title', 'VP Marketing')
-      .pause(1000)
-      .saveScreenshot(config.projectRoot + '/test/nightwatch-screenshots/search-result-vp-marketing.png')
       .end();
   }
 };
