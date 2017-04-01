@@ -69,8 +69,14 @@ class FiltersContainer extends React.Component {
             {locations}
           </select>
         </div>
-        <input id="filter-distance-temp" placeholder="Distance in km" type="text" onKeyDown={filterDistanceTest} />
-        <input id="filter-duration-temp" placeholder="Duration in minutes" type="text" onKeyDown={filterDistanceTest} />
+        <div id="filter-distance">
+          <span id="max-distance-label">Max distance: </span>
+          <input id="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="1" step="0.1" onKeyDown={applyFilters} onInput={applyFilters}/>
+        </div>
+        <div id="filter-duration">
+          <span id="max-duration-label">Max duration: </span>
+          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="1" step="0.1" onKeyDown={applyFilters} onInput={applyFilters}/>
+        </div>
       </div>
     </div>);
   }
@@ -177,8 +183,11 @@ function applyFilters() {
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
   let location = document.getElementById('filter-location-dropdown').value;
-  let distance = Number(document.getElementById('filter-distance-temp').value) * 1000;
-  let duration = Number(document.getElementById('filter-duration-temp').value) * 60;
+  // TODO: remove hardcoded values as soon as the seed is fixed and we decide on the format.
+  let distance = Number(document.getElementById('filter-distance-temp').value) * 9007199254740992;
+  document.getElementById('max-distance-label').innerHTML = "Max distance: " + distance + " km";
+  let duration = Number(document.getElementById('filter-duration-temp').value) * 9007199254740992;
+  document.getElementById('max-duration-label').innerHTML = "Max duration: " + duration + " m";
   for (let freelancer of freelancers) {
     let fCategory = freelancer.getAttribute('data-category');
     let fDistance = Number(freelancer.getAttribute('data-distance'));
