@@ -11,6 +11,9 @@ module.exports = {
     "log_path" : false,
     "host" : "127.0.0.1",
     "port" : 4444,
+    "cli_args": {
+      "webdriver.chrome.driver": "./chromedriver"
+    }
   },
 
   "test_settings" : {
@@ -24,7 +27,7 @@ module.exports = {
         "path" : ""
       },
       "desiredCapabilities": {
-        "browserName": "phantomjs",
+        "browserName": "chrome",
         "javascriptEnabled": true,
         "acceptSslCerts": true
       }
