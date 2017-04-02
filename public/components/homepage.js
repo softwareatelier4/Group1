@@ -1,12 +1,5 @@
 'use strict';
 
-let locationsTemp = [
-  "Bellinzona",
-  "Lugano",
-  "Mendrisio"
-];
-
-
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -14,8 +7,8 @@ class SearchContainer extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       let searchWarning = document.getElementById('search-warning');
       let searchName = document.getElementById('search-what').value;
-      if (searchName.match(/[^A-Za-z ]/)) {
-        searchWarning.innerHTML = 'Only alphabetic characters allowed.';
+      if (!searchName.match(/[a-zA-Z0-9]*/)) {
+        searchWarning.innerHTML = 'Only alphanumeric characters allowed.';
         return;
       }
       searchWarning.innerHTML = '';
@@ -48,11 +41,6 @@ class FiltersContainer extends React.Component {
       let category = this.props.categories[i].categoryName;
       categories.push(<option value={category} key={i}>{category}</option>);
     }
-    let locations = [];
-    for (let i = 0; i < this.props.locations.length; ++i) {
-      let location = this.props.locations[i]
-      locations.push(<option value={location} key={i}>{location}</option>);
-    }
     return (<div id="filters-container">
       <div id="filters">
         <div id="filter-category">
@@ -62,20 +50,14 @@ class FiltersContainer extends React.Component {
             {categories}
           </select>
         </div>
-        <div id="filter-location">
-          <span>Location: </span>
-          <select id="filter-location-dropdown" defaultValue="" onChange={applyFilters}>
-            <option value="">Anywhere</option>
-            {locations}
-          </select>
-        </div>
+
         <div id="filter-distance">
           <span id="max-distance-label">Max distance: </span>
-          <input id="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="1" step="0.1" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
         </div>
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
-          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="1" step="0.1" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters}/>
         </div>
       </div>
     </div>);
@@ -108,18 +90,22 @@ class FreelancerCard extends React.Component {
       return '-';
     }
   }
-  formatDistance(distance) {
-    if (!distance || distance !== Number.MAX_SAFE_INTEGER) {
+  formatDistance(distance, id) {
+    if(!document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
+
+    if (distance !== undefined && distance !== Number.MAX_SAFE_INTEGER) {
       return (distance / 1000).toFixed(2) + ' km';
     } else {
-      return '-';
+      return '';
     }
   }
   formatDuration(duration) {
-    if (!duration || duration !== Number.MAX_SAFE_INTEGER) {
+    if(!document.getElementById('search-where').value) return ''; // on first load, no distance info
+
+    if (duration !== "undefined" && duration !== Number.MAX_SAFE_INTEGER) {
       return ', ' + (duration / 3600).toFixed(2) + ' h';
     } else {
-      return '';
+      return 'Not reachable by car';
     }
   }
   redirectFreelancer(freelancer) {
@@ -182,22 +168,31 @@ function filterDistanceTest(e) {
 function applyFilters() {
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
-  let location = document.getElementById('filter-location-dropdown').value;
-  // TODO: remove hardcoded values as soon as the seed is fixed and we decide on the format.
-  let distance = Number(document.getElementById('filter-distance-temp').value) * 9007199254740992;
-  document.getElementById('max-distance-label').innerHTML = "Max distance: " + distance + " km";
-  let duration = Number(document.getElementById('filter-duration-temp').value) * 9007199254740992;
-  document.getElementById('max-duration-label').innerHTML = "Max duration: " + duration + " m";
+  let origin = document.getElementById('search-where').value;
+  // format distance slider
+  let distance = Number(document.getElementById('filter-distance-temp').value);
+  let maxDistance = document.getElementById('filter-distance-temp').max;
+  let distanceStr = "Max distance: " + distance;
+  distanceStr += (distance == maxDistance) ? "+ km" : " km";
+  document.getElementById('max-distance-label').innerHTML = distanceStr;
+  distance *= 1000;
+  // format time slider
+  let duration = Number(document.getElementById('filter-duration-temp').value);
+  let maxDuration = document.getElementById('filter-duration-temp').max;
+  let durationStr = "Max time by car: " + duration;
+  durationStr += (duration == maxDuration) ? "+ min" : " min";
+  document.getElementById('max-duration-label').innerHTML = durationStr;
+  duration *= 60;
   for (let freelancer of freelancers) {
     let fCategory = freelancer.getAttribute('data-category');
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
-    //let fLocation = freelancer.getAttribute('data-location');
-    if ((category && category !== fCategory) ||
-        (distance && fDistance > distance)   ||
-        (duration && fDuration > duration)) {//||
-        //(location && location !== fLocation)) {
+    if ((category && category !== fCategory)
+        || (origin !== "" && (distance/1000 != maxDistance && fDistance > distance
+                              || duration/60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
+      console.log(distance != maxDistance);
+
     } else {
       freelancer.style.display = 'flex';
     }
@@ -216,7 +211,7 @@ function renderSearch() {
 }
 
 function renderFilters(categories) {
-  ReactDOM.render(<FiltersContainer categories={categories} locations={locationsTemp} />, document.getElementById('react-filters-container'));
+  ReactDOM.render(<FiltersContainer categories={categories}/>, document.getElementById('react-filters-container'));
 }
 
 function renderFreelancerCreateBtn() {

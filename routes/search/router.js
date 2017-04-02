@@ -44,7 +44,9 @@ router.get('/', function(req, res, next) {
 
 			// Google distance request
       let googleMapsClient = GoogleMaps.createClient({
-        key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
+        // both work
+        //key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
+        key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
       });
       googleMapsClient.distanceMatrix({
         origins: [ req.query.origin ],

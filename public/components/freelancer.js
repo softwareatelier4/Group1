@@ -29,6 +29,7 @@ function renderComponent(data) {
       address={data.address}
       email={data.email}
       tags={listTags}
+      urlPicture = {data.urlPicture}
     />,
 
     document.getElementById('freelancer-root')
