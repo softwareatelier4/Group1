@@ -17,6 +17,7 @@
   "author": "Group 1",
   "license": "MIT",
   "dependencies": {
+    "@google/maps": "^0.3.1",
     "adaro": "~1.0.0",
     "bluebird": "~3.5.0",
     "body-parser": "^1.17.1",
