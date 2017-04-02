@@ -21,7 +21,7 @@ module.exports = {
       .setValue('input[name=address]', 'USI, Lugano')
       .setValue('input[name=email]', 'test@night.watch')
       .click('input[name=submit-button]')
-      .waitForElementVisible('div.freelancer-view', 1000)
+      .waitForElementVisible('div.freelancer-view', 10000)
       .assert.containsText('h1.freelancer-header-name', 'Nightwatch')
       .assert.containsText('span.freelancer-category', 'Engineering')
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
