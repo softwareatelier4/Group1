@@ -67,8 +67,8 @@ class Contact extends React.Component {
     return (
       <address>
         <span>Phone: <a>{this.props.phone}</a></span>
-        <span>Address: <a>{this.props.address}</a></span>
-        <span>Email: <a href={"mailto:" + this.props.email}>{this.props.email}</a></span>
+        <span>Address: <a className="freelancer-address">{this.props.address}</a></span>
+        <span>Email: <a className="freelancer-email" href={"mailto:" + this.props.email}>{this.props.email}</a></span>
       </address>
     );
   }
