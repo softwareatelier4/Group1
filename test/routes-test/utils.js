@@ -43,27 +43,29 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
 }
 
 module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(responseObj, freelance) {
+
   Object.keys(freelance).forEach(function(key) {
     switch (key) {
+      case '_id': // ignore id value
+        break;
       case 'tags': // Test for tags IDs in a freelance
-      responseObj.tags.forEach(function(tag) {
-        assert.equal(ObjectId.isValid(tag), true);
-      }); break;
+        responseObj.tags.forEach(function(tag) {
+          assert.equal(ObjectId.isValid(tag), true);
+        }); break;
 
       case 'reviews': // Test for reviews IDs in a freelance
-      responseObj.reviews.forEach(function(review) {
-        assert.equal(ObjectId.isValid(review), true);
-      }); break;
+        responseObj.reviews.forEach(function(review) {
+          assert.equal(ObjectId.isValid(review), true);
+        }); break;
 
       case 'category': // Test for category info in a freelance
-      responseObj.category.should.have.property("_id");
-      responseObj.category.should.have.property("freelancers");
-      responseObj.category.should.have.property("categoryName");
-      break;
+        responseObj.category.should.have.property("_id");
+        responseObj.category.should.have.property("freelancers");
+        responseObj.category.should.have.property("categoryName");
+        break;
 
       default:
-      responseObj.should.have.property(key, freelance[key]);
-      break;
+        responseObj.should.have.property(key, freelance[key]);
     }
 	});
 }

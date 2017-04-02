@@ -35,21 +35,32 @@ body {
   justify-content: center;
 }
 
-#search-name {
+#search-what,
+#search-where {
   padding: 10px;
   border: none;
   border-bottom: solid 2px #c9c9c9;
   transition: border 0.3s;
   outline: none;
-  width: 400px;
+  width: 35%;
   height: 60px;
   font-size: 1.2em;
 }
 
-#search-name:focus,
-#search-name.focus {
+#react-search-container {
+  width: 100%;
+}
+
+#search-what:focus,
+#search-what.focus,
+#search-where:focus,
+#search-where.focus {
   border-bottom: solid 2px #969696;
   outline: none;
+}
+
+#search-where {
+  margin-left: 20px;
 }
 
 #search-btn {
@@ -82,7 +93,10 @@ body {
   display: flex;
   flex-flow: row;
   justify-content: left;
-  margin-left: 18px;
+}
+
+#filters > div {
+  margin: 0 1em;
 }
 
 #filter-category-dropdown, #filter-location-dropdown {
