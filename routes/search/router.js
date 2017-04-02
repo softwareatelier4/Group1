@@ -87,7 +87,7 @@ router.get('/', function(req, res, next) {
       }
     });
   });
-}
+});
 
 /** router for search */
 module.exports = router;
