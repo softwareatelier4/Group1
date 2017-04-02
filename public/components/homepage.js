@@ -191,8 +191,6 @@ function applyFilters() {
         || (origin !== "" && (distance/1000 != maxDistance && fDistance > distance
                               || duration/60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
-      console.log(distance != maxDistance);
-
     } else {
       freelancer.style.display = 'flex';
     }
