@@ -16,7 +16,15 @@ router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 // Return index
 router.get('/', function(req, res, next) {
   const keyword = req.query.keyword;
-  const regex = new RegExp(keyword, "i");
+  var pattern = '';
+  if (keyword) {
+    for(let word of keyword.split(' ')) {
+      console.log(word);
+      pattern += word + '|';
+    }
+  }
+  pattern = pattern.slice(0, -1) || keyword;
+  const regex = new RegExp(pattern, "i");
   let query = [
     { firstName : regex },
     { familyName : regex },
