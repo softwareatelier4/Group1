@@ -23,8 +23,8 @@ class SearchContainer extends React.Component {
     return (
       <div id="search-container">
         <div id="search-bar">
-          <input id="search-what" placeholder="What?" onKeyDown={this.searchRequest} />
-          <input id="search-where" placeholder="Where?" onKeyDown={this.searchRequest} />
+          <input id="search-what" name="search-what" placeholder="What?" onKeyDown={this.searchRequest} />
+          <input id="search-where" name="search-where" placeholder="Where?" onKeyDown={this.searchRequest} />
           <button id="search-btn" onClick={this.searchRequest}>Search</button>
         </div>
         <div id="search-warning"></div>
@@ -123,7 +123,7 @@ class FreelancerCard extends React.Component {
           <span>{this.props.category}</span>
           <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
           <span>Price range: {this.formatPrice(this.props.price)}</span>
-          <span>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
+          <span name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
       </div>
     );
