@@ -53,7 +53,7 @@ class FiltersContainer extends React.Component {
 
         <div id="filter-distance">
           <span id="max-distance-label">Max distance: </span>
-          <input id="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
         </div>
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
@@ -123,7 +123,7 @@ class FreelancerCard extends React.Component {
           <span>{this.props.category}</span>
           <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
           <span>Price range: {this.formatPrice(this.props.price)}</span>
-          <span name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
+          <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
       </div>
     );
