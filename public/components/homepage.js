@@ -107,7 +107,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDuration(duration) {
-    if(!document.getElementById('search-where').value) return ''; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return ''; // on first load, no distance info
 
     if (duration !== "undefined" && duration !== Number.MAX_SAFE_INTEGER) {
       return ', ' + (duration / 3600).toFixed(2) + ' h';
