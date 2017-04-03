@@ -1,5 +1,8 @@
 'use strict';
 
+var mongoose   = require('mongoose');
+var ObjectId   = mongoose.Types.ObjectId;
+
 var should = require('should');
 var config = require('../config');
 var app = require(config.projectRoot + '/app');
@@ -99,6 +102,21 @@ describe('Freelance-post test: ', function() {
         }
       });
     });
+
+    it('should respond with a 400 if the given freelance ID is not valid', function(done) {
+      request(app)
+        .post('/freelance/' + 'literally_anything_which_is_not_in_the_correct_format/review')
+        .set('Accept', 'application/json')
+        .expect(400, done);
+    });
+
+    it('should respond with a 404 if the given freelance ID is not in the database', function(done) {
+      request(app)
+        .post('/freelance/' + ObjectId().toString() + '/review')
+        .set('Accept', 'application/json')
+        .expect(404, done);
+    });
+
   });
 });
 

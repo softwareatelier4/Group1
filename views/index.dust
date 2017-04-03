@@ -7,15 +7,19 @@
     <link rel="stylesheet" type="text/css" href="css/homepage.css" />
   </head>
   <body>
-    <div id='root'>
+    <div id='topbar'>
       <!-- Title -->
-      <div id="title">JobAdvisor</div>
-      <!-- Search -->
-      <div id="react-search-container"></div>
-      <!-- Filters -->
-      <div id="react-filters-container"></div>
+      <div id="react-title"></div>
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
+    </div>
+    <div id='root'>
+      <div id=search-and-filters>
+        <!-- Search -->
+        <div id="react-search-container"></div>
+        <!-- Filters -->
+        <div id="react-filters-container"></div>
+      </div>
       <!-- Freelancers -->
       <div id="react-freelancers-container"></div>
     </div>
@@ -27,5 +31,7 @@
     <script src="../js/browser.min.js"></script>
     <!-- Scripts -->
     <script src="components/homepage.js" type="text/babel"></script>
+    <script src="components/topbar.js" type="text/babel"></script>
+
   </body>
 </html>

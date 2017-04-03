@@ -29,6 +29,7 @@ function renderComponent(data) {
       address={data.address}
       email={data.email}
       tags={listTags}
+      urlPicture = {data.urlPicture}
     />,
 
     document.getElementById('freelancer-root')
@@ -66,8 +67,8 @@ class Contact extends React.Component {
     return (
       <address>
         <span>Phone: <a>{this.props.phone}</a></span>
-        <span>Address: <a>{this.props.address}</a></span>
-        <span>Email: <a href={"mailto:" + this.props.email}>{this.props.email}</a></span>
+        <span>Address: <a className="freelancer-address">{this.props.address}</a></span>
+        <span>Email: <a className="freelancer-email" href={"mailto:" + this.props.email}>{this.props.email}</a></span>
       </address>
     );
   }
@@ -108,12 +109,12 @@ class FreelancerHeader extends React.Component {
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-header-info">
-          <h1>{this.props.title}</h1>
           <Name first={this.props.first} last={this.props.last}/>
-          <span>{this.props.category}</span>
+          <span className="freelancer-header-title">{this.props.title}</span>
           <span>Average Score: {this.props.avgScore}/5</span>
           {price}
         </div>
+        <span className="freelancer-category">{this.props.category}</span>
       </div>
   );
   }

@@ -86,14 +86,14 @@ class CreationForm extends React.Component {
             <label>
               Job Category
             </label>
-            <select ref="category">
+            <select name="category" ref="category">
               <option selected disabled hidden>Please select a job category</option>
               {this.props.categories}
             </select>
           </div>
 
           <div className="group">
-            <input ref="address" className="address" name="address" type="text"/>
+            <input ref="address" className="address" name="address" type="text" required/>
             <span className="bar"></span>
             <label>
               Address
@@ -101,7 +101,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}'/>
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
             <span className="bar"></span>
             <label>
               Phone
@@ -116,7 +116,7 @@ class CreationForm extends React.Component {
             </label>
           </div>
 
-          <input className="submit-button" type="submit" value="Submit"/>
+          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
       </div>
     );
