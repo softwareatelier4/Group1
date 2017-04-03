@@ -195,7 +195,7 @@ function applyFilters() {
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
     if ((category && category !== fCategory)
-        || (origin !== "" && (distance/1000 != maxDistance && fDistance > distance
+        || ((origin !== "" || geolocalization !== "") && (distance/1000 != maxDistance && fDistance > distance
                               || duration/60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
     } else {
