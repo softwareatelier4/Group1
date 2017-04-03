@@ -1,5 +1,7 @@
 'use strict';
 
+let geolocalization = '';
+
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -14,8 +16,12 @@ class SearchContainer extends React.Component {
       searchWarning.innerHTML = '';
       let query = `/search?keyword=${searchName}`;
       let origin = document.getElementById('search-where').value;
-      if (origin)
+      if (!origin && geolocalization) {
+        origin = geolocalization;
+      }
+      if (origin) {
         query += `&origin=${origin}`;
+      }
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -91,7 +97,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDistance(distance, id) {
-    if(!document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
 
     if (distance !== undefined && distance !== Number.MAX_SAFE_INTEGER) {
       return (distance / 1000).toFixed(2) + ' km';
@@ -201,7 +207,15 @@ function renderPage(data) {
   renderSearch();
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   renderFreelancerCreateBtn();
-  ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
+      let query = `/search?origin=${geolocalization}`;
+      ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+    });
+  } else {
+    ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+  }
 }
 
 function renderSearch() {
