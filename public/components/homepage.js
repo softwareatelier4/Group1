@@ -1,7 +1,7 @@
 'use strict';
 
 let geolocalization = '';
-
+let mostRecentQuery = '';
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -22,6 +22,7 @@ class SearchContainer extends React.Component {
       if (origin) {
         query += `&origin=${origin}`;
       }
+      mostRecentQuery = query;
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -212,7 +213,12 @@ function renderPage(data) {
     navigator.geolocation.getCurrentPosition(function(position) {
       if (position) {
         geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
-        let query = `/search?origin=${geolocalization}`;
+        let query = mostRecentQuery || `/search?origin=${geolocalization}`;
+        if(!query.includes('origin')) {
+          query += `&origin=${geolocalization}`
+        }
+        console.log(query);
+
         ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
       }
     }, null, { enableHighAccuracy : false, maximumAge : 600 });
