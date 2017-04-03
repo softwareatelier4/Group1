@@ -209,10 +209,14 @@ function renderPage(data) {
   renderFreelancerCreateBtn();
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-      geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
-      let query = `/search?origin=${geolocalization}`;
-      ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
-    });
+      if (position) {
+        geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
+        let query = `/search?origin=${geolocalization}`;
+        ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+      } else {
+        ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+      }
+    }, null, { enableHighAccuracy : false, maximumAge : 600 });
   } else {
     ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
   }
