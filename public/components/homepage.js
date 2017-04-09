@@ -1,5 +1,7 @@
 'use strict';
 
+let geolocalization = '';
+let mostRecentQuery = '';
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -14,8 +16,13 @@ class SearchContainer extends React.Component {
       searchWarning.innerHTML = '';
       let query = `/search?keyword=${searchName}`;
       let origin = document.getElementById('search-where').value;
-      if (origin)
+      if (!origin && geolocalization) {
+        origin = geolocalization;
+      }
+      if (origin) {
         query += `&origin=${origin}`;
+      }
+      mostRecentQuery = query;
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -91,7 +98,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDistance(distance, id) {
-    if(!document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
 
     if (distance !== undefined && distance !== Number.MAX_SAFE_INTEGER) {
       return (distance / 1000).toFixed(2) + ' km';
@@ -100,7 +107,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDuration(duration) {
-    if(!document.getElementById('search-where').value) return ''; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return ''; // on first load, no distance info
 
     if (duration !== "undefined" && duration !== Number.MAX_SAFE_INTEGER) {
       return ', ' + (duration / 3600).toFixed(2) + ' h';
@@ -188,7 +195,7 @@ function applyFilters() {
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
     if ((category && category !== fCategory)
-        || (origin !== "" && (distance/1000 != maxDistance && fDistance > distance
+        || ((origin !== "" || geolocalization !== "") && (distance/1000 != maxDistance && fDistance > distance
                               || duration/60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
     } else {
@@ -202,6 +209,20 @@ function renderPage(data) {
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   renderFreelancerCreateBtn();
   ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      if (position) {
+        geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
+        let query = mostRecentQuery || `/search?origin=${geolocalization}`;
+        if(!query.includes('origin')) {
+          query += `&origin=${geolocalization}`
+        }
+        console.log(query);
+
+        ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+      }
+    }, null, { enableHighAccuracy : false, maximumAge : 600 });
+  }
 }
 
 function renderSearch() {
