@@ -9,15 +9,15 @@
 .freelancer-form {
   margin: 10vh 10vw 5vh;
   width: auto;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  box-shadow: var(--box-shadow-material);
   border-radius: 2px;
-  background-color: #fff;
+  background-color: var(--basic-white);
 }
 
 .freelancer-form-header {
   padding: 20px;
-  color: #fff;
-  background-color: #F44336;
+  color: var(--basic-white);
+  background-color: var(--accent-color);
   font-weight: 100;
   border-radius: 2px 2px 0 0;
   text-align: center;
@@ -48,8 +48,8 @@
 /* submit button */
 
 .submit-button {
-  background-color: #f44336;
-  color: #fff;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
   border-radius: 2px;
   border-style: none;
   width: 17%;
@@ -57,12 +57,12 @@
 }
 
 .submit-button:hover {
-  background-color: #d73a2f;
+  background-color: var(--home-search-button-border-hover);
+  cursor: pointer;
 }
 
 .submit-button:hover:active {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  background-color: #f44336;
+  box-shadow: var(--box-shadow-material);
 }
 
 
@@ -84,7 +84,7 @@
   padding: 0 10px 0 0;
   margin-bottom: 40px;
   margin-top: -22px;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid var(--form-input-border);
 }
 
 .category-selector select {
@@ -95,7 +95,7 @@
 
 .category-selector label {
   font-size: 14px;
-  color: #F44336;
+  color: var(--accent-color);
   margin-left: 5px;
 }
 
@@ -118,7 +118,7 @@ input {
   display: block;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #757575;
+  border-bottom: 1px solid var(--form-input-border);
 }
 
 input:focus {
@@ -128,8 +128,8 @@ input:focus {
 /* LABEL ======================================= */
 
 label {
-  color: #999;
-  font-size: 1.2em;
+  color: var(--form-label-color);
+  font-size: var(--input-font-size);
 }
 
 .group label {
@@ -145,10 +145,10 @@ label {
 
 /* active state */
 
-input:focus ~ label, input:valid ~ label {
+input:focus ~ label {
   top: -20px;
   font-size: 14px;
-  color: #F44336;
+  color: var(--accent-color);
 }
 
 /* BOTTOM BARS ================================= */
@@ -165,7 +165,7 @@ input:focus ~ label, input:valid ~ label {
   width: 0;
   bottom: 1px;
   position: absolute;
-  background: #F44336;
+  background: var(--accent-color);
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;

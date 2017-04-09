@@ -77,7 +77,7 @@ class FreelancerCreateBtn extends React.Component {
     document.location = '/freelance/new';
   }
   render () {
-    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm}>Add a freelancer</button>);
+    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm} type="submit">Add a Freelancer</button>);
   }
 }
 
@@ -125,13 +125,13 @@ class FreelancerCard extends React.Component {
       <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance} data-duration={this.props.duration}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
-          <h1>{this.props.title}</h1>
+          <h1 className="job-title  ">{this.props.title}</h1>
           <h2>{this.props.firstName} {this.props.familyName}</h2>
-          <span>{this.props.category}</span>
           <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
           <span>Price range: {this.formatPrice(this.props.price)}</span>
           <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
+        <span className="category">{this.props.category}</span>
       </div>
     );
   }

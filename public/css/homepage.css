@@ -4,7 +4,6 @@ html {
 
 body {
   margin: 0;
-  /*background-color: ghostwhite;*/
 }
 
 #root {
@@ -13,6 +12,14 @@ body {
   flex-flow: column;
   justify-content: center;
   align-items: center;
+}
+
+#title {
+    font-size: var(--title-font-size);
+  text-align: center;
+  color: white;
+  margin-left: 20px;
+  padding: 5px 0;
 }
 
 #search-and-filters {
@@ -39,12 +46,12 @@ body {
 #search-where {
   padding: 10px;
   border: none;
-  border-bottom: solid 2px #c9c9c9;
+  border-bottom: solid 2px var(--home-search-border);
   transition: border 0.3s;
   outline: none;
   width: 35%;
   height: 60px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
 }
 
 #react-search-container {
@@ -55,7 +62,7 @@ body {
 #search-what.focus,
 #search-where:focus,
 #search-where.focus {
-  border-bottom: solid 2px #969696;
+  border-bottom: solid 2px var(--home-search-border-focus);
   outline: none;
 }
 
@@ -66,18 +73,23 @@ body {
 #search-btn {
   margin-left: 20px;
   width: 100px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
   border: 0;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   color: white;
-  border-bottom: solid 4px #d83838;
+  border-bottom: solid 4px var(--home-search-button-border);
   outline: none;
-  /*d83838*/
+  cursor: pointer;
 }
 
 #search-btn:hover {
-  background-color: #c9372c;
-  border-bottom: solid 4px #b72f2f;
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+#search-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
 }
 
 #search-warning {
@@ -109,27 +121,30 @@ body {
 #freelancer-create-btn {
   width: 100%;
   height: 65px;
-  background-color: #F44336;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
   border: 0px;
-  border-left: 1px solid white;
-  color: white;
-  font-size: 1em;
+  font-size: var(--input-font-size);
+  padding: 20px;
 }
 
 #freelancer-create-btn:hover {
-  background-color: #c9372c;
-  pointer: cursor;
+  box-shadow: var(--box-shadow-material-hover);
+  cursor: pointer;
 }
 
+#freelancer-create-btn:focus {
+  outline: none;
+  background-color: var(--background);
+}
+
+
 #root > * {
-  /*background-color: lightgreen;*/
   width: 100%;
 }
 
 #freelancers-container {
-  /*background-color: lightgreen;*/
   width: 100%;
-  margin-top: 50px;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -137,17 +152,24 @@ body {
 
 .freelancer-card {
   width: 100%;
-  background-color: #F44336;
+  background-color: var(--accent-color);
   display: flex;
   flex-direction: row;
   margin-bottom: 50px;
   padding: 20px;
-  color: #fff;
-  border-radius: 2px 2px 0px 0px;
+  color: var(--basic-white);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-material);
+  transition: all 0.1s ease;
 }
 
 .freelancer-card:hover {
   cursor: pointer;
+  box-shadow: var(--box-shadow-material-card-hover);
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition: all 0.1s ease;
 }
 
 .freelancer-card-picture-placeholder {
@@ -162,16 +184,41 @@ body {
   height: 100%;
 }
 
+/* Card information */
+
 .freelancer-card-info {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
+  flex-grow: 1;
+  margin: 0px 20px 0 20px;
   align-content: flex-end;
-  padding-bottom: 30px;
+  padding-right: 20px;
 }
 
 .freelancer-card-info > h1,
+.freelancer-card-info > h2,
 .freelancer-card-info > div,
 .freelancer-card-info > span {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
+  font-weight: 100;
+}
+
+.freelancer-card-info > h2 {
+  font-weight: bold;
+  margin: 0;
+}
+
+.job-title {
+  font-weight: lighter;
+}
+
+/* Category corner */
+.category {
+  color: var(--accent-color);
+  align-self: flex-start;
+  margin: -20px;
+  padding: 10px;
+  background-color: var(--basic-white);
+  border-radius: 0 2px 0 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
