@@ -49,9 +49,13 @@ body {
   border-bottom: solid 2px var(--home-search-border);
   transition: border 0.3s;
   outline: none;
-  width: 250px;
+  width: 35%;
   height: 60px;
   font-size: var(--input-font-size);
+}
+
+#react-search-container {
+  width: 100%;
 }
 
 #search-what:focus,
@@ -101,7 +105,10 @@ body {
   display: flex;
   flex-flow: row;
   justify-content: left;
-  margin-left: 18px;
+}
+
+#filters > div {
+  margin: 0 1em;
 }
 
 #filter-category-dropdown, #filter-location-dropdown {
