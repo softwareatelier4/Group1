@@ -36,7 +36,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		email					: { type: String, required: true },
 		phone					: { type: String },
 		price					: { type: Object },
-		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' }
+		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' },
 		//we recompute this on every review
 		avgScore 			: { type: Number },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
