@@ -58,8 +58,6 @@ Freelance.pre('save', function (next) {
 			this.avgScore = 0;
 		}
 	}
-
-
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
 	//maybe in future
@@ -79,6 +77,7 @@ Freelance.pre('save', function (next) {
 	next();
 
 });
+// TODO Post to update value of avgscore with reviews
 
 //register model for schema
 mongoose.model('Freelance', Freelance);
