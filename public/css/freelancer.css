@@ -110,6 +110,10 @@ article {
   padding: 20px;
 }
 
+.review-form-comment {
+  width: 100%;
+}
+
 .review-header {
   display: flex;
   flex-direction: row;

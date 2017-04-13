@@ -49,6 +49,7 @@ function renderComponent(data) {
 
   ReactDOM.render(
     <div className="freelancer-reviews">
+      <ReviewForm />
       {listReviews}
     </div>,
 
@@ -117,6 +118,55 @@ class FreelancerHeader extends React.Component {
         <span className="freelancer-category">{this.props.category}</span>
       </div>
   );
+  }
+}
+
+class ReviewForm extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(evt) {
+    evt.preventDefault();
+    let form = evt.target;
+
+    const formData = {};
+    formData['score'] = form.elements['score'].value;
+    formData['text'] = form.elements['comment'].value;
+    formData['author'] = "User to be implemented";
+
+    ajaxRequest("POST", window.location + "/review", {}, formData, function(data) {
+      console.log(data);
+    });
+  }
+
+  generateRadioButtons() {
+    const MAX_SCORE = 5;
+    let group = [];
+    for(let i = 1; i <= MAX_SCORE; i++) {
+      let radio = document.createElement("input");
+      group.push(<span key={i}><input type="radio" name="score" ref="score" value={i} required/><label> {i} </label></span>);
+    }
+    return group;
+  }
+
+  render() {
+    return (
+      <div className="review-form">
+        <h3>Post a review</h3>
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <label>Score: </label>
+            {this.generateRadioButtons()}
+          </div>
+          <textarea className="review-form-comment" name="comment" defaultValue="Enter text...">
+          </textarea>
+          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+        </form>
+      </div>
+    );
   }
 }
 
