@@ -104,6 +104,16 @@ describe('Search test: ', function() {
         });
     });
 
+    it('should respond with a 200 even if there is no keyword given', function(done) {
+      request(app)
+        .get('/search?keyword=')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          done();
+        });
+    });
+
     it('should respond with a 405 if the method is not GET or OPTIONS', function(done) {
       request(app)
         .head('/search/')
