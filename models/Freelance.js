@@ -24,6 +24,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require('./Review');
 require('./Tag');
 require('./Category');
+const Review = mongoose.model('Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
 		firstName			: { type: String, required: true },
@@ -79,6 +80,24 @@ Freelance.pre('save', function (next) {
 
 });
 // TODO Post to update value of avgscore with reviews
+Freelance.post('save', function(doc){
+	var score =0;
+	for (var item of doc.reviews){
+		Review.findById(item).exec((err, review)=>{
+			if (err) throw err;
+			if (review){
+				score += review.score;
+
+			}
+		});
+	}
+
+	score = score/doc.reviews.length; //TODO does not work. maybe try on other side? (review side?)
+});
+Freelance.post('update', function(){
+	console.log('## UPDATE ##');
+	console.log(doc);
+});
 
 //register model for schema
 mongoose.model('Freelance', Freelance);

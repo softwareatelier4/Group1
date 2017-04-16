@@ -53,9 +53,12 @@ function dump(data){
   }
 }
 
+/* Keep this order for seeding 
+* as it depends on references
+*/
 var seedData = [];
-seedData.push(freelancers);
 seedData.push(reviews);
+seedData.push(freelancers);
 seedData.push(tags);
 seedData.push(categories);
 
