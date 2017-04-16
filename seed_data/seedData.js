@@ -57,8 +57,8 @@ function dump(data){
 * as it depends on references
 */
 var seedData = [];
-seedData.push(reviews);
 seedData.push(freelancers);
+seedData.push(reviews);
 seedData.push(tags);
 seedData.push(categories);
 

@@ -81,22 +81,23 @@ Freelance.pre('save', function (next) {
 });
 // TODO Post to update value of avgscore with reviews
 Freelance.post('save', function(doc){
-	var score =0;
-	for (var item of doc.reviews){
-		Review.findById(item).exec((err, review)=>{
-			if (err) throw err;
-			if (review){
-				score += review.score;
-
-			}
-		});
-	}
-
-	score = score/doc.reviews.length; //TODO does not work. maybe try on other side? (review side?)
+	// var score =0;
+	// for (var item of doc.reviews){
+	// 	Review.findById(item).exec((err, review)=>{
+	// 		if (err) throw err;
+	// 		if (review){
+	// 			score += review.score;
+	// 		}
+	// 		console.log("score updated: "+ score);
+	// 		next();
+	// 	});
+	// }
+	// console.log(score);
+	// score = score/doc.reviews.length; //TODO does not work.
 });
 Freelance.post('update', function(){
-	console.log('## UPDATE ##');
-	console.log(doc);
+	// console.log('## UPDATE ##');
+	// console.log(doc);
 });
 
 //register model for schema
