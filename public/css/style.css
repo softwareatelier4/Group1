@@ -97,3 +97,29 @@ a#title {
   cursor: pointer;
 }
 /* End topbar */
+
+/* Submit button */
+
+.submit-button {
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  width: 17%;
+  border-radius: 2px;
+  border-style: none;
+  align-self: flex-end;
+}
+
+.submit-button:hover {
+  background-color: var(--home-search-button-border-hover);
+  cursor: pointer;
+}
+
+.submit-button:hover:active {
+  box-shadow: var(--box-shadow-material);
+}
+
+.submit-button:focus {
+  outline: none;  
+}
+
+/* End submit button */

@@ -126,6 +126,7 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.selectText = this.selectText.bind(this);
   }
 
   handleSubmit(evt) {
@@ -140,6 +141,10 @@ class ReviewForm extends React.Component {
     ajaxRequest("POST", window.location + "/review", {}, formData, function(data) {
       console.log(data);
     });
+  }
+
+  selectText(evt) {
+    evt.target.select();
   }
 
   generateRadioButtons() {
@@ -157,11 +162,11 @@ class ReviewForm extends React.Component {
       <div className="review-form">
         <h3>Post a review</h3>
         <form onSubmit={this.handleSubmit}>
-          <div>
+          <div className="score-selector">
             <label>Score: </label>
             {this.generateRadioButtons()}
           </div>
-          <textarea className="review-form-comment" name="comment" defaultValue="Enter text...">
+          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.selectText}>
           </textarea>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
