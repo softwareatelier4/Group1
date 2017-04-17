@@ -62,21 +62,22 @@ router.post('/:freelanceid/review', function(req, res, next) {
           message: "Freelance not found with the given id."
         });
       } else {
-        freelance.reviews.push(newReview);
-        freelance.save(function(err, saved) {
-          if (err) {
-            res.status(400).json({
-              message: "Could not save Review to in Freelance."
-            });
-          } else {
-            newReview.save(function(err, saved) {
+        newReview.save(function(err, saved) {
               if (err) {
                 res.status(400).json(utils.formatErrorMessage(err));
               } else {
-                res.status(201).json(saved);
+                // res.status(201).json(saved);
+                freelance.reviews.push(newReview);
+                freelance.save(function(err, saved) {
+                  if (err) {
+                    res.status(400).json({
+                      message: "Could not save Review in Freelance."
+                    });
+                  } else {
+                    res.status(201).json(saved);
+                  }
+                });
               }
-            });
-          }
         });
       }
     });
