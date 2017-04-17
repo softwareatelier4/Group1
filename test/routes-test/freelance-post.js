@@ -86,7 +86,7 @@ describe('Freelance-post test: ', function() {
     // TEST: correct post of a review.
     it('app should get answer 201 on POST /freelance/:freelanceid/review', function(done) {
       request(app)
-      .post('/freelance/' + seedData[0].data[0]._id.toString() + '/review')
+      .post('/freelance/' + seedData[1].data[0]._id.toString() + '/review')
       .send({
         "author" : "Patrick",
         "text" : "This is a comment.",

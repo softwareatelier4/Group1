@@ -20,14 +20,14 @@ describe('Freelance-get test: ', function() {
 
     it('should list the freelance with correct data', function(done) {
       request(app)
-        .get('/freelance/' + seedData[0].data[0]._id.toString())
+        .get('/freelance/' + seedData[1].data[0]._id.toString())
         .set('Accept', 'application/json')
         .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
           var freelance = JSON.parse(res.text) || {};
-          freelanceutils.checkFreelanceInfoInResponse(freelance, seedData[0].data[0]);
+          freelanceutils.checkFreelanceInfoInResponse(freelance, seedData[1].data[0]);
           done();
         });
     });
@@ -50,7 +50,7 @@ describe('Freelance-get test: ', function() {
 
     it('should respond with a 405 if the method is not GET, PUT, or OPTIONS', function(done) {
       request(app)
-        .head('/freelance/' + seedData[0].data[0]._id.toString()) // valid id
+        .head('/freelance/' + seedData[1].data[0]._id.toString()) // valid id
         .set('Accept', 'application/json')
         .set('Ajax', 'true')
         .expect(405, done);
@@ -58,7 +58,7 @@ describe('Freelance-get test: ', function() {
 
     it('should respond with a 200 if the request accepts HTML', function(done) {
       request(app)
-        .get('/freelance/' + seedData[0].data[0]._id.toString()) // valid id and method
+        .get('/freelance/' + seedData[1].data[0]._id.toString()) // valid id and method
         .set('Accept', 'text/html')
         .expect(200)
         .end(function(err, res) {
@@ -69,7 +69,7 @@ describe('Freelance-get test: ', function() {
 
     it('should respond with a 400 if the request is not AJAX and does not accept HTML', function(done) {
       request(app)
-        .get('/freelance/' + seedData[0].data[0]._id.toString()) // valid id and method
+        .get('/freelance/' + seedData[1].data[0]._id.toString()) // valid id and method
         .set('Accept', 'application/json')
         .expect(400, done);
     });
