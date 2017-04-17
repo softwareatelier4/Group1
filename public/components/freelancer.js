@@ -134,7 +134,7 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.selectText = this.selectText.bind(this);
+    this.clearText = this.clearText.bind(this);
   }
 
   handleSubmit(evt) {
