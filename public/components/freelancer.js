@@ -35,8 +35,16 @@ function renderComponent(data) {
     document.getElementById('freelancer-root')
   );
 
-  // reviews
-  const reviews = data.reviews;
+  renderReviews(data);
+}
+
+function renderReviews(data) {
+  let reviews = data.reviews;
+  // sort by date
+  reviews.sort(function(a, b) {
+    return new Date(b.date) - new Date(a.date);
+  });
+
   const listReviews = reviews.map((review, index) =>
     <Review
       key={index}
@@ -138,13 +146,22 @@ class ReviewForm extends React.Component {
     formData['text'] = form.elements['comment'].value;
     formData['author'] = "User to be implemented";
 
-    ajaxRequest("POST", window.location + "/review", {}, formData, function(data) {
-      console.log(data);
+    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+      /**
+       * we discard received data, we get and re-render all reviews since we do not
+       * update them live, and here we would have to render the component again
+       * anyway
+       */
+       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
+         renderReviews(data);
+         // reset form
+         document.getElementById("review-form").reset();
+       });
     });
   }
 
-  selectText(evt) {
-    evt.target.select();
+  clearText(evt) {
+    evt.target.value = "";
   }
 
   generateRadioButtons() {
@@ -161,12 +178,12 @@ class ReviewForm extends React.Component {
     return (
       <div className="review-form">
         <h3>Post a review</h3>
-        <form onSubmit={this.handleSubmit}>
+        <form id="review-form" onSubmit={this.handleSubmit}>
           <div className="score-selector">
             <label>Score: </label>
             {this.generateRadioButtons()}
           </div>
-          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.selectText}>
+          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.clearText}>
           </textarea>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
