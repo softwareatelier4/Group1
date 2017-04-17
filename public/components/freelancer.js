@@ -53,6 +53,7 @@ function renderReviews(data) {
       score={review.score}
       date={review.date}
       reviewCount={reviews.length}
+      display={(review.text && review.text != "Enter text...") ? "inherit" : "none"}
     />
   );
 
@@ -197,7 +198,7 @@ class ReviewForm extends React.Component {
 class Review extends React.Component {
   render() {
     return (
-      <article>
+      <article style={{display: this.props.display}}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
           <span className="review-date">Date: {this.props.date}</span>

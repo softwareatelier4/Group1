@@ -23,6 +23,14 @@ module.exports = {
       .click('input[name=submit-button]')
       .pause(2000)
       .assert.containsText('div.review-text', 'Nightwatch is the best reviewer')
+      // submit empty review
+      .assert.visible('input[name=score]')
+      .assert.visible('input[id=score-5]')
+      .click('input[id=score-5]')
+      .click('input[name=submit-button]')
+      .pause(2000)
+      // test empty review not listed
+      .assert.hidden('div.review-text')
       .end();
   }
 };
