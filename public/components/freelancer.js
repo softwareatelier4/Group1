@@ -15,7 +15,6 @@ function renderComponent(data) {
       {tag.tagName}
     </li>
   );
-
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
@@ -23,6 +22,7 @@ function renderComponent(data) {
       title={data.title}
       category={data.category.categoryName}
       avgScore={data.avgScore}
+      reviewCount={data.reviews.length}
       price={data.price}
       description={data.description}
       phone={data.phone}
@@ -52,6 +52,7 @@ function renderReviews(data) {
       text={review.text}
       score={review.score}
       date={review.date}
+      reviewCount={reviews.length}
     />
   );
 
@@ -93,6 +94,7 @@ class FreelancerView extends React.Component {
           last={this.props.last}
           title={this.props.title}
           category={this.props.category}
+          reviewCount={this.props.reviewCount}
           avgScore={this.props.avgScore}
           price={this.props.price}
         />
@@ -120,7 +122,7 @@ class FreelancerHeader extends React.Component {
         <div className="freelancer-header-info">
           <Name first={this.props.first} last={this.props.last}/>
           <span className="freelancer-header-title">{this.props.title}</span>
-          <span>Average Score: {this.props.avgScore}/5</span>
+          <span>{"Average Score: " + this.props.avgScore + "/5 (" + this.props.reviewCount + " reviews)"}</span>
           {price}
         </div>
         <span className="freelancer-category">{this.props.category}</span>
@@ -148,12 +150,12 @@ class ReviewForm extends React.Component {
 
     ajaxRequest("POST", window.location + "/review", {}, formData, function() {
       /**
-       * we discard received data, we get and re-render all reviews since we do not
-       * update them live, and here we would have to render the component again
-       * anyway
+       * we discard received data, we get and re-render all reviews and freelance info
+       * since we do not update them live, and here we would have to render the component
+       * again anyway (new review and new average)
        */
        ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
-         renderReviews(data);
+         renderComponent(data);
          // reset form
          document.getElementById("review-form").reset();
        });
