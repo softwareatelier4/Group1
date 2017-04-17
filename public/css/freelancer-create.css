@@ -45,26 +45,6 @@
   width: 50%;
 }
 
-/* submit button */
-
-.submit-button {
-  background-color: var(--accent-color);
-  color: var(--basic-white);
-  border-radius: 2px;
-  border-style: none;
-  width: 17%;
-  align-self: flex-end;
-}
-
-.submit-button:hover {
-  background-color: var(--home-search-button-border-hover);
-  cursor: pointer;
-}
-
-.submit-button:hover:active {
-  box-shadow: var(--box-shadow-material);
-}
-
 
 /* freelancer form label (courtesy of codeopen.io user )
  * NOTE: possibly move this code to an external css file if form input
