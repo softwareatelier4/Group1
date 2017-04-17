@@ -169,7 +169,7 @@ class ReviewForm extends React.Component {
     let group = [];
     for(let i = 1; i <= MAX_SCORE; i++) {
       let radio = document.createElement("input");
-      group.push(<span key={i}><input type="radio" name="score" ref="score" value={i} required/><label> {i} </label></span>);
+      group.push(<span key={i}><input type="radio" name="score" ref="score" id={"score-" + i} value={i} required/><label> {i} </label></span>);
     }
     return group;
   }
