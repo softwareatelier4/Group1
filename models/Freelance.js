@@ -39,7 +39,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		price					: { type: Object },
 		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' },
 		//we recompute this on every review
-		avgScore 			: { type: Number },
+		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
 		//TODO add certifications
@@ -79,25 +79,30 @@ Freelance.pre('save', function (next) {
 	next();
 
 });
-// TODO Post to update value of avgscore with reviews
-Freelance.post('save', function(doc){
-	// var score =0;
-	// for (var item of doc.reviews){
-	// 	Review.findById(item).exec((err, review)=>{
-	// 		if (err) throw err;
-	// 		if (review){
-	// 			score += review.score;
-	// 		}
-	// 		console.log("score updated: "+ score);
-	// 		next();
-	// 	});
-	// }
-	// console.log(score);
-	// score = score/doc.reviews.length; //TODO does not work.
+//call of asynchronous, parallel pre
+Freelance.pre('validate', true, function(next, done){
+	var count = 0;
+	next();
+	if (this.reviews.length == 0) done();
+	for (var item of this.reviews){
+		Review.findById(item).exec((err, review)=>{
+			if (err) throw err;
+			if (review){
+				this.avgScore += review.score;
+				count++;
+			}
+			if (count >= this.reviews.length) { // method 'validate' is not executed until done() is called.
+				this.avgScore = Math.round(this.avgScore/this.reviews.length); // different possibilities for rounding: floor, ceil
+				done();
+			} 
+		});
+	}
 });
+
 Freelance.post('update', function(){
 	// console.log('## UPDATE ##');
 	// console.log(doc);
+
 });
 
 //register model for schema
