@@ -14,7 +14,7 @@ const utils = require(projectRoot +'/seed_data/utils');
 require(projectRoot+ '/models/Freelance');
 require(projectRoot + '/models/Review');
 
-describe('Freelance Model ', function(done){
+describe('FREELANCE : ', function(done){
 
   // Freelance constructor test
   describe('Freelance model definition', function(){
@@ -39,16 +39,7 @@ describe('Freelance Model ', function(done){
       //connect and drop db
       utils.connectAndDropDb(function(err){
         if (err) return done(err);
-      done();
-
-    //     freelance = new Freelance({
-    //       name : 'Mark Knopfler',
-    //       email : 'ripperoni@pepe.pe'
-    //     });
-
-    //     freelance.save(function(err,save){
-    //       if (err) return done(err);
-    //     });
+        done();
       });
     });
 
@@ -98,40 +89,6 @@ describe('Freelance Model ', function(done){
       freelance.title = "photographer"
       freelance.email = "";
       utils.errorIfNullUndefinedOrEmpty(freelance, 'email', done );
-    });
-
-      it ('should bound over 5 avgScore to 5', function(done) {
-      let freelance = new Freelance();
-      freelance.firstName = 'Mark';
-      freelance.familyName = 'Knopfer';
-      freelance.title = 'I am alive yeah';
-      freelance.email = 'ripperoni@pepe.pe';
-      freelance.price = {min: 20, max: 100};
-      freelance.review = [];
-      freelance.tags = [];
-      freelance.avgScore = 500;
-      freelance.save(function(err, saved){
-        should.not.exist(err, 'No error should occur');
-        freelance.avgScore.should.equal(5);
-        done();
-      });
-    });
-
-      it ('should bound less than 0 avgScore to 0', function(done) {
-      let freelance = new Freelance();
-      freelance.firstName = 'Mark';
-      freelance.familyName = 'Knopfer';
-      freelance.title = 'I am alive yeah';
-      freelance.email = 'ripperoni@pepe.pe';
-      freelance.price = {min: 20, max: 100};
-      freelance.review = [];
-      freelance.tags = [];
-      freelance.avgScore = -32;
-      freelance.save(function(err, saved){
-        should.not.exist(err, 'No error should occur');
-        freelance.avgScore.should.equal(0);
-        done();
-      });
     });
 
       it('if reviews is empty; null; or undefined, it should get assigned the value []',
