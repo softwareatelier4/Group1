@@ -13,7 +13,7 @@ const modelsutils = require('../utils');
 
 require(projectRoot + '/models/Review');
 
-describe('Review Model ', function(done){
+describe('REVIEW : ', function(done){
 
   // Freelance constructor test
   describe('Review model definition', function() {
