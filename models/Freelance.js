@@ -94,7 +94,7 @@ Freelance.pre('validate', true, function(next, done){
 				count++;
 			}
 			if (count >= this.reviews.length) { 
-				this.avgScore = Math.round(this.avgScore/this.reviews.length); // different possibilities for rounding: floor, ceil
+				this.avgScore = this.avgScore/this.reviews.length;
 				done();
 			} 
 		});
