@@ -9,7 +9,7 @@ const assert = require('assert');
 const ObjectId = mongoose.Types.ObjectId;
 
 module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInResponse(responseObj, freelance) {
-  var populated = ["reviews", "tags", "category"];
+  var populated = ["reviews", "tags", "category", "avgScore"];
   Object.keys(freelance).forEach(function(key) {
     if (populated.indexOf(key) == -1) {
       responseObj.should.have.property(key, freelance[key]);
@@ -47,6 +47,8 @@ module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(re
   Object.keys(freelance).forEach(function(key) {
     switch (key) {
       case '_id': // ignore id value
+        break;
+      case 'avgScore': // ignore avgScore value
         break;
       case 'tags': // Test for tags IDs in a freelance
         responseObj.tags.forEach(function(tag) {

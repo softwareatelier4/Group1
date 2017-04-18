@@ -15,6 +15,7 @@ require ('./Freelance');
 const Category = exports.Category = new mongoose.Schema({
     categoryName     : { type: String, required: true },
     freelancers      : [{ type: ObjectID, ref: 'Freelance', default:[] }],
+    // TODO add requirements
   },
   {
     versionKey: false,

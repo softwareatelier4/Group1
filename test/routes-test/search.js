@@ -27,7 +27,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance", Number.MAX_SAFE_INTEGER);
             freelance.should.have.property("duration", Number.MAX_SAFE_INTEGER);
           });
@@ -45,7 +45,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
             freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
@@ -67,7 +67,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
             freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
