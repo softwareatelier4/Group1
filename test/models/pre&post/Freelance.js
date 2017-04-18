@@ -1,4 +1,4 @@
-/* tests for constructor and creation of Freelance */
+/* tests for pre and post conditions of Freelance */
 'use strict';
 
 //connect to DB
@@ -38,7 +38,7 @@ describe('Freelance pre&post :', function(done){
 	  freelance.avgScore = -32;
 	  freelance.save(function(err, saved){
 	    should.not.exist(err, 'No error should occur');
-	    freelance.avgScore.should.equal(0);
+	    saved.avgScore.should.equal(0);
 	    done();
 	  });
 	});
@@ -55,7 +55,7 @@ describe('Freelance pre&post :', function(done){
 	  freelance.avgScore = 500;
 	  freelance.save(function(err, saved){
 	    should.not.exist(err, 'No error should occur');
-	    freelance.avgScore.should.equal(5);
+	    saved.avgScore.should.equal(5);
 	    done();
 	  });
 	});

@@ -9,6 +9,7 @@ const should = require('should');
 const config = require('../../config');
 var projectRoot = config.projectRoot;
 const utils = require(projectRoot +'/seed_data/utils');
+const modelsutils = require('../utils');
 
 
 require(projectRoot+ '/models/Freelance');
@@ -121,6 +122,32 @@ describe('FREELANCE : ', function(done){
       freelance.save(function(err, saved){
         should.not.exist(err, 'No error should occur');
         freelance.tags.isMongooseArray.should.equal(true);
+        done();
+      });
+    });
+
+    it('should have a default state `not verified`', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.save(function(err, saved){
+        should.not.exist(err, 'No error should occur');
+        saved.state.should.equal('not verified');
+        done();
+      });
+    });
+
+    it('should not accept any other values for `state`', function(done){
+      let freelance = new Freelance();
+      freelance.firstName = 'Mark';
+      freelance.familyName = 'Knopfer';
+      freelance.title = 'I am alive yeah';
+      freelance.email = 'ripperoni@pepe.pe';
+      freelance.state = 'I am wrong';
+      freelance.save(function(err, saved){
+        modelsutils.checkValidationErrorEnum(err, 'state', 'I am wrong');
         done();
       });
     });
