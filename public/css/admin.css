@@ -1,0 +1,51 @@
+#login-form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#login-form-username,
+#login-form-password,
+#login-form-btn {
+  width: 35%;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+#login-form-username,
+#login-form-password {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+#login-form-username:focus,
+#login-form-username.focus,
+#login-form-password:focus,
+#login-form-password.focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+#login-form-btn {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 4px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+}
+
+#login-form-btn:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+#login-form-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
+}
