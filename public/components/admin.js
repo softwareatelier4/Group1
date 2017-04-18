@@ -3,7 +3,10 @@
 class LoginForm extends React.Component {
   login(e) {
     if (!e.keyCode || e.keyCode == 13) {
-      console.log("LOGIN");
+      let username = document.getElementById('login-form-username').value;
+      let password = document.getElementById('login-form-password').value;
+      let query = `?username=${username}&password=${password}`;
+      ajaxRequest('GET', `/admin/login${query}`, { ajax : true }, null, renderAdminSettings);
     }
   }
   render () {
@@ -14,6 +17,14 @@ class LoginForm extends React.Component {
         <button id="login-form-btn" name="login-btn" onClick={this.login}>Login</button>
       </div>
     );
+  }
+}
+
+function renderAdminSettings(data) {
+  if (data && data.valid) {
+    console.log('correct password');
+  } else {
+    console.log('wrong password');
   }
 }
 

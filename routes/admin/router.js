@@ -11,9 +11,19 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 
+const adminUsername = 'admin';
+const adminPassword = 'asd';
 
 // Supported methods
 router.all('/', middleware.supportedMethods('GET, OPTIONS'));
+
+router.get('/login', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    res.status(200).json({ valid : true });
+  } else {
+    res.sendStatus(400);
+  }
+});
 
 // Return index
 router.get('/', function(req, res, next) {
