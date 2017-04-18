@@ -22,7 +22,6 @@ const User = exports.User = new mongoose.Schema({
   },
   {
     versionKey: false,
-    password: false,
   }
 );
 
