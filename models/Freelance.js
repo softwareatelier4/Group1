@@ -80,6 +80,8 @@ Freelance.pre('save', function (next) {
 
 });
 //call of asynchronous, parallel pre
+// method 'validate' is not executed until done() is called.
+// validate is also called for every update, not only save.
 Freelance.pre('validate', true, function(next, done){
 	var count = 0;
 	next();
@@ -91,7 +93,7 @@ Freelance.pre('validate', true, function(next, done){
 				this.avgScore += review.score;
 				count++;
 			}
-			if (count >= this.reviews.length) { // method 'validate' is not executed until done() is called.
+			if (count >= this.reviews.length) { 
 				this.avgScore = Math.round(this.avgScore/this.reviews.length); // different possibilities for rounding: floor, ceil
 				done();
 			} 
@@ -99,11 +101,6 @@ Freelance.pre('validate', true, function(next, done){
 	}
 });
 
-Freelance.post('update', function(){
-	// console.log('## UPDATE ##');
-	// console.log(doc);
-
-});
 
 //register model for schema
 mongoose.model('Freelance', Freelance);

@@ -15,6 +15,8 @@ var tags = require('./tagsData');
 var tagsSize = tags.data.length;
 var categories = require('./categoriesData');
 var catSize = categories.data.length;
+var users = require('./usersData');
+var usersSize = users.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
@@ -61,5 +63,6 @@ seedData.push(reviews);
 seedData.push(freelancers);
 seedData.push(tags);
 seedData.push(categories);
+seedData.push(users);
 
 module.exports = seedData;
