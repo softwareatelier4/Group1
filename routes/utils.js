@@ -2,8 +2,10 @@
 
 const config = require('../config');
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Tag = mongoose.model('Tag');
 const User = mongoose.model('User');
+const Freelance = mongoose.model('Freelance');
 
 
 module.exports = {
@@ -53,6 +55,16 @@ module.exports = {
         return done(false);
       }
     });
+  },
+
+  checkFreelancerExistsAndIsNotClaimed : function(freelancerId, done) {
+    if (ObjectId.isValid(freelancerId)) {
+      Freelance.findById(freelancerId, function(err, res) {
+        if (err || !res || res.state == 'verified') done(false);
+        else done(true);
+      });
+    }
+    else done(false);
   },
 
 }

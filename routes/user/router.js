@@ -8,6 +8,7 @@ const utils = require('../utils');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const User = mongoose.model('User');
+const Freelance = mongoose.model('Freelance');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('POST, OPTIONS'));
@@ -58,6 +59,48 @@ router.post('/', function(req, res, next) {
           res.status(201).json(createdUser);
         }
       });
+    }
+  });
+});
+
+// PUT /user/:username
+router.put('/:username', function(req, res, next) {
+  User.findOne({ username : req.params.username }).exec(function(err, user){
+    if (err) {
+      res.status(400).json(utils.formatErrorMessage(err));
+    } else if (!user) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Not Found",
+      });
+    } else {
+      // Update given fields
+      user.username = req.body.username || user.username;
+      user.password = req.body.password || user.password;
+      user.email = req.body.email || user.email;
+      user.freelancer = req.body.freelancer || user.freelancer;
+      if (req.body.freelancer) {
+        utils.checkFreelancerExistsAndIsNotClaimed(req.body.freelancer, function(exists) {
+          if (exists) {
+            user.save(function (err, updatedUser) {
+              if (err) res.status(400).json(utils.formatErrorMessage(err));
+
+              // update the state of the freelancer
+              Freelance.update({ _id: updatedUser.freelancer }, { $set: { state: 'verified' }}, function(err, raw) {
+                if (err) res.status(400).json(utils.formatErrorMessage(err));
+                res.status(204).end();
+              });
+            });
+          } else {
+            res.status(400).end();
+          }
+        });
+      } else {
+        user.save(function (err, updated) {
+          if (err) res.status(400).json(utils.formatErrorMessage(err));
+          res.status(204).end();
+        });
+      }
     }
   });
 });
