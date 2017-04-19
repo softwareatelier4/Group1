@@ -50,6 +50,11 @@ module.exports = {
           })
         })
       })
+      // increase distance to test duration properly
+      .moveToElement('input[name=filter-distance-temp]',  120,  0)
+      .mouseButtonDown(0)
+      .mouseButtonUp(0)
+      .pause(500)
       // set duration
       .moveToElement('input[name=filter-duration-temp]',  0,  0)
       .mouseButtonDown(0)
@@ -59,26 +64,25 @@ module.exports = {
       .mouseButtonDown(0)
       .mouseButtonUp(0)
       .pause(2000)
-      .getAttribute('div.freelancer-card:first-child', 'data-duration', function(duration) {
-        // test sorting
-        client.getAttribute('div.freelancer-card:last-child', 'data-duration', function(maxDuration) {
-          client.getAttribute('input[name=filter-duration-temp]','value', function(maxDurationFilter) {
-            // test duration filter
-            if(Number(maxDuration.value) <= Number(maxDurationFilter.value) * 60) {
-              client.assert.visible('div.freelancer-card:last-child')
-            } else {
-              client.assert.hidden('div.freelancer-card:last-child')
-            }
-          })
+      .getAttribute('div.freelancer-card:last-child', 'data-duration', function(maxDuration) {
+        client.getAttribute('input[name=filter-duration-temp]','value', function(maxDurationFilter) {
+          // test duration filter
+          if(Number(maxDuration.value) <= Number(maxDurationFilter.value) * 60) {
+            client.assert.visible('div.freelancer-card:last-child')
+          } else {
+            client.assert.hidden('div.freelancer-card:last-child')
+          }
         })
       })
-      .getText('span.category', function(text) {
-        client.click('select[name=filter-category-dropdown] option[value=' + text.value + ']');
-        client.click('div.freelancer-card')
-        client.waitForElementVisible('body', 1000)
-        client.waitForElementVisible('span.freelancer-header-title', 1000)
-        client.assert.containsText('span.freelancer-header-title', 'VP')
-        client.assert.containsText('span.freelancer-category', text.value)
+      .getAttribute('span.category', 'data-category', function(categoryID) {
+        client.getText('span.category', function(text) {
+          client.click('select[name=filter-category-dropdown] option[id=category-' + categoryID.value + ']');
+          client.click('div.freelancer-card')
+          client.waitForElementVisible('body', 1000)
+          client.waitForElementVisible('span.freelancer-header-title', 1000)
+          client.assert.containsText('span.freelancer-header-title', 'VP')
+          client.assert.containsText('span.freelancer-category', text.value)
+        })
       })
       .end();
   }
