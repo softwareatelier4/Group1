@@ -1,5 +1,4 @@
 var config = require('../config');
-let category;
 
 module.exports = {
   'Simple search' : function (client) {
