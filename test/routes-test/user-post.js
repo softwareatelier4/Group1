@@ -9,7 +9,6 @@ var app = require(config.projectRoot + '/app');
 var seedData = require('../../seed_data/seedData');
 var seedDb = require('../../seed_data/seedDb');
 var utils = require('../../seed_data/utils');
-var test_utils = require('./utils');
 var request = require('supertest');
 
 describe('User-post test: ', function() {
@@ -163,6 +162,13 @@ describe('User-post test: ', function() {
           done();
         }
       });
+    });
+
+    it('should respond with a 405 if the method is not POST or OPTIONS', function(done) {
+      request(app)
+        .head('/user')
+        .set('Accept', 'application/json')
+        .expect(405, done);
     });
   });
 });

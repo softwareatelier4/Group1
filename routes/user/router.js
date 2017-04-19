@@ -13,6 +13,23 @@ const User = mongoose.model('User');
 router.all('/', middleware.supportedMethods('POST, OPTIONS'));
 router.all('/:username', middleware.supportedMethods('GET, PUT, OPTIONS'));
 
+// GET user/:username
+router.get('/:username', function(req, res, next) {
+  User.findOne({ username : req.params.username }).select("-password").exec(function(err, user){
+    if (err) {
+      res.status(400).json(utils.formatErrorMessage(err));
+    } else if (!user) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Not Found",
+      });
+    } else {
+      let found = Object.create(user);
+      res.status(200).json(found).end();
+    }
+  });
+});
+
 
 // POST /user
 router.post('/', function(req, res, next) {
