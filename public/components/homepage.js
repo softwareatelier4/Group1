@@ -52,7 +52,7 @@ class FiltersContainer extends React.Component {
       <div id="filters">
         <div id="filter-category">
           <span>Category: </span>
-          <select id="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
+          <select id="filter-category-dropdown" name="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}
           </select>
@@ -60,11 +60,11 @@ class FiltersContainer extends React.Component {
 
         <div id="filter-distance">
           <span id="max-distance-label">Max distance: </span>
-          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onKeyUp={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
-          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-duration-temp" name="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
       </div>
     </div>);
