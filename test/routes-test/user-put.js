@@ -50,6 +50,28 @@ describe('User-put test: ', function() {
         });
     });
 
+    it('should respond with 204 after a successful update another field', function(done) {
+      request(app)
+        .put('/user/' + seedData[4].data[0].username.toString())
+        .set('Accept', 'application/json')
+        .send({
+          "email" : "kek420@dankme.me",
+        })
+        .expect(204)
+        .end(function() {
+          request(app)
+            .get('/user/' + seedData[4].data[0].username.toString())
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/, 'it should respond with json')
+            .expect(200)
+            .end(function(err, res) {
+              var user = JSON.parse(res.text) || {};
+              user.email.should.be.equal("kek420@dankme.me");
+              done();
+            });
+        });
+    });
+
     it('should respond with 400 if the given freelancer is already verified', function(done) {
       request(app)
         .put('/user/' + seedData[4].data[1].username.toString())
