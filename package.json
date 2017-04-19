@@ -12,7 +12,7 @@
     "test-fast" : "sh test_local_no_download.sh",
     "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/* --recursive --colors --reporter mocha-jenkins-reporter",
     "test-nightwatch": "./nightwatch",
-    "test-nightwatch-jenkins": "xvfb-run -e /dev/stdout ./nightwatch"
+    "test-nightwatch-jenkins": "xvfb-run -a -e /dev/stdout ./nightwatch"
   },
   "author": "Group 1",
   "license": "MIT",
