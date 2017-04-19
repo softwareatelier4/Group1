@@ -12,7 +12,7 @@
       <div id="react-title"></div>
     </div>
     <div id="root">
-      <div id="react-login-form"></div>
+      <div id="react-main"></div>
     </div>
     <!-- Utils -->
     <script src="../js/ajax.js"></script>

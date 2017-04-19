@@ -9,7 +9,7 @@ const rootUrl = require("../../config").url;
 const utils = require('../utils');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-const Freelance = mongoose.model('Freelance');
+const Category = mongoose.model('Category');
 
 const adminUsername = 'admin';
 const adminPassword = 'asd';
@@ -19,7 +19,13 @@ router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
 router.get('/login', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
-    res.status(200).json({ valid : true });
+    Category.find().lean().exec(function(err, categories) {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        res.status(200).json({ valid : true, categories : categories });
+      }
+    });
   } else {
     res.sendStatus(400);
   }
