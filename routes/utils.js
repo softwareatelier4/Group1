@@ -3,6 +3,8 @@
 const config = require('../config');
 const mongoose = require('mongoose');
 const Tag = mongoose.model('Tag');
+const User = mongoose.model('User');
+
 
 module.exports = {
 
@@ -39,6 +41,18 @@ module.exports = {
       }
       done(freelancer_ids);
     });
-  }
+  },
+
+  // returns true if the given username is  not already taken
+  checkUsername : function(user, done) {
+    User.find({ username : user.username }).exec(function(err, results) {
+      if (Object.keys(results).length == 0) {
+        return done(true);
+      }
+      else {
+        return done(false);
+      }
+    });
+  },
 
 }
