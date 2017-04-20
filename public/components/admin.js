@@ -8,11 +8,18 @@
 //   }
 // }
 
+let g_username;
+let g_password;
+
 class CardCategory extends React.Component {
   removeCategory(e) {
-    // TODO: make delete request to server
-    // Remove element from HTML
-    e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+    let cardCategory = e.target.parentNode;
+    let query = `?username=${g_username}&password=${g_password}`;
+    ajaxRequest('DELETE', `/admin/category${query}`, { ajax : true }, {}, function(res) {
+      if (res === 204) {
+        cardCategory.parentNode.removeChild(cardCategory);
+      }
+    });
   }
   render() {
     return (
@@ -29,7 +36,7 @@ class ContainerCategories extends React.Component {
     let isNameUnique = function(name) {
       let categories = document.getElementById('admin-categories').children;
       for (let i = 1; i < categories.length; ++i)
-        if (categories[i]['data-name'] === name)
+        if (categories[i].getAttribute('data-name') === name)
           return false;
       return true;
     }
@@ -37,8 +44,16 @@ class ContainerCategories extends React.Component {
       let name = document.getElementById('new-category-input').value;
       if (name) {
         if (isNameUnique(name)) {
-          // ajaxRequest('POST', `/admin/add`, { ajax : true }, { name : name }, renderAdminView);
-          // TODO add
+          ajaxRequest('POST', `/admin/category`, { ajax : true }, {
+            username : g_username,
+            password : g_password,
+            name : name
+          }, function(res) {
+            if (res === 201) {
+              console.log('Succesfully added');
+              // TODO add
+            }
+          });
         } else {
           console.log('Name already exists');
         }
@@ -107,9 +122,9 @@ class AdminView extends React.Component {
 class AdminLogin extends React.Component {
   login(e) {
     if (!e.keyCode || e.keyCode == 13) {
-      let username = document.getElementById('login-form-username').value;
-      let password = document.getElementById('login-form-password').value;
-      let query = `?username=${username}&password=${password}`;
+      g_username = document.getElementById('login-form-username').value;
+      g_password = document.getElementById('login-form-password').value;
+      let query = `?username=${g_username}&password=${g_password}`;
       ajaxRequest('GET', `/admin/login${query}`, { ajax : true }, null, renderAdminView);
     }
   }
@@ -128,13 +143,15 @@ function renderAdminView(data) {
   if (data && data.valid) {
     ReactDOM.render(<AdminView data={data} />, document.getElementById('react-main'));
   } else {
-    console.log('wrong password');
+    console.log('Wrong username or password');
   }
 }
 
 function renderPage() {
   // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  ajaxRequest('GET', `/admin/login?username=admin&password=asd`, { ajax : true }, null, renderAdminView);
+  g_username = 'admin';
+  g_password = 'asd';
+  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();

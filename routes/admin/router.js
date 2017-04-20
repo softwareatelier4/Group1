@@ -15,7 +15,7 @@ const adminUsername = 'admin';
 const adminPassword = 'asd';
 
 // Supported methods
-router.all('/', middleware.supportedMethods('GET, OPTIONS'));
+router.all('/', middleware.supportedMethods('GET, POST, DELETE, OPTIONS'));
 
 router.get('/login', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
@@ -40,6 +40,24 @@ router.get('/', function(req, res, next) {
   }
   else {
     res.sendStatus(404);
+  }
+});
+
+router.post('/category', function(req, res) {
+  // TODO: add category
+  if (adminUsername === req.body.username && adminPassword === req.body.password) {
+    res.sendStatus(201);
+  } else {
+    res.sendStatus(400);
+  }
+});
+
+router.delete('/category', function(req, res) {
+  // TODO: delete category (and remove it from all freelancers)
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    res.sendStatus(204);
+  } else {
+    res.sendStatus(400);
   }
 });
 
