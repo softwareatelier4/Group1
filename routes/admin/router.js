@@ -46,7 +46,7 @@ router.get('/', function(req, res, next) {
 router.post('/category', function(req, res) {
   // TODO: add category
   if (adminUsername === req.body.username && adminPassword === req.body.password) {
-    res.sendStatus(201);
+    res.status(201).json({ _id : 0 });
   } else {
     res.sendStatus(400);
   }

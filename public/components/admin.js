@@ -11,6 +11,14 @@
 let g_username;
 let g_password;
 
+// Shitty tweak to append React element
+function addReactElement(element, container) {
+  let div = document.getElementById(container).appendChild(document.createElement('div'));
+  ReactDOM.render(element, div);
+  div.parentNode.appendChild(div.firstChild);
+  div.parentNode.removeChild(div);
+}
+
 class CardCategory extends React.Component {
   removeCategory(e) {
     let cardCategory = e.target.parentNode;
@@ -24,7 +32,7 @@ class CardCategory extends React.Component {
   render() {
     return (
       <div className="card-category" data-name={this.props.name} data-_id={this.props._id}>
-        <div><span>{this.props.name}</span></div>
+        <div className="card-category-name"><span>{this.props.name}</span></div>
         <button onClick={this.removeCategory}>Remove</button>
       </div>
     );
@@ -36,7 +44,7 @@ class ContainerCategories extends React.Component {
     let isNameUnique = function(name) {
       let categories = document.getElementById('admin-categories').children;
       for (let i = 1; i < categories.length; ++i)
-        if (categories[i].getAttribute('data-name') === name)
+        if (categories[i].getAttribute('data-name').toLowerCase() === name.toLowerCase())
           return false;
       return true;
     }
@@ -49,16 +57,19 @@ class ContainerCategories extends React.Component {
             password : g_password,
             name : name
           }, function(res) {
-            if (res === 201) {
-              console.log('Succesfully added');
-              // TODO add
+            if (typeof res === 'object') {
+              addReactElement(<CardCategory name={name} _id={res._id} />, 'admin-categories');
+              let newCategoryMessage = document.getElementById('new-category-message');
+              newCategoryMessage.innerHTML = '';
             }
           });
         } else {
-          console.log('Name already exists');
+          let newCategoryMessage = document.getElementById('new-category-message');
+          newCategoryMessage.innerHTML = '<span>Chosen category name already exists</span>';
         }
       } else {
-        console.log('No category name given');
+        let newCategoryMessage = document.getElementById('new-category-message');
+        newCategoryMessage.innerHTML = '<span>No category name given</span>';
       }
     }
   }
@@ -72,6 +83,7 @@ class ContainerCategories extends React.Component {
       <div id="admin-categories" className="selected">
         <div id="new-category" className="card-category">
           <input id="new-category-input" placeholder="New category name" onKeyDown={this.addCategory}/>
+          <div id="new-category-message"></div>
           <button onClick={this.addCategory}>Add</button>
         </div>
         {categories}
@@ -124,16 +136,25 @@ class AdminLogin extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       g_username = document.getElementById('login-form-username').value;
       g_password = document.getElementById('login-form-password').value;
-      let query = `?username=${g_username}&password=${g_password}`;
-      ajaxRequest('GET', `/admin/login${query}`, { ajax : true }, null, renderAdminView);
+      if (!g_username) {
+        let loginFormMessage = document.getElementById('login-form-message');
+        loginFormMessage.innerHTML = 'Missing username';
+      } else if (!g_password) {
+        let loginFormMessage = document.getElementById('login-form-message');
+        loginFormMessage.innerHTML = 'Missing password';
+      } else {
+        let query = `?username=${g_username}&password=${g_password}`;
+        ajaxRequest('GET', `/admin/login${query}`, { ajax : true }, null, renderAdminView);
+      }
     }
   }
   render () {
     return (
       <div id="login-form">
         <input id="login-form-username" name="username" placeholder="Username" onKeyDown={this.login} />
-        <input id="login-form-password" name="password" placeholder="Password" onKeyDown={this.login} />
+        <input id="login-form-password" type="password" name="password" placeholder="Password" onKeyDown={this.login} />
         <button id="login-form-btn" name="login-btn" onClick={this.login}>Login</button>
+        <div id="login-form-message"></div>
       </div>
     );
   }
@@ -143,15 +164,16 @@ function renderAdminView(data) {
   if (data && data.valid) {
     ReactDOM.render(<AdminView data={data} />, document.getElementById('react-main'));
   } else {
-    console.log('Wrong username or password');
+    let loginFormMessage = document.getElementById('login-form-message');
+    loginFormMessage.innerHTML = 'Wrong username or password';
   }
 }
 
 function renderPage() {
-  // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  g_username = 'admin';
-  g_password = 'asd';
-  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
+  ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
+  // g_username = 'admin';
+  // g_password = 'asd';
+  // ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();

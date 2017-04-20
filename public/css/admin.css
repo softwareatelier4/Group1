@@ -47,10 +47,16 @@ button:active {
 
 #login-form-username,
 #login-form-password,
-#login-form-btn {
+#login-form-btn,
+#login-form-message {
   width: 100%;
-  height: 60px;
+  height: 50px;
   margin-bottom: 20px;
+}
+
+#login-form-message {
+  text-align: center;
+  color: red;
 }
 
 #admin-view {
@@ -111,7 +117,7 @@ button:active {
 }
 
 .card-category > input,
-.card-category > div {
+.card-category-name {
   width: 250px;
   height: 35px;
 }
@@ -121,7 +127,14 @@ button:active {
   height: 35px;
 }
 
-.card-category > div {
+.card-category-name,
+#new-category-message {
   display: flex;
   align-items: center;
+}
+
+#new-category-message {
+  flex: 1;
+  padding-left: 20px;
+  color: red;
 }
