@@ -49,13 +49,13 @@ class CardClaimComment extends React.Component {
       let comment = e.target.parentNode.firstChild.value.replace(/\n/g, '<br>');
       let message = `Dear ${claim.user.name},<br><br>We have decided to <b>${status}</b> your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:<br><br>${comment}<br><br>Best regards,<br><br>JobAdvisor`;
       let query = `?username=${g_username}&password=${g_password}&message=${message}&email=${claim.user.email}`;
-      ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
-        if (res === 204) {
+      // ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
+      //   if (res === 204) {
           claimCard.parentNode.removeChild(claimCard);
-        } else {
-          console.log('ERROR sendig claim response');
-        }
-      });
+      //   } else {
+      //     console.log('ERROR sendig claim response');
+      //   }
+      // });
     }
   }
   render() {
