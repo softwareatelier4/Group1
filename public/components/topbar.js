@@ -64,7 +64,7 @@ class LoginForm extends React.Component {
       <form id="login-form" onSubmit={this.handleSubmit}>
         <input ref="login-username" name="login-username" type="text" placeholder="username" required/>
         <input ref="login-password" name="login-password" type="password" placeholder="password" required/>
-        <input ref="login-submit-button" className="login-submit-button" type="submit" value="Login"/>
+        <input ref="login-submit" name="login-submit" className="login-submit" type="submit" value="Login"/>
       </form>
     );
   }
