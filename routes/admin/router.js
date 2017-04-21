@@ -45,8 +45,15 @@ router.get('/', function(req, res, next) {
 
 router.post('/category', function(req, res) {
   // TODO: add category
-  if (adminUsername === req.body.username && adminPassword === req.body.password) {
-    res.status(201).json({ _id : 0 });
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    const newCategory = new Category(req.body);
+    newCategory.save(function(err, saved) {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        res.status(201).json(saved);
+      }
+    });
   } else {
     res.sendStatus(400);
   }
@@ -61,33 +68,34 @@ router.delete('/category', function(req, res) {
   }
 });
 
-// router.delete('/claim', function(req, res) {
-//   if (adminUsername === req.query.username && adminPassword === req.query.password) {
-//     //TODO: delete claim from database
-//     let transporter = nodemailer.createTransport({
-//         service: 'Gmail',
-//         auth: {
-//             user: 'jobadvisor.group1@gmail.com',
-//             pass: '-5#x3Y;R;u<fz6}l'
-//         }
-//     });
-//     let mailOptions = {
-//       from: 'jobadvisor.group1@gmail.com',
-//       to: req.query.email,
-//       subject: 'Claim request',
-//       html: req.query.message
-//     };
-//     transporter.sendMail(mailOptions, function(err, info){
-//       if(err){
-//           res.sendStatus(500);
-//       } else {
-//           res.sendStatus(204);
-//       };
-//     });
-//   } else {
-//     res.sendStatus(400);
-//   }
-// });
+router.delete('/claim', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    //TODO: delete claim from database
+    // let transporter = nodemailer.createTransport({
+    //     service: 'Gmail',
+    //     auth: {
+    //         user: 'jobadvisor.group1@gmail.com',
+    //         pass: '-5#x3Y;R;u<fz6}l'
+    //     }
+    // });
+    // let mailOptions = {
+    //   from: 'jobadvisor.group1@gmail.com',
+    //   to: req.query.email,
+    //   subject: 'Claim request',
+    //   html: req.query.message
+    // };
+    // transporter.sendMail(mailOptions, function(err, info){
+    //   if(err){
+    //       res.sendStatus(500);
+    //   } else {
+    //       res.sendStatus(204);
+    //   };
+    // });
+    res.sendStatus(204);
+  } else {
+    res.sendStatus(400);
+  }
+});
 
 /** router for root */
 module.exports = router;

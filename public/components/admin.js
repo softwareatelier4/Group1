@@ -49,13 +49,13 @@ class CardClaimComment extends React.Component {
       let comment = e.target.parentNode.firstChild.value.replace(/\n/g, '<br>');
       let message = `Dear ${claim.user.name},<br><br>We have decided to <b>${status}</b> your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:<br><br>${comment}<br><br>Best regards,<br><br>JobAdvisor`;
       let query = `?username=${g_username}&password=${g_password}&message=${message}&email=${claim.user.email}`;
-      // ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
-      //   if (res === 204) {
+      ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
+        if (res === 204) {
           claimCard.parentNode.removeChild(claimCard);
-      //   } else {
-      //     console.log('ERROR sendig claim response');
-      //   }
-      // });
+        } else {
+          console.log('ERROR sendig claim response');
+        }
+      });
     }
   }
   render() {
@@ -143,11 +143,8 @@ class ContainerCategories extends React.Component {
       let name = document.getElementById('new-category-input').value;
       if (name) {
         if (isNameUnique(name)) {
-          ajaxRequest('POST', `/admin/category`, { ajax : true }, {
-            username : g_username,
-            password : g_password,
-            name : name
-          }, function(res) {
+          let query = `?username=${g_username}&password=${g_password}`;
+          ajaxRequest('POST', `/admin/category${query}`, { ajax : true }, { categoryName : name }, function(res) {
             if (typeof res === 'object') {
               let adminCategories = document.getElementById('admin-categories');
               addReactElement(<CardCategory name={name} _id={res._id} />, adminCategories);
