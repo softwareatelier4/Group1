@@ -77,13 +77,14 @@ router.delete('/claim', function(req, res) {
       subject: 'Claim request',
       html: req.query.message
     };
-    transporter.sendMail(mailOptions, function(err, info){
-      if(err){
-          res.sendStatus(500);
-      } else {
-          res.sendStatus(204);
-      };
-    });
+    // transporter.sendMail(mailOptions, function(err, info){
+    //   if(err){
+    //       res.sendStatus(500);
+    //   } else {
+    //       res.sendStatus(204);
+    //   };
+    // });
+    res.sendStatus(204);
   } else {
     res.sendStatus(400);
   }
