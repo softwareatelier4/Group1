@@ -75,6 +75,20 @@ Freelance.pre('save', function (next) {
 		}
 	}
 
+	if(this.reviews.length > 0){
+		let j=0;
+		let sum=0;
+		for (let i = 0; i < this.reviews.length; i++){
+			sum+=this.reviews[i].score;
+			j++;
+		}
+
+		sum = sum/j;
+		// sum = sum.toFixed(2);
+		this.avgScore = sum;
+		// console.log("HERE: "+this.avgScore);
+	}
+
 
 	next();
 
@@ -93,10 +107,10 @@ Freelance.pre('validate', true, function(next, done){
 				this.avgScore += review.score;
 				count++;
 			}
-			if (count >= this.reviews.length) { 
+			if (count >= this.reviews.length) {
 				this.avgScore = this.avgScore/this.reviews.length;
 				done();
-			} 
+			}
 		});
 	}
 });
