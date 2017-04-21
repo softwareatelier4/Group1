@@ -145,8 +145,10 @@ class FreelancersContainer extends React.Component {
     for (let i = 0; i < this.props.freelancers.length; ++i) {
       let freelancer = this.props.freelancers[i];
       let categoryName = 'Other';
+      let categoryId = '';
       if (freelancer.category) {
         categoryName = freelancer.category.categoryName;
+        categoryId = freelancer.category._id;
       }
       freelancers.push(<FreelancerCard
         urlPicture = {freelancer.urlPicture}
@@ -154,7 +156,7 @@ class FreelancersContainer extends React.Component {
         familyName = {freelancer.familyName}
         title      = {freelancer.title}
         category   = {categoryName}
-        categoryID = {freelancer.category._id}
+        categoryID = {categoryId}
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
         distance   = {freelancer.distance}
