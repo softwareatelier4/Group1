@@ -68,7 +68,7 @@ router.put('/category', function(req, res) {
       if (err) {
         res.status(400).json(utils.formatErrorMessage(err));
       } else {
-        res.status(200).json(category);
+        res.status(201).json(category);
       }
     });
   } else {

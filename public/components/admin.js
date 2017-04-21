@@ -138,7 +138,6 @@ class CardCategory extends React.Component {
             if (!category._id) {
               categoryNameSpan.innerHTML = this.originalName;
             }
-            console.log(category);
           });
         }
       }
