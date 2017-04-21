@@ -104,6 +104,44 @@ describe('Search test: ', function() {
         });
     });
 
+    it('should respond with a 200 even if there is no keyword given', function(done) {
+      request(app)
+        .get('/search')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text);
+          results.should.be.not.empty;
+          done();
+        });
+    });
+
+    it('should respond with a 200 and search among all fields', function(done) {
+      request(app)
+        .get('/search?keyword=ale')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text);
+          results.forEach(function(result) {
+            JSON.stringify(result).should.containEql("ale");
+          });
+          done();
+        });
+    });
+
+    it('should respond with a 200 and parse a single string to fit a global filter', function(done) {
+      request(app)
+        .get('/search?keyword=ilarson0@cnbc.com+lalexander2@netlog.com')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          res.text.should.containEql("ilarson0@cnbc.com");
+          res.text.should.containEql("lalexander2@netlog.com");
+          done();
+        });
+    });
+
     it('should respond with a 405 if the method is not GET or OPTIONS', function(done) {
       request(app)
         .head('/search/')

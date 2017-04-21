@@ -15,7 +15,6 @@ function renderComponent(data) {
       {tag.tagName}
     </li>
   );
-
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
@@ -23,6 +22,7 @@ function renderComponent(data) {
       title={data.title}
       category={data.category.categoryName}
       avgScore={data.avgScore}
+      reviewCount={data.reviews.length}
       price={data.price}
       description={data.description}
       phone={data.phone}
@@ -35,8 +35,16 @@ function renderComponent(data) {
     document.getElementById('freelancer-root')
   );
 
-  // reviews
-  const reviews = data.reviews;
+  renderReviews(data);
+}
+
+function renderReviews(data) {
+  let reviews = data.reviews;
+  // sort by date
+  reviews.sort(function(a, b) {
+    return new Date(b.date) - new Date(a.date);
+  });
+
   const listReviews = reviews.map((review, index) =>
     <Review
       key={index}
@@ -44,11 +52,14 @@ function renderComponent(data) {
       text={review.text}
       score={review.score}
       date={review.date}
+      reviewCount={reviews.length}
+      display={(review.text && review.text != "Enter text...") ? "inherit" : "none"}
     />
   );
 
   ReactDOM.render(
     <div className="freelancer-reviews">
+      <ReviewForm />
       {listReviews}
     </div>,
 
@@ -84,6 +95,7 @@ class FreelancerView extends React.Component {
           last={this.props.last}
           title={this.props.title}
           category={this.props.category}
+          reviewCount={this.props.reviewCount}
           avgScore={this.props.avgScore}
           price={this.props.price}
         />
@@ -111,7 +123,7 @@ class FreelancerHeader extends React.Component {
         <div className="freelancer-header-info">
           <Name first={this.props.first} last={this.props.last}/>
           <span className="freelancer-header-title">{this.props.title}</span>
-          <span>Average Score: {this.props.avgScore}/5</span>
+          <span>{"Average Score: " + this.props.avgScore + "/5 (" + this.props.reviewCount + " reviews)"}</span>
           {price}
         </div>
         <span className="freelancer-category">{this.props.category}</span>
@@ -120,10 +132,73 @@ class FreelancerHeader extends React.Component {
   }
 }
 
+class ReviewForm extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearText = this.clearText.bind(this);
+  }
+
+  handleSubmit(evt) {
+    evt.preventDefault();
+    let form = evt.target;
+
+    const formData = {};
+    formData['score'] = form.elements['score'].value;
+    formData['text'] = form.elements['comment'].value;
+    formData['author'] = "User to be implemented";
+
+    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+      /**
+       * we discard received data, we get and re-render all reviews and freelance info
+       * since we do not update them live, and here we would have to render the component
+       * again anyway (new review and new average)
+       */
+       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
+         renderComponent(data);
+         // reset form
+         document.getElementById("review-form").reset();
+       });
+    });
+  }
+
+  clearText(evt) {
+    evt.target.value = "";
+  }
+
+  generateRadioButtons() {
+    const MAX_SCORE = 5;
+    let group = [];
+    for(let i = 1; i <= MAX_SCORE; i++) {
+      let radio = document.createElement("input");
+      group.push(<span key={i}><input type="radio" name="score" ref="score" id={"score-" + i} value={i} required/><label> {i} </label></span>);
+    }
+    return group;
+  }
+
+  render() {
+    return (
+      <div className="review-form">
+        <h3>Post a review</h3>
+        <form id="review-form" onSubmit={this.handleSubmit}>
+          <div className="score-selector">
+            <label>Score: </label>
+            {this.generateRadioButtons()}
+          </div>
+          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.clearText}>
+          </textarea>
+          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+        </form>
+      </div>
+    );
+  }
+}
+
 class Review extends React.Component {
   render() {
     return (
-      <article>
+      <article style={{display: this.props.display}}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
           <span className="review-date">Date: {this.props.date}</span>

@@ -13,6 +13,24 @@ module.exports = {
       .assert.containsText('div.freelancer-description', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.')
       .waitForElementPresent('ul.tag-list', 1000)
       .waitForElementPresent('div#freelancer-reviews-root', 1000)
+      // submit review
+      .assert.visible('input[name=score]')
+      .assert.visible('input[id=score-3]')
+      .assert.visible('textarea[name=comment]')
+      .click('input[id=score-3]')
+      .click('textarea[name=comment]')
+      .setValue('textarea[name=comment]', 'Nightwatch is the best reviewer')
+      .click('input[name=submit-button]')
+      .pause(2000)
+      .assert.containsText('div.review-text', 'Nightwatch is the best reviewer')
+      // submit empty review
+      .assert.visible('input[name=score]')
+      .assert.visible('input[id=score-5]')
+      .click('input[id=score-5]')
+      .click('input[name=submit-button]')
+      .pause(2000)
+      // test empty review not listed
+      .assert.hidden('div.review-text')
       .end();
   }
 };

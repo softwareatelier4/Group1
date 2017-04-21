@@ -2,7 +2,11 @@
 
 const config = require('../config');
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Tag = mongoose.model('Tag');
+const User = mongoose.model('User');
+const Freelance = mongoose.model('Freelance');
+
 
 module.exports = {
 
@@ -39,6 +43,28 @@ module.exports = {
       }
       done(freelancer_ids);
     });
-  }
+  },
+
+  // returns true if the given username is  not already taken
+  checkUsername : function(user, done) {
+    User.find({ username : user.username }).exec(function(err, results) {
+      if (Object.keys(results).length == 0) {
+        return done(true);
+      }
+      else {
+        return done(false);
+      }
+    });
+  },
+
+  checkFreelancerExistsAndIsNotClaimed : function(freelancerId, done) {
+    if (ObjectId.isValid(freelancerId)) {
+      Freelance.findById(freelancerId, function(err, res) {
+        if (err || !res || res.state == 'verified') done(false);
+        else done(true);
+      });
+    }
+    else done(false);
+  },
 
 }
