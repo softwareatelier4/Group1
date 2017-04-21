@@ -46,13 +46,14 @@ class FiltersContainer extends React.Component {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
       let category = this.props.categories[i].categoryName;
-      categories.push(<option value={category} key={i}>{category}</option>);
+      let categoryId = this.props.categories[i]._id;
+      categories.push(<option id={'category-' + categoryId} value={category} key={i}>{category}</option>);
     }
     return (<div id="filters-container">
       <div id="filters">
         <div id="filter-category">
           <span>Category: </span>
-          <select id="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
+          <select id="filter-category-dropdown" name="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}
           </select>
@@ -60,11 +61,11 @@ class FiltersContainer extends React.Component {
 
         <div id="filter-distance">
           <span id="max-distance-label">Max distance: </span>
-          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onKeyUp={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
-          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-duration-temp" name="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
       </div>
     </div>);
@@ -131,7 +132,7 @@ class FreelancerCard extends React.Component {
           <span>Price range: {this.formatPrice(this.props.price)}</span>
           <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
-        <span className="category">{this.props.category}</span>
+        <span className="category" data-category={this.props.categoryID}>{this.props.category}</span>
       </div>
     );
   }
@@ -143,16 +144,13 @@ class FreelancersContainer extends React.Component {
     let freelancers = [];
     for (let i = 0; i < this.props.freelancers.length; ++i) {
       let freelancer = this.props.freelancers[i];
-      let categoryName = 'Other';
-      if (freelancer.category) {
-        categoryName = freelancer.category.categoryName;
-      }
       freelancers.push(<FreelancerCard
         urlPicture = {freelancer.urlPicture}
         firstName  = {freelancer.firstName}
         familyName = {freelancer.familyName}
         title      = {freelancer.title}
-        category   = {categoryName}
+        category   = {freelancer.category.categoryName}
+        categoryID = {freelancer.category._id}
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
         distance   = {freelancer.distance}

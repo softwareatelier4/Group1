@@ -27,7 +27,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance", Number.MAX_SAFE_INTEGER);
             freelance.should.have.property("duration", Number.MAX_SAFE_INTEGER);
           });
@@ -45,7 +45,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
             freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
@@ -67,7 +67,7 @@ describe('Search test: ', function() {
           const results = JSON.parse(res.text) || [];
           results.length.should.be.greaterThan(0);
           results.forEach(function(freelance) {
-            freelanceutils.checkSearchInfoInResponse(freelance, seedData[0].data[0]);
+            freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
             freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
@@ -100,6 +100,44 @@ describe('Search test: ', function() {
         .end(function(err, res) {
           const results = JSON.parse(res.text);
           results.should.be.empty;
+          done();
+        });
+    });
+
+    it('should respond with a 200 even if there is no keyword given', function(done) {
+      request(app)
+        .get('/search')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text);
+          results.should.be.not.empty;
+          done();
+        });
+    });
+
+    it('should respond with a 200 and search among all fields', function(done) {
+      request(app)
+        .get('/search?keyword=ale')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          const results = JSON.parse(res.text);
+          results.forEach(function(result) {
+            JSON.stringify(result).should.containEql("ale");
+          });
+          done();
+        });
+    });
+
+    it('should respond with a 200 and parse a single string to fit a global filter', function(done) {
+      request(app)
+        .get('/search?keyword=ilarson0@cnbc.com+lalexander2@netlog.com')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end(function(err, res) {
+          res.text.should.containEql("ilarson0@cnbc.com");
+          res.text.should.containEql("lalexander2@netlog.com");
           done();
         });
     });

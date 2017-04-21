@@ -11,7 +11,7 @@ const utils = require(projectRoot +'/seed_data/utils');
 
 require(projectRoot + '/models/Category');
 
-describe('Category Model ', function(done) {
+describe('CATEGORY : ', function(done) {
 
   // Category constructor test
   describe('Category model definition', function() {

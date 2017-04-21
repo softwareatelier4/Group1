@@ -24,6 +24,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require('./Review');
 require('./Tag');
 require('./Category');
+const Review = mongoose.model('Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
 		firstName			: { type: String, required: true },
@@ -36,11 +37,12 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		email					: { type: String, required: true },
 		phone					: { type: String },
 		price					: { type: Object },
+		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' },
 		//we recompute this on every review
-		avgScore 			: { type: Number },
+		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
-		//maybe add category
+		//TODO add certifications
 	},
 	{
 		versionKey	: false,
@@ -58,8 +60,6 @@ Freelance.pre('save', function (next) {
 			this.avgScore = 0;
 		}
 	}
-
-
 	//we check that price has both a min and a max
 	//and that they are both above 0; in particular, max must be > min
 	//maybe in future
@@ -79,6 +79,28 @@ Freelance.pre('save', function (next) {
 	next();
 
 });
+//call of asynchronous, parallel pre
+// method 'validate' is not executed until done() is called.
+// validate is also called for every update, not only save.
+Freelance.pre('validate', true, function(next, done){
+	var count = 0;
+	next();
+	if (this.reviews.length == 0) done();
+	for (var item of this.reviews){
+		Review.findById(item).exec((err, review)=>{
+			if (err) throw err;
+			if (review){
+				this.avgScore += review.score;
+				count++;
+			}
+			if (count >= this.reviews.length) { 
+				this.avgScore = this.avgScore/this.reviews.length;
+				done();
+			} 
+		});
+	}
+});
+
 
 //register model for schema
 mongoose.model('Freelance', Freelance);

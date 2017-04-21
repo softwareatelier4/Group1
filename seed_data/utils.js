@@ -94,7 +94,7 @@ module.exports.errorIfNullOrUndefined = function errorIfNullOrUndefined(obj, pro
 /**
 * Goes through a Mongoose CastError error to check specific properties
 */
-var checkCastErrorFields = module.exports.checkValidationErrorFields = function checkValidationErrorFields(err, prop, kind){
+var checkCastErrorFields = module.exports.checkCastErrorFields = function checkCastErrorFields(err, prop, kind){
   var kind = kind || "ObjectID";
   should.exist(err, 'There should be an error');
   should.exist(err.errors[prop], 'There should be an err.errors[' + prop + ']');
