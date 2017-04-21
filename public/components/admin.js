@@ -146,7 +146,7 @@ class ContainerCategories extends React.Component {
         if (isNameUnique(name)) {
           let query = `?username=${g_username}&password=${g_password}`;
           ajaxRequest('POST', `/admin/category${query}`, { ajax : true }, { categoryName : name }, function(res) {
-            if (typeof res === 'object') {
+            if (res && res._id) {
               let adminCategories = document.getElementById('admin-categories');
               addReactElement(<CardCategory name={name} _id={res._id} />, adminCategories);
               let newCategoryMessage = document.getElementById('new-category-message');

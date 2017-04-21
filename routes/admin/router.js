@@ -40,17 +40,16 @@ router.get('/', function(req, res, next) {
     });
   }
   else {
-    res.sendStatus(404);
+    res.sendStatus(400);
   }
 });
 
 router.post('/category', function(req, res) {
-  // TODO: add category
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
     const newCategory = new Category(req.body);
     newCategory.save(function(err, saved) {
       if (err) {
-        res.sendStatus(500);
+        res.status(400).json(utils.formatErrorMessage(err));
       } else {
         res.status(201).json(saved);
       }
@@ -65,15 +64,15 @@ router.delete('/category', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {
     Category.findById(req.query.id, function(err, category) {
       if (err) {
-        res.sendStatus(500);
+        res.status(400).json(utils.formatErrorMessage(err));
       } else {
         Freelance.updateMany({ _id : { $in : category.freelancers } }, { category : undefined }, function(err, freelancers) {
           if (err) {
-            res.sendStatus(500);
+            res.status(400).json(utils.formatErrorMessage(err));
           } else {
             category.remove(function(err) {
               if (err) {
-                res.sendStatus(500);
+                res.status(400).json(utils.formatErrorMessage(err));
               } else {
                 res.sendStatus(204);
               }
