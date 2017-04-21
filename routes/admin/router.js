@@ -2,7 +2,6 @@
 'use strict';
 
 const express = require('express');
-const GoogleMaps = require('@google/maps');
 const router = express.Router();
 const middleware =  require('../middleware');
 const rootUrl = require("../../config").url;

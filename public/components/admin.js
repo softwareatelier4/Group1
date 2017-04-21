@@ -1,22 +1,107 @@
 'use strict';
 
-// class CardClaiming extends React.Component {
-//   render() {
-//     return (
-//
-//     );
-//   }
-// }
-
 let g_username;
 let g_password;
 
+let claims_temp = [
+  {
+    user : {
+      _id : "1234",
+      name : 'Tizio'
+    },
+    freelancer : {
+      _id : "58cc4942fc13ae612c00004b",
+      name : 'Nicholas Franklin'
+    }
+  },
+  {
+    user : {
+      _id : "1111",
+      name : 'Ariel'
+    },
+    freelancer : {
+      _id : "58cc4941fc13ae612c000018",
+      name : 'Barbara Torres'
+    }
+  }
+];
+
 // Shitty tweak to append React element
 function addReactElement(element, container) {
-  let div = document.getElementById(container).appendChild(document.createElement('div'));
+  let div = container.appendChild(document.createElement('div'));
   ReactDOM.render(element, div);
   div.parentNode.appendChild(div.firstChild);
   div.parentNode.removeChild(div);
+}
+
+class CardClaimComment extends React.Component {
+  cancel(e) {
+    let cardClaimComment = e.target.parentNode;
+    cardClaimComment.parentNode.removeChild(cardClaimComment);
+  }
+  sendMessage(status) {
+    return function(e) {
+      // TODO: add request to DB
+      let claim = this.props.claim;
+      let comment = e.target.parentNode.firstChild.value;
+      let message = `Dear ${claim.user.name},\n\nWe have decided to ${status} your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:\n\n${comment}\n\nBest regards,\n\nJobAdvisor`;
+      console.log(message);
+      // TODO: send email
+      // Delete claim from HTML
+      let claimCard = e.target.parentNode.parentNode;
+      claimCard.parentNode.removeChild(claimCard);
+    }
+  }
+  render() {
+    return (
+      <div className="card-claim-comment">
+        <textarea rows="5"></textarea>
+        <button onClick={this.cancel}>Cancel</button>
+        <button onClick={this.sendMessage('accept').bind(this)}>Accept</button>
+        <button onClick={this.sendMessage('reject').bind(this)}>Reject</button>
+      </div>
+    );
+  }
+}
+
+class CardClaim extends React.Component {
+  respond(e) {
+    let cardClaim = e.target.parentNode.parentNode;
+    if (cardClaim.lastChild.className === 'card-claim-comment') {
+      cardClaim.removeChild(cardClaim.lastChild);
+    }
+    addReactElement(<CardClaimComment claim={this.props.claim} />, cardClaim);
+  }
+  render() {
+    let claim = this.props.claim;
+    let userLink = `/user/${claim.user._id}`;
+    let freelancerLink = `/freelance/${claim.freelancer._id}`;
+    return (
+      <div className="card-claim" data-user_id={claim.user._id} data-freelancer_id={claim.freelancer._id}>
+        <div className="card-claim-row">
+          <div><a href={userLink} target="_blank">{claim.user.name}</a></div>
+          <div><a href={freelancerLink} target="_blank">{claim.freelancer.name}</a></div>
+          <div><span>Files...</span></div>
+          <button onClick={this.respond.bind(this)}>Respond</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class ContainerClaims extends React.Component {
+  render() {
+    let claims = [];
+    for (let i = 0; i < this.props.claims.length; ++i) {
+      let claim = this.props.claims[i];
+      claims.push(<CardClaim claim={claim} key={i} />);
+    }
+    return (
+      <div id="admin-claims" className="selected">
+        {claims}
+      </div>
+    );
+  }
 }
 
 class CardCategory extends React.Component {
@@ -58,7 +143,8 @@ class ContainerCategories extends React.Component {
             name : name
           }, function(res) {
             if (typeof res === 'object') {
-              addReactElement(<CardCategory name={name} _id={res._id} />, 'admin-categories');
+              let adminCategories = document.getElementById('admin-categories');
+              addReactElement(<CardCategory name={name} _id={res._id} />, adminCategories);
               let newCategoryMessage = document.getElementById('new-category-message');
               newCategoryMessage.innerHTML = '';
             }
@@ -80,7 +166,7 @@ class ContainerCategories extends React.Component {
       categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} />);
     }
     return (
-      <div id="admin-categories" className="selected">
+      <div id="admin-categories" className="">
         <div id="new-category" className="card-category">
           <input id="new-category-input" placeholder="New category name" onKeyDown={this.addCategory}/>
           <div id="new-category-message"></div>
@@ -117,13 +203,13 @@ class AdminView extends React.Component {
     return (
       <div id="admin-view">
         <div id="admin-menu">
-          <button id="admin-btn-categories" className="selected" onClick={this.select('categories')}>Categories</button>
-          <button id="admin-btn-claimings" onClick={this.select('claimings')}>Claimings</button>
+          <button id="admin-btn-categories" onClick={this.select('categories')}>Categories</button>
+          <button id="admin-btn-claims" className="selected" onClick={this.select('claims')}>Claims</button>
           <button id="admin-btn-settings" onClick={this.select('settings')}>Settings</button>
         </div>
         <div id="admin-content">
           <ContainerCategories categories={this.props.data.categories} />
-          <div id="admin-claimings">CLAIMINGS</div>
+          <ContainerClaims claims={claims_temp} />
           <div id="admin-settings">SETTINGS</div>
         </div>
       </div>
@@ -170,10 +256,10 @@ function renderAdminView(data) {
 }
 
 function renderPage() {
-  ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  // g_username = 'admin';
-  // g_password = 'asd';
-  // ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
+  // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
+  g_username = 'admin';
+  g_password = 'asd';
+  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();

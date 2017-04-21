@@ -71,6 +71,7 @@ button:active {
   width: 100%;
   display: flex;
   flex-flow: row;
+  margin-bottom: 30px;
 }
 
 #admin-menu > button {
@@ -110,10 +111,11 @@ button:active {
 .card-category {
   width: 100%;
   border-bottom: 1px solid black;
-  padding: 5px 0;
+  padding: 10px;
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  background-color: var(--basic-white);
 }
 
 .card-category > input,
@@ -122,9 +124,14 @@ button:active {
   height: 35px;
 }
 
+.card-category > input {
+  border: 1px solid black;
+}
+
 .card-category > button {
   width: 100px;
   height: 35px;
+  border: none;
 }
 
 .card-category-name,
@@ -137,4 +144,52 @@ button:active {
   flex: 1;
   padding-left: 20px;
   color: red;
+}
+
+.card-claim {
+  margin-bottom: 10px;
+}
+
+.card-claim button {
+  border: 1px solid black;
+  padding: 0;
+}
+
+.card-claim button:hover,
+.card-claim button:active {
+  border: 1px solid black;
+}
+
+.card-claim-row {
+  display: flex;
+  flex-flow: row;
+  background-color: var(--basic-white);
+  border: 1px solid black;
+}
+
+.card-claim-row > * {
+  height: 30px;
+  border: 1px solid black;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.card-claim-comment {
+  width: 100%;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+}
+
+.card-claim-comment > textarea {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 10px;
 }
