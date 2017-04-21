@@ -1,12 +1,12 @@
 /** @module freelance/router */
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var middleware =  require('../middleware');
+const express = require('express');
+const router = express.Router();
+const middleware =  require('../middleware');
 const utils = require('../utils');
-var mongoose = require('mongoose');
-var ObjectId = mongoose.Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
 
@@ -20,6 +20,7 @@ router.get('/new', function(req, res, next) {
   if (req.accepts('text/html')) {
     res.render('freelancer-create', {
       title: "JobAdvisor - Create Freelancer Profile" ,
+      logged: (req.session.user_id != undefined)
     });
   } else res.sendStatus(400);
 });
@@ -45,7 +46,8 @@ router.get('/:freelanceid', function(req, res, next) {
       });
     } else if (req.accepts('text/html')) {
 			res.render('freelancer', {
-				title: "JobAdvisor" ,
+				title: "JobAdvisor",
+        logged: (req.session.user_id != undefined)
 			});
     } else res.sendStatus(400);
   } else res.sendStatus(400);

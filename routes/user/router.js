@@ -10,14 +10,6 @@ const ObjectId = mongoose.Types.ObjectId;
 const User = mongoose.model('User');
 const Freelance = mongoose.model('Freelance');
 
-const session = require('express-session');
-router.use(session({
-  secret: 'plswork4me',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
-
 // Supported methods.
 router.all('/', middleware.supportedMethods('POST, OPTIONS'));
 router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
@@ -39,12 +31,12 @@ router.post('/login', function(req, res, next) {
       if (foundUser.password == password) {
         // start session
         req.session.user_id = foundUser._id;
-        //res.redirect('/'); //TODO logged in website
-        res.sendStatus(200).end();
+        res.sendStatus(202).end(); // redirect doen client side
       }
       else res.sendStatus(401).end(); // unauthorised
     }
   });
+
 });
 
 // POST /user/logout
@@ -54,7 +46,7 @@ router.get('/logout', function (req, res) {
     if(err) {
       console.log(err);
     }
-    res.redirect('/');
+    res.sendStatus(202).end(); // redirect done client side
   })
 
 });

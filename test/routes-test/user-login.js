@@ -20,14 +20,14 @@ describe('Login-post test: ', function() {
     after(seed_utils.dropDb);
 
     // CORRECT: login with correct password
-    it('app should get answer 200 on POST /user/login with correct username and password', function(done) {
+    it('app should get answer 202 on POST /user/login with correct username and password', function(done) {
       request(app)
       .post('/user/login')
       .send({
         "username" : "MrSatan",
         "password" : "666",
       })
-      .expect(200).end(done);
+      .expect(202).end(done);
     });
 
     // CORRECT: login with wrong password
