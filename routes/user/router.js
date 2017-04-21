@@ -48,7 +48,6 @@ router.get('/logout', function (req, res) {
     }
     res.sendStatus(202).end(); // redirect done client side
   })
-
 });
 
 // End of login and logout
@@ -143,6 +142,5 @@ router.put('/:username', function(req, res, next) {
     }
   });
 });
-
 
 module.exports = router;

@@ -11,9 +11,6 @@ router.all('/', middleware.supportedMethods('GET, OPTIONS'));
 
 // list users
 router.get('/', function(req, res, next) {
-  console.log(req.session);
-
-  console.log(req.session.user_id);
   if (req.accepts('text/html')) {
     res.render('index', {
       title: "JobAdvisor",
