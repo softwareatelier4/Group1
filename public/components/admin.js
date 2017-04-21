@@ -103,7 +103,7 @@ class ContainerClaims extends React.Component {
       claims.push(<CardClaim claim={claim} key={i} />);
     }
     return (
-      <div id="admin-claims" className="selected">
+      <div id="admin-claims">
         {claims}
       </div>
     );
@@ -111,6 +111,39 @@ class ContainerClaims extends React.Component {
 }
 
 class CardCategory extends React.Component {
+  // resetName(e) {
+  //   let categoryNameSpan = e.target.parentNode.children[1];
+  //   categoryNameSpan.innerHTML = this.originalName;
+  //   this.editName(e);
+  // }
+  editName(e) {
+    if (!e.keyCode || e.keyCode == 13) {
+      let categoryNameBtn = e.target.parentNode.children[0];
+      let categoryNameSpan = e.target.parentNode.children[1];
+      if (!this.editable) {
+        this.editable = true;
+        this.originalName = categoryNameSpan.innerText;
+        categoryNameBtn.innerHTML = 'OK';
+        categoryNameSpan.setAttribute('contenteditable', true);
+        categoryNameSpan.focus();
+      } else {
+        this.editable = false;
+        categoryNameBtn.innerHTML = 'Edit';
+        categoryNameSpan.setAttribute('contenteditable', false);
+        if (this.originalName !== categoryNameSpan.innerText) {
+          let query = `?username=${g_username}&password=${g_password}&id=${this.props._id}`;
+          ajaxRequest('PUT', `/admin/category${query}`, { ajax : true }, {
+            categoryName : categoryNameSpan.innerText
+          }, function(category) {
+            if (!category._id) {
+              categoryNameSpan.innerHTML = this.originalName;
+            }
+            console.log(category);
+          });
+        }
+      }
+    }
+  }
   removeCategory(e) {
     let cardCategory = e.target.parentNode;
     let categoryId = cardCategory.getAttribute('data-_id');
@@ -124,7 +157,10 @@ class CardCategory extends React.Component {
   render() {
     return (
       <div className="card-category" data-name={this.props.name} data-_id={this.props._id}>
-        <div className="card-category-name"><span>{this.props.name}</span></div>
+        <div className="card-category-name">
+          <button onClick={this.editName.bind(this)}>Edit</button>
+          <span onKeyDown={this.editName.bind(this)}>{this.props.name}</span>
+        </div>
         <button onClick={this.removeCategory}>Remove</button>
       </div>
     );
@@ -170,7 +206,7 @@ class ContainerCategories extends React.Component {
       categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} />);
     }
     return (
-      <div id="admin-categories" className="">
+      <div id="admin-categories" className="selected">
         <div id="new-category" className="card-category">
           <input id="new-category-input" placeholder="New category name" onKeyDown={this.addCategory}/>
           <div id="new-category-message"></div>
@@ -207,8 +243,8 @@ class AdminView extends React.Component {
     return (
       <div id="admin-view">
         <div id="admin-menu">
-          <button id="admin-btn-categories" onClick={this.select('categories')}>Categories</button>
-          <button id="admin-btn-claims" className="selected" onClick={this.select('claims')}>Claims</button>
+          <button id="admin-btn-categories" className="selected" onClick={this.select('categories')}>Categories</button>
+          <button id="admin-btn-claims" onClick={this.select('claims')}>Claims</button>
           <button id="admin-btn-settings" onClick={this.select('settings')}>Settings</button>
         </div>
         <div id="admin-content">

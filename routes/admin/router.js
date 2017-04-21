@@ -59,6 +59,23 @@ router.post('/category', function(req, res) {
   }
 });
 
+router.put('/category', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {
+    Category.findByIdAndUpdate(req.query.id,
+                               { categoryName : req.body.categoryName },
+                               { new : true },
+                               function(err, category) {
+      if (err) {
+        res.status(400).json(utils.formatErrorMessage(err));
+      } else {
+        res.status(200).json(category);
+      }
+    });
+  } else {
+    res.sendStatus(400);
+  }
+});
+
 router.delete('/category', function(req, res) {
   // TODO: delete category (and remove it from all freelancers)
   if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {

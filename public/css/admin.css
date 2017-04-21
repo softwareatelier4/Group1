@@ -134,6 +134,12 @@ button:active {
   border: none;
 }
 
+.card-category-name > button {
+  width: 50px;
+  margin-right: 10px;
+  border: none;
+}
+
 .card-category-name,
 #new-category-message {
   display: flex;
