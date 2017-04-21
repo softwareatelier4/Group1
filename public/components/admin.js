@@ -113,7 +113,8 @@ class ContainerClaims extends React.Component {
 class CardCategory extends React.Component {
   removeCategory(e) {
     let cardCategory = e.target.parentNode;
-    let query = `?username=${g_username}&password=${g_password}`;
+    let categoryId = cardCategory.getAttribute('data-_id');
+    let query = `?username=${g_username}&password=${g_password}&id=${categoryId}`;
     ajaxRequest('DELETE', `/admin/category${query}`, { ajax : true }, {}, function(res) {
       if (res === 204) {
         cardCategory.parentNode.removeChild(cardCategory);

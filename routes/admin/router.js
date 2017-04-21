@@ -9,6 +9,7 @@ const utils = require('../utils');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
+const Freelance = mongoose.model('Freelance');
 // const nodemailer = require('nodemailer');
 
 const adminUsername = 'admin';
@@ -61,8 +62,26 @@ router.post('/category', function(req, res) {
 
 router.delete('/category', function(req, res) {
   // TODO: delete category (and remove it from all freelancers)
-  if (adminUsername === req.query.username && adminPassword === req.query.password) {
-    res.sendStatus(204);
+  if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {
+    Category.findById(req.query.id, function(err, category) {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        Freelance.updateMany({ _id : { $in : category.freelancers } }, { category : undefined }, function(err, freelancers) {
+          if (err) {
+            res.sendStatus(500);
+          } else {
+            category.remove(function(err) {
+              if (err) {
+                res.sendStatus(500);
+              } else {
+                res.sendStatus(204);
+              }
+            });
+          }
+        });
+      }
+    });
   } else {
     res.sendStatus(400);
   }

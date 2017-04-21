@@ -15,12 +15,16 @@ function renderComponent(data) {
       {tag.tagName}
     </li>
   );
+  let categoryName = 'Other';
+  if (data.category) {
+    categoryName = data.category.categoryName;
+  }
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category={data.category.categoryName}
+      category={categoryName}
       avgScore={data.avgScore}
       reviewCount={data.reviews.length}
       price={data.price}
