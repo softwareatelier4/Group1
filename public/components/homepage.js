@@ -144,12 +144,16 @@ class FreelancersContainer extends React.Component {
     let freelancers = [];
     for (let i = 0; i < this.props.freelancers.length; ++i) {
       let freelancer = this.props.freelancers[i];
+      let categoryName = 'Other';
+      if (freelancer.category) {
+        categoryName = freelancer.category.categoryName;
+      }
       freelancers.push(<FreelancerCard
         urlPicture = {freelancer.urlPicture}
         firstName  = {freelancer.firstName}
         familyName = {freelancer.familyName}
         title      = {freelancer.title}
-        category   = {freelancer.category.categoryName}
+        category   = {categoryName}
         categoryID = {freelancer.category._id}
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
