@@ -7,7 +7,8 @@ let claims_temp = [
   {
     user : {
       _id : "1234",
-      name : 'Tizio'
+      name : 'Tizio',
+      email : 'amedeo.zucchetti@gmail.com'
     },
     freelancer : {
       _id : "58cc4942fc13ae612c00004b",
@@ -17,7 +18,8 @@ let claims_temp = [
   {
     user : {
       _id : "1111",
-      name : 'Ariel'
+      name : 'Ariel',
+      email : 'amedeo.zucchetti@usi.ch'
     },
     freelancer : {
       _id : "58cc4941fc13ae612c000018",
@@ -43,13 +45,17 @@ class CardClaimComment extends React.Component {
     return function(e) {
       // TODO: add request to DB
       let claim = this.props.claim;
-      let comment = e.target.parentNode.firstChild.value;
-      let message = `Dear ${claim.user.name},\n\nWe have decided to ${status} your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:\n\n${comment}\n\nBest regards,\n\nJobAdvisor`;
-      console.log(message);
-      // TODO: send email
-      // Delete claim from HTML
       let claimCard = e.target.parentNode.parentNode;
-      claimCard.parentNode.removeChild(claimCard);
+      let comment = e.target.parentNode.firstChild.value.replace(/\n/g, '<br>');
+      let message = `Dear ${claim.user.name},<br><br>We have decided to <b>${status}</b> your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:<br><br>${comment}<br><br>Best regards,<br><br>JobAdvisor`;
+      let query = `?username=${g_username}&password=${g_password}&message=${message}&email=${claim.user.email}`;
+      ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
+        if (res === 204) {
+          claimCard.parentNode.removeChild(claimCard);
+        } else {
+          console.log('ERROR sendig claim response');
+        }
+      });
     }
   }
   render() {

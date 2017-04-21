@@ -9,6 +9,7 @@ const utils = require('../utils');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
+const nodemailer = require('nodemailer');
 
 const adminUsername = 'admin';
 const adminPassword = 'asd';
@@ -55,6 +56,34 @@ router.delete('/category', function(req, res) {
   // TODO: delete category (and remove it from all freelancers)
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
     res.sendStatus(204);
+  } else {
+    res.sendStatus(400);
+  }
+});
+
+router.delete('/claim', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    //TODO: delete claim from database
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'jobadvisor.group1@gmail.com',
+            pass: '-5#x3Y;R;u<fz6}l'
+        }
+    });
+    let mailOptions = {
+      from: 'jobadvisor.group1@gmail.com',
+      to: req.query.email,
+      subject: 'Claim request',
+      html: req.query.message
+    };
+    transporter.sendMail(mailOptions, function(err, info){
+      if(err){
+          res.sendStatus(500);
+      } else {
+          res.sendStatus(204);
+      };
+    });
   } else {
     res.sendStatus(400);
   }

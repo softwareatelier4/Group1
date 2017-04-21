@@ -9,7 +9,7 @@
     "start": "DEBUG='jobadvisor' ./bin/www",
     "start:dev": "DEBUG='jobadvisor' nodemon ./bin/www -e html,css,dust,js,json,sh",
     "test": "sh test_local.sh",
-    "test-fast" : "sh test_local_no_download.sh",
+    "test-fast": "sh test_local_no_download.sh",
     "test-mocha": "JUNIT_REPORT_PATH=./jenkins-test-results.xml istanbul cover --report cobertura _mocha -- --timeout 3000 -R spec ./test/* --recursive --colors --reporter mocha-jenkins-reporter",
     "test-nightwatch": "./nightwatch",
     "test-nightwatch-jenkins": "xvfb-run ./nightwatch"
@@ -30,6 +30,7 @@
     "mongodb": "~2.2.22",
     "mongoose": "^4.9.0",
     "morgan": "^1.8.1",
+    "nodemailer": "^4.0.1",
     "supertest": "^1.2.0"
   },
   "devDependencies": {
