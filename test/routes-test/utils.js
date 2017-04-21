@@ -42,6 +42,13 @@ module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInRespo
   });
 }
 
+module.exports.checkUserInfoInResponse = function checkUserInfoInResponse(responseObj, user) {
+  Object.keys(user).forEach(function(key) {
+    if (key == "password") return;
+    responseObj.should.have.property(key, user[key]);
+  });
+}
+
 module.exports.checkSearchInfoInResponse = function checkSearchInfoInResponse(responseObj, freelance) {
 
   Object.keys(freelance).forEach(function(key) {
