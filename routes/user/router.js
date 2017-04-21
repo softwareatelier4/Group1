@@ -10,9 +10,56 @@ const ObjectId = mongoose.Types.ObjectId;
 const User = mongoose.model('User');
 const Freelance = mongoose.model('Freelance');
 
+const session = require('express-session');
+router.use(session({
+  secret: 'plswork4me',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
 // Supported methods.
 router.all('/', middleware.supportedMethods('POST, OPTIONS'));
-router.all('/:username', middleware.supportedMethods('GET, PUT, OPTIONS'));
+router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+
+
+/**
+ * Login and logout
+ *
+ * POST /user/login
+ * `username` and `password` expected in the body
+*/
+router.post('/login', function(req, res, next) {
+  const password = req.body.password;
+  User.findOne({ username : req.body.username }, function(err, foundUser) {
+    if (err) res.sendStatus(500).end(); // error
+    else if (!foundUser) res.sendStatus(404).end(); // username not found
+    else {
+      // check password
+      if (foundUser.password == password) {
+        // start session
+        req.session.user_id = foundUser._id;
+        //res.redirect('/'); //TODO logged in website
+        res.sendStatus(200).end();
+      }
+      else res.sendStatus(401).end(); // unauthorised
+    }
+  });
+});
+
+// POST /user/logout
+router.get('/logout', function (req, res) {
+  // delete req.session.user_id;
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    }
+    res.redirect('/');
+  })
+
+});
+
+// End of login and logout
 
 // GET user/:username
 router.get('/:username', function(req, res, next) {
@@ -104,5 +151,6 @@ router.put('/:username', function(req, res, next) {
     }
   });
 });
+
 
 module.exports = router;

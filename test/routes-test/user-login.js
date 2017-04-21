@@ -14,36 +14,39 @@ var request = require('supertest');
 
 describe('Login-post test: ', function() {
 
-  describe('POST /login/:username', function() {
+  describe('POST /user/login', function() {
 
     before(seed);
     after(seed_utils.dropDb);
 
     // CORRECT: login with correct password
-    it('app should get answer 200 on POST /login/:username with correct password', function(done) {
+    it('app should get answer 200 on POST /user/login with correct username and password', function(done) {
       request(app)
-      .post('/login/MrSatan')
+      .post('/user/login')
       .send({
+        "username" : "MrSatan",
         "password" : "666",
       })
       .expect(200).end(done);
     });
 
     // CORRECT: login with wrong password
-    it('app should get answer 401 on POST /login/:username with wrong password', function(done) {
+    it('app should get answer 401 on POST /user/login with correct username wrong password', function(done) {
       request(app)
-      .post('/login/MrSatan')
+      .post('/user/login')
       .send({
+        "username" : "MrSatan",
         "password" : "a_wrong_password",
       })
       .expect(401).end(done);
     });
 
     // ERROR: login with non-existing username
-    it('app should get answer 404 on POST /login/:username with non-existing username', function(done) {
+    it('app should get answer 404 on POST /user/login with non-existing username', function(done) {
       request(app)
-      .post('/login/a_username_that_unfortunately_does_not_exist')
+      .post('/user/login')
       .send({
+        "username" : "a_username_that_unfortunately_does_not_exist",
         "password" : "any_password_really,_it_does_not_matter,_does_it?",
       })
       .expect(404).end(done);
