@@ -9,7 +9,7 @@ const utils = require('../utils');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 const adminUsername = 'admin';
 const adminPassword = 'asd';
