@@ -211,6 +211,10 @@ ul.tag-list li {
   flex-flow: column;
 }
 
+#freelancer-claim-form-message {
+    color: red;
+}
+
 .hidden {
   display: none;
 }

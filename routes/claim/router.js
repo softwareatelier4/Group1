@@ -8,14 +8,13 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const User = mongoose.model('User');
-// const Claim = mongoose.model('Claim');
+const Claim = mongoose.model('Claim');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
 
 router.post('/new', function(req, res) {
-  console.log(req.body);
   if (req.session.user_id && req.body.freelancerId) {
     User.findById(req.session.user_id, function(err, user) {
       if (err) {
@@ -35,22 +34,21 @@ router.post('/new', function(req, res) {
                 res.status(400).json({ error : 'failed user save' });
               } else {
                 freelancer.state = 'in progress';
-                freelancer.save(function(err, claim) {
+                freelancer.save(function(err) {
                   if (err) {
                     res.status(400).json({ error : 'failed freelancer save' });
                   } else {
-                    res.status(201).json(claim);
-                    // let newClaim = new Claim({
-                    //   userID : req.session.user_id,
-                    //   freelanceID : req.body.freelancerId,
-                    // });
-                    // newClaim.save(function(err) {
-                    //   if (err) {
-                    //     res.sendStatus(400);
-                    //   } else {
-                    //     res.sendStatus(201);
-                    //   }
-                    // });
+                    let newClaim = new Claim({
+                      userID : req.session.user_id,
+                      freelanceID : req.body.freelancerId,
+                    });
+                    newClaim.save(function(err, claim) {
+                      if (err) {
+                        res.sendStatus(400).json({ error : 'failed claim save' });
+                      } else {
+                        res.status(201).json(claim);
+                      }
+                    });
                   }
                 })
               }

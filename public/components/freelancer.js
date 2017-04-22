@@ -127,14 +127,13 @@ class FreelancerClaimForm extends React.Component {
         freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
       } else {
         let message = document.getElementById('freelancer-claim-form-message');
-        message.innerHTML = 'Freelancer or user are already in a claim procedure';
+        message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
       }
     });
   }
   render() {
     return (
       <div id="freelancer-claim-form">
-        <div>Upload ID file</div>
         <input type="file" multiple="true" />
         <button onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
