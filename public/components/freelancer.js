@@ -158,7 +158,7 @@ class ReviewForm extends React.Component {
     const formData = {};
     formData['score'] = form.elements['score'].value;
     formData['text'] = form.elements['comment'].value;
-    formData['author'] = "User to be implemented";
+    formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
 
     ajaxRequest("POST", window.location + "/review", {}, formData, function() {
       /**

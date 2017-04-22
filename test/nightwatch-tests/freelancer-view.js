@@ -30,6 +30,7 @@ module.exports = {
       .setValue('textarea[name=comment]', 'Nightwatch is the best reviewer')
       .click('input[name=submit-button]')
       .pause(2000)
+      .assert.containsText('span.review-author', 'MrSatan')
       .assert.containsText('div.review-text', 'Nightwatch is the best reviewer')
       // submit empty review
       .assert.visible('input[name=score]')
