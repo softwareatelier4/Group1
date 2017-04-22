@@ -114,19 +114,25 @@ class FreelancerView extends React.Component {
 }
 
 class FreelancerClaimForm extends React.Component {
+  claim() {
+    // if no file => error
+    // post request
+    // if invalid freelancerid or invalid userid => error
+    // else close form, update freelancer locally
+  }
   render() {
     return (
       <div id="freelancer-claim-form">
         <div>Upload ID file</div>
         <input type="file" multiple="true" />
-        <button>Claim</button>
+        <button onClick={this.claim.bind(this)}>Claim</button>
       </div>
     );
   }
 }
 
 class FreelancerClaim extends React.Component {
-  claim(e) {
+  toggleForm(e) {
     this.isClaiming = false;
     return function(e) {
       //TODO: verify if there is a valid user in session
@@ -136,7 +142,7 @@ class FreelancerClaim extends React.Component {
         if (!this.isClaiming) {
           this.isClaiming = true;
           claimBtn.innerHTML = 'CANCEL';
-          addReactElement(<FreelancerClaimForm />, freelancerClaim);
+          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} />, freelancerClaim);
         } else {
           this.isClaiming = false;
           claimBtn.innerHTML = 'CLAIM';
@@ -162,7 +168,7 @@ class FreelancerClaim extends React.Component {
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div>{this.props.state}</div>
-          <button onClick={this.claim().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
+          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
         </div>
       </div>
     );
