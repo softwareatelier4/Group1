@@ -58,6 +58,18 @@ describe('CATEGORY : ', function(done) {
       });
     });
 
+		it('should create a category with required documents', function(done) {
+			let category = new Category();
+			category.categoryName = 'Swift';
+			category.freelancers = [];
+			category.requiresDocs = true;
+			category.save(function(err, saved) {
+				should.not.exist(err, 'No error should occur');
+				saved.requiresDocs.should.equal(true);
+				done();
+			});
+		});
+
     it('should fail if categoryName is empty, null, or undefined', function(done) {
       let category = new Category();
       category.freelancers = [];
