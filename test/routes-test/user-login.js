@@ -12,9 +12,11 @@ var seed_utils = require('../../seed_data/utils');
 var utils = require('./utils');
 var request = require('supertest');
 
-describe('Login-post test: ', function() {
+var Cookies;
 
-  describe('POST /user/login', function() {
+describe('Login and logout test: ', function() {
+
+  describe('POST /user/login and GET /user/logout', function() {
 
     before(seed);
     after(seed_utils.dropDb);
@@ -27,10 +29,34 @@ describe('Login-post test: ', function() {
         "username" : "MrSatan",
         "password" : "666",
       })
-      .expect(202).end(done);
+      .expect(202).end(function(err,res) {
+        var re = new RegExp('; path=/; httponly', 'gi');
+        Cookies = res.headers['set-cookie'].map(function(r) {
+            return r.replace(re, '');
+          }).join("; ");
+        done();
+      });
     });
 
-    // CORRECT: login with wrong password
+    // WRONG: duplicate login without ending session first
+    it('app should get answer 409 on POST /user/login if already logged in', function(done) {
+      let req = request(app).post('/user/login');
+      req.cookies = Cookies;
+      req.send({
+        "username" : "MrSatan",
+        "password" : "666",
+      })
+      .expect(409).end(done);
+    });
+
+    // CORRECT: logout after login
+    it('app should get answer 202 on GET /user/logout if already logged in', function(done) {
+      let req = request(app).get('/user/logout');
+      req.cookies = Cookies;
+      req.expect(202).end(done);
+    });
+
+    // ERROR: login with wrong password
     it('app should get answer 401 on POST /user/login with correct username wrong password', function(done) {
       request(app)
       .post('/user/login')
