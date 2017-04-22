@@ -19,7 +19,7 @@ describe('Login and logout test: ', function() {
   describe('POST /user/login and GET /user/logout', function() {
 
     before(seed);
-    after(seed_utils.dropDb);
+    after(seed_utils.dropDbAndCloseConnection);
 
     // CORRECT: login with correct password
     it('app should get answer 202 on POST /user/login with correct username and password', function(done) {
