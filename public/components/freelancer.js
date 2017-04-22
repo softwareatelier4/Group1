@@ -115,10 +115,21 @@ class FreelancerView extends React.Component {
 
 class FreelancerClaimForm extends React.Component {
   claim() {
-    // if no file => error
-    // post request
-    // if invalid freelancerid or invalid userid => error
-    // else close form, update freelancer locally
+    ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(response) {
+      if (response !== 400) {
+        let claimBtn = document.getElementById('freelancer-claim-btn');
+        claimBtn.classList.add('hidden');
+        let freelancerClaim = document.getElementById('freelancer-claim');
+        freelancerClaim.className = 'bg-yellow';
+        let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
+        freelancerClaimStatusName.innerHTML = 'in progress';
+        let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+        freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+      } else {
+        let message = document.getElementById('freelancer-claim-form-message');
+        message.innerHTML = 'Freelancer or user are already in a claim procedure';
+      }
+    });
   }
   render() {
     return (
@@ -126,6 +137,7 @@ class FreelancerClaimForm extends React.Component {
         <div>Upload ID file</div>
         <input type="file" multiple="true" />
         <button onClick={this.claim.bind(this)}>Claim</button>
+        <div id="freelancer-claim-form-message"></div>
       </div>
     );
   }
@@ -135,7 +147,6 @@ class FreelancerClaim extends React.Component {
   toggleForm(e) {
     this.isClaiming = false;
     return function(e) {
-      //TODO: verify if there is a valid user in session
       if (this.props.state === 'not verified') {
         let claimBtn = document.getElementById('freelancer-claim-btn');
         let freelancerClaim = document.getElementById('freelancer-claim');
@@ -167,7 +178,7 @@ class FreelancerClaim extends React.Component {
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
-          <div>{this.props.state}</div>
+          <div id="freelancer-claim-status-name">{this.props.state}</div>
           <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
         </div>
       </div>

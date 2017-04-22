@@ -7,23 +7,62 @@ const utils = require('../utils');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
-const Review = mongoose.model('Review');
+const User = mongoose.model('User');
+// const Claim = mongoose.model('Claim');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
-router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete later
-router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
 
-router.get('/:freelanceid', function(req, res) {
-  if (req.accepts('text/html')) {
-    res.render('claim', {
-      title: "JobAdvisor",
+router.post('/new', function(req, res) {
+  console.log(req.body);
+  if (req.session.user_id && req.body.freelancerId) {
+    User.findById(req.session.user_id, function(err, user) {
+      if (err) {
+        res.status(400).json({ error : 'wrong user id' });
+      } else if (user.freelancer) {
+        res.status(400).json({ error : 'user id already claiming' });
+      } else {
+        Freelance.findById(req.body.freelancerId, function(err, freelancer) {
+          if (err) {
+            res.status(400).json({ error : 'wrong freelancer id' });
+          } else if (freelancer.state !== 'not verified') {
+            res.status(400).json({ error : 'freelancer id already verified' });
+          } else {
+            user.freelancer = req.body.freelancerId;
+            user.save(function(err) {
+              if (err) {
+                res.status(400).json({ error : 'failed user save' });
+              } else {
+                freelancer.state = 'in progress';
+                freelancer.save(function(err, claim) {
+                  if (err) {
+                    res.status(400).json({ error : 'failed freelancer save' });
+                  } else {
+                    res.status(201).json(claim);
+                    // let newClaim = new Claim({
+                    //   userID : req.session.user_id,
+                    //   freelanceID : req.body.freelancerId,
+                    // });
+                    // newClaim.save(function(err) {
+                    //   if (err) {
+                    //     res.sendStatus(400);
+                    //   } else {
+                    //     res.sendStatus(201);
+                    //   }
+                    // });
+                  }
+                })
+              }
+            });
+          }
+        });
+      }
     });
+  } else {
+    res.status(400).json({ error : 'no user id or freelancer id' });
   }
-  else {
-    res.sendStatus(404);
-  }
-});
+})
 
 
 module.exports = router;
