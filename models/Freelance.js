@@ -89,6 +89,7 @@ Freelance.pre('save', function (next) {
 Freelance.pre('validate', true, function(next, done){
 	var count = 0;
 	next();
+	this.avgScore = 0;
 	if (this.reviews.length == 0) done();
 	for (var item of this.reviews){
 		Review.findById(item).exec((err, review) => {
