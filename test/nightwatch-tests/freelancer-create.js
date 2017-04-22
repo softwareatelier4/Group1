@@ -29,6 +29,21 @@ module.exports = {
       .assert.containsText('span.freelancer-category', 'Engineering')
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
       .assert.containsText('a.freelancer-email', 'test@night.watch')
+
+      // add yourself
+      .url( config.baseURL + '/freelance/new')
+      // test alert if not logged in
+      .click('button#freelancer-myself')
+      .pause(1000)
+      .acceptAlert()
+      // login
+      .setValue('input[name=login-username]', 'MrSatan')
+      .setValue('input[name=login-password]', '666')
+      .click('input[name=login-submit]')
+      .waitForElementPresent('button#freelancer-myself', 2000)
+      .click('button#freelancer-myself')
+      .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
+
       .end();
   }
 };
