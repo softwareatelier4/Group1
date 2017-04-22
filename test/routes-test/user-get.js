@@ -24,6 +24,7 @@ describe('User-get test: ', function() {
         .expect(401)
         .end(done);
     });
+  });
 
   describe('GET /user/:username', function() {
     before(seed);
