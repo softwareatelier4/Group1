@@ -22,6 +22,10 @@ router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'))
  * `username` and `password` expected in the body
 */
 router.post('/login', function(req, res, next) {
+  if(req.session.user_id) { // if a session is already open, something is very wrong
+    res.sendStatus(409).end();
+  }
+
   const password = req.body.password;
   User.findOne({ username : req.body.username }, function(err, foundUser) {
     if (err) res.sendStatus(500).end(); // error
@@ -41,6 +45,10 @@ router.post('/login', function(req, res, next) {
 
 // POST /user/logout
 router.get('/logout', function (req, res) {
+  if(!req.session.user_id) { // if no session open, something is very wrong
+    res.sendStatus(409).end();
+  }
+
   // delete req.session.user_id;
   req.session.destroy(function(err) {
     if(err) {
