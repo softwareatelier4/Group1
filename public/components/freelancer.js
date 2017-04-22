@@ -30,6 +30,8 @@ function renderComponent(data) {
       email={data.email}
       tags={listTags}
       urlPicture = {data.urlPicture}
+      _id={data._id}
+      state={data.state}
     />,
 
     document.getElementById('freelancer-root')
@@ -89,6 +91,10 @@ class FreelancerView extends React.Component {
   render() {
     return (
       <div className="freelancer-view">
+        <FreelancerClaimStatus
+          _id={this.props._id}
+          state={this.props.state}
+        />
         <FreelancerHeader
           urlPicture={this.props.urlPicture || ""}
           first={this.props.first}
@@ -102,6 +108,33 @@ class FreelancerView extends React.Component {
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
         <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags}/>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaimStatus extends React.Component {
+  claim() {
+    //TODO: verify if there is a user in session
+    if (this.props.state === 'not verified') {
+      //TODO: ajax?
+      document.location = '/claim/${this.props._id}';
+    }
+  }
+  render() {
+    let bgColor = 'bg-orange';
+    let claimBtn = '';
+    if (this.props.state === 'verified') {
+      bgColor = 'bg-green';
+      claimBtn = 'hidden';
+    } else if (this.props.state === 'in progress') {
+      bgColor = 'bg-yellow';
+      claimBtn = 'hidden';
+    }
+    return (
+      <div id="freelancer-claim-status" className={bgColor}>
+        <div>{this.props.state}</div>
+        <button onClick={this.claim.bind(this)} className={claimBtn}>CLAIM</button>
       </div>
     );
   }

@@ -190,3 +190,28 @@ ul.tag-list li {
   border-radius: 8px;
   font-size: var(--tag-font-size);
 }
+
+#freelancer-claim-status {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.bg-orange {
+  background-color: orange;
+}
+
+.bg-green {
+  background-color: green;
+}
+
+.bg-yellow {
+  background-color: yellow;
+}

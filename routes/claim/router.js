@@ -15,7 +15,6 @@ router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete la
 router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
 
 router.get('/:freelanceid', function(req, res) {
-  console.log('ABC');
   if (req.accepts('text/html')) {
     res.render('claim', {
       title: "JobAdvisor",
