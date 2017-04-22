@@ -40,7 +40,7 @@ app.use('/', routers.root);
 app.use('/freelance', routers.freelance);
 app.use('/search', routers.search);
 app.use('/category', routers.category);
-app.use('/admin', routers.admin);
+app.use('/user', routers.user);
 
 module.exports = app;
 process.title = 'jobadvisor'
