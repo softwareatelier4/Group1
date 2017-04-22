@@ -48,10 +48,10 @@ describe('Search test: ', function() {
             freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
-            freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.distance.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
             freelance.should.have.property("duration");
             freelance.duration.should.not.be.lessThan(0);
-            freelance.duration.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.duration.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
           });
           done();
         });
@@ -70,10 +70,10 @@ describe('Search test: ', function() {
             freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0]);
             freelance.should.have.property("distance");
             freelance.distance.should.not.be.lessThan(0);
-            freelance.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.distance.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
             freelance.should.have.property("duration");
             freelance.duration.should.not.be.lessThan(0);
-            freelance.duration.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+            freelance.duration.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
           });
           done();
         });
