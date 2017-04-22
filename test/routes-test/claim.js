@@ -16,7 +16,7 @@ describe('Claim-post test: ', function() {
   describe('POST /claim', function() {
 
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     var Cookies;
 
