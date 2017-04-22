@@ -143,6 +143,8 @@ class FreelancerClaimForm extends React.Component {
           let claimid = document.getElementById('freelancer-claim-form-claimid');
           claimid.value = claim._id;
           let form = document.getElementById('freelancer-claim-form-form');
+          // The submit redirects to a new page and I don't know how to prevent it
+          // Note: e.preventDefault() doesn't work, I'm not an imbecile (or am I?)
           form.submit();
           // Delete form
           let freelancerClaimForm = document.getElementById('freelancer-claim-form');
