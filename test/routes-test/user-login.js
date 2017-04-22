@@ -56,6 +56,17 @@ describe('Login and logout test: ', function() {
       req.expect(202).end(done);
     });
 
+    // CORRECT: login after logout
+    it('app should get answer 202 on POST /user/login with correct username and password', function(done) {
+      request(app)
+      .post('/user/login')
+      .send({
+        "username" : "MrSatan",
+        "password" : "666",
+      })
+      .expect(202).end(done);
+    });
+
     // ERROR: login with wrong password
     it('app should get answer 401 on POST /user/login with correct username wrong password', function(done) {
       request(app)
