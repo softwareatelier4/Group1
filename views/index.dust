@@ -10,6 +10,12 @@
     <div id='topbar'>
       <!-- Title -->
       <div id="react-title"></div>
+      <!-- Login - show only if not already logged -->
+      {^logged}
+        <div id="react-login"></div>
+      {:else}
+        <div id="react-logout"></div>
+      {/logged}
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>

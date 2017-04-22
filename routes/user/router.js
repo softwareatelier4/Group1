@@ -12,7 +12,53 @@ const Freelance = mongoose.model('Freelance');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('POST, OPTIONS'));
-router.all('/:username', middleware.supportedMethods('GET, PUT, OPTIONS'));
+router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+
+
+/**
+ * Login and logout
+ *
+ * POST /user/login
+ * `username` and `password` expected in the body
+*/
+router.post('/login', function(req, res, next) {
+  if(req.session.user_id) { // if a session is already open, something is very wrong
+    res.sendStatus(409).end();
+  }
+
+  const password = req.body.password;
+  User.findOne({ username : req.body.username }, function(err, foundUser) {
+    if (err) res.sendStatus(500).end(); // error
+    else if (!foundUser) res.sendStatus(404).end(); // username not found
+    else {
+      // check password
+      if (foundUser.password == password) {
+        // start session
+        req.session.user_id = foundUser._id;
+        res.sendStatus(202).end(); // redirect doen client side
+      }
+      else res.sendStatus(401).end(); // unauthorised
+    }
+  });
+
+});
+
+// POST /user/logout
+router.get('/logout', function (req, res) {
+  if(!req.session.user_id) { // if no session open, something is very wrong
+    res.sendStatus(409).end();
+  }
+
+  // delete req.session.user_id;
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    }
+    res.sendStatus(202).end(); // redirect done client side
+  })
+});
+
+// End of login and logout
 
 // GET user/:username
 router.get('/:username', function(req, res, next) {
