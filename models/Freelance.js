@@ -98,7 +98,7 @@ Freelance.pre('validate', true, function(next, done){
 				count++;
 			}
 			if (count >= this.reviews.length) {
-				this.avgScore = this.avgScore/this.reviews.length;
+				this.avgScore = Math.round((this.avgScore/this.reviews.length) * 100) / 100;
 				done();
 			}
 		});
