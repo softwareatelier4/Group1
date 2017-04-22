@@ -16,7 +16,7 @@ describe('Freelance-get test: ', function() {
 
   describe('GET /freelance/:freelanceid', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should list the freelance with correct data', function(done) {
       request(app)
@@ -78,7 +78,7 @@ describe('Freelance-get test: ', function() {
 
   describe('GET /freelance/new', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('it should respond with 200 if the request is valid', function(done) {
       request(app)

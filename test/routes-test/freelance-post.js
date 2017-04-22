@@ -17,7 +17,7 @@ describe('Freelance-post test: ', function() {
   describe('POST /freelance', function() {
 
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     // TEST: correct post.
     it('app should get answer 201 on POST /freelance', function(done) {
@@ -81,7 +81,7 @@ describe('Freelance-post test: ', function() {
   describe('POST /freelance/:freelanceid/review', function() {
 
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     // TEST: correct post of a review.
     it('app should get answer 201 on POST /freelance/:freelanceid/review', function(done) {
