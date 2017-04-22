@@ -10,6 +10,7 @@ require('./Review');
 require('./Tag');
 require('./Category');
 require('./User');
+require('./Claim');
 
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
 	'Review'     : mongoose.model('Review'),
   'Tag'        : mongoose.model('Tag'),
   'Category'   : mongoose.model('Category'),
-  'User'			 : mongoose.model('User')
+  'User'			 : mongoose.model('User'),
+  'Claim'			 : mongoose.model('Claim')
 }
