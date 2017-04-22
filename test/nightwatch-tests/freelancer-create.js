@@ -7,6 +7,9 @@ module.exports = {
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#freelancer-root', 10000)
+      // add someone else
+      .click('button#freelancer-other')
+      .assert.containsText('h1#freelancer-form-title', 'Create a freelancer profile for someone else')
       .assert.visible('input[name=first-name]')
       .assert.visible('input[name=family-name]')
       .assert.visible('input[name=job-title]')

@@ -21,7 +21,7 @@
     </div>
 
     <!-- React container -->
-    <div id='freelancer-root'></div>
+    <div id='freelancer-root' data-user-id={userID}></div>
 
 
     <!-- Utils -->

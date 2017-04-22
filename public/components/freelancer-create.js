@@ -13,17 +13,24 @@
  *   <label>Name</label>
  * </div>
  */
+function renderFreelancerTypeButtons() {
+  ReactDOM.render(
+    <FreelancerTypeButtons />,
+    document.getElementById('freelancer-root')
+  );
+}
 
-ajaxRequest("GET", "/category", { ajax : true }, {}, renderComponent);
-
-function renderComponent(data) {
+function renderComponent(data, isMyself) {
   const categories = data;
   const listCategories = categories.map((category, index) =>
     <option key={index} value={category._id}>{category.categoryName}</option>
   );
 
   ReactDOM.render(
-   <CreationForm categories={listCategories}/>,
+   <CreationForm
+    categories={listCategories}
+    isMyself={isMyself}
+  />,
    document.getElementById('freelancer-root')
   );
 }
@@ -51,7 +58,7 @@ class CreationForm extends React.Component {
     return (
       <div className="freelancer-form">
         <div className="freelancer-form-header">
-          <h1>Get started by creating your freelancer profile </h1>
+          <h1 id="freelancer-form-title">{ this.props.isMyself ? 'Create your own freelancer profile' : 'Create a freelancer profile for someone else' }</h1>
         </div>
         <form onSubmit={this.handleSubmit}>
 
@@ -122,3 +129,41 @@ class CreationForm extends React.Component {
     );
   }
 }
+
+class FreelancerTypeButtons extends React.Component {
+  constructor(props) {
+    super(props);
+    this.showForm = this.showForm.bind(this);
+  }
+
+  showForm(evt) {
+    let isMyself = evt.target.id == "freelancer-myself";
+    // check user is logged in
+    if(isMyself && !document.getElementById('freelancer-root').getAttribute('data-user-id')) {
+      alert("You need to login to create your own freelancer profile");
+      return;
+    }
+
+    ajaxRequest("GET",
+      "/category",
+      { ajax : true }, {},
+      function(data) { renderComponent(data, isMyself) }
+    );
+
+  }
+
+  render() {
+    return (
+      <div id="freelancer-type">
+        <button id="freelancer-other" onClick={this.showForm}>Add someone else</button>
+        <button id="freelancer-myself" onClick={this.showForm}>Add yourself</button>
+      </div>
+    );
+  }
+}
+
+/**
+ * Render components
+ */
+
+renderFreelancerTypeButtons()

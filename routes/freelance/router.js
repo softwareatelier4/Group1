@@ -20,7 +20,8 @@ router.get('/new', function(req, res, next) {
   if (req.accepts('text/html')) {
     res.render('freelancer-create', {
       title: "JobAdvisor - Create Freelancer Profile" ,
-      logged: (req.session.user_id != undefined)
+      logged: (req.session.user_id != undefined),
+      userID: req.session.user_id
     });
   } else res.sendStatus(400);
 });
@@ -65,21 +66,21 @@ router.post('/:freelanceid/review', function(req, res, next) {
         });
       } else {
         newReview.save(function(err, saved) {
+          if (err) {
+            res.status(400).json(utils.formatErrorMessage(err));
+          } else {
+            // res.status(201).json(saved);
+            freelance.reviews.push(newReview);
+            freelance.save(function(err, saved) {
               if (err) {
-                res.status(400).json(utils.formatErrorMessage(err));
-              } else {
-                // res.status(201).json(saved);
-                freelance.reviews.push(newReview);
-                freelance.save(function(err, saved) {
-                  if (err) {
-                    res.status(400).json({
-                      message: "Could not save Review in Freelance."
-                    });
-                  } else {
-                    res.status(201).json(saved);
-                  }
+                res.status(400).json({
+                  message: "Could not save Review in Freelance."
                 });
+              } else {
+                res.status(201).json(saved);
               }
+            });
+          }
         });
       }
     });
