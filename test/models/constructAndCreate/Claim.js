@@ -59,9 +59,9 @@ describe('CLAIM : ', function(done) {
 			freelance.familyName = 'Knopfer';
 			freelance.title = 'I am alive yeah';
 			freelance.email = 'ripperoni@pepe.pe';
-			freelance.price = {min: 20, max: 100};
+			freelance.price = { min: 20, max: 100 };
 			freelance.tags = [];
-			freelance.save(function(err, freelance){
+			freelance.save(function(err, freelance) {
 				should.not.exist(err, 'No error should occur');
 
 				let user = new User();
@@ -119,9 +119,9 @@ describe('CLAIM : ', function(done) {
 			freelance.familyName = 'Knopfer';
 			freelance.title = 'I am alive yeah';
 			freelance.email = 'ripperoni@pepe.pe';
-			freelance.price = {min: 20, max: 100};
+			freelance.price = { min: 20, max: 100 };
 			freelance.tags = [];
-			freelance.save(function(err, freelance){
+			freelance.save(function(err, freelance) {
 				should.not.exist(err, 'No error should occur');
 
 				let claim = new Claim();

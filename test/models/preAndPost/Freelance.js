@@ -20,7 +20,7 @@ describe('Freelance pre&post :', function(done){
 
 	before(function(done){
 		//connect and drop db
-		utils.connectAndDropDb(function(err){
+		utils.connectAndDropDb(function(err) {
 			if (err) return done(err);
 			done();
 		});

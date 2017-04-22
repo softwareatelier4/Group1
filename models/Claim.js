@@ -17,7 +17,7 @@ require ('./User');
 const Claim = exports.Claim = new mongoose.Schema({
 		userID 				: { type: ObjectID, ref: "User", required: true },
 		freelanceID 	: { type: ObjectID, ref: "Freelance", required: true  },
-		dateOpened 		: { type: Date, default: Date.now()},
+		dateOpened 		: { type: Date, default: Date.now() },
 	},
 	{
 		versionKey: false,

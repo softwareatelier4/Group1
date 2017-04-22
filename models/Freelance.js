@@ -41,7 +41,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		phone					: { type: String },
 		price					: { type: Object },
 		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' },
-		owner					: { type: ObjectID, ref: "User"},
+		owner					: { type: ObjectID, ref: "User" },
 		//we recompute this on every review
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
@@ -57,7 +57,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 Freelance.pre('save', function (next) {
 
 	//review between 0 and 5
-	if (this.avgScore !== undefined){
+	if (this.avgScore !== undefined) {
 		if (this.avgScore > 5) {
 			this.avgScore = 5;
 		} else if (this.avgScore < 0) {
@@ -91,14 +91,14 @@ Freelance.pre('validate', true, function(next, done){
 	next();
 	if (this.reviews.length == 0) done();
 	for (var item of this.reviews){
-		Review.findById(item).exec((err, review)=>{
+		Review.findById(item).exec((err, review) => {
 			if (err) throw err;
 			if (review){
 				this.avgScore += review.score;
 				count++;
 			}
 			if (count >= this.reviews.length) {
-				this.avgScore = Math.round((this.avgScore/this.reviews.length) * 100) / 100;
+				this.avgScore = Math.round((this.avgScore / this.reviews.length) * 100) / 100;
 				done();
 			}
 		});
