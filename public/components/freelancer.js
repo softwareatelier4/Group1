@@ -143,8 +143,6 @@ class FreelancerClaimForm extends React.Component {
           let claimid = document.getElementById('freelancer-claim-form-claimid');
           claimid.value = claim._id;
           let form = document.getElementById('freelancer-claim-form-form');
-          // The submit redirects to a new page and I don't know how to prevent it
-          // Note: e.preventDefault() doesn't work, I'm not an imbecile (or am I?)
           form.submit();
           // Delete form
           let freelancerClaimForm = document.getElementById('freelancer-claim-form');
@@ -159,10 +157,11 @@ class FreelancerClaimForm extends React.Component {
   render() {
     return (
       <div id="freelancer-claim-form">
-        <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
+        <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post" target="noredirect">
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+          <iframe width="0" height="0" border="0" name="noredirect" id="noredirect"></iframe>
         </form>
         <button onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
