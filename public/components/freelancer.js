@@ -91,7 +91,7 @@ class FreelancerView extends React.Component {
   render() {
     return (
       <div className="freelancer-view">
-        <FreelancerClaimStatus
+        <FreelancerClaim
           _id={this.props._id}
           state={this.props.state}
         />
@@ -113,12 +113,39 @@ class FreelancerView extends React.Component {
   }
 }
 
-class FreelancerClaimStatus extends React.Component {
-  claim() {
-    //TODO: verify if there is a user in session
-    if (this.props.state === 'not verified') {
-      //TODO: ajax?
-      document.location = '/claim/${this.props._id}';
+class FreelancerClaimForm extends React.Component {
+  render() {
+    return (
+      <div id="freelancer-claim-form">
+        <div>Upload ID file</div>
+        <input type="file" multiple="true" />
+        <button>Claim</button>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaim extends React.Component {
+  claim(e) {
+    this.isClaiming = false;
+    return function(e) {
+      //TODO: verify if there is a valid user in session
+      if (this.props.state === 'not verified') {
+        let claimBtn = document.getElementById('freelancer-claim-btn');
+        let freelancerClaim = document.getElementById('freelancer-claim');
+        if (!this.isClaiming) {
+          this.isClaiming = true;
+          claimBtn.innerHTML = 'CANCEL';
+          addReactElement(<FreelancerClaimForm />, freelancerClaim);
+        } else {
+          this.isClaiming = false;
+          claimBtn.innerHTML = 'CLAIM';
+          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+          if (freelancerClaimForm) {
+            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          }
+        }
+      }
     }
   }
   render() {
@@ -132,9 +159,11 @@ class FreelancerClaimStatus extends React.Component {
       claimBtn = 'hidden';
     }
     return (
-      <div id="freelancer-claim-status" className={bgColor}>
-        <div>{this.props.state}</div>
-        <button onClick={this.claim.bind(this)} className={claimBtn}>CLAIM</button>
+      <div id="freelancer-claim" className={bgColor}>
+        <div id="freelancer-claim-status">
+          <div>{this.props.state}</div>
+          <button onClick={this.claim().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
+        </div>
       </div>
     );
   }
@@ -251,4 +280,12 @@ class Tags extends React.Component {
       </ul>
     )
   }
+}
+
+// Shitty tweak to append React element
+function addReactElement(element, container) {
+  let div = container.appendChild(document.createElement('div'));
+  ReactDOM.render(element, div);
+  div.parentNode.appendChild(div.firstChild);
+  div.parentNode.removeChild(div);
 }
