@@ -9,10 +9,31 @@ var ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const User = mongoose.model('User');
 const Claim = mongoose.model('Claim');
+const multer = require('multer');
+const fs = require('fs');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    let dest = `public/claims/${req.body.claimid}/`;
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest);
+    }
+    cb(null, dest)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+var upload = multer({ storage : storage });
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
+
+router.post('/upload', upload.array('idfile'), function(req, res) {
+  res.sendStatus(200);
+});
 
 router.post('/new', function(req, res) {
   if (req.session.user_id && req.body.freelancerId) {
@@ -60,7 +81,7 @@ router.post('/new', function(req, res) {
   } else {
     res.status(400).json({ error : 'no user id or freelancer id' });
   }
-})
+});
 
 
 module.exports = router;

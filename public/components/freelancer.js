@@ -115,26 +115,42 @@ class FreelancerView extends React.Component {
 
 class FreelancerClaimForm extends React.Component {
   claim() {
-    ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(response) {
-      if (response !== 400) {
-        let claimBtn = document.getElementById('freelancer-claim-btn');
-        claimBtn.classList.add('hidden');
-        let freelancerClaim = document.getElementById('freelancer-claim');
-        freelancerClaim.className = 'bg-yellow';
-        let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
-        freelancerClaimStatusName.innerHTML = 'in progress';
-        let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-        freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
-      } else {
-        let message = document.getElementById('freelancer-claim-form-message');
-        message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
-      }
-    });
+    let files = document.getElementById('freelancer-claim-form-files').files;
+    if (files.length === 0) {
+      let message = document.getElementById('freelancer-claim-form-message');
+      message.innerHTML = 'No file was given';
+    } else {
+      ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claim) {
+        if (claim._id) {
+          let claimBtn = document.getElementById('freelancer-claim-btn');
+          claimBtn.classList.add('hidden');
+          let freelancerClaim = document.getElementById('freelancer-claim');
+          freelancerClaim.className = 'bg-yellow';
+          let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
+          freelancerClaimStatusName.innerHTML = 'in progress';
+          // Send files
+          let claimid = document.getElementById('freelancer-claim-form-claimid');
+          claimid.value = claim._id;
+          let form = document.getElementById('freelancer-claim-form-form');
+          form.submit();
+          // Delete form
+          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+          freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+        } else {
+          let message = document.getElementById('freelancer-claim-form-message');
+          message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
+        }
+      });
+    }
   }
   render() {
     return (
       <div id="freelancer-claim-form">
-        <input type="file" multiple="true" />
+        <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
+          <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
+          <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+        </form>
         <button onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
       </div>
