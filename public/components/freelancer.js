@@ -57,14 +57,25 @@ function renderReviews(data) {
     />
   );
 
-  ReactDOM.render(
-    <div className="freelancer-reviews">
-      <ReviewForm />
-      {listReviews}
-    </div>,
+  if(document.getElementById('freelancer-logged-reviews-root')) { // if user logged in, show review form
+    ReactDOM.render(
+      <div className="freelancer-reviews">
+        <ReviewForm />
+        {listReviews}
+      </div>,
 
-    document.getElementById('freelancer-reviews-root')
-  );
+      document.getElementById('freelancer-logged-reviews-root')
+    );
+  }  else if(document.getElementById('freelancer-reviews-root')) {
+    ReactDOM.render(
+      <div className="freelancer-reviews">
+        <p>Login to be able to write a review</p>
+        {listReviews}
+      </div>,
+
+      document.getElementById('freelancer-reviews-root')
+    );
+  }
 }
 
 class Name extends React.Component {
