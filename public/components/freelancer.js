@@ -133,7 +133,7 @@ class FreelancerClaimForm extends React.Component {
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claim) {
         if (claim._id) {
-          let claimBtn = document.getElementById('freelancer-claim-btn');
+          let claimBtn = document.getElementById('freelancer-claim-toggle');
           claimBtn.classList.add('hidden');
           let freelancerClaim = document.getElementById('freelancer-claim');
           freelancerClaim.className = 'bg-yellow';
@@ -167,7 +167,7 @@ class FreelancerClaimForm extends React.Component {
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
         </form>
-        <button onClick={this.claim.bind(this)}>Claim</button>
+        <button id="freelancer-claim-btn" onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
       </div>
     );
@@ -179,7 +179,7 @@ class FreelancerClaim extends React.Component {
     this.isClaiming = false;
     return function(e) {
       if (this.props.state === 'not verified') {
-        let claimBtn = document.getElementById('freelancer-claim-btn');
+        let claimBtn = document.getElementById('freelancer-claim-toggle');
         let freelancerClaim = document.getElementById('freelancer-claim');
         if (!this.isClaiming) {
           this.isClaiming = true;
@@ -211,7 +211,7 @@ class FreelancerClaim extends React.Component {
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
-          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
+          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn}>CLAIM</button>
         </div>
       </div>
     );
