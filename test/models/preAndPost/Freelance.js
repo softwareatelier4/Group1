@@ -81,37 +81,44 @@ describe('Freelance pre&post :', function(done){
 
 	//these tests go in timeout for some reason
 
-	// it ('should have a score of 3 for a review of 2 and one of 4', function(done) {
-	//
-	// 	let freelance = new Freelance();
-	// 	freelance.firstName = 'Mark';
-	// 	freelance.familyName = 'Knopfer';
-	// 	freelance.title = 'I am alive yeah';
-	// 	freelance.email = 'ripperoni@pepe.pe';
-	// 	freelance.price = {min: 20, max: 100};
-	// 	freelance.tags = [];
-	// 	freelance.reviews = [];
-	//
-	// 	let review1 = new Review();
-	// 	review1.author = "me";
-	// 	review1.score = 2;
-	//
-	// 	let review2 = new Review();
-	// 	review2.author = "pepe";
-	// 	review2.score = 4;
-	//
-	// 	freelance.reviews.push(review1);
-	// 	freelance.reviews.push(review2);
-	//
-	//
-	//
-	// 	freelance.save(function(err, saved){
-	// 		should.not.exist(err, 'No error should occur');
-	// 		console.log("Here i expect 3: "+ saved.avgScore);
-	// 		saved.avgScore.should.equal(6/2);
-	// 		done();
-	// 	});
-	// });
+	it ('should have a score of 3 for a review of 2 and one of 4', function(done) {
+
+		let freelance = new Freelance();
+		freelance.firstName = 'Mark1';
+		freelance.familyName = 'Knopfer1';
+		freelance.title = 'I am alive yeah';
+		freelance.email = 'ripperoni@pepe.pe';
+		freelance.price = {min: 20, max: 100};
+		freelance.tags = [];
+		freelance.reviews = [];
+
+		let review1 = new Review();
+		review1.author = "me";
+		review1.score = 2;
+
+		let review2 = new Review();
+		review2.author = "pepe";
+		review2.score = 4;
+
+		freelance.reviews.push(review1);
+		freelance.reviews.push(review2);
+
+		review1.save(function(err, saved){
+			should.not.exist(err, 'No error should occur');
+
+			review2.save(function(err, saved){
+				should.not.exist(err, 'No error should occur');
+
+				freelance.save(function(err, saved){
+					should.not.exist(err, 'No error should occur');
+					saved.avgScore.should.equal(3);
+					done();
+				});
+			});
+		});
+
+
+	});
 
 	// it ('should have a score of 3.33 for a review of 2 and 2 of 4', function(done) {
 	//
