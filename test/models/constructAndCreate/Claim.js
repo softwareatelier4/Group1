@@ -91,16 +91,46 @@ describe('CLAIM : ', function(done) {
 
 
 		//need to look into why these fail
-		
-    // it('should fail if userID is empty, null, or undefined', function(done) {
-		// 	let claim = new Claim();
-    //   utils.errorIfNullUndefinedOrEmpty(claim, 'userID', done);
-    // });
-		//
-    // it('should fail if freelanceID is empty, null, or undefined', function(done) {
-    //   let claim = new Claim();
-    //   utils.errorIfNullUndefinedOrEmpty(claim, 'freelanceID', done);
-    // });
 
-  });
+		it('should fail if freelanceID is empty, null, or undefined', function(done) {
+			var User = mongoose.model('User');
+
+			let user = new User();
+			user.username = 'Lanaya';
+			user.password = 'vivaimorti';
+			user.email = 'supersecret';
+			user.save(function(err, user) {
+				should.not.exist(err, 'No error should occur');
+
+				let claim = new Claim();
+				claim.userID = user._id;
+				utils.errorIfNullUndefinedOrEmpty(claim, 'freelanceID', done);
+					done();
+			});
+
+		});
+
+		it('should fail if freelanceID is empty, null, or undefined', function(done) {
+			var Freelance = mongoose.model('Freelance');
+			var User = mongoose.model('User');
+
+			let freelance = new Freelance();
+			freelance.firstName = 'Mark';
+			freelance.familyName = 'Knopfer';
+			freelance.title = 'I am alive yeah';
+			freelance.email = 'ripperoni@pepe.pe';
+			freelance.price = {min: 20, max: 100};
+			freelance.tags = [];
+			freelance.save(function(err, freelance){
+				should.not.exist(err, 'No error should occur');
+
+				let claim = new Claim();
+				claim.freelanceID = freelance._id;
+
+				utils.errorIfNullUndefinedOrEmpty(claim, 'freelanceID', done);
+				done();
+			});
+		});
+
+	});
 });
