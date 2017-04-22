@@ -12,7 +12,15 @@ module.exports = {
       .assert.containsText('a.freelancer-email', 'ilarson0@cnbc.com')
       .assert.containsText('div.freelancer-description', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.')
       .waitForElementPresent('ul.tag-list', 1000)
+      // check review hidden if not logged in
       .waitForElementPresent('div#freelancer-reviews-root', 1000)
+      // login
+      .waitForElementPresent('div#react-login', 1000)
+      .setValue('input[name=login-username]', 'MrSatan')
+      .setValue('input[name=login-password]', '666')
+      .click('input[name=login-submit]')
+      // check review form visible
+      .waitForElementPresent('div#freelancer-logged-reviews-root', 5000)
       // submit review
       .assert.visible('input[name=score]')
       .assert.visible('input[id=score-3]')
