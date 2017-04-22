@@ -142,13 +142,14 @@ class FreelancerClaimForm extends React.Component {
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
           claimid.value = claim._id;
-          let form = document.getElementById('freelancer-claim-form-form');
-          // The submit redirects to a new page and I don't know how to prevent it
-          // Note: e.preventDefault() doesn't work, I'm not an imbecile (or am I?)
-          form.submit();
-          // Delete form
-          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-          freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          
+          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
+
+          ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
+            // Delete form
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          });
         } else {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';

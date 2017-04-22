@@ -14,6 +14,11 @@ const fs = require('fs');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    // create claims folder
+    if (!fs.existsSync('public/claims/')) {
+      fs.mkdirSync('public/claims/');
+    }
+
     let dest = `public/claims/${req.body.claimid}/`;
     if (!fs.existsSync(dest)) {
       fs.mkdirSync(dest);
@@ -32,7 +37,7 @@ router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
 
 router.post('/upload', upload.array('idfile'), function(req, res) {
-  res.sendStatus(200);
+  res.sendStatus(202);
 });
 
 router.post('/new', function(req, res) {
