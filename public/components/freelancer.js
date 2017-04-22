@@ -138,18 +138,19 @@ class FreelancerClaimForm extends React.Component {
           let freelancerClaim = document.getElementById('freelancer-claim');
           freelancerClaim.className = 'bg-yellow';
           let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
-          freelancerClaimStatusName.innerHTML = 'in progress';
+          freelancerClaimStatusName.innerHTML = 'IN PROGRESS';
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
           claimid.value = claim._id;
-          
-          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
 
+          // Submit files
+          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
           ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
             // Delete form
             let freelancerClaimForm = document.getElementById('freelancer-claim-form');
             freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
           });
+
         } else {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
@@ -157,6 +158,7 @@ class FreelancerClaimForm extends React.Component {
       });
     }
   }
+
   render() {
     return (
       <div id="freelancer-claim-form">
@@ -194,6 +196,7 @@ class FreelancerClaim extends React.Component {
       }
     }
   }
+
   render() {
     let bgColor = 'bg-orange';
     let claimBtn = '';
@@ -207,7 +210,7 @@ class FreelancerClaim extends React.Component {
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
-          <div id="freelancer-claim-status-name">{this.props.state}</div>
+          <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
           <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-btn" className={claimBtn}>CLAIM</button>
         </div>
       </div>
