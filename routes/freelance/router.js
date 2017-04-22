@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
+const User = mongoose.model('User');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
@@ -18,11 +19,22 @@ router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); /
 // GET /freelance/new
 router.get('/new', function(req, res, next) {
   if (req.accepts('text/html')) {
-    res.render('freelancer-create', {
-      title: "JobAdvisor - Create Freelancer Profile" ,
-      logged: (req.session.user_id != undefined),
-      userID: req.session.user_id
-    });
+    if(req.session.user_id) {
+       User.findById(req.session.user_id).exec(function(err, user){
+        res.render('freelancer-create', {
+          title: "JobAdvisor - Create Freelancer Profile" ,
+          logged: true,
+          username: user.name,
+          userFreelancer: user.freelancer
+        });
+      });
+    } else {
+      res.render('freelancer-create', {
+        title: "JobAdvisor - Create Freelancer Profile" ,
+        logged: false
+      });
+    }
+
   } else res.sendStatus(400);
 });
 

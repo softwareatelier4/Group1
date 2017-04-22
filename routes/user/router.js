@@ -11,7 +11,7 @@ const User = mongoose.model('User');
 const Freelance = mongoose.model('Freelance');
 
 // Supported methods.
-router.all('/', middleware.supportedMethods('POST, OPTIONS'));
+router.all('/', middleware.supportedMethods('GET, POST, OPTIONS'));
 router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 
 
@@ -77,6 +77,30 @@ router.get('/:username', function(req, res, next) {
   });
 });
 
+/**
+ *  GET /user
+ *  gets the info of the currently logged in user (based on session)
+ *  route used to making it more straightforward to access data from client
+ */
+router.get('/', function(req, res, next) {
+  if(!req.session.user_id) {
+    res.status(401).end();
+  }
+
+  User.findById(req.session.user_id).select("-password").exec(function(err, user){
+    if (err) {
+      res.status(400).json(utils.formatErrorMessage(err));
+    } else if (!user) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Not Found",
+      });
+    } else {
+      let found = Object.create(user);
+      res.status(200).json(found).end();
+    }
+  });
+});
 
 // POST /user
 router.post('/', function(req, res, next) {

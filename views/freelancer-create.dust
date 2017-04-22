@@ -21,8 +21,11 @@
     </div>
 
     <!-- React container -->
-    <div id='freelancer-root' data-user-id={userID}></div>
-
+    {?logged}
+      <div id='freelancer-root' data-username={username} data-user-freelancer={userFreelancer}></div>
+    {:else}
+      <div id='freelancer-root'></div>
+    {/logged}
 
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
