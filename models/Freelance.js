@@ -14,6 +14,8 @@
 * price						Object			Price range of the freelance e.g. {min: 12, max: 24}
 * reviews					[ObjectID]		Array containing IDs of all reviews
 * tags						Array			Array of Strings. Tags used for search
+* state						enum			represent if the user has been claimed or not
+* owner						ObjectID	User that owns the profile
 *
 * _id (ObjectID) will be added automatically by mongoose if not specified
 */
@@ -24,6 +26,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require('./Review');
 require('./Tag');
 require('./Category');
+require('./User');
 const Review = mongoose.model('Review');
 
 const Freelance = exports.Freelance = new mongoose.Schema({
@@ -38,6 +41,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		phone					: { type: String },
 		price					: { type: Object },
 		state					: { type: String, enum: ['verified', 'in progress', 'not verified'], default: 'not verified' },
+		owner					: { type: ObjectID, ref: "User"},
 		//we recompute this on every review
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
