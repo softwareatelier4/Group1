@@ -16,7 +16,7 @@ describe('User-post test: ', function() {
   describe('POST /user', function() {
 
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     // TEST: correct post
     it('app should get answer 201 on POST /user with new username and no freelancer', function(done) {

@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
+const User = mongoose.model('User');
+
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
@@ -45,10 +47,20 @@ router.get('/:freelanceid', function(req, res, next) {
         }
       });
     } else if (req.accepts('text/html')) {
-			res.render('freelancer', {
-				title: "JobAdvisor",
-        logged: (req.session.user_id != undefined)
-			});
+      if(req.session.user_id) { // logged in user
+        User.findById(req.session.user_id).exec(function(err, user){
+          res.render('freelancer', {
+    				title: "JobAdvisor",
+            logged: true,
+            username: user.username,
+    			});
+        });
+      } else {
+        res.render('freelancer', {
+  				title: "JobAdvisor",
+          logged: false
+  			});
+      }
     } else res.sendStatus(400);
   } else res.sendStatus(400);
 });

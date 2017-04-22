@@ -32,8 +32,8 @@ describe('CATEGORY : ', function(done) {
     var Category = mongoose.model('Category');
 
     before(function(done) {
-      // connect and drop db
-      utils.connectAndDropDb(function(err) {
+      // drop db
+      utils.dropDb(function(err) {
         if (err) return done(err);
         done();
       });

@@ -15,7 +15,7 @@ describe('Search test: ', function() {
 
   describe('GET /search?keyword=', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('Should respond with a 200 and return the correct data', function(done) {
       request(app)

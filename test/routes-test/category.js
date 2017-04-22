@@ -22,7 +22,7 @@ describe('Category test: ', function() {
   describe('GET /category/', function() {
 
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should respond with a 200 and return correct data', function(done) {
       request(app)

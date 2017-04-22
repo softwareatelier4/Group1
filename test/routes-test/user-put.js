@@ -16,7 +16,7 @@ describe('User-put test: ', function() {
 
   describe('PUT /user/:username', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should respond with 204 after a successful update of the freelancer field', function(done) {
       request(app)
