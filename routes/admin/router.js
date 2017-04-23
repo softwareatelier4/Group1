@@ -22,6 +22,10 @@ const adminPassword = 'asd';
 
 // Supported methods
 router.all('/', middleware.supportedMethods('GET, POST, DELETE, OPTIONS'));
+router.all('/login', middleware.supportedMethods('GET, OPTIONS'));
+router.all('/files/:claimid', middleware.supportedMethods('GET, OPTIONS'));
+router.all('/category', middleware.supportedMethods('POST, PUT, DELETE, OPTIONS'));
+router.all('/claim', middleware.supportedMethods('DELETE, OPTIONS'));
 
 router.get('/login', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {

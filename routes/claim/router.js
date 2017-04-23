@@ -33,7 +33,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage : storage });
 
 // Supported methods.
-router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+router.all('/', middleware.supportedMethods('GET, POST, OPTIONS'));
+router.all('/upload', middleware.supportedMethods('POST, OPTIONS'));
 router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
 
 router.post('/upload', upload.array('idfile'), function(req, res) {
