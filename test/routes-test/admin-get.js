@@ -33,18 +33,72 @@ describe('Admin-get test: ', function() {
         });
     });
 
-    it('should respond with 400 if username is wrong', function(done) {
+    it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .get('/admin/login?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
-    it('should respond with 400 if password is wrong', function(done) {
+    it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .get('/admin/login?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
+    });
+
+  });
+
+  describe('GET /admin/files/:claimid', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    // WRONG
+    it('should respond with 401 if username is wrong', function(done) {
+      request(app)
+        .get('/admin/files/CLAIMID?username=wrongusername&password=asd')
+        .set('Ajax', 'true')
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 401 if password is wrong', function(done) {
+      request(app)
+        .get('/admin/files/CLAIMID?username=admin&password=wrongpassword')
+        .set('Ajax', 'true')
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 400 if given wrong claim id', function(done) {
+      request(app)
+        .get('/admin/files/wrongclaimid?username=admin&password=asd')
+        .set('Ajax', 'true')
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "no file directory for this claim id");
+            done();
+          }
+        });
     });
 
   });

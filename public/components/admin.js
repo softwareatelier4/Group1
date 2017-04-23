@@ -56,12 +56,14 @@ class CardClaim extends React.Component {
     let claim = this.props.claim;
     let userLink = `/user/${claim.userID._id}`;
     let freelancerLink = `/freelance/${claim.freelanceID._id}`;
+    let query = `?username=${g_username}&password=${g_password}&user=${claim.userID.username}&freelancer=${claim.freelanceID.firstName}-${claim.freelanceID.familyName}`;
+    let downloadPath = `/admin/files/${this.props.claim._id}${query}`;
     return (
       <div className="card-claim">
         <div className="card-claim-row">
-          <div><a href={userLink} target="_blank">{claim.userID.username}</a></div>
+          <div><a target="_blank">{claim.userID.username}</a></div>
           <div><a href={freelancerLink} target="_blank">{claim.freelanceID.firstName} {claim.freelanceID.familyName}</a></div>
-          <div><span>Files...</span></div>
+          <a href={downloadPath} download>Download files</a>
           <button onClick={this.respond.bind(this)}>Respond</button>
         </div>
       </div>
@@ -218,12 +220,10 @@ class AdminView extends React.Component {
         <div id="admin-menu">
           <button id="admin-btn-categories" className="selected" onClick={this.select('categories')}>Categories</button>
           <button id="admin-btn-claims" onClick={this.select('claims')}>Claims</button>
-          <button id="admin-btn-settings" onClick={this.select('settings')}>Settings</button>
         </div>
         <div id="admin-content">
           <ContainerCategories categories={this.props.data.categories} />
           <ContainerClaims claims={this.props.data.claims} />
-          <div id="admin-settings">SETTINGS</div>
         </div>
       </div>
     );
@@ -269,10 +269,10 @@ function renderAdminView(data) {
 }
 
 function renderPage() {
-  // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  g_username = 'admin';
-  g_password = 'asd';
-  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
+  ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
+  // g_username = 'admin';
+  // g_password = 'asd';
+  // ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();

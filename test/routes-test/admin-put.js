@@ -37,25 +37,25 @@ describe('Admin-put test: ', function() {
         });
     });
 
-    it('should respond with 400 if no id is given', function(done) {
+    it('should respond with 401 if no id is given', function(done) {
       request(app)
         .put('/admin/category?username=admin&password=asd')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
-    it('should respond with 400 if username is wrong', function(done) {
+    it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .put('/admin/category?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
-    it('should respond with 400 if password is wrong', function(done) {
+    it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .put('/admin/category?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
   });

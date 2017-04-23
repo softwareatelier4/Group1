@@ -8,6 +8,7 @@ const rootUrl = require("../../config").url;
 const utils = require('../utils');
 const path = require('path');
 const fs = require('fs')
+const zipper = require('zip-folder');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
@@ -21,6 +22,10 @@ const adminPassword = 'asd';
 
 // Supported methods
 router.all('/', middleware.supportedMethods('GET, POST, DELETE, OPTIONS'));
+router.all('/login', middleware.supportedMethods('GET, OPTIONS'));
+router.all('/files/:claimid', middleware.supportedMethods('GET, OPTIONS'));
+router.all('/category', middleware.supportedMethods('POST, PUT, DELETE, OPTIONS'));
+router.all('/claim', middleware.supportedMethods('DELETE, OPTIONS'));
 
 router.get('/login', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
@@ -42,7 +47,38 @@ router.get('/login', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
+  }
+});
+
+router.get('/files/:claimid', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    let filesDir = path.resolve(__dirname, '../../public/claims/', req.params.claimid);
+    let filesZip = filesDir + '-' + req.query.user + '-' + req.query.freelancer + '.zip';
+    if (!fs.existsSync(filesDir)) {
+      res.status(400).json({ error : 'no file directory for this claim id' });
+    } else {
+      let files = fs.readdirSync(filesDir);
+      if (files.length == 0) {
+        res.status(400).json({ error : 'file directory is empty' }); // should never happen
+      } else {
+        zipper(filesDir, filesZip, function(err) {
+          if (err) {
+            res.status(500).json({ error : 'failed to zip files' });
+          } else {
+            res.download(filesZip, function(err) {
+              if (err) {
+                res.status(500).json({ error : 'failed send zipped files' });
+              } else {
+                fs.unlinkSync(filesZip);
+              }
+            });
+          }
+        });
+      }
+    }
+  } else {
+    res.status(401).json({ error : 'wrong username or password' });
   }
 });
 
@@ -69,7 +105,7 @@ router.post('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
@@ -86,12 +122,11 @@ router.put('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
 router.delete('/category', function(req, res) {
-  // TODO: delete category (and remove it from all freelancers)
   if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {
     Category.findById(req.query.id, function(err, category) {
       if (err) {
@@ -113,7 +148,7 @@ router.delete('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
@@ -140,6 +175,7 @@ router.delete('/claim', function(req, res) {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {
                   freelancer.state = 'verified';
+                  freelancer.owner = claim.userID;
                   user.claiming = false;
                 } else if (req.query.choice === 'reject') {
                   freelancer.state = 'not verified';
@@ -201,7 +237,7 @@ router.delete('/claim', function(req, res) {
       }
     });
   } else {
-    res.status(400).json({ error : 'wrong username or password' });
+    res.status(401).json({ error : 'wrong username or password' });
   }
 });
 
