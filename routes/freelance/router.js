@@ -11,7 +11,6 @@ const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
 const User = mongoose.model('User');
 
-
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete later
@@ -20,10 +19,23 @@ router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); /
 // GET /freelance/new
 router.get('/new', function(req, res, next) {
   if (req.accepts('text/html')) {
-    res.render('freelancer-create', {
-      title: "JobAdvisor - Create Freelancer Profile" ,
-      logged: (req.session.user_id != undefined)
-    });
+    if(req.session.user_id) {
+       User.findById(req.session.user_id).exec(function(err, user){
+        res.render('freelancer-create', {
+          title: "JobAdvisor - Create Freelancer Profile" ,
+          logged: true,
+          username: user.username,
+          userFreelancer: user.freelancer,
+          claiming: user.claiming
+        });
+      });
+    } else {
+      res.render('freelancer-create', {
+        title: "JobAdvisor - Create Freelancer Profile" ,
+        logged: false
+      });
+    }
+
   } else res.sendStatus(400);
 });
 
@@ -77,21 +89,21 @@ router.post('/:freelanceid/review', function(req, res, next) {
         });
       } else {
         newReview.save(function(err, saved) {
+          if (err) {
+            res.status(400).json(utils.formatErrorMessage(err));
+          } else {
+            // res.status(201).json(saved);
+            freelance.reviews.push(newReview);
+            freelance.save(function(err, saved) {
               if (err) {
-                res.status(400).json(utils.formatErrorMessage(err));
-              } else {
-                // res.status(201).json(saved);
-                freelance.reviews.push(newReview);
-                freelance.save(function(err, saved) {
-                  if (err) {
-                    res.status(400).json({
-                      message: "Could not save Review in Freelance."
-                    });
-                  } else {
-                    res.status(201).json(saved);
-                  }
+                res.status(400).json({
+                  message: "Could not save Review in Freelance."
                 });
+              } else {
+                res.status(201).json(saved);
               }
+            });
+          }
         });
       }
     });
