@@ -37,8 +37,8 @@ module.exports = {
       .pause(1000)
       .acceptAlert()
       // login
-      .setValue('input[name=login-username]', 'MrSatan')
-      .setValue('input[name=login-password]', '666')
+      .setValue('input[name=login-username]', 'Bilbo')
+      .setValue('input[name=login-password]', 'baggins')
       .click('input[name=login-submit]')
       .waitForElementPresent('button#freelancer-myself', 2000)
       .click('button#freelancer-myself')

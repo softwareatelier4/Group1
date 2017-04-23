@@ -22,7 +22,11 @@
 
     <!-- React container -->
     {?logged}
-      <div id='freelancer-root' data-username={username} data-user-freelancer={userFreelancer} data-claiming={claiming}></div>
+      <div id='freelancer-root'
+        data-username={username}
+        {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}
+        data-claiming={claiming}>
+      </div>
     {:else}
       <div id='freelancer-root'></div>
     {/logged}

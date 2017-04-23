@@ -217,38 +217,41 @@ class FreelancerClaimForm extends React.Component {
 class FreelancerTypeButtons extends React.Component {
   constructor(props) {
     super(props);
-    this.showForm = this.showForm.bind(this);
-  }
-
-  showForm(evt) {
-    let isMyself = evt.target.id == "freelancer-myself";
-    // check user is logged in
-    if(isMyself && !document.getElementById('freelancer-root').getAttribute('data-username')) {
-      alert("You need to login to create your own freelancer profile");
-      return;
-    // check no claim in progress
-    } else if(isMyself
-        && document.getElementById('freelancer-root').getAttribute('data-claiming')) {
-        alert("You have a claiming request in progress");
-        return;
-    // check not already freelancer
-    } else if(isMyself
-      && document.getElementById('freelancer-root').getAttribute('data-user-freelancer')) {
-      alert("You already have your own freelancer profile");
-      return;
-    }
-
-    doAjaxAndRenderForm(isMyself);
   }
 
   render() {
     return (
       <div id="freelancer-type">
-        <button id="freelancer-other" onClick={this.showForm}>Add someone else</button>
-        <button id="freelancer-myself" onClick={this.showForm}>Add yourself</button>
+        <button id="freelancer-other" onClick={showForm}>Add someone else</button>
+        <button id="freelancer-myself" onClick={showForm}>Add yourself</button>
       </div>
     );
   }
+}
+
+/**
+ * Show correct form version
+ * @param  {Object} evt either click event of boolean (if called directly)
+ */
+function showForm(evt) {
+  let isMyself = (evt == true) || (evt.target && evt.target.id == "freelancer-myself");
+  // check user is logged in
+  if(isMyself && !document.getElementById('freelancer-root').getAttribute('data-username')) {
+    alert("You need to login to create your own freelancer profile");
+    window.location = '/freelance/new';
+  // check no claim in progress
+  } else if(isMyself
+    && document.getElementById('freelancer-root').getAttribute('data-claiming')) {
+    alert("You have a claiming request in progress");
+    window.location = '/freelance/new';
+  // check not already freelancer
+  } else if(isMyself
+    && document.getElementById('freelancer-root').getAttribute('data-user-freelancer')) {
+    alert("You already have your own freelancer profile");
+    window.location = '/freelance/new';
+  }
+
+  doAjaxAndRenderForm(isMyself);
 }
 
 function renderFreelancerTypeButtons() {
@@ -260,6 +263,18 @@ function renderFreelancerTypeButtons() {
 
 /**
  * Render components function
- */
-//TODO check url #myself
-renderFreelancerTypeButtons()
+ * 
+ * if #myself or #other set in URL, go directly to respective form
+ * (checks still in place for #myself)
+ * */
+if(window.location.hash) {
+  let hash = window.location.hash.substring(1);
+  switch (hash) {
+    case 'myself':
+      showForm(true); break;
+    case 'other':
+      showForm(false); break;
+  }
+} else {
+  renderFreelancerTypeButtons();
+}
