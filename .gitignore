@@ -7,3 +7,4 @@ coverage/coverage.json
 test/nightwatch-reports/
 npm-debug.log
 test/nightwatch-screenshots/
+public/claims
