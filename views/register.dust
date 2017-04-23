@@ -14,6 +14,7 @@
         <div id="react-login"></div>
         <div id="react-register"></div>
       {:else}
+        <div id="react-username">{username}</div>
         <div id="react-logout"></div>
       {/logged}
       <!-- Create -->
