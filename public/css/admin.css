@@ -1,0 +1,201 @@
+input {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+input.focus,
+input:focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+button {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 4px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+button:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
+}
+
+#react-main {
+  display: flex;
+  justify-content: center;
+}
+
+#login-form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 35%;
+}
+
+#login-form-username,
+#login-form-password,
+#login-form-btn,
+#login-form-message {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+#login-form-message {
+  text-align: center;
+  color: red;
+}
+
+#admin-view {
+  max-width: 800px;
+  width: 80%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#admin-menu {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 30px;
+}
+
+#admin-menu > button {
+  flex: 1;
+  height: 50px;
+  border-bottom: solid 4px var(--accent-color);
+}
+
+#admin-menu > button:hover {
+  flex: 1;
+  border-bottom: solid 4px var(--accent-hover);
+}
+
+#admin-menu > button:active {
+  border-top: 0;
+  border-bottom: solid 4px var(--accent-hover);
+}
+
+#admin-menu > button.selected {
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+#admin-content {
+  width: 100%;
+}
+
+#admin-content > div {
+  display: none;
+}
+
+#admin-content > div.selected {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.card-category {
+  width: 100%;
+  border-bottom: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  background-color: var(--basic-white);
+}
+
+.card-category > input,
+.card-category-name {
+  width: 250px;
+  height: 35px;
+}
+
+.card-category > input {
+  border: 1px solid black;
+}
+
+.card-category > button {
+  width: 100px;
+  height: 35px;
+  border: none;
+}
+
+.card-category-name > button {
+  width: 50px;
+  margin-right: 10px;
+  border: none;
+}
+
+.card-category-name,
+#new-category-message {
+  display: flex;
+  align-items: center;
+}
+
+#new-category-message {
+  flex: 1;
+  padding-left: 20px;
+  color: red;
+}
+
+.card-claim {
+  margin-bottom: 10px;
+}
+
+.card-claim button {
+  border: 1px solid black;
+  padding: 0;
+}
+
+.card-claim button:hover,
+.card-claim button:active {
+  border: 1px solid black;
+}
+
+.card-claim-row {
+  display: flex;
+  flex-flow: row;
+  background-color: var(--basic-white);
+  border: 1px solid black;
+}
+
+.card-claim-row > * {
+  height: 30px;
+  border: 1px solid black;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.card-claim-comment {
+  width: 100%;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+}
+
+.card-claim-comment > textarea {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 10px;
+}

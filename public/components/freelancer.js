@@ -15,12 +15,16 @@ function renderComponent(data) {
       {tag.tagName}
     </li>
   );
+  let categoryName = 'Other';
+  if (data.category) {
+    categoryName = data.category.categoryName;
+  }
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category={data.category.categoryName}
+      category={categoryName}
       avgScore={data.avgScore}
       reviewCount={data.reviews.length}
       price={data.price}
@@ -30,6 +34,8 @@ function renderComponent(data) {
       email={data.email}
       tags={listTags}
       urlPicture = {data.urlPicture}
+      _id={data._id}
+      state={data.state}
     />,
 
     document.getElementById('freelancer-root')
@@ -57,14 +63,25 @@ function renderReviews(data) {
     />
   );
 
-  ReactDOM.render(
-    <div className="freelancer-reviews">
-      <ReviewForm />
-      {listReviews}
-    </div>,
+  if(document.getElementById('freelancer-logged-reviews-root')) { // if user logged in, show review form
+    ReactDOM.render(
+      <div className="freelancer-reviews">
+        <ReviewForm />
+        {listReviews}
+      </div>,
 
-    document.getElementById('freelancer-reviews-root')
-  );
+      document.getElementById('freelancer-logged-reviews-root')
+    );
+  }  else if(document.getElementById('freelancer-reviews-root')) {
+    ReactDOM.render(
+      <div className="freelancer-reviews">
+        <p>Login to be able to write a review</p>
+        {listReviews}
+      </div>,
+
+      document.getElementById('freelancer-reviews-root')
+    );
+  }
 }
 
 class Name extends React.Component {
@@ -89,6 +106,10 @@ class FreelancerView extends React.Component {
   render() {
     return (
       <div className="freelancer-view">
+        <FreelancerClaim
+          _id={this.props._id}
+          state={this.props.state}
+        />
         <FreelancerHeader
           urlPicture={this.props.urlPicture || ""}
           first={this.props.first}
@@ -102,6 +123,100 @@ class FreelancerView extends React.Component {
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
         <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags}/>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaimForm extends React.Component {
+  claim() {
+    let files = document.getElementById('freelancer-claim-form-files').files;
+    if (files.length === 0) {
+      let message = document.getElementById('freelancer-claim-form-message');
+      message.innerHTML = 'No file was given';
+    } else {
+      ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claim) {
+        if (claim._id) {
+          let claimBtn = document.getElementById('freelancer-claim-toggle');
+          claimBtn.classList.add('hidden');
+          let freelancerClaim = document.getElementById('freelancer-claim');
+          freelancerClaim.className = 'bg-yellow';
+          let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
+          freelancerClaimStatusName.innerHTML = 'IN PROGRESS';
+          // Send files
+          let claimid = document.getElementById('freelancer-claim-form-claimid');
+          claimid.value = claim._id;
+
+          // Submit files
+          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
+          ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
+            // Delete form
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          });
+
+        } else {
+          let message = document.getElementById('freelancer-claim-form-message');
+          message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
+        }
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div id="freelancer-claim-form">
+        <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
+          <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
+          <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+        </form>
+        <button id="freelancer-claim-btn" onClick={this.claim.bind(this)}>Claim</button>
+        <div id="freelancer-claim-form-message"></div>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaim extends React.Component {
+  toggleForm(e) {
+    this.isClaiming = false;
+    return function(e) {
+      if (this.props.state === 'not verified') {
+        let claimBtn = document.getElementById('freelancer-claim-toggle');
+        let freelancerClaim = document.getElementById('freelancer-claim');
+        if (!this.isClaiming) {
+          this.isClaiming = true;
+          claimBtn.innerHTML = 'CANCEL';
+          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} />, freelancerClaim);
+        } else {
+          this.isClaiming = false;
+          claimBtn.innerHTML = 'CLAIM';
+          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+          if (freelancerClaimForm) {
+            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          }
+        }
+      }
+    }
+  }
+
+  render() {
+    let bgColor = 'bg-orange';
+    let claimBtn = '';
+    if (this.props.state === 'verified') {
+      bgColor = 'bg-green';
+      claimBtn = 'hidden';
+    } else if (this.props.state === 'in progress') {
+      bgColor = 'bg-yellow';
+      claimBtn = 'hidden';
+    }
+    return (
+      <div id="freelancer-claim" className={bgColor}>
+        <div id="freelancer-claim-status">
+          <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
+          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn}>CLAIM</button>
+        </div>
       </div>
     );
   }
@@ -147,7 +262,7 @@ class ReviewForm extends React.Component {
     const formData = {};
     formData['score'] = form.elements['score'].value;
     formData['text'] = form.elements['comment'].value;
-    formData['author'] = "User to be implemented";
+    formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
 
     ajaxRequest("POST", window.location + "/review", {}, formData, function() {
       /**
@@ -218,4 +333,12 @@ class Tags extends React.Component {
       </ul>
     )
   }
+}
+
+// Shitty tweak to append React element
+function addReactElement(element, container) {
+  let div = container.appendChild(document.createElement('div'));
+  ReactDOM.render(element, div);
+  div.parentNode.appendChild(div.firstChild);
+  div.parentNode.removeChild(div);
 }
