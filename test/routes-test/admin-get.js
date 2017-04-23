@@ -33,18 +33,18 @@ describe('Admin-get test: ', function() {
         });
     });
 
-    it('should respond with 400 if username is wrong', function(done) {
+    it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .get('/admin/login?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
-    it('should respond with 400 if password is wrong', function(done) {
+    it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .get('/admin/login?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(400, done);
+        .expect(401, done);
     });
 
   });
@@ -54,11 +54,11 @@ describe('Admin-get test: ', function() {
     after(utils.dropDbAndCloseConnection);
 
     // WRONG
-    it('should respond with 400 if username is wrong', function(done) {
+    it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .get('/admin/files/CLAIMID?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(400)
+        .expect(401)
         .end(function(err, res) {
           if (err) {
             done(err);
@@ -70,11 +70,11 @@ describe('Admin-get test: ', function() {
     });
 
     // WRONG
-    it('should respond with 400 if password is wrong', function(done) {
+    it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .get('/admin/files/CLAIMID?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(400)
+        .expect(401)
         .end(function(err, res) {
           if (err) {
             done(err);

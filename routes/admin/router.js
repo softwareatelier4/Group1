@@ -43,7 +43,7 @@ router.get('/login', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
@@ -74,7 +74,7 @@ router.get('/files/:claimid', function(req, res) {
       }
     }
   } else {
-    res.status(400).json({ error : 'wrong username or password' });
+    res.status(401).json({ error : 'wrong username or password' });
   }
 });
 
@@ -101,7 +101,7 @@ router.post('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
@@ -118,12 +118,11 @@ router.put('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
 router.delete('/category', function(req, res) {
-  // TODO: delete category (and remove it from all freelancers)
   if (adminUsername === req.query.username && adminPassword === req.query.password && req.query.id) {
     Category.findById(req.query.id, function(err, category) {
       if (err) {
@@ -145,7 +144,7 @@ router.delete('/category', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
@@ -234,7 +233,7 @@ router.delete('/claim', function(req, res) {
       }
     });
   } else {
-    res.status(400).json({ error : 'wrong username or password' });
+    res.status(401).json({ error : 'wrong username or password' });
   }
 });
 
