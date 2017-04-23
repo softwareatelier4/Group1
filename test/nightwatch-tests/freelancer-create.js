@@ -7,6 +7,9 @@ module.exports = {
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#freelancer-root', 10000)
+      // add someone else
+      .click('button#freelancer-other')
+      .assert.containsText('h1#freelancer-form-title', 'Create a freelancer profile for someone else')
       .assert.visible('input[name=first-name]')
       .assert.visible('input[name=family-name]')
       .assert.visible('input[name=job-title]')
@@ -26,6 +29,29 @@ module.exports = {
       .assert.containsText('span.freelancer-category', 'Engineering')
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
       .assert.containsText('a.freelancer-email', 'test@night.watch')
+
+      // add yourself
+      .url( config.baseURL + '/freelance/new')
+      // test alert if not logged in
+      .click('button#freelancer-myself')
+      .pause(1000)
+      .acceptAlert()
+      // login
+      .setValue('input[name=login-username]', 'Bilbo')
+      .setValue('input[name=login-password]', 'baggins')
+      .click('input[name=login-submit]')
+      .waitForElementPresent('button#freelancer-myself', 2000)
+      .click('button#freelancer-myself')
+      .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
+      .setValue('input[name=first-name]', 'Bilbo Baggins')
+      .setValue('input[name=job-title]', 'Tester')
+      .click('select[name="category"] option[value="58cc4b15fc13ae5ec7000123"]')
+      .setValue('input[name=address]', 'USI, Lugano')
+      .setValue('input[name=email]', 'test@bilbo.myself')
+      .setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
+      .click('input[name=submit-button]')
+      .pause(2000)
+      .assert.containsText('div#freelancer-claim-status-name', 'IN PROGRESS')
       .end();
   }
 };

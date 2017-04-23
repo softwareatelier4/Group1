@@ -135,8 +135,8 @@ class FreelancerClaimForm extends React.Component {
       let message = document.getElementById('freelancer-claim-form-message');
       message.innerHTML = 'No file was given';
     } else {
-      ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claim) {
-        if (claim._id) {
+      ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claimData) {
+        if (claimData._id) {
           let claimBtn = document.getElementById('freelancer-claim-toggle');
           claimBtn.classList.add('hidden');
           let freelancerClaim = document.getElementById('freelancer-claim');
@@ -145,7 +145,7 @@ class FreelancerClaimForm extends React.Component {
           freelancerClaimStatusName.innerHTML = 'IN PROGRESS';
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
-          claimid.value = claim._id;
+          claimid.value = claimData._id;
 
           // Submit files
           let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
