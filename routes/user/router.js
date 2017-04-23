@@ -14,6 +14,30 @@ const Freelance = mongoose.model('Freelance');
 router.all('/', middleware.supportedMethods('GET, POST, OPTIONS'));
 router.all('/:username', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 
+/**
+ * Registration
+ *
+ * GET /user/register
+ * just renders the page
+*/
+router.get('/register', function(req, res) {
+  if(req.session.user_id) { // logged in user
+    User.findById(req.session.user_id).exec(function(err, user){
+      res.render('register', {
+        title: "JobAdvisor",
+        logged: true,
+        username: user.username,
+      });
+    });
+  } else {
+    res.render('register', {
+      title: "JobAdvisor",
+      logged: false
+    });
+  }
+});
+
+// End of registration
 
 /**
  * Login and logout
