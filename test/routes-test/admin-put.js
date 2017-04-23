@@ -41,21 +41,45 @@ describe('Admin-put test: ', function() {
       request(app)
         .put('/admin/category?username=admin&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "no category id given");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .put('/admin/category?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .put('/admin/category?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
   });

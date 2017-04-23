@@ -25,25 +25,49 @@ describe('Admin-delete test: ', function() {
         .expect(204, done);
     });
 
-    it('should respond with 401 if no id is given', function(done) {
+    it('should respond with 400 if no id is given', function(done) {
       request(app)
         .delete('/admin/category?username=admin&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "no category id given");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .delete('/admin/category?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .delete('/admin/category?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
   });
@@ -55,16 +79,31 @@ describe('Admin-delete test: ', function() {
     var Cookies;
     var claimId;
 
-    it('should respond with 400 if wrong id is given', function(done) {
+    it('should respond with 500 if invelid claim id is given', function(done) {
       request(app)
         .delete('/admin/claim?username=admin&password=asd&claimid=wrongid')
         .set('Ajax', 'true')
-        .expect(400)
+        .expect(500)
         .end(function(err, res) {
           if (err) {
             done(err);
           } else {
-            res.body.should.have.property("error", "invalid claim id");
+            res.body.should.have.property("error", "database error while finding claim");
+            done();
+          }
+        });
+    });
+    
+    it('should respond with 404 if non-existent claim id is given', function(done) {
+      request(app)
+        .delete('/admin/claim?username=admin&password=asd&claimid=000000000000000000000000')
+        .set('Ajax', 'true')
+        .expect(404)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "claim not found");
             done();
           }
         });
