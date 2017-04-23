@@ -1,5 +1,6 @@
 /**
  * Do ajax request
+ * NOTE: set `headers` to `null` when sending a formData object (headers and parsing done automatically by the browser)
  * @param  {String}   method
  * @param  {String}   url
  * @param  {Object}   headers  `key` : `value` pair for each header
@@ -29,6 +30,11 @@ function ajaxRequest(method, url, headers, data, callback) {
 
 	request.setRequestHeader("Accept", "application/json");
 
+	// if header is null, do not set anything
+	if (headers != null && (method === "POST" || method === "PUT")) {
+		request.setRequestHeader("Content-Type", "application/json");
+	}
+
 	// add custom headers
 	if (headers) {
     for (header in headers) {
@@ -36,10 +42,10 @@ function ajaxRequest(method, url, headers, data, callback) {
 		}
   }
 
-	if (method === "POST" || method === "PUT") {
-		request.setRequestHeader("Content-Type", "application/json");
+	if(headers == null) {
+		request.send(data)
+	} else {
+		// send body data
+		request.send(JSON.stringify(data));
 	}
-
-	// send body data
-	request.send(JSON.stringify(data));
 }
