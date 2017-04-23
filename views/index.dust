@@ -13,6 +13,7 @@
       <!-- Login - show only if not already logged -->
       {^logged}
         <div id="react-login"></div>
+        <div id="react-register"></div>
       {:else}
         <div id="react-logout"></div>
       {/logged}
