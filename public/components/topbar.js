@@ -100,12 +100,7 @@ function renderLogoutButton() {
  */
 class RegisterButton extends React.Component {
   register() {
-    alert("memes");
-    // ajaxRequest("GET", "/user/logout", {}, {}, function(status) {
-    //   if(status == 202) {
-    //     window.location = '/';
-    //   }
-    // });
+    window.location = '/user/register';
   }
 
   render () {
