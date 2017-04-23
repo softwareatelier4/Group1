@@ -49,32 +49,28 @@ router.get('/login', function(req, res) {
 
 router.get('/files/:claimid', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
-    if (!req.params.claimid) {
-      res.status(400).json({ error : 'missing claim id' });
+    let filesDir = path.resolve(__dirname, '../../public/claims/', req.params.claimid);
+    let filesZip = filesDir + '-' + req.query.user + '-' + req.query.freelancer + '.zip';
+    if (!fs.existsSync(filesDir)) {
+      res.status(400).json({ error : 'no file directory for this claim id' });
     } else {
-      let filesDir = path.resolve(__dirname, '../../public/claims/', req.params.claimid);
-      let filesZip = filesDir + '-' + req.query.user + '-' + req.query.freelancer + '.zip';
-      if (!fs.existsSync(filesDir)) {
-        res.status(400).json({ error : 'no file directory for this claim id' });
+      let files = fs.readdirSync(filesDir);
+      if (files.length == 0) {
+        res.status(400).json({ error : 'file directory is empty' }); // should never happen
       } else {
-        let files = fs.readdirSync(filesDir);
-        if (files.length == 0) {
-          res.status(400).json({ error : 'file directory is empty' });
-        } else {
-          zipper(filesDir, filesZip, function(err) {
-            if (err) {
-              res.status(500).json({ error : 'failed to zip files' });
-            } else {
-              res.download(filesZip, function(err) {
-                if (err) {
-                  res.status(500).json({ error : 'failed send zipped files' });
-                } else {
-                  fs.unlinkSync(filesZip);
-                }
-              });
-            }
-          });
-        }
+        zipper(filesDir, filesZip, function(err) {
+          if (err) {
+            res.status(500).json({ error : 'failed to zip files' });
+          } else {
+            res.download(filesZip, function(err) {
+              if (err) {
+                res.status(500).json({ error : 'failed send zipped files' });
+              } else {
+                fs.unlinkSync(filesZip);
+              }
+            });
+          }
+        });
       }
     }
   } else {
@@ -176,6 +172,7 @@ router.delete('/claim', function(req, res) {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {
                   freelancer.state = 'verified';
+                  freelancer.owner = claim.userID;
                   user.claiming = false;
                 } else if (req.query.choice === 'reject') {
                   freelancer.state = 'not verified';
