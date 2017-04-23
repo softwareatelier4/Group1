@@ -111,6 +111,20 @@ router.post('/', function(req, res, next) {
 
 // PUT /user/:username
 router.put('/:username', function(req, res, next) {
+  // cannot put freelancer through this route. Use the /claim route instead.
+  if (req.body.freelancer) {
+    let err = {
+      "message" : "Unsupported action",
+      "errors" : {
+        "1" : {
+          "message" : "Cannot set `freelancer` field of user `" + req.params.username + "` using `PUT /user/:username`.",
+        },
+      },
+    }
+    res.status(400).json(utils.formatErrorMessage(err));
+  }
+
+  // normal execution
   User.findOne({ username : req.params.username }).exec(function(err, user){
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
@@ -120,33 +134,16 @@ router.put('/:username', function(req, res, next) {
         message: "Not Found",
       });
     } else {
-      // Update given fields
+      // Update given fields (not freelancer)
       user.username = req.body.username || user.username;
       user.password = req.body.password || user.password;
       user.email = req.body.email || user.email;
-      user.freelancer = req.body.freelancer || user.freelancer;
-      if (req.body.freelancer) {
-        utils.checkFreelancerExistsAndIsNotClaimed(req.body.freelancer, function(exists) {
-          if (exists) {
-            user.save(function (err, updatedUser) {
-              if (err) res.status(400).json(utils.formatErrorMessage(err));
 
-              // update the state of the freelancer
-              Freelance.update({ _id: updatedUser.freelancer }, { $set: { state: 'verified' }}, function(err, raw) {
-                if (err) res.status(400).json(utils.formatErrorMessage(err));
-                res.status(204).end();
-              });
-            });
-          } else {
-            res.status(400).end();
-          }
-        });
-      } else {
-        user.save(function (err, updated) {
-          if (err) res.status(400).json(utils.formatErrorMessage(err));
-          res.status(204).end();
-        });
-      }
+      // save
+      user.save(function (err, updated) {
+        if (err) res.status(400).json(utils.formatErrorMessage(err));
+        res.status(204).end();
+      });
     }
   });
 });
