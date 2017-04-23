@@ -8,6 +8,7 @@ const rootUrl = require("../../config").url;
 const utils = require('../utils');
 const path = require('path');
 const fs = require('fs')
+const zipper = require('zip-folder');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
@@ -43,6 +44,41 @@ router.get('/login', function(req, res) {
     });
   } else {
     res.sendStatus(400);
+  }
+});
+
+router.get('/files/:claimid', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    if (!req.params.claimid) {
+      res.status(400).json({ error : 'missing claim id' });
+    } else {
+      let filesDir = path.resolve(__dirname, '../../public/claims/', req.params.claimid);
+      let filesZip = filesDir + '-' + req.query.user + '-' + req.query.freelancer + '.zip';
+      if (!fs.existsSync(filesDir)) {
+        res.status(400).json({ error : 'no file directory for this claim id' });
+      } else {
+        let files = fs.readdirSync(filesDir);
+        if (files.length == 0) {
+          res.status(400).json({ error : 'file directory is empty' });
+        } else {
+          zipper(filesDir, filesZip, function(err) {
+            if (err) {
+              res.status(500).json({ error : 'failed to zip files' });
+            } else {
+              res.download(filesZip, function(err) {
+                if (err) {
+                  res.status(500).json({ error : 'failed send zipped files' });
+                } else {
+                  fs.unlinkSync(filesZip);
+                }
+              });
+            }
+          });
+        }
+      }
+    }
+  } else {
+    res.status(400).json({ error : 'wrong username or password' });
   }
 });
 
