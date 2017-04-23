@@ -226,7 +226,14 @@ class FreelancerTypeButtons extends React.Component {
     if(isMyself && !document.getElementById('freelancer-root').getAttribute('data-username')) {
       alert("You need to login to create your own freelancer profile");
       return;
-    } else if(isMyself && document.getElementById('freelancer-root').getAttribute('data-user-freelancer')) {
+    // check no claim in progress
+    } else if(isMyself
+        && document.getElementById('freelancer-root').getAttribute('data-claiming')) {
+        alert("You have a claiming request in progress");
+        return;
+    // check not already freelancer
+    } else if(isMyself
+      && document.getElementById('freelancer-root').getAttribute('data-user-freelancer')) {
       alert("You already have your own freelancer profile");
       return;
     }

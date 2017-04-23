@@ -24,8 +24,9 @@ router.get('/new', function(req, res, next) {
         res.render('freelancer-create', {
           title: "JobAdvisor - Create Freelancer Profile" ,
           logged: true,
-          username: user.name,
-          userFreelancer: user.freelancer
+          username: user.username,
+          userFreelancer: user.freelancer,
+          claiming: user.claiming
         });
       });
     } else {
