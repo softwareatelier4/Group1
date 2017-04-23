@@ -125,13 +125,13 @@ router.delete('/claim', function(req, res) {
       } else {
         Freelance.findById(claim.freelanceID, function(err, freelancer) {
           if (err) {
-            res.status(400).json({ error : 'invalid freelancer id' });
+            res.status(400).json({ error : 'invalid freelancer id' }); // should never happen
           } else if (freelancer.state != 'in progress') {
             res.status(400).json({ error : 'freelancer is not claimed' });
           } else {
             User.findById(claim.userID, function(err, user) {
               if (err) {
-                res.status(400).json({ error : 'invalid user id' });
+                res.status(400).json({ error : 'invalid user id' }); // should never happen
               } else if (!user.freelancer) {
                 res.status(400).json({ error : 'user is not claiming' });
               } else if (user.freelancer && !user.claiming) {
@@ -148,50 +148,52 @@ router.delete('/claim', function(req, res) {
                 } else {
                   res.status(400).json({ error : 'invalid choice' });
                 }
-                freelancer.save(function(err) {
-                  if (err) {
-                    res.status(500).json({ error : 'error while saving freelancer' });
-                  } else {
-                    user.save(function(err) {
-                      if (err) {
-                        res.status(500).json({ error : 'error while saving user' });
-                      } else {
-                        // Remove claim folder with submitted files
-                        let claimDir = path.resolve(__dirname, '../../public/claims/', req.query.claimid);
-                        rmDir(claimDir);
-                        // Remove claim from db
-                        claim.remove(function(err) {
-                          if (err) {
-                            res.status(500).json({ error : 'error while deleting claim' });
-                          } else {
-                            // Send email
-                            // let transporter = nodemailer.createTransport({
-                            //     service: 'Gmail',
-                            //     auth: {
-                            //         user: 'jobadvisor.group1@gmail.com',
-                            //         pass: '-5#x3Y;R;u<fz6}l'
-                            //     }
-                            // });
-                            // let mailOptions = {
-                            //   from: 'jobadvisor.group1@gmail.com',
-                            //   to: req.query.email,
-                            //   subject: 'Claim request',
-                            //   html: req.query.message
-                            // };
-                            // transporter.sendMail(mailOptions, function(err, info){
-                            //   if(err){
-                            //       res.sendStatus(500).json({ error : 'failed to send email' });;
-                            //   } else {
-                            //       res.sendStatus(204);
-                            //   };
-                            // });
-                            res.sendStatus(204);
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
+                if (req.query.choice === 'accept' || req.query.choice === 'reject') {
+                  freelancer.save(function(err) {
+                    if (err) {
+                      res.status(500).json({ error : 'error while saving freelancer' });
+                    } else {
+                      user.save(function(err) {
+                        if (err) {
+                          res.status(500).json({ error : 'error while saving user' });
+                        } else {
+                          // Remove claim folder with submitted files
+                          let claimDir = path.resolve(__dirname, '../../public/claims/', req.query.claimid);
+                          rmDir(claimDir);
+                          // Remove claim from db
+                          claim.remove(function(err) {
+                            if (err) {
+                              res.status(500).json({ error : 'error while deleting claim' });
+                            } else {
+                              // Send email
+                              // let transporter = nodemailer.createTransport({
+                              //     service: 'Gmail',
+                              //     auth: {
+                              //         user: 'jobadvisor.group1@gmail.com',
+                              //         pass: '-5#x3Y;R;u<fz6}l'
+                              //     }
+                              // });
+                              // let mailOptions = {
+                              //   from: 'jobadvisor.group1@gmail.com',
+                              //   to: req.query.email,
+                              //   subject: 'Claim request',
+                              //   html: req.query.message
+                              // };
+                              // transporter.sendMail(mailOptions, function(err, info){
+                              //   if(err){
+                              //       res.sendStatus(500).json({ error : 'failed to send email' });;
+                              //   } else {
+                              //       res.sendStatus(204);
+                              //   };
+                              // });
+                              res.sendStatus(204);
+                            }
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
               }
             });
           }
@@ -199,7 +201,7 @@ router.delete('/claim', function(req, res) {
       }
     });
   } else {
-    res.sendStatus(400);
+    res.status(400).json({ error : 'wrong username or password' });
   }
 });
 
