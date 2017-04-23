@@ -57,9 +57,9 @@ router.post('/new', function(req, res) {
       } else {
         Freelance.findById(req.body.freelancerId, function(err, freelancer) {
           if (err) {
-            res.status(500).json({ error : 'database error while finding freelancer' });  // TODO: TEST
+            res.status(500).json({ error : 'database error while finding freelancer' });  // TESTED
           } else if (!freelancer) {
-            res.status(404).json({ error : 'freelancer not found' }); // TODO: TEST
+            res.status(404).json({ error : 'freelancer not found' }); // TESTED
           } else if (freelancer.state !== 'not verified') {
             res.status(453).json({ error : 'freelancer id already verified' }); // TESTED
           } else {

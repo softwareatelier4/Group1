@@ -67,6 +67,42 @@ describe('Claim-post test: ', function() {
       });
     });
 
+    // WRONG
+    it('app should get answer 500 on POST /claim/new if invalid freelancer id', function(done) {
+      let req = request(app).post('/claim/new');
+      req.cookies = Cookies;
+      req.expect(500)
+      .send({
+        freelancerId : 'invalidfreelancerid'
+      })
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "database error while finding freelancer");
+          done();
+        }
+      });
+    });
+
+    // WRONG
+    it('app should get answer 404 on POST /claim/new if freelancer not found', function(done) {
+      let req = request(app).post('/claim/new');
+      req.cookies = Cookies;
+      req.expect(404)
+      .send({
+        freelancerId : '000000000000000000000000'
+      })
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "freelancer not found");
+          done();
+        }
+      });
+    });
+
     // CORRECT
     it('app should get answer 201 on POST /claim/new if everything is correct', function(done) {
       let req = request(app).post('/claim/new');

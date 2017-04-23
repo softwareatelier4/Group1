@@ -127,9 +127,9 @@ router.put('/category', function(req, res) {
                                  { new : true },
                                  function(err, category) {
         if (err) {
-          res.status(500).json({ error : 'database error while finding and updating category' }); // TODO: TEST
+          res.status(500).json({ error : 'database error while finding and updating category' }); // TESTED
         } else if (!category) {
-          res.status(404).json({ error : 'category not found' }); // TODO: TEST
+          res.status(404).json({ error : 'category not found' }); // TESTED
         } else {
           res.status(201).json(category); // TESTED
         }
@@ -148,10 +148,10 @@ router.delete('/category', function(req, res) {
       res.status(400).json({ error : 'no category id given' }); // TESTED
     } else {
       Category.findById(req.query.id, function(err, category) {
-        if (err || !category) {
-          res.status(500).json({ error : 'database error while finding category' }); // TODO: TEST
+        if (err) {
+          res.status(500).json({ error : 'database error while finding category' }); // TESTED
         } else if (!category) {
-          res.status(404).json({ error : 'category not found' }); // TODO: TEST
+          res.status(404).json({ error : 'category not found' }); // TESTED
         } else {
           Freelance.updateMany({ _id : { $in : category.freelancers } }, { category : undefined }, function(err, freelancers) {
             if (err) {
@@ -184,21 +184,21 @@ router.delete('/claim', function(req, res) {
       } else {
         Freelance.findById(claim.freelanceID, function(err, freelancer) {
           if (err) {
-            res.status(500).json({ error : 'database error while finding freelancer' }); // TODO: TEST
+            res.status(500).json({ error : 'database error while finding freelancer' }); // CANNOT TEST
           } else if (!freelancer) {
-            res.status(404).json({ error : 'freelancer not found' }); // TODO: TEST
+            res.status(404).json({ error : 'freelancer not found' }); // TESTED
           } else if (freelancer.state !== 'in progress') {
-            res.status(400).json({ error : 'freelancer is not claimed' }); // TODO: TEST
+            res.status(400).json({ error : 'freelancer is not claimed' }); // TESTED
           } else {
             User.findById(claim.userID, function(err, user) {
               if (err) {
-                res.status(500).json({ error : 'database error while finding user' }); // TODO: TEST
+                res.status(500).json({ error : 'database error while finding user' }); // CANNOT TEST
               } else if (!user) {
-                res.status(404).json({ error : 'user not found' }); // TODO: TEST
+                res.status(404).json({ error : 'user not found' }); // TESTED
               } else if (!user.freelancer) {
-                res.status(400).json({ error : 'user is not claiming' }); // TODO: TEST
+                res.status(400).json({ error : 'user is not claiming' }); // TESTED
               } else if (user.freelancer && !user.claiming) {
-                res.status(400).json({ error : 'user is already associtated with a freelancer' }); // TODO: TEST
+                res.status(400).json({ error : 'user is already associtated with a freelancer' }); // TESTED
               } else {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {

@@ -3,6 +3,20 @@
 let g_username;
 let g_password;
 
+// For broken claims
+let g_emptyClaim = {
+  _id : '000000000000000000000000',
+  freelanceID : {
+    _id : '000000000000000000000000',
+    firstName : 'undefined',
+    familyName : 'undefined'
+  },
+  userID : {
+    _id : '000000000000000000000000',
+    username : 'undefined'
+  }
+};
+
 // Shitty tweak to append React element
 function addReactElement(element, container) {
   let div = container.appendChild(document.createElement('div'));
@@ -53,7 +67,10 @@ class CardClaim extends React.Component {
     addReactElement(<CardClaimComment claim={this.props.claim} />, cardClaim);
   }
   render() {
-    let claim = this.props.claim;
+    let claim = this.props.claim || g_emptyClaim;
+    if (!claim || !claim.freelanceID || !claim.userID) {
+      claim = g_emptyClaim;
+    }
     let userLink = `/user/${claim.userID._id}`;
     let freelancerLink = `/freelance/${claim.freelanceID._id}`;
     let query = `?username=${g_username}&password=${g_password}&user=${claim.userID.username}&freelancer=${claim.freelanceID.firstName}-${claim.freelanceID.familyName}`;
