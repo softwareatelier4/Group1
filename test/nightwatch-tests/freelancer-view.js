@@ -48,7 +48,7 @@ module.exports = {
       .click('button#freelancer-claim-btn')
       .pause(2000)
       .assert.containsText('div#freelancer-claim-form-message', 'No file was given')
-      .setValue('input#freelancer-claim-form-files', require('path').resolve(__dirname + '/README.md'))
+      .setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
       .click('button#freelancer-claim-btn')
       .pause(2000)
       .assert.containsText('div#freelancer-claim-status-name', 'IN PROGRESS')
