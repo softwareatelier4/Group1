@@ -18,13 +18,13 @@ describe('User-put test: ', function() {
     before(seed);
     after(utils.dropDbAndCloseConnection);
 
-    // CORRECT: update of a field that is not freelancer
-    it('should respond with 204 after a successful update of any field that is not freelancer', function(done) {
+    // CORRECT: change email
+    it('should respond with 204 after a successful update of email', function(done) {
       request(app)
       .put('/user/' + seedData[4].data[0].username.toString())
       .set('Accept', 'application/json')
       .send({
-        "email" : "kek420@dankme.me",
+        "email" : "wubba-lubba-dub-dub@universe.me",
       })
       .expect(204)
       .end(function() {
@@ -35,9 +35,51 @@ describe('User-put test: ', function() {
         .expect(200)
         .end(function(err, res) {
           var user = JSON.parse(res.text) || {};
-          user.email.should.be.equal("kek420@dankme.me");
+          user.email.should.be.equal("wubba-lubba-dub-dub@universe.me");
           done();
         });
+      });
+    });
+
+    // CORRECT: change username
+    it('should respond with 204 after a successful update of username', function(done) {
+      request(app)
+      .put('/user/' + seedData[4].data[0].username.toString())
+      .set('Accept', 'application/json')
+      .send({
+        "username" : "rick_sanchez",
+      })
+      .expect(204)
+      .end(function() {
+        request(app)
+        .get('/user/rick_sanchez')
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(200)
+        .end(function(err, res) {
+          var user = JSON.parse(res.text) || {};
+          user.username.should.be.equal("rick_sanchez");
+          user.email.should.be.equal("wubba-lubba-dub-dub@universe.me");
+          done();
+        });
+      });
+    });
+
+    // ERROR: change username, already existing
+    it('should respond with 409 after a failed update of username (already existing)', function(done) {
+      request(app)
+      .put('/user/rick_sanchez')
+      .set('Accept', 'application/json')
+      .send({
+        "username" : "Smaug",
+      })
+      .expect(409)
+      .end(function(err, res) {
+        if (err) done(err);
+        else {
+          res.body.should.have.property("errors", ["Username `Smaug` is already in use."]);
+          done();
+        }
       });
     });
 
