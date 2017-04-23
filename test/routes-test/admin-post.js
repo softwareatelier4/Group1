@@ -16,7 +16,7 @@ describe('Admin-post test: ', function() {
 
   describe('POST /admin/category', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should get answer 201 on POST /admin/category', function(done) {
       request(app)

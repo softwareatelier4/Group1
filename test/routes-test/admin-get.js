@@ -16,7 +16,7 @@ describe('Admin-get test: ', function() {
 
   describe('GET /admin/login', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should list the categories with correct data', function(done) {
       request(app)
@@ -51,7 +51,7 @@ describe('Admin-get test: ', function() {
 
   describe('GET /admin', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should respond with 200 if the request is valid', function(done) {
       request(app)

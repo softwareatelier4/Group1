@@ -1,11 +1,10 @@
 /** @module root/router */
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-var middleware =  require('../middleware');
-var rootUrl = require("../../config").url;
-
+const express = require('express');
+const router = express.Router();
+const middleware =  require('../middleware');
+const rootUrl = require("../../config").url;
 
 // supported methods
 router.all('/', middleware.supportedMethods('GET, OPTIONS'));
@@ -15,6 +14,7 @@ router.get('/', function(req, res, next) {
   if (req.accepts('text/html')) {
     res.render('index', {
       title: "JobAdvisor",
+      logged: (req.session.user_id != undefined) // no session means not logged
     });
   }
   else {

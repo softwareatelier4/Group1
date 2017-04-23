@@ -20,7 +20,7 @@ describe('Root test: ', function() {
 
   describe('GET /', function(){
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should respond with a 200 if the request expects text/html', function(done) {
       request(app)

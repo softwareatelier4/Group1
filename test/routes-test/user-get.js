@@ -16,7 +16,7 @@ describe('User-get test: ', function() {
 
   describe('GET /user/:username', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should list the user with correct data and without the password', function(done) {
       request(app)

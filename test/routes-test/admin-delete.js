@@ -16,7 +16,7 @@ describe('Admin-delete test: ', function() {
 
   describe('DELETE /admin/category', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should respond with 204 if request is valid', function(done) {
       request(app)
