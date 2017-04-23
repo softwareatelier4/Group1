@@ -33,7 +33,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage : storage });
 
 // Supported methods.
-router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
+router.all('/', middleware.supportedMethods('GET, POST, OPTIONS'));
+router.all('/upload', middleware.supportedMethods('POST, OPTIONS'));
 router.all('/new', middleware.supportedMethods('POST, OPTIONS'));
 
 router.post('/upload', upload.array('idfile'), function(req, res) {
@@ -46,15 +47,16 @@ router.post('/new', function(req, res) {
       if (err) {
         res.status(400).json({ error : 'wrong user id' });
       } else if (user.freelancer) {
-        res.status(400).json({ error : 'user id already claiming' });
+        res.status(402).json({ error : 'user id already claiming' });
       } else {
         Freelance.findById(req.body.freelancerId, function(err, freelancer) {
           if (err) {
             res.status(400).json({ error : 'wrong freelancer id' });
           } else if (freelancer.state !== 'not verified') {
-            res.status(400).json({ error : 'freelancer id already verified' });
+            res.status(403).json({ error : 'freelancer id already verified' });
           } else {
             user.freelancer = req.body.freelancerId;
+            user.claiming = true;
             user.save(function(err) {
               if (err) {
                 res.status(400).json({ error : 'failed user save' });
@@ -84,7 +86,7 @@ router.post('/new', function(req, res) {
       }
     });
   } else {
-    res.status(400).json({ error : 'no user id or freelancer id' });
+    res.status(401).json({ error : 'no user id or freelancer id' });
   }
 });
 

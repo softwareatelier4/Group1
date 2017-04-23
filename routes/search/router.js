@@ -64,9 +64,9 @@ router.get('/', function(req, res, next) {
         let googleMapsClient = GoogleMaps.createClient({
           // any works, it might stop working for some time after too many requests,
           // in case switch to another
-          //key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
+          key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
           //key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
-          key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
+          // key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
         });
         googleMapsClient.distanceMatrix({

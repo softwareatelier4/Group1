@@ -15,12 +15,16 @@ function renderComponent(data) {
       {tag.tagName}
     </li>
   );
+  let categoryName = 'Other';
+  if (data.category) {
+    categoryName = data.category.categoryName;
+  }
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
       last={data.familyName}
       title={data.title}
-      category={data.category.categoryName}
+      category={categoryName}
       avgScore={data.avgScore}
       reviewCount={data.reviews.length}
       price={data.price}
@@ -151,9 +155,18 @@ class FreelancerClaimForm extends React.Component {
             freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
           });
 
+        } else if (claim === 401) {
+          let message = document.getElementById('freelancer-claim-form-message');
+          message.innerHTML = 'Please log in to claim a freelancer profile';
+        } else if (claim === 402) {
+          let message = document.getElementById('freelancer-claim-form-message');
+          message.innerHTML = 'This user is already claiming/has already claimed a freelancer profile';
+        } else if (claim === 403) {
+          let message = document.getElementById('freelancer-claim-form-message');
+          message.innerHTML = 'This freelancer profile is already being claimed';
         } else {
           let message = document.getElementById('freelancer-claim-form-message');
-          message.innerHTML = 'Freelancer or user are already in a claim procedure, or you are not logged in';
+          message.innerHTML = 'Something went wrong';
         }
       });
     }
