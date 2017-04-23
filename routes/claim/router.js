@@ -55,6 +55,7 @@ router.post('/new', function(req, res) {
             res.status(400).json({ error : 'freelancer id already verified' });
           } else {
             user.freelancer = req.body.freelancerId;
+            user.claiming = true;
             user.save(function(err) {
               if (err) {
                 res.status(400).json({ error : 'failed user save' });

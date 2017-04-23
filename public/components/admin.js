@@ -3,31 +3,6 @@
 let g_username;
 let g_password;
 
-let claims_temp = [
-  {
-    user : {
-      _id : "1234",
-      name : 'Tizio',
-      email : 'amedeo.zucchetti@gmail.com'
-    },
-    freelancer : {
-      _id : "58cc4942fc13ae612c00004b",
-      name : 'Nicholas Franklin'
-    }
-  },
-  {
-    user : {
-      _id : "1111",
-      name : 'Ariel',
-      email : 'amedeo.zucchetti@usi.ch'
-    },
-    freelancer : {
-      _id : "58cc4941fc13ae612c000018",
-      name : 'Barbara Torres'
-    }
-  }
-];
-
 // Shitty tweak to append React element
 function addReactElement(element, container) {
   let div = container.appendChild(document.createElement('div'));
@@ -41,14 +16,13 @@ class CardClaimComment extends React.Component {
     let cardClaimComment = e.target.parentNode;
     cardClaimComment.parentNode.removeChild(cardClaimComment);
   }
-  sendMessage(status) {
+  sendMessage(choice) {
     return function(e) {
-      // TODO: add request to DB
       let claim = this.props.claim;
       let claimCard = e.target.parentNode.parentNode;
       let comment = e.target.parentNode.firstChild.value.replace(/\n/g, '<br>');
-      let message = `Dear ${claim.user.name},<br><br>We have decided to <b>${status}</b> your claim request for the freelancer profile "${claim.freelancer.name}". The reasons are:<br><br>${comment}<br><br>Best regards,<br><br>JobAdvisor`;
-      let query = `?username=${g_username}&password=${g_password}&message=${message}&email=${claim.user.email}`;
+      let message = `Dear ${claim.userID.username},<br><br>We have decided to <b>${choice}</b> your claim request for the freelancer profile "${claim.freelanceID.firstName} ${claim.freelanceID.familyName}". The reasons are:<br><br>${comment}<br><br>Best regards,<br><br>JobAdvisor`;
+      let query = `?username=${g_username}&password=${g_password}&claimid=${claim._id}&choice=${choice}&message=${message}&email=${claim.userID.email}`;
       ajaxRequest('DELETE', `/admin/claim${query}`, { ajax : true }, {}, function(res) {
         if (res === 204) {
           claimCard.parentNode.removeChild(claimCard);
@@ -80,13 +54,13 @@ class CardClaim extends React.Component {
   }
   render() {
     let claim = this.props.claim;
-    let userLink = `/user/${claim.user._id}`;
-    let freelancerLink = `/freelance/${claim.freelancer._id}`;
+    let userLink = `/user/${claim.userID._id}`;
+    let freelancerLink = `/freelance/${claim.freelanceID._id}`;
     return (
-      <div className="card-claim" data-user_id={claim.user._id} data-freelancer_id={claim.freelancer._id}>
+      <div className="card-claim">
         <div className="card-claim-row">
-          <div><a href={userLink} target="_blank">{claim.user.name}</a></div>
-          <div><a href={freelancerLink} target="_blank">{claim.freelancer.name}</a></div>
+          <div><a href={userLink} target="_blank">{claim.userID.username}</a></div>
+          <div><a href={freelancerLink} target="_blank">{claim.freelanceID.firstName} {claim.freelanceID.familyName}</a></div>
           <div><span>Files...</span></div>
           <button onClick={this.respond.bind(this)}>Respond</button>
         </div>
@@ -248,7 +222,7 @@ class AdminView extends React.Component {
         </div>
         <div id="admin-content">
           <ContainerCategories categories={this.props.data.categories} />
-          <ContainerClaims claims={claims_temp} />
+          <ContainerClaims claims={this.props.data.claims} />
           <div id="admin-settings">SETTINGS</div>
         </div>
       </div>
