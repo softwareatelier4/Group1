@@ -1,5 +1,7 @@
 'use strict';
 
+let geolocalization = '';
+let mostRecentQuery = '';
 // Container for the search bar and the search button
 class SearchContainer extends React.Component {
   searchRequest(e) {
@@ -14,8 +16,13 @@ class SearchContainer extends React.Component {
       searchWarning.innerHTML = '';
       let query = `/search?keyword=${searchName}`;
       let origin = document.getElementById('search-where').value;
-      if (origin)
+      if (!origin && geolocalization) {
+        origin = geolocalization;
+      }
+      if (origin) {
         query += `&origin=${origin}`;
+      }
+      mostRecentQuery = query;
       ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
     }
   }
@@ -39,13 +46,14 @@ class FiltersContainer extends React.Component {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
       let category = this.props.categories[i].categoryName;
-      categories.push(<option value={category} key={i}>{category}</option>);
+      let categoryId = this.props.categories[i]._id;
+      categories.push(<option id={'category-' + categoryId} value={category} key={i}>{category}</option>);
     }
     return (<div id="filters-container">
       <div id="filters">
         <div id="filter-category">
           <span>Category: </span>
-          <select id="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
+          <select id="filter-category-dropdown" name="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}
           </select>
@@ -53,11 +61,11 @@ class FiltersContainer extends React.Component {
 
         <div id="filter-distance">
           <span id="max-distance-label">Max distance: </span>
-          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-distance-temp" name="filter-distance-temp" placeholder="Distance in km" type="range" min="0" max="200" step="5" defaultValue="200" onKeyDown={applyFilters} onKeyUp={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
-          <input id="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters}/>
+          <input id="filter-duration-temp" name="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
         </div>
       </div>
     </div>);
@@ -70,7 +78,7 @@ class FreelancerCreateBtn extends React.Component {
     document.location = '/freelance/new';
   }
   render () {
-    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm}>Add a freelancer</button>);
+    return (<button id="freelancer-create-btn" onClick={this.redirectFreelancerForm} type="submit">Add a Freelancer</button>);
   }
 }
 
@@ -91,7 +99,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDistance(distance, id) {
-    if(!document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return 'Input a location'; // on first load, no distance info
 
     if (distance !== undefined && distance !== Number.MAX_SAFE_INTEGER) {
       return (distance / 1000).toFixed(2) + ' km';
@@ -100,7 +108,7 @@ class FreelancerCard extends React.Component {
     }
   }
   formatDuration(duration) {
-    if(!document.getElementById('search-where').value) return ''; // on first load, no distance info
+    if(!geolocalization && !document.getElementById('search-where').value) return ''; // on first load, no distance info
 
     if (duration !== "undefined" && duration !== Number.MAX_SAFE_INTEGER) {
       return ', ' + (duration / 3600).toFixed(2) + ' h';
@@ -118,13 +126,13 @@ class FreelancerCard extends React.Component {
       <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance} data-duration={this.props.duration}>
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
-          <h1>{this.props.title}</h1>
+          <h1 className="job-title  ">{this.props.title}</h1>
           <h2>{this.props.firstName} {this.props.familyName}</h2>
-          <span>{this.props.category}</span>
           <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
           <span>Price range: {this.formatPrice(this.props.price)}</span>
           <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
         </div>
+        <span className="category" data-category={this.props.categoryID}>{this.props.category}</span>
       </div>
     );
   }
@@ -136,12 +144,19 @@ class FreelancersContainer extends React.Component {
     let freelancers = [];
     for (let i = 0; i < this.props.freelancers.length; ++i) {
       let freelancer = this.props.freelancers[i];
+      let categoryName = 'Other';
+      let categoryId = '';
+      if (freelancer.category) {
+        categoryName = freelancer.category.categoryName;
+        categoryId = freelancer.category._id;
+      }
       freelancers.push(<FreelancerCard
         urlPicture = {freelancer.urlPicture}
         firstName  = {freelancer.firstName}
         familyName = {freelancer.familyName}
         title      = {freelancer.title}
-        category   = {freelancer.category.categoryName}
+        category   = {categoryName}
+        categoryID = {categoryId}
         avgScore   = {freelancer.avgScore}
         price      = {freelancer.price}
         distance   = {freelancer.distance}
@@ -188,7 +203,7 @@ function applyFilters() {
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
     if ((category && category !== fCategory)
-        || (origin !== "" && (distance/1000 != maxDistance && fDistance > distance
+        || ((origin !== "" || geolocalization !== "") && (distance/1000 != maxDistance && fDistance > distance
                               || duration/60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
     } else {
@@ -202,6 +217,20 @@ function renderPage(data) {
   ajaxRequest("GET", "/category", { ajax : true }, {}, renderFilters);
   renderFreelancerCreateBtn();
   ajaxRequest("GET", "/search", { ajax : true }, {}, renderFreelancers);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      if (position) {
+        geolocalization = `${position.coords.latitude},${position.coords.longitude}`;
+        let query = mostRecentQuery || `/search?origin=${geolocalization}`;
+        if(!query.includes('origin')) {
+          query += `&origin=${geolocalization}`
+        }
+        console.log(query);
+
+        ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+      }
+    }, null, { enableHighAccuracy : false, maximumAge : 600 });
+  }
 }
 
 function renderSearch() {

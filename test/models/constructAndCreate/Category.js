@@ -11,7 +11,7 @@ const utils = require(projectRoot +'/seed_data/utils');
 
 require(projectRoot + '/models/Category');
 
-describe('Category Model ', function(done) {
+describe('CATEGORY : ', function(done) {
 
   // Category constructor test
   describe('Category model definition', function() {
@@ -32,8 +32,8 @@ describe('Category Model ', function(done) {
     var Category = mongoose.model('Category');
 
     before(function(done) {
-      // connect and drop db
-      utils.connectAndDropDb(function(err) {
+      // drop db
+      utils.dropDb(function(err) {
         if (err) return done(err);
         done();
       });
@@ -57,6 +57,18 @@ describe('Category Model ', function(done) {
         done();
       });
     });
+
+		it('should create a category with required documents', function(done) {
+			let category = new Category();
+			category.categoryName = 'Swift';
+			category.freelancers = [];
+			category.requiresDocs = true;
+			category.save(function(err, saved) {
+				should.not.exist(err, 'No error should occur');
+				saved.requiresDocs.should.equal(true);
+				done();
+			});
+		});
 
     it('should fail if categoryName is empty, null, or undefined', function(done) {
       let category = new Category();
