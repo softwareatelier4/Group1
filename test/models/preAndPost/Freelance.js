@@ -43,25 +43,26 @@ describe('Freelance pre&post :', function(done){
 			done();
 		});
 	});
+	
+	// This test now is impossible because of preconditions
+	// on the 'validate' hook that happens before 'save'
 
-	it ('should bound over 5 avgScore to 5', function(done) {
-		let freelance = new Freelance();
-		freelance.firstName = 'Mark';
-		freelance.familyName = 'Knopfer';
-		freelance.title = 'I am alive yeah';
-		freelance.email = 'ripperoni@pepe.pe';
-		freelance.price = {min: 20, max: 100};
-		freelance.reviews = [];
-		freelance.tags = [];
-		freelance.avgScore = 500;
-		freelance.save(function(err, saved){
-			should.not.exist(err, 'No error should occur');
-			saved.avgScore.should.equal(5);
-			done();
-		});
-	});
-
-	//TODO test for the avgScore pre
+	// it ('should bound over 5 avgScore to 5', function(done) {
+	// 	let freelance = new Freelance();
+	// 	freelance.firstName = 'Mark';
+	// 	freelance.familyName = 'Knopfer';
+	// 	freelance.title = 'I am alive yeah';
+	// 	freelance.email = 'ripperoni@pepe.pe';
+	// 	freelance.price = {min: 20, max: 100};
+	// 	freelance.reviews = [];
+	// 	freelance.tags = [];
+	// 	freelance.avgScore = 500;
+	// 	freelance.save(function(err, saved){
+	// 		should.not.exist(err, 'No error should occur');
+	// 		saved.avgScore.should.equal(5);
+	// 		done();
+	// 	});
+	// });
 
 	it ('should have a score of 0 for no reviews', function(done) {
 		let freelance = new Freelance();
@@ -77,9 +78,6 @@ describe('Freelance pre&post :', function(done){
 			done();
 		});
 	});
-
-
-	//these tests go in timeout for some reason
 
 	it ('should have a score of 3 for a review of 2 and one of 4', function(done) {
 
@@ -145,9 +143,6 @@ describe('Freelance pre&post :', function(done){
 		review3.author = "asd";
 		review3.score = 4;
 
-
-
-
 		review1.save(function(err, r1){
 			should.not.exist(err, 'No error should occur');
 
@@ -169,8 +164,6 @@ describe('Freelance pre&post :', function(done){
 				});
 			});
 		});
-
-
 	});
 
 });

@@ -15,7 +15,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 require ('./Freelance');
 
 const User = exports.User = new mongoose.Schema({
-    username    : { type: String, required: true },
+    username    : { type: String, required: true, unique: true },
     password    : { type: String, required: true },
     email				: { type: String, required: true },
 		claiming		: { type: Boolean, default: false},
