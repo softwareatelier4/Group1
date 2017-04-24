@@ -11,7 +11,7 @@ const utils = require(projectRoot +'/seed_data/utils');
 
 require(projectRoot + '/models/Tag');
 
-describe('Tag Model ', function(done) {
+describe('TAG : ', function(done) {
 
   // Tag constructor test
   describe('Tag model definition', function() {

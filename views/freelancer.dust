@@ -10,14 +10,25 @@
     <div id='topbar'>
       <!-- Title -->
       <div id="react-title"></div>
+      <!-- Login - show only if not already logged -->
+      {^logged}
+        <div id="react-login"></div>
+        <div id="react-register"></div>
+      {:else}
+        <div id="react-username">{username}</div>
+        <div id="react-logout"></div>
+      {/logged}
       <!-- Create -->
       <div id="react-freelancer-home-btn"></div>
     </div>
 
     <!-- React container -->
     <div id='freelancer-root'></div>
-    <div id='freelancer-reviews-root'></div>
-
+    {^logged}
+      <div id='freelancer-reviews-root' ></div>
+    {:else}
+      <div id='freelancer-logged-reviews-root' data-username={username}></div>
+    {/logged}
 
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
