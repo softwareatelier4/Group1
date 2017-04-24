@@ -37,14 +37,30 @@ describe('Admin-get test: ', function() {
       request(app)
         .get('/admin/login?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .get('/admin/login?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
   });
@@ -90,7 +106,7 @@ describe('Admin-get test: ', function() {
       request(app)
         .get('/admin/files/wrongclaimid?username=admin&password=asd')
         .set('Ajax', 'true')
-        .expect(400)
+        .expect(404)
         .end(function(err, res) {
           if (err) {
             done(err);

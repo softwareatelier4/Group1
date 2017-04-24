@@ -41,30 +41,38 @@ router.post('/upload', upload.array('idfile'), function(req, res) {
   res.sendStatus(202);
 });
 
+// Note: statuses 451, 452 and 453 are needed for error identification on front-end
+// This way, specific error messages can be displayed
 router.post('/new', function(req, res) {
-  if (req.session.user_id && req.body.freelancerId) {
+  if (!req.session.user_id || !req.body.freelancerId) {
+    res.status(451).json({ error : 'no user id or freelancer id' }); // TESTED
+  } else {
     User.findById(req.session.user_id, function(err, user) {
       if (err) {
-        res.status(400).json({ error : 'wrong user id' });
+        res.status(500).json({ error : 'database error while finding user' }); // TODO: TEST
+      } else if (!user) {
+        res.status(404).json({ error : 'user not found' });  // TODO: TEST
       } else if (user.freelancer) {
-        res.status(402).json({ error : 'user id already claiming' });
+        res.status(452).json({ error : 'user id already claiming' }); // TESTED
       } else {
         Freelance.findById(req.body.freelancerId, function(err, freelancer) {
           if (err) {
-            res.status(400).json({ error : 'wrong freelancer id' });
+            res.status(500).json({ error : 'database error while finding freelancer' });  // TESTED
+          } else if (!freelancer) {
+            res.status(404).json({ error : 'freelancer not found' }); // TESTED
           } else if (freelancer.state !== 'not verified') {
-            res.status(403).json({ error : 'freelancer id already verified' });
+            res.status(453).json({ error : 'freelancer id already verified' }); // TESTED
           } else {
             user.freelancer = req.body.freelancerId;
             user.claiming = true;
             user.save(function(err) {
               if (err) {
-                res.status(400).json({ error : 'failed user save' });
+                res.status(500).json({ error : 'database error while saving user' });  // CANNOT TEST
               } else {
                 freelancer.state = 'in progress';
                 freelancer.save(function(err) {
                   if (err) {
-                    res.status(400).json({ error : 'failed freelancer save' });
+                    res.status(500).json({ error : 'database error while saving freelancer' });  // CANNOT TEST
                   } else {
                     let newClaim = new Claim({
                       userID : req.session.user_id,
@@ -72,9 +80,9 @@ router.post('/new', function(req, res) {
                     });
                     newClaim.save(function(err, claim) {
                       if (err) {
-                        res.sendStatus(400).json({ error : 'failed claim save' });
+                        res.sendStatus(500).json({ error : 'database error while saving claim' });  // CANNOT TEST
                       } else {
-                        res.status(201).json(claim);
+                        res.status(201).json(claim); // TESTED
                       }
                     });
                   }
@@ -85,8 +93,6 @@ router.post('/new', function(req, res) {
         });
       }
     });
-  } else {
-    res.status(401).json({ error : 'no user id or freelancer id' });
   }
 });
 

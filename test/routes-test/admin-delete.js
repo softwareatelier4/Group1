@@ -25,25 +25,79 @@ describe('Admin-delete test: ', function() {
         .expect(204, done);
     });
 
-    it('should respond with 401 if no id is given', function(done) {
+    it('should respond with 400 if no id is given', function(done) {
       request(app)
         .delete('/admin/category?username=admin&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "no category id given");
+            done();
+          }
+        });
+    });
+
+    it('should respond with 500 if invalid category', function(done) {
+      request(app)
+        .delete('/admin/category?username=admin&password=asd&id=invalidcategory')
+        .set('Ajax', 'true')
+        .expect(500)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "database error while finding category");
+            done();
+          }
+        });
+    });
+
+    it('should respond with 404 if invalid category', function(done) {
+      request(app)
+        .delete('/admin/category?username=admin&password=asd&id=000000000000000000000000')
+        .set('Ajax', 'true')
+        .expect(404)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "category not found");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .delete('/admin/category?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .delete('/admin/category?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
   });
@@ -55,21 +109,39 @@ describe('Admin-delete test: ', function() {
     var Cookies;
     var claimId;
 
-    it('should respond with 400 if wrong id is given', function(done) {
+    // WRONG
+    it('should respond with 500 if invalid claim id is given', function(done) {
       request(app)
         .delete('/admin/claim?username=admin&password=asd&claimid=wrongid')
         .set('Ajax', 'true')
-        .expect(400)
+        .expect(500)
         .end(function(err, res) {
           if (err) {
             done(err);
           } else {
-            res.body.should.have.property("error", "invalid claim id");
+            res.body.should.have.property("error", "database error while finding claim");
             done();
           }
         });
     });
 
+    // WRONG
+    it('should respond with 404 if non-existent claim id is given', function(done) {
+      request(app)
+        .delete('/admin/claim?username=admin&password=asd&claimid=000000000000000000000000')
+        .set('Ajax', 'true')
+        .expect(404)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "claim not found");
+            done();
+          }
+        });
+    });
+
+    // WRONG
     it('should respond with 401 if username is wrong', function(done) {
       request(app)
         .delete('/admin/claim?username=wrongusername&password=asd')
@@ -85,6 +157,7 @@ describe('Admin-delete test: ', function() {
         });
     });
 
+    // WRONG
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .delete('/admin/claim?username=admin&password=wrongpassword')
@@ -95,6 +168,86 @@ describe('Admin-delete test: ', function() {
             done(err);
           } else {
             res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 404 if freelancer not found', function(done) {
+      request(app)
+        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[0]._id}`)
+        .set('Ajax', 'true')
+        .expect(404)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "freelancer not found");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 400 if freelancer is not claimed', function(done) {
+      request(app)
+        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[1]._id}`)
+        .set('Ajax', 'true')
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "freelancer is not claimed");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 404 if user not found', function(done) {
+      request(app)
+        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[2]._id}`)
+        .set('Ajax', 'true')
+        .expect(404)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "user not found");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 400 if user is not claiming', function(done) {
+      request(app)
+        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[3]._id}`)
+        .set('Ajax', 'true')
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "user is not claiming");
+            done();
+          }
+        });
+    });
+
+    // WRONG
+    it('should respond with 400 if user is already associated with a freelancer', function(done) {
+      request(app)
+        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[4]._id}`)
+        .set('Ajax', 'true')
+        .expect(400)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "user is already associated with a freelancer");
             done();
           }
         });

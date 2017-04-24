@@ -17,6 +17,8 @@ var categories = require('./categoriesData');
 var catSize = categories.data.length;
 var users = require('./usersData');
 var usersSize = users.data.length;
+var claims = require('./claimsData');
+var claimsSize = claims.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
@@ -55,14 +57,15 @@ function dump(data){
   }
 }
 
-/* Keep this order for seeding 
+/* Keep this order for seeding
 * as it depends on references
 */
 var seedData = [];
-seedData.push(reviews);
-seedData.push(freelancers);
-seedData.push(tags);
-seedData.push(categories);
-seedData.push(users);
+seedData.push(reviews);     // 0
+seedData.push(freelancers); // 1
+seedData.push(tags);        // 2
+seedData.push(categories);  // 3
+seedData.push(users);       // 4
+seedData.push(claims);      // 5
 
 module.exports = seedData;

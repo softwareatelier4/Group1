@@ -37,7 +37,7 @@ describe('Admin-post test: ', function() {
         });
     });
 
-    it('should get an error if no categoryName was given', function(done) {
+    it('should respnd with 400 if no categoryName was given', function(done) {
       request(app)
         .post('/admin/category?username=admin&password=asd')
         .set('Ajax', 'true')
@@ -47,7 +47,7 @@ describe('Admin-post test: ', function() {
           if (err) {
             done(err);
           } else {
-            res.body.should.have.property("errors", [ "Path `categoryName` is required." ]);
+            res.body.should.have.property("error", "no category name given");
             done();
           }
         });
@@ -57,14 +57,30 @@ describe('Admin-post test: ', function() {
       request(app)
         .post('/admin/category?username=wrongusername&password=asd')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
     it('should respond with 401 if password is wrong', function(done) {
       request(app)
         .post('/admin/category?username=admin&password=wrongpassword')
         .set('Ajax', 'true')
-        .expect(401, done);
+        .expect(401)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "wrong username or password");
+            done();
+          }
+        });
     });
 
   });

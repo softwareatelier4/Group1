@@ -155,13 +155,13 @@ class FreelancerClaimForm extends React.Component {
             freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
           });
 
-        } else if (claim === 401) {
+        } else if (claimData === 451) {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'Please log in to claim a freelancer profile';
-        } else if (claim === 402) {
+        } else if (claimData === 452) {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'This user is already claiming/has already claimed a freelancer profile';
-        } else if (claim === 403) {
+        } else if (claimData === 453) {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'This freelancer profile is already being claimed';
         } else {

@@ -21,10 +21,10 @@ describe('Claim-post test: ', function() {
     var Cookies;
 
     // WRONG
-    it('app should get answer 401 on POST /claim/new if user is not logged in', function(done) {
+    it('app should get answer 451 on POST /claim/new if user is not logged in', function(done) {
       request(app)
       .post('/claim/new')
-      .expect(401)
+      .expect(451)
       .end(function(err, res) {
         if (err) {
           done(err);
@@ -53,15 +53,51 @@ describe('Claim-post test: ', function() {
     });
 
     // WRONG
-    it('app should get answer 401 on POST /claim/new if no freelancer id was given', function(done) {
+    it('app should get answer 451 on POST /claim/new if no freelancer id was given', function(done) {
       let req = request(app).post('/claim/new');
       req.cookies = Cookies;
-      req.expect(401)
+      req.expect(451)
       .end(function(err, res) {
         if (err) {
           done(err);
         } else {
           res.body.should.have.property("error", "no user id or freelancer id");
+          done();
+        }
+      });
+    });
+
+    // WRONG
+    it('app should get answer 500 on POST /claim/new if invalid freelancer id', function(done) {
+      let req = request(app).post('/claim/new');
+      req.cookies = Cookies;
+      req.expect(500)
+      .send({
+        freelancerId : 'invalidfreelancerid'
+      })
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "database error while finding freelancer");
+          done();
+        }
+      });
+    });
+
+    // WRONG
+    it('app should get answer 404 on POST /claim/new if freelancer not found', function(done) {
+      let req = request(app).post('/claim/new');
+      req.cookies = Cookies;
+      req.expect(404)
+      .send({
+        freelancerId : '000000000000000000000000'
+      })
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "freelancer not found");
           done();
         }
       });
@@ -86,10 +122,10 @@ describe('Claim-post test: ', function() {
     });
 
     // WRONG
-    it('app should get answer 402 on POST /claim/new if user is already claiming', function(done) {
+    it('app should get answer 452 on POST /claim/new if user is already claiming', function(done) {
       let req = request(app).post('/claim/new');
       req.cookies = Cookies;
-      req.expect(402)
+      req.expect(452)
       .send({
         freelancerId : seedData[1].data[1]
       })
@@ -121,10 +157,10 @@ describe('Claim-post test: ', function() {
     });
 
     // WRONG
-    it('app should get answer 403 on POST /claim/new if freelance is already claimed', function(done) {
+    it('app should get answer 453 on POST /claim/new if freelance is already claimed', function(done) {
       let req = request(app).post('/claim/new');
       req.cookies = Cookies;
-      req.expect(403)
+      req.expect(453)
       .send({
         freelancerId : seedData[1].data[0]
       })
