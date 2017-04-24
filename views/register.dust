@@ -2,9 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>JobAdvisor</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" type="text/css" href="css/homepage.css" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="../css/style.css">
   </head>
   <body>
     <div id='topbar'>
@@ -19,27 +18,30 @@
         <div id="react-logout"></div>
       {/logged}
       <!-- Create -->
-      <div id="react-freelancer-create-btn"></div>
+      <div id="react-freelancer-home-btn"></div>
     </div>
-    <div id='root'>
-      <div id=search-and-filters>
-        <!-- Search -->
-        <div id="react-search-container"></div>
-        <!-- Filters -->
-        <div id="react-filters-container"></div>
+
+    <!-- React container -->
+    {^logged}
+      <div id="register-form">
+        Can register
+        <!-- <div id="meme"></div> -->
       </div>
-      <!-- Freelancers -->
-      <div id="react-freelancers-container"></div>
-    </div>
+    {:else}
+      <div>Already registered as {username}</div>
+    {/logged}
+
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
-    <!-- React -->
+
+    <!-- React libraries -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>
     <script src="../js/browser.min.js"></script>
-    <!-- Scripts -->
-    <script src="components/homepage.js" type="text/babel"></script>
-    <script src="components/topbar.js" type="text/babel"></script>
+
+    <!-- React component rendering -->
+    <script src="../components/topbar.js" type="text/babel"></script>
+    <script src="../components/register.js" type="text/babel"></script>
 
   </body>
 </html>
