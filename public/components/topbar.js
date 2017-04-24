@@ -95,6 +95,23 @@ function renderLogoutButton() {
   ReactDOM.render(<LogoutButton />, document.getElementById('react-logout'));
 }
 
+/**
+ * Register Button component
+ */
+class RegisterButton extends React.Component {
+  register() {
+    window.location = '/user/register';
+  }
+
+  render () {
+    return (<button id="user-register-btn" onClick={this.register}>Register</button>);
+  }
+}
+
+function renderRegisterButton() {
+  ReactDOM.render(<RegisterButton />, document.getElementById('react-register'));
+}
+
 // call rendering functions
 renderTitle();
 
@@ -106,6 +123,7 @@ if(document.getElementById('react-freelancer-home-btn')) {
 // Either render login form or logout button, based on whether user already logged in
 if(document.getElementById('react-login')) {
   renderLoginForm();
+  renderRegisterButton();
 } else if(document.getElementById('react-logout')) {
   renderLogoutButton();
 }
