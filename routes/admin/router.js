@@ -198,7 +198,7 @@ router.delete('/claim', function(req, res) {
               } else if (!user.freelancer) {
                 res.status(400).json({ error : 'user is not claiming' }); // TESTED
               } else if (user.freelancer && !user.claiming) {
-                res.status(400).json({ error : 'user is already associtated with a freelancer' }); // TESTED
+                res.status(400).json({ error : 'user is already associated with a freelancer' }); // TESTED
               } else {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {
