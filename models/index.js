@@ -11,13 +11,17 @@ require('./Tag');
 require('./Category');
 require('./User');
 require('./Claim');
+require('./Day');
+require('./Availability');
 
 
 module.exports = {
-	'Freelance'  : mongoose.model('Freelance'),
-	'Review'     : mongoose.model('Review'),
-  'Tag'        : mongoose.model('Tag'),
-  'Category'   : mongoose.model('Category'),
-  'User'			 : mongoose.model('User'),
-  'Claim'			 : mongoose.model('Claim')
+	'Freelance' 	  : mongoose.model('Freelance'),
+	'Review'     		: mongoose.model('Review'),
+  'Tag'     	    : mongoose.model('Tag'),
+  'Category'  	  : mongoose.model('Category'),
+  'User'				  : mongoose.model('User'),
+  'Claim'			 		: mongoose.model('Claim'),
+	'Day'				 		: mongoose.model('Day'),
+	'Availability'  : mongoose.model('Availability')
 }
