@@ -11,11 +11,12 @@
 const mongoose = require('mongoose');
 const ObjectID = mongoose.Schema.Types.ObjectId;
 
-const Day = require('./Day');
+require('./Day');
+
 
 const Availability = exports.Availability = new mongoose.Schema({
-    days   			: [ { type: Day, default: [] } ],
-    recurrence	: { type: String, enum:{ "none", "weekly", "monthly" } },
+    days   			: [ { type: Object, default: [] } ],
+    recurrence	: { type: String, enum: [ 'none', 'weekly', 'monthly' ] },
   },
   {
     versionKey: false,

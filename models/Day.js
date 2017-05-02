@@ -14,7 +14,7 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 
 
 const Day = exports.Day = new mongoose.Schema({
-    day    : { type: String, enum: { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" } },
+    day    : { type: String, enum: [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ] },
     startTime    : { type: Date, required: true },
     endTime			: { type: Date, required: true },
   },
