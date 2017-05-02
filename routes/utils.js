@@ -57,14 +57,4 @@ module.exports = {
     });
   },
 
-  checkFreelancerExistsAndIsNotClaimed : function(freelancerId, done) {
-    if (ObjectId.isValid(freelancerId)) {
-      Freelance.findById(freelancerId, function(err, res) {
-        if (err || !res || res.state == 'verified') done(false);
-        else done(true);
-      });
-    }
-    else done(false);
-  },
-
 }

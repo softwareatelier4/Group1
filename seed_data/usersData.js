@@ -22,9 +22,17 @@ var usersData = {
       "email"     : "summonmonster@abadar.ab"
     },
     {
+      "_id"       : "58cc4941fc13ae612a10000a",
       "username"  : "Robb Elkson",
       "password"  : "perdonamierastil",
       "email"     : "summonmonster@erastil.er"
+    },
+    {
+      "_id"       : "58cc4941fc13ae612a10000b",
+      "username"  : "Robb Bis",
+      "password"  : "perdonamierastil",
+      "email"     : "summonmonster@erastile.er",
+      "freelancer": "58cc4941fc13ae612c00000e"
     }
   ]
 }

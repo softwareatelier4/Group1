@@ -13,10 +13,22 @@ var test_utils = require('./utils');
 var request = require('supertest');
 
 describe('User-get test: ', function() {
+  describe('GET /user', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    it('should be unauthorised if no user logged in', function(done) {
+      request(app)
+        .get('/user')
+        .set('Accept', 'application/json')
+        .expect(401)
+        .end(done);
+    });
+  });
 
   describe('GET /user/:username', function() {
     before(seed);
-    after(utils.dropDb);
+    after(utils.dropDbAndCloseConnection);
 
     it('should list the user with correct data and without the password', function(done) {
       request(app)

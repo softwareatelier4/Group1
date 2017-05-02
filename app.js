@@ -7,6 +7,14 @@ var dustjs = require('adaro');
 var app = express();
 var methodOverride = require('method-override');
 
+const session = require('express-session');
+app.use(session({
+  secret: 'plswork4me',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
+
 // Connect to MongoDB here
 var mongoose = require('mongoose');
 mongoose.connect(config.mongoUrl + config.mongoDbName);
@@ -41,6 +49,8 @@ app.use('/freelance', routers.freelance);
 app.use('/search', routers.search);
 app.use('/category', routers.category);
 app.use('/user', routers.user);
+app.use('/claim', routers.claim);
+app.use('/admin', routers.admin);
 
 module.exports = app;
 process.title = 'jobadvisor'
