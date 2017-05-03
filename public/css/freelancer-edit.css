@@ -1,0 +1,13 @@
+/**
+ * Freelancer View Styling
+ * js components in components/manage-freelancer.js
+ */
+
+#emergency-form-repetition-week {
+  display: flex;
+  flex-direction: column;
+}
+
+#emergency-form-repetition-week label {
+  padding-right: .5em;
+}

@@ -60,10 +60,18 @@ router.get('/edit', function(req, res) {
          }
       });
     } else {
+      // TODO remove, commented for testing
+      // res.render('freelancer-edit', {
+      //   title: "JobAdvisor - Edit Freelancer Profile" ,
+      //   logged: false
+      // });
       res.render('freelancer-edit', {
         title: "JobAdvisor - Edit Freelancer Profile" ,
-        logged: false
+        logged: true,
+        username: "MrSatan",
+        userFreelancer: "58cc4942fc13ae612c000023"
       });
+
     }
 
   } else res.sendStatus(400);

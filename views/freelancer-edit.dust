@@ -5,6 +5,8 @@
     <title>JobAdvisor</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
+    <link rel="stylesheet" type="text/css" href="../css/freelancer-edit.css" />
+
   </head>
   <body>
     <div id='topbar'>
@@ -21,7 +23,7 @@
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>
-    <div id='root'>
+    <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
       {?logged}
         <div id='react-freelancer-edit'></div>
       {:else}
@@ -35,7 +37,7 @@
     <script src="../js/react-dom-15.0.1.js"></script>
     <script src="../js/browser.min.js"></script>
     <!-- Scripts -->
-    <script src="../components/manage-freelancer.js" type="text/babel"></script>
+    <script src="../components/freelancer-edit.js" type="text/babel"></script>
     <script src="../components/topbar.js" type="text/babel"></script>
 
   </body>
