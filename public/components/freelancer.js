@@ -319,7 +319,30 @@ class ReviewForm extends React.Component {
   }
 }
 
+class ReplyForm extends React.Component {
+  render() {
+    return (
+      <div className="reply-form">
+        <h5>Post reply:</h5>
+      </div>
+    )
+  }
+}
+
 class Review extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { replying: false };
+  }
+
+  replyToReview(e) {
+    this.setState({
+      replying: !this.state.replying
+    })
+    console.log("replying miciomiao buton");
+  }
+
   render() {
     return (
       <article style={{display: this.props.display}}>
@@ -329,6 +352,12 @@ class Review extends React.Component {
           <span className="review-score">Score: {this.props.score}/5</span>
         </div>
         <div className="review-text">{this.props.text}</div>
+        {this.state.replying ? (
+            <ReplyForm/>) : (null)
+        }
+        <button onClick={this.replyToReview.bind(this)}>
+          {this.state.replying ? "Cancel" : "Reply"}
+        </button>
       </article>
     );
   }
