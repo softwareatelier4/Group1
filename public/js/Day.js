@@ -1,13 +1,17 @@
 function Day(day, begin, end, location){
 
 	if(!begin || !end || !location){
-		error(69, 'a field in a Day is undefined');
+		console.log(69+' a field in a Day is undefined');
+		return;
 	}
 
 	if(!(begin instanceof Date) ||
-	!(end instanceof Date) ||
-	!(location instanceof String)){
-		error(42, 'a field in Day is of the wrong type');
+	!(end instanceof Date) 
+	||
+	!(typeof location === 'string')
+	){
+		console.log(42+' a field in Day is of the wrong type');
+		return;
 	}
 
 	let a = {
@@ -22,7 +26,8 @@ function Day(day, begin, end, location){
 	} else if (day instanceof Date){
 		a.day = day;
 	} else{
-		error(23, 'Day.day is not of type Date');
+		console.log(23+' Day.day is not of type Date');
+		return;
 	}
 
 	return a;
@@ -31,3 +36,5 @@ function Day(day, begin, end, location){
 function sortBegin(day1, day2){
 	return day1.begin < day2.begin;
 }
+
+console.log('x')
