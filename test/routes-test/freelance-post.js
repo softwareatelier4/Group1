@@ -118,6 +118,45 @@ describe('Freelance-post test: ', function() {
     });
 
   });
+
+  // Test posting of reply to review
+  describe('POST /freelance/:freelanceid/review', function() {
+
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    // TEST: correct post of a reply to a review.
+    it('app should get answer 201 on POST reply /freelance/:freelanceid/review', function(done) {
+      request(app)
+      .post('/freelance/' + seedData[1].data[0]._id.toString() + '/review')
+      .send({
+        "author" : "Patrick",
+        "text" : "This is a a reply to a review.",
+        "score" : 0,
+        "reply" : "58cc4415fc13ae5afb0000c8"
+      })
+      .expect(201)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          var review = JSON.parse(res.text) || {};
+          review.should.have.property("reply");
+          review.should.have.property("_id", "58cc4415fc13ae5afb0000c8");
+          done();
+        }
+      });
+    });
+
+    it('should respond with a 404 if the given freelance ID is not in the database', function(done) {
+      request(app)
+        .post('/freelance/' + ObjectId().toString() + '/review')
+        .set('Accept', 'application/json')
+        .expect(404, done);
+    });
+
+  });
+
 });
 
 
