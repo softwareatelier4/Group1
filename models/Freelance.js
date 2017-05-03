@@ -46,6 +46,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
+		availability	: [ {type:Object, default:[] }],
 		//TODO add certifications
 	},
 	{
@@ -78,6 +79,82 @@ Freelance.pre('save', function (next) {
 			this.price = {min:0, max:0};
 		}
 	}
+
+	if (this.availability !== undefined){
+		let length = this.availability.length;
+		if(length > 7){
+			let monday = null;
+			let tuesday = null;
+			let wednesday = null;
+			let thursday = null;
+			let friday = null;
+			let saturday = null;
+			let sunday = null;
+
+			for(date of this.availability){
+				if(date.day !== undefined && date.day === "monday"){
+					monday = date;
+				} else if(date.day !== undefined && date.day === "tuesday"){
+					tuesday = date;
+				} else if(date.day !== undefined && date.day === "wednesday"){
+					wednesday = date;
+				} else if(date.day !== undefined && date.day === "thursday"){
+					thursday = date;
+				} else if(date.day !== undefined && date.day === "friday"){
+					friday = date;
+				} else if(date.day !== undefined && date.day === "saturday"){
+					saturday = date;
+				} else if(date.day !== undefined && date.day === "sunday"){
+					sunday = date;
+				}
+			}
+
+
+			let temp = [];
+			if(monday){
+				temp.push(monday);
+			}
+			if(tuesday){
+				temp.push(tuesday);
+			}
+			if(wednesday){
+				temp.push(wednesday);
+			}
+			if(thursday){
+				temp.push(thursday);
+			}
+			if(friday){
+				temp.push(friday);
+			}
+			if(saturday){
+				temp.push(saturday);
+			}
+			if(sunday){
+				temp.push(sunday);
+			}
+
+			this.availability = temp;
+		}
+	}
+
+
+	// need to look into this, is it possible to reject the save?
+	// if(this.availability != undefined){
+	// 	for(day of this.availability){
+	// 		if ((day.hasOwnProperty('day') && day.day instanceof Date){
+	//
+	// 		}
+	// 		if ((day.hasOwnProperty('begin') && day.begin instanceof Date){
+	//
+	// 		}
+	// 		if ((day.hasOwnProperty('end') && day.end instanceof Date){
+	//
+	// 		}
+	// 		if ((day.hasOwnProperty('location') && day.location instanceof String){
+	//
+	// 		}
+	// 	}
+	// }
 
 
 	next();
