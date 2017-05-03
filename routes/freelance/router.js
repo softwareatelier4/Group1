@@ -39,13 +39,20 @@ router.get('/new', function(req, res, next) {
   } else res.sendStatus(400);
 });
 
+//'reviews tags category reviews.reply'
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
 
   if (ObjectId.isValid(req.params.freelanceid)) {
     // distinguish between raw and ajax GET request (to render page or return JSON)
     if(req.headers.ajax) {
-      Freelance.findById(req.params.freelanceid).populate('reviews tags category').exec(function(err, freelance){
+      Freelance.findById(req.params.freelanceid).populate({
+        path: 'reviews',
+        populate: {
+          path: 'reply',
+          model: 'Review',
+        }
+      }).populate('tags category').exec(function(err, freelance) {
         if (err) {
           res.status(400).json(utils.formatErrorMessage(err));
         } else if (!freelance) {
@@ -77,17 +84,49 @@ router.get('/:freelanceid', function(req, res, next) {
   } else res.sendStatus(400);
 });
 
-// POST freelance/:freelanceid/review
+// POST freelance/:freelanceid/review/:replyingid
 router.post('/:freelanceid/review', function(req, res, next) {
   const newReview = new Review(req.body);
   if (ObjectId.isValid(req.params.freelanceid)) {
-    Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+    if (newReview.reply) {
+      // newReview is a reply, so add it to the database as a review and put it into the corresponding review
+      console.log("ENTERED IN REPLY");
+      Review.findById(newReview.reply).exec(function(err, review) {
+        if (err) return next(err);
+        if (!review) {
+          res.status(404).json({
+            message: "Trying to reply to a non-existent review."
+          });
+        } else {
+          newReview.reply = undefined;
+          newReview.save(function(err, saved) {
+            if (err) {
+              res.status(400).json(utils.formatErrorMessage(err));
+            } else {
+              review.reply = newReview;
+              review.save(function(err, saved) {
+                if (err) {
+                  res.status(400).json({
+                    message: "Could not save Review in Freelance."
+                  });
+                } else {
+                  console.log("POSTED REPLY" + review.reply);
+                  res.status(201).json(saved);
+                }
+              })
+            }
+          })
+        }
+      })
+    } else {
+      Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
       if (err) return next(err);
       if (!freelance) {
         res.status(404).json({
           message: "Freelance not found with the given id."
         });
       } else {
+        // newReview is a review, therefore add a new review to the database and to the array of reviews of the corresponding freelance
         newReview.save(function(err, saved) {
           if (err) {
             res.status(400).json(utils.formatErrorMessage(err));
@@ -107,6 +146,7 @@ router.post('/:freelanceid/review', function(req, res, next) {
         });
       }
     });
+    }
   } else {
     res.sendStatus(400);
   }
