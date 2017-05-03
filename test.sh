@@ -7,5 +7,5 @@ printf "\nPROCESS USING PORT 3001:\n" && lsof -i:3000 || printf "NONE" && printf
 npm start &
 sleep 1
 node seed.js
-# xvfb-run -a -e /dev/stdout --  ./nightwatch # nightwatch runs successfully in local
+xvfb-run -a -e /dev/stdout --  ./nightwatch # nightwatch runs successfully in local
 pkill "jobadvisor"
