@@ -13,8 +13,9 @@ const User = mongoose.model('User');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
-router.all('/new', middleware.supportedMethods('GET, OPTIONS')); //add delete later
+router.all('/new', middleware.supportedMethods('GET, OPTIONS'));
 router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+router.all('/:freelanceid/availability', middleware.supportedMethods('PUT, OPTIONS')); //add delete later
 
 // GET /freelance/new
 router.get('/new', function(req, res, next) {
@@ -148,6 +149,42 @@ router.post('/:freelanceid/review', function(req, res, next) {
     res.sendStatus(400);
   }
 });
+
+// PUT freelance/:freelanceid/availability/
+router.put('/:freelanceid/availability', function(req, res, next) {
+  let days_array = req.body;
+
+  // check if the request is valid
+  days_array.forEach(function(day) {
+    if (
+      !day.day
+      || !day.begin
+      || !day.end
+      || !day.location
+      || !(day.day instanceof Date)
+      || !(day.begin instanceof Date)
+      || !(day.end instanceof Date)
+      || !(typeof day.location === 'string')
+    ) res.sendStatus(400).end();
+  });
+
+  Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+    if (err) res.status(500).json(utils.formatErrorMessage(err));
+    else if (!freelance) {
+      res.status(404).json({
+        message: "Freelance not found with the given id."
+      });
+    } else {
+      freelance.availability = days_array;
+      freelance.save(function (err, updated) {
+        if (err) res.status(400).json(utils.formatErrorMessage(err));
+        res.status(204).end();
+      });
+    }
+  });
+
+});
+
 
 // POST freelance/
 router.post('/', function(req, res, next) {
