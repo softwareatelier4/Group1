@@ -12,8 +12,10 @@
       <div id="react-title"></div>
       <!-- Login - show only if not already logged -->
       {^logged}
+        <span id="topbar-filler-left"></span>
         <div id="react-login"></div>
         <div id="react-register"></div>
+        <span id="topbar-filler-right"></span>
       {:else}
         <div id="react-username">{username}</div>
         <div id="react-logout"></div>

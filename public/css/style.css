@@ -94,6 +94,11 @@ a#title {
   cursor: pointer;
 }
 
+#react-register {
+  display: flex;
+  align-items: center;
+}
+
 #login-form {
   height: 100%;
   display: flex;
@@ -115,10 +120,10 @@ a#title {
   color: var(--basic-white);
 }
 
-#login-submit {
+#login-submit, #user-register-btn  {
   padding-top: 7px;
   padding-bottom: 7px;
-  width: 70px;
+  width: 80px;
   height: auto;
   font-size: var(--input-font-size);
   border: 0;
@@ -127,16 +132,28 @@ a#title {
   border-bottom: solid 4px var(--home-search-border);
   outline: none;
   cursor: pointer;
+  text-align: center;
 }
 
-#login-submit:hover {
+#login-submit:hover, #user-register-btn:hover {
   background-color: var(--background);
   border-bottom: solid 4px var(--login-button-border);
 }
 
-#login-submit:active {
+#login-submit:active, #user-register-btn:active {
   border-bottom: 0;
   border-top: solid 4px var(--accent-color);
+}
+
+#user-register-btn {
+  margin-left: 30px;
+}
+
+#topbar-filler-right {
+  flex-grow: 2;
+}
+#topbar-filler-left {
+  flex-grow: 1;
 }
 /* End topbar */
 
