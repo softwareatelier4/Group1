@@ -46,10 +46,11 @@ Review.pre('save', function(next) {
 	}
 
 	if (this.reply !== undefined) {
-		let length = this.reply.length;
+
+		let length = this.reply.text.length;
 
 		if (length > 1000) {
-			this.reply = this.reply.substring(0, 999);
+			this.reply = this.reply.text.substring(0, 999);
 		}
 	}
 
