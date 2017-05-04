@@ -6,6 +6,7 @@
 * score							Integer			Score of the review, goes from 1-5. Required.
 * target						ObjectID		Freelancer affected by review.
 * date							Date			date of the review, default now.
+* reply             String    reply from the author
 *
 * _id (ObjectID) will be added automatically by mongoose if not specified
 */
@@ -22,6 +23,7 @@ const Review = exports.Review = new mongoose.Schema({
 		text 	: { type: String },
 		score 	: { type: Number, required: true },
 		date	: { type: Date, default: Date.now },
+		reply 	: { type: ObjectID, ref: 'Review' },
 	},
 	{
 		versionKey: false,
@@ -40,6 +42,15 @@ Review.pre('save', function(next) {
 
 		if (length > 1000) {
 			this.text = this.text.substring(0, 999);
+		}
+	}
+
+	if (this.reply !== undefined) {
+
+		let length = this.reply.text.length;
+
+		if (length > 1000) {
+			this.reply = this.reply.text.substring(0, 999);
 		}
 	}
 
