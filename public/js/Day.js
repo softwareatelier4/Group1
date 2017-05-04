@@ -39,5 +39,3 @@ function Day(begin, end, location, day){
 function sortBegin(day1, day2){
 	return day1.begin < day2.begin;
 }
-
-console.log('x')
