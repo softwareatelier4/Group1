@@ -11,8 +11,6 @@ require('./Tag');
 require('./Category');
 require('./User');
 require('./Claim');
-require('./Day');
-require('./Availability');
 
 
 module.exports = {
@@ -22,6 +20,4 @@ module.exports = {
   'Category'  	  : mongoose.model('Category'),
   'User'				  : mongoose.model('User'),
   'Claim'			 		: mongoose.model('Claim'),
-	'Day'				 		: mongoose.model('Day'),
-	'Availability'  : mongoose.model('Availability')
 }
