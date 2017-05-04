@@ -119,7 +119,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Week days</label>
+          <label>Weekly schedule:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
@@ -162,6 +162,19 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
             From <input type="time" id="emergency-time-7-start" disabled /> to <input type="time" id="emergency-time-7-end" disabled />
             <input type="text" id="emergency-location-7" placeholder="Location" disabled />
           </span>
+        </div>
+        
+        <div id="emergency-form-repetition-type">
+          <label>Use same schedule from:
+            <input type="date" id="emergency-repetition-start-date" defaultValue={new Date().toJSON().slice(0,10)}/>
+          </label>
+          <label><input type="radio" name="emergency-repetition-type" value="weeks"/>
+            <input type="text" id="emergency-repetition-weeks" placeholder="For a number of weeks" />
+          </label>
+          <label>
+            <input type="radio" name="emergency-recurrence-type" value="until"/>
+            Until <input type="date" id="emergency-repetition-end-date" defaultValue={new Date().toJSON().slice(0,10)}/>
+          </label>
         </div>
 
         <input type="submit" />

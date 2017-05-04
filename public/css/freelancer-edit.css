@@ -3,9 +3,10 @@
  * js components in components/manage-freelancer.js
  */
 
-#emergency-form-repetition-week {
+form#emergency-form-repetition div {
   display: flex;
   flex-direction: column;
+  margin: 1em 0;
 }
 
 #emergency-form-repetition-week label {
