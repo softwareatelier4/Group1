@@ -26,6 +26,7 @@ html {
   --home-search-button-border-hover: #b72f2f;
   --form-label-color: #999;
   --form-input-border: #757575;
+  --login-button-border: #b1b1b1;
 
   /* Shadows */
   --box-shadow-material: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -44,14 +45,6 @@ html {
   height: 100%;
   justify-content: space-around;
   text-align: center;
-}
-
-#topbar{
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  background-color: var(--accent-color);
-  margin-bottom: 50px;
 }
 
 #react-title {
@@ -100,6 +93,51 @@ a#title {
   box-shadow: var(--box-shadow-material-hover);
   cursor: pointer;
 }
+
+#login-form {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#login-username, #login-password {
+  padding: 10px 10px 5px 5px;
+  border: none;
+  border-bottom: solid 2px var(--basic-white);
+  transition: border 0.3s;
+  outline: none;
+  width: 35%;
+  height: auto;
+  font-size: var(--input-font-size);
+  background: var(--accent-color);
+  color: var(--basic-white);
+}
+
+#login-submit {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 70px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+}
+
+#login-submit:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#login-submit:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
 /* End topbar */
 
 /* Submit button */
@@ -127,3 +165,43 @@ a#title {
 }
 
 /* End submit button */
+
+/* Placeholder bullshit color change */
+
+#login-username::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: var(--basic-white);
+}
+
+#login-username:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color: var(--basic-white);
+opacity:  1;
+}
+
+#login-username::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: var(--basic-white);
+   opacity:  1;
+}
+
+#login-username:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: var(--basic-white);
+}
+
+#login-password::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: var(--basic-white);
+}
+
+#login-password:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color: var(--basic-white);
+opacity:  1;
+}
+
+#login-password::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: var(--basic-white);
+   opacity:  1;
+}
+
+#login-password:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: var(--basic-white);
+}
+
+/* End placeholder bullshit */
