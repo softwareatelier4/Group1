@@ -54,6 +54,7 @@ function renderReviews(data) {
   const listReviews = reviews.map((review, index) =>
     <Review
       key={index}
+      id={review._id}
       author={review.author}
       text={review.text}
       score={review.score}
@@ -317,12 +318,32 @@ class ReviewForm extends React.Component {
 class ReplyForm extends React.Component {
 
   handleSubmitReply(e) {
-    // TODO
+    e.preventDefault();
+    let form = e.target;
+
+    const formData = {};
+    formData['text'] = form.elements['comment'].value;
+    formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
+    formData['score'] = 0;
+    formData['reply'] = form.parentNode.parentNode.getAttribute('data-id');
+
+    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+      /**
+       * we discard received data, we get and re-render all reviews and freelance info
+       * since we do not update them live, and here we would have to render the component
+       * again anyway (new review and new average)
+       */
+      //  ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
+      //    renderComponent(data);
+      //    // reset form
+      //    document.getElementById("reply-form").reset();
+      //  });
+    });
   }
   
   render() {
     return (
-      <div className="review-form">
+      <div className="reply-form">
         <h5>Post reply:</h5>
         <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
           <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
@@ -345,12 +366,11 @@ class Review extends React.Component {
     this.setState({
       replying: !this.state.replying
     })
-    console.log("replying miciomiao buton");
   }
 
   render() {
     return (
-      <article style={{display: this.props.display}}>
+      <article style={{display: this.props.display}} data-id={this.props.id}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
           <span className="review-date">Date: {this.props.date}</span>

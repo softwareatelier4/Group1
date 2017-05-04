@@ -90,7 +90,6 @@ router.post('/:freelanceid/review', function(req, res, next) {
   if (ObjectId.isValid(req.params.freelanceid)) {
     if (newReview.reply) {
       // newReview is a reply, so add it to the database as a review and put it into the corresponding review
-      console.log("ENTERED IN REPLY");
       Review.findById(newReview.reply).exec(function(err, review) {
         if (err) return next(err);
         if (!review) {
@@ -110,7 +109,6 @@ router.post('/:freelanceid/review', function(req, res, next) {
                     message: "Could not save Review in Freelance."
                   });
                 } else {
-                  console.log("POSTED REPLY" + review.reply);
                   res.status(201).json(saved);
                 }
               })
