@@ -261,7 +261,6 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.clearText = this.clearText.bind(this);
   }
 
   handleSubmit(evt) {
@@ -287,10 +286,6 @@ class ReviewForm extends React.Component {
     });
   }
 
-  clearText(evt) {
-    evt.target.value = "";
-  }
-
   generateRadioButtons() {
     const MAX_SCORE = 5;
     let group = [];
@@ -310,7 +305,7 @@ class ReviewForm extends React.Component {
             <label>Score: </label>
             {this.generateRadioButtons()}
           </div>
-          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.clearText}>
+          <textarea className="review-form-comment" name="comment" placeholder="Enter text...">
           </textarea>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
@@ -320,10 +315,20 @@ class ReviewForm extends React.Component {
 }
 
 class ReplyForm extends React.Component {
+
+  handleSubmitReply(e) {
+    // TODO
+  }
+  
   render() {
     return (
-      <div className="reply-form">
+      <div className="review-form">
         <h5>Post reply:</h5>
+        <form id="review-form" onSubmit={this.handleSubmitReply}>
+          <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
+          </textarea>
+          <input name="submit-button" className="submit-button" type="submit" value="Reply"/>
+        </form>
       </div>
     )
   }
