@@ -60,6 +60,7 @@ function renderReviews(data) {
       score={review.score}
       date={review.date}
       reviewCount={reviews.length}
+      reply={review.reply}
       display={(review.text && review.text != "Enter text...") ? "inherit" : "none"}
     />
   );
@@ -325,8 +326,7 @@ class ReplyForm extends React.Component {
     formData['text'] = form.elements['comment'].value;
     formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
     formData['score'] = 0;
-    formData['reply'] = form.parentNode.parentNode.getAttribute('data-id');
-
+    formData['reply'] = form.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
     ajaxRequest("POST", window.location + "/review", {}, formData, function() {
       /**
        * we discard received data, we get and re-render all reviews and freelance info
@@ -377,12 +377,21 @@ class Review extends React.Component {
           <span className="review-score">Score: {this.props.score}/5</span>
         </div>
         <div className="review-text">{this.props.text}</div>
-        {this.state.replying ? (
-            <ReplyForm/>) : (null)
-        }
-        <button onClick={this.replyToReview.bind(this)}>
-          {this.state.replying ? "Cancel" : "Reply"}
-        </button>
+        <div className="reply-container">
+          {this.props.reply ? (<span>{this.props.reply ? 
+            (<div>
+              <p className="reply-date">{this.props.reply.date}</p>
+              <p className="reply-text">{this.props.reply.text}</p>
+              </div>) : (null)}</span>) :
+          (
+            <div>
+            {this.state.replying ? (<ReplyForm/>) : (null)}
+            <button onClick={this.replyToReview.bind(this)}>
+              {this.state.replying ? ("Cancel") : ("Reply")}
+            </button>
+            </div>
+          )}
+        </div>
       </article>
     );
   }

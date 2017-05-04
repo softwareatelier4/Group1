@@ -42,7 +42,6 @@ router.get('/new', function(req, res, next) {
 //'reviews tags category reviews.reply'
 // GET freelance/:freelanceid
 router.get('/:freelanceid', function(req, res, next) {
-
   if (ObjectId.isValid(req.params.freelanceid)) {
     // distinguish between raw and ajax GET request (to render page or return JSON)
     if(req.headers.ajax) {
@@ -87,8 +86,11 @@ router.get('/:freelanceid', function(req, res, next) {
 // POST freelance/:freelanceid/review/:replyingid
 router.post('/:freelanceid/review', function(req, res, next) {
   const newReview = new Review(req.body);
+  console.log("isvalid " + ObjectId.isValid(req.params.freelanceid));
   if (ObjectId.isValid(req.params.freelanceid)) {
+    console.log("entering " + req.body.reply);
     if (newReview.reply) {
+      console.log("newReview.reply: " + newReview);
       // newReview is a reply, so add it to the database as a review and put it into the corresponding review
       Review.findById(newReview.reply).exec(function(err, review) {
         if (err) return next(err);
@@ -98,6 +100,7 @@ router.post('/:freelanceid/review', function(req, res, next) {
           });
         } else {
           newReview.reply = undefined;
+          console.log("sacving: " + newReview);
           newReview.save(function(err, saved) {
             if (err) {
               res.status(400).json(utils.formatErrorMessage(err));
