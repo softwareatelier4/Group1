@@ -55,6 +55,8 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.changeCheck = this.changeCheck.bind(this);
     this.onCheckChange = this.onCheckChange.bind(this);
+    this.onRadioChange = this.onRadioChange.bind(this);
+
     this.generateDays = this.generateDays.bind(this);
 
   }
@@ -71,14 +73,15 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       repetition = Number(document.getElementById('emergency-repetition-weeks').value);
     } else { // if (repetition == "until") {
       repetition = new Date(document.getElementById('emergency-repetition-end-date').value);
+      console.log(repetition);
     }
 
     let thisRef = this;
 
     daysInfo.forEach(function(day) {
       if(day.checked) {
-
         let date = new Date(document.getElementById('emergency-repetition-start-date').value);
+        // set first day after starting date
         let dayOffset = day.value - date.getDay();
         if(dayOffset < 0) {
           dayOffset += 7;
@@ -89,12 +92,6 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
         let startString = document.getElementById("emergency-time-" + day.value + "-start").value;
         let endString = document.getElementById("emergency-time-" + day.value + "-end").value;
         let location = document.getElementById("emergency-location-" + day.value).value;
-
-        // check time is set
-        if(!startString || !endString) {
-          document.getElementById('emergency-single-date-error').innerHTML = "Invalid time interval";
-          return;
-        }
 
         let startDate = new Date(date);
         startDate.setHours(startString.split(':')[0]);
@@ -118,6 +115,8 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     });
 
     //TODO ajax
+    if(scheduledDays.length == 0) return renderError("Schedule at least a one day");
+
     console.log(scheduledDays);
 
   }
@@ -130,33 +129,32 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
    */
   generateDays(repetition, day) {
     let days = [];
+
+    let copyAndIncrementWeek = (day, weeksAhead) => {
+      let newBegin = new Date();
+      let newEnd = new Date();
+      newBegin.setTime(day.begin.getTime());
+      newBegin.setDate(day.begin.getDate() + 7 * weeksAhead);
+      newEnd.setTime(day.end.getTime());
+      newEnd.setDate(day.end.getDate() + 7 * weeksAhead);
+      return new Day(newBegin, newEnd, day.location)
+    }
+
     switch (typeof repetition) {
       case 'number': // create a day copy per week, for # of weeks
         for(let i = 0; i < repetition; i++) {
-          let newBegin = new Date();
-          let newEnd = new Date();
-          newBegin.setTime(day.begin.getTime());
-          newBegin.setDate(day.begin.getDate() + 7 * (i + 1));
-          newEnd.setTime(day.end.getTime());
-          newEnd.setDate(day.end.getDate() + 7 * (i + 1));
-          days.push(Day(newBegin, newEnd, day.location));
+          days.push(copyAndIncrementWeek(day, i));
         }
         break;
 
       case 'object': // create a day copy per week, until date
-        // do {
-        //   let newBegin = new Date();
-        //   let newEnd = new Date();
-        //   newBegin.setDate(day.begin.getDate() + 7 * (i + 1));
-        //   newBegin.setTime(day.begin.getTime());
-        //   newEnd.setDate(day.end.getDate() + 7 * (i + 1));
-        //   newEnd.setTime(day.end.getTime());
-        //   days.push(new Day(newBegin, newEnd, day.location));
-        //} while(newBegin < repetition);
+        let newDay;
+        for(let i = 0; (newDay = copyAndIncrementWeek(day, i)).day < repetition; i++) {
+          days.push(newDay);
+        }
     }
 
     return days;
-
   }
 
   // this is needed to fire a change event
@@ -179,6 +177,14 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     locationInput.disabled = !evt.target.checked;
     locationInput.required = evt.target.checked;
+  }
+
+  onRadioChange(evt) {
+    let radio = evt.target;
+    let repetitionWeeks = document.getElementById('emergency-repetition-weeks');
+    let isNumberOfWeeks = radio.value == "weeks";
+    repetitionWeeks.disabled = !isNumberOfWeeks;
+    repetitionWeeks.required = isNumberOfWeeks;
   }
 
 
@@ -235,11 +241,11 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
           <label>Use schedule from:
             <input type="date" id="emergency-repetition-start-date" defaultValue={new Date().toJSON().slice(0,10)}/>
           </label>
-          <label><input type="radio" name="emergency-repetition-type" value="weeks" defaultChecked={true} />
-            <input type="text" id="emergency-repetition-weeks" placeholder="For a number of weeks" />
+          <label><input type="radio" name="emergency-repetition-type" value="weeks" defaultChecked={true} onChange={this.onRadioChange} />
+            <input type="text" id="emergency-repetition-weeks" placeholder="For a number of weeks" required/>
           </label>
           <label>
-            <input type="radio" name="emergency-repetition-type" value="until" />
+            <input type="radio" name="emergency-repetition-type" value="until" onChange={this.onRadioChange} />
             Until <input type="date" id="emergency-repetition-end-date" defaultValue={new Date().toJSON().slice(0,10)}/>
           </label>
         </div>
