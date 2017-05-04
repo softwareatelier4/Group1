@@ -44,6 +44,8 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeCheck = this.changeCheck.bind(this);
+    this.onCheckChange = this.onCheckChange.bind(this);
   }
 
   handleSubmit(evt) {
@@ -94,52 +96,71 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     console.log(scheduledDays);
 
   }
+
+  // this is needed to fire a change event
+  changeCheck(evt) {
+    let current = evt.target.getAttribute('checked');
+    evt.target.setAttribute('checked', !current);
+  }
+
+  onCheckChange(evt) {
+    let day = evt.target.value;
+    let startInput = document.getElementById('emergency-time-' + day + '-start');
+    let endInput = document.getElementById('emergency-time-' + day + '-end');
+    let locationInput = document.getElementById('emergency-location-' + day);
+
+    startInput.disabled = !evt.target.checked;
+    endInput.disabled = !evt.target.checked;
+    locationInput.disabled = !evt.target.checked;
+  }
+
+
   render() {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
           <label>Week days</label>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="1" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
-            From <input type="time" id="emergency-time-1-start"></input> to <input type="time" id="emergency-time-1-end"></input>
-            <input type="text" id="emergency-location-1" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-1-start" disabled /> to <input type="time" id="emergency-time-1-end" disabled />
+            <input type="text" id="emergency-location-1" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="2" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="2" />
             <label>Tu</label>
-            From <input type="time" id="emergency-time-2-start"></input> to <input type="time" id="emergency-time-2-end"></input>
-            <input type="text" id="emergency-location-2" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-2-start" disabled /> to <input type="time" id="emergency-time-2-end" disabled />
+            <input type="text" id="emergency-location-2" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="3" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="3" />
             <label>We</label>
-            From <input type="time" id="emergency-time-3-start"></input> to <input type="time" id="emergency-time-3-end"></input>
-            <input type="text" id="emergency-location-3" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-3-start" disabled /> to <input type="time" id="emergency-time-3-end" disabled />
+            <input type="text" id="emergency-location-3" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="4" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="4" />
             <label>Th</label>
-            From <input type="time" id="emergency-time-4-start"></input> to <input type="time" id="emergency-time-4-end"></input>
-            <input type="text" id="emergency-location-4" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-4-start" disabled /> to <input type="time" id="emergency-time-4-end" disabled />
+            <input type="text" id="emergency-location-4" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="5" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="5" />
             <label>Fr</label>
-            From <input type="time" id="emergency-time-5-start"></input> to <input type="time" id="emergency-time-5-end"></input>
-            <input type="text" id="emergency-location-5" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-5-start" disabled /> to <input type="time" id="emergency-time-5-end" disabled />
+            <input type="text" id="emergency-location-5" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="6" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="6" />
             <label>Sa</label>
-            From <input type="time" id="emergency-time-6-start"></input> to <input type="time" id="emergency-time-6-end"></input>
-            <input type="text" id="emergency-location-6" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-6-start" disabled /> to <input type="time" id="emergency-time-6-end" disabled />
+            <input type="text" id="emergency-location-6" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" value="7" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="7" />
             <label>Su</label>
-            From <input type="time" id="emergency-time-7-start"></input> to <input type="time" id="emergency-time-7-end"></input>
-            <input type="text" id="emergency-location-7" placeholder="Location"></input>
+            From <input type="time" id="emergency-time-7-start" disabled /> to <input type="time" id="emergency-time-7-end" disabled />
+            <input type="text" id="emergency-location-7" placeholder="Location" disabled />
           </span>
         </div>
 
