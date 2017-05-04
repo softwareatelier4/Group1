@@ -300,7 +300,7 @@ class ReviewForm extends React.Component {
     return (
       <div className="review-form">
         <h3>Post a review</h3>
-        <form id="review-form" onSubmit={this.handleSubmit}>
+        <form id="review-form" onSubmit={this.handleSubmit} method="post">
           <div className="score-selector">
             <label>Score: </label>
             {this.generateRadioButtons()}
@@ -324,7 +324,7 @@ class ReplyForm extends React.Component {
     return (
       <div className="review-form">
         <h5>Post reply:</h5>
-        <form id="review-form" onSubmit={this.handleSubmitReply}>
+        <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
           <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
           </textarea>
           <input name="submit-button" className="submit-button" type="submit" value="Reply"/>
