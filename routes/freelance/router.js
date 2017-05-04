@@ -153,6 +153,7 @@ router.post('/:freelanceid/review', function(req, res, next) {
 // PUT freelance/:freelanceid/availability/
 router.put('/:freelanceid/availability', function(req, res, next) {
   let days_array = req.body;
+  let bad_data = false;
 
   // check if the request is valid
   days_array.forEach(function(day) {
@@ -165,7 +166,10 @@ router.put('/:freelanceid/availability', function(req, res, next) {
       || !(day.begin instanceof Date)
       || !(day.end instanceof Date)
       || !(typeof day.location === 'string')
-    ) res.sendStatus(400).end();
+    ) {
+      res.sendStatus(400);
+      return next();
+    }
   });
 
   Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
