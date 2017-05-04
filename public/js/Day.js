@@ -1,16 +1,19 @@
-function Day(day, begin, end, location){
+function Day(begin, end, location, day){
 
 	if(!begin || !end || !location){
 		console.log(69+' a field in a Day is undefined');
 		return;
 	}
-
-	if(!(begin instanceof Date) ||
-	!(end instanceof Date) 
-	||
-	!(typeof location === 'string')
-	){
-		console.log(42+' a field in Day is of the wrong type');
+	if(!(begin instanceof Date)){
+		console.log('begin is of the wrong type. Must be Date.');
+		return;
+	}
+	if (!(end instanceof Date)) {
+		console.log('end is of the wrong type. Must be Date.');
+		return;
+	}
+	if (!(typeof location === 'string')) {
+		console.log('location is of the wrong type. Must be String.');
 		return;
 	}
 
