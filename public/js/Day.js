@@ -6,7 +6,7 @@
  * @param {Date} day      day of week (time is midnight by default, day of week is the same as `end` and `begin`)
  */
 
-function Day(begin, end, location, day) {
+function Day(begin, end, location, isRepeated, day) {
 
 	if(!begin || !end || !location) {
 		return;
@@ -25,7 +25,8 @@ function Day(begin, end, location, day) {
 		day: null,
 		begin: begin,
 		end: end,
-		location: location
+		location: location,
+		isRepeated: isRepeated || false
 	}
 
 	if(!day) {

@@ -2,6 +2,59 @@ function renderError(errorString) {
   document.getElementById('emergency-single-date-error').innerHTML = errorString;
 }
 
+
+
+class FreelancerEmergencySingleDate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.deleteDate = this.deleteDate.bind(this);
+  }
+
+  deleteDate(evt) {
+    console.log(evt.target.parentNode);
+  }
+
+  render() {
+    let day = this.props.day;
+    let timeSettings = { hour12: false,  hour: "numeric",  minute: "numeric" } ;
+    return (
+      <li>
+        {
+          day.day.toLocaleDateString('en-GB')
+          + " from " + day.begin.toLocaleTimeString('en-US',  timeSettings)
+          + " to " + day.end.toLocaleTimeString('en-US',  timeSettings)
+          + " in " + day.location
+        }
+        <input type="button" value="Delete" onClick={this.deleteDate} />
+      </li>
+    );
+  }
+}
+
+let testingDates = [
+  new Day(new Date(), new Date(), "L", false),
+  new Day(new Date(), new Date(), "L", false),
+  new Day(new Date(), new Date(), "L", false)
+];
+
+renderSingleDates(testingDates);
+function renderSingleDates(days) {
+  // get single days (not set via weekly schedule)
+  let singleDays = days.filter((day) => { return !day.isRepeated; });
+
+  let dayList = singleDays.map((day, index) => <FreelancerEmergencySingleDate day={day} key={index} /> );
+  console.log(dayList);
+  ReactDOM.render(
+    <ul>
+      <label>Single dates saved:</label>
+      {dayList}
+    </ul>,
+    document.getElementById('react-freelancer-emergency-single-list')
+  );
+}
+
+
+
 class FreelancerSingleDateForm extends React.Component {
   constructor(props) {
     super(props);
@@ -27,20 +80,24 @@ class FreelancerSingleDateForm extends React.Component {
     let day = Day(startDate, endDate, location);
     console.log(day);
 
-    // TODO edit url
+    // TODO ajax
     let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
     // ajaxRequest("PUT", freelancerId + "/availability", {}, {}, function(newDays) {
     //   if(!newDays) {
     //     console.log("No data received");
     //   }
     // });
+    //
+    testingDates.push(day);
+    renderSingleDates(testingDates);
   }
+
   render() {
     return (
       <form id="emergency-form-single-date" onSubmit={this.handleSubmit}>
         <label>Select specific day(s):</label>
         <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
-        From <input type="time" id="emergency-single-start"></input> to <input type="time" id="emergency-single-end"/>
+        From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
         <input type="text" id="emergency-location-single" placeholder="Location" required />
         <input type="submit" value="+" />
         <span id="emergency-single-date-error"></span>
