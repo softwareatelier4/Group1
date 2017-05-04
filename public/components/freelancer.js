@@ -5,10 +5,15 @@
  * CSS styling in css/freelancer.css
  */
 
+let userName;
+
 ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
   // freelancer info
+  if (data.owner) {
+    userName = data.owner.username;
+  }
   const tags = data.tags;
   const listTags = tags.map((tag, index) =>
     <li key={index}>
@@ -367,6 +372,12 @@ class Review extends React.Component {
   }
 
   render() {
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
     return (
       <article style={{display: this.props.display}} data-id={this.props.id}>
         <div className="review-header">
@@ -384,9 +395,12 @@ class Review extends React.Component {
           (
             <div>
             {this.state.replying ? (<ReplyForm/>) : (null)}
-            <button onClick={this.replyToReview.bind(this)}>
-              {this.state.replying ? ("Cancel") : ("Reply")}
-            </button>
+            {isOwner ? (
+              <button onClick={this.replyToReview.bind(this)}>
+                {this.state.replying ? ("Cancel") : ("Reply")}
+              </button>
+              ) : (null)}
+            
             </div>
           )}
         </div>
