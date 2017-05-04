@@ -44,25 +44,6 @@ describe('Freelance pre&post :', function(done){
 		});
 	});
 	
-	// This test now is impossible because of preconditions
-	// on the 'validate' hook that happens before 'save'
-
-	// it ('should bound over 5 avgScore to 5', function(done) {
-	// 	let freelance = new Freelance();
-	// 	freelance.firstName = 'Mark';
-	// 	freelance.familyName = 'Knopfer';
-	// 	freelance.title = 'I am alive yeah';
-	// 	freelance.email = 'ripperoni@pepe.pe';
-	// 	freelance.price = {min: 20, max: 100};
-	// 	freelance.reviews = [];
-	// 	freelance.tags = [];
-	// 	freelance.avgScore = 500;
-	// 	freelance.save(function(err, saved){
-	// 		should.not.exist(err, 'No error should occur');
-	// 		saved.avgScore.should.equal(5);
-	// 		done();
-	// 	});
-	// });
 
 	it ('should have a score of 0 for no reviews', function(done) {
 		let freelance = new Freelance();

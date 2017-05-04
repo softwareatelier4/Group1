@@ -46,6 +46,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
+		availability	: [{type:Object, default:[] }],
 		//TODO add certifications
 	},
 	{
@@ -78,7 +79,6 @@ Freelance.pre('save', function (next) {
 			this.price = {min:0, max:0};
 		}
 	}
-
 
 	next();
 
