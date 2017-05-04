@@ -333,11 +333,9 @@ class ReplyForm extends React.Component {
        * since we do not update them live, and here we would have to render the component
        * again anyway (new review and new average)
        */
-      //  ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
-      //    renderComponent(data);
-      //    // reset form
-      //    document.getElementById("reply-form").reset();
-      //  });
+       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
+         renderReviews(data);
+       });
     });
   }
   
