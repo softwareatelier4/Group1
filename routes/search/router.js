@@ -21,7 +21,6 @@ router.get('/', function(req, res, next) {
   var pattern = '';
   if (keyword) {
     for(let word of keyword.split(' ')) {
-      console.log(word);
       pattern += word + '|';
     }
   }

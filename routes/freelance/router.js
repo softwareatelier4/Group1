@@ -162,10 +162,13 @@ router.put('/:freelanceid/availability', function(req, res, next) {
       && day.begin
       && day.end
       && day.location
-      // Cannot check, they are all 'string'
-      // && (day.day instanceof Date)
-      // && (day.begin instanceof Date)
-      // && (day.end instanceof Date)
+      // Checked using conversion to Date, but saved as a string
+      && (new Date (day.day) instanceof Date)
+      && (!isNaN((new Date (day.day)).valueOf()))
+      && (new Date (day.begin) instanceof Date)
+      && (!isNaN((new Date (day.begin)).valueOf()))
+      && (new Date (day.end) instanceof Date)
+      && (!isNaN((new Date (day.end)).valueOf()))
       && (typeof day.location === 'string')
       && (days_array.push(day))
     );
@@ -179,7 +182,6 @@ router.put('/:freelanceid/availability', function(req, res, next) {
           message: "Freelance not found with the given id."
         });
       } else {
-        console.log("HERE");
         freelance.availability = days_array;
         freelance.save(function (err, updated) {
           if (err) {
