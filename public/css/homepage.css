@@ -113,7 +113,7 @@ body {
 
 #filter-category, #filter-distance, #filter-duration {
   font-size: 0.8em;
-  width: 22vh;
+  width: 170px;
 }
 
 #filter-category {
@@ -124,7 +124,7 @@ body {
   border-radius: 2px;
 }
 
-#category-label {
+#category-label, #max-distance-label, #max-duration-label {
   width: 100%;
   padding: 5px 0;
   text-align: center;
@@ -151,6 +151,19 @@ body {
 #filter-category-dropdown:hover {
   background-color: var(--basic-white-hover);
   cursor: pointer;
+}
+
+#filter-distance, #filter-duration {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--basic-white);
+  border-radius: 0 0 2px 2px;
+  box-shadow: var(--box-shadow-material);
+}
+
+#filter-distance-temp, #filter-duration-temp {
+  padding: 0 10px;
+  height: 50%;
 }
 
 #freelancer-create-btn {
