@@ -43,21 +43,35 @@ router.get('/', function(req, res, next) {
       query.push({ _id : id});
     });
 
-    Freelance.find({ $or : query }).populate('category').lean().exec(function(err, results) {
+    Freelance.find({ $or : query }).populate('category').lean().exec(function(err, freelancers) {
       if (err) {
         res.status(400).json(err);
       } else {
         let destinations = [];
-        results.forEach(function(freelance) {
+        let destinationsEmergency = [];
+        freelancers.forEach(function(freelance) {
           utils.addLinks(freelance, "freelance");
           destinations.push(freelance.address);
           freelance.distance = Number.MAX_SAFE_INTEGER;
           freelance.duration = Number.MAX_SAFE_INTEGER;
-          freelance.emergency = {};
+          let day = freelancerAvailableDay(freelance, new Date(req.query.date));
+          if (day) {
+            freelance.emergency = {
+              available: true,
+              end: day.end,
+              location: day.location
+            };
+            destinationsEmergency.push(day.location);
+          } else {
+            freelance.emergency = {
+              available: false
+            }
+            destinationsEmergency.push('xjhasbdjahwbelaebhajwhbljfbhajw'); // Impossible location
+          }
         });
 
 			  if (!req.query.origin) {
-          res.json(results).end();
+          res.json(freelancers).end();
           return;
 			  }
 
@@ -65,9 +79,9 @@ router.get('/', function(req, res, next) {
         let googleMapsClient = GoogleMaps.createClient({
           // any works, it might stop working for some time after too many requests,
           // in case switch to another
-          // key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
+          key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
           // key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
-          key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
+          // key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
           // key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
         });
@@ -79,27 +93,47 @@ router.get('/', function(req, res, next) {
             let distances = response.json.rows[0].elements;
             distances.forEach(function(el, i) {
               if (el.distance) {
-                results[i].distance = el.distance.value;
-                results[i].duration = el.duration.value;
+                freelancers[i].distance = el.distance.value;
+                freelancers[i].duration = el.duration.value;
               } else {
-                results[i].distance = Number.MAX_SAFE_INTEGER;
-                results[i].duration = Number.MAX_SAFE_INTEGER;
+                freelancers[i].distance = Number.MAX_SAFE_INTEGER;
+                freelancers[i].duration = Number.MAX_SAFE_INTEGER;
               }
-              results[i].emergency = {
-                available : true,
-                distance : 1000000,
-                duration : 2000000,
-                end : new Date(),
-                location : 'Zurigo'
-              };
             });
-            res.json(results).end();
+            googleMapsClient.distanceMatrix({
+              origins: [ req.query.origin ],
+              destinations: destinationsEmergency
+            }, function(err, response) {
+              let distancesEmergency = response.json.rows[0].elements;
+              distancesEmergency.forEach(function(r, i) {
+                if (r.distance) {
+                  freelancers[i].emergency.distance = r.distance.value;
+                  freelancers[i].emergency.duration = r.duration.value;
+                } else {
+                  freelancers[i].emergency.distance = Number.MAX_SAFE_INTEGER;
+                  freelancers[i].emergency.duration = Number.MAX_SAFE_INTEGER;
+                }
+              });
+              res.json(freelancers).end();
+            });
           }
         });
       }
     });
   });
 });
+
+// Check if a freelancer is available in a given moment
+function freelancerAvailableDay(freelancer, date) {
+  for (let day of freelancer.availability) {
+    if (date.getTime() < day.begin.getTime()) {
+      return null;
+    } else if (date.getTime() <= day.end.getTime()) {
+      return day;
+    }
+  }
+  return null;
+}
 
 /** router for search */
 module.exports = router;
