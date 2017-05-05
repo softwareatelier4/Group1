@@ -19,11 +19,12 @@ var users = require('./usersData');
 var usersSize = users.data.length;
 var claims = require('./claimsData');
 var claimsSize = claims.data.length;
+var availabilities = require('./availabilityData');
+var availabilitySize = availabilities.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var n = Math.floor(Math.random() * catSize);
-  // console.log(categories.data[n]['_id']);
   var rndId = categories.data[n]['_id'];
   freelancers.data[i]['category'] = rndId;
   categories.data[n].freelancers.push(freelancers.data[i]['_id']);
@@ -43,14 +44,19 @@ for (var i = freelancersSize - 1; i >= 0; i--) {
     tags.data[n].freelancers.push(freelancers.data[i]['_id']);
   }
 }
-// hardcode the location
+// hardcode the location for freelancer
 var locations = ["Acquarossa", "Agno", "Alto Malcantone", "Airolo", "Aranno", "Arbedo-Castione", "Arogno", "Ascona", "Astano", "Avegno-Gordevio", "Balerna", "Bedano", "Bedigliora", "Bedretto", "Bellinzona", "Biasca", "Bioggio", "Bissone", "Blenio", "Bodio", "Bosco/Gurin", "Breggia", "Brione (Verzasca)", "Brione sopra Minusio", "Brissago", "Brusino Arsizio", "Cademario", "Cadempino", "Cadenazzo", "Camorino", "Campo (Vallemaggia)", "Canobbio", "Capriasca", "Caslano", "Castel San Pietro", "Centovalli", "Cerentino", "Cevio", "Chiasso", "Claro", "Coldrerio", "Collina d'Oro", "Comano", "Corippo", "Cresciano", "Croglio", "Cugnasco-Gerra", "Cureglia", "Curio", "Dalpe", "Faido", "Frasco", "Gambarogno", "Giornico", "Giubiasco", "Gnosca", "Gordola", "Gorduno", "Grancia", "Gravesano", "Gresso", "Gudo", "Iragna", "Isone", "Isorno", "Lamone", "Lavertezzo", "Lavizzara", "Linescio", "Locarno", "Lodrino", "Losone", "Lugano", "Lumino", "Maggia", "Magliaso", "Manno", "Maroggia", "Massagno", "Melano", "Melide", "Mendrisio", "Mergoscia", "Mezzovico-Vira", "Miglieglia", "Minusio", "Moleno", "Monte Carasso", "Monteceneri", "Monteggio", "Morbio Inferiore", "Morcote", "Mosogno", "Muralto", "Muzzano", "Neggio", "Novaggio", "Novazzano", "Onsernone", "Origlio", "Orselina", "Osogna", "Paradiso", "Personico", "Pianezzo", "Pollegio", "Ponte Capriasca", "Ponte Tresa", "Porza", "Prato (Leventina)", "Preonzo", "Pura", "Quinto", "Riva San Vitale", "Ronco sopra Ascona", "Rovio", "Sant'Antonino", "Sant'Antonio", "Savosa", "Sementina", "Serravalle", "Sessa", "Sobrio", "Sonogno", "Sorengo", "Stabio", "Tenero-Contra", "Terre di Pedemonte", "Torricella-Taverne", "Vacallo", "Vergeletto", "Vernate", "Vezia", "Vico Morcote", "Vogorno"];
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var rndl = Math.floor(Math.random() * locations.length);
   freelancers.data[i].address = locations[rndl];
 }
-// dump(freelancers.data);
+// hardcode location for availability
+for (var i = availabilities.data.length - 1; i >= 0; i--) {
+  var rndl = Math.floor(Math.random() * locations.length);
+  availabilities.data[i].location = locations[rndl];
+}
 
+// utility function to dump the whole seed data array of a model
 function dump(data){
   for (var i = data.length - 1; i >= 0; i--) {
     console.log(data[i]);
