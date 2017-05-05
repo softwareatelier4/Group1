@@ -110,7 +110,16 @@ class CardCategoryDocuments extends React.Component {
     alert("Not implemented yet ¯\\_(ツ)_/¯")
   }
   deleteDoc (e) {
-    alert("Not implemented yet ¯\\_(ツ)_/¯")
+    let cardCategory = e.target.parentNode.parentNode.parentNode.parentNode;
+    let categoryId = cardCategory.getAttribute('data-_id');
+    let docElement = e.target.parentNode;
+    let docName = docElement.getAttribute('data-name');
+    let query = `?username=${g_username}&password=${g_password}&id=${categoryId}&docname=${docName}`;
+    ajaxRequest('DELETE', `/admin/category/document${query}`, { ajax : true }, {}, function(res) {
+      if (res === 204) {
+        docElement.parentNode.removeChild(docElement);
+      }
+    });
   }
   render() {
     let docs = [];
@@ -118,7 +127,7 @@ class CardCategoryDocuments extends React.Component {
       let doc = this.props.documents[i];
       let isRequired = (doc.required) ? 'required' : 'not required';
       docs.push(
-        <li key={i}>
+        <li data-name={doc.name} key={i}>
           <span className="card-category-document-name">{doc.name}</span>
           <span className="card-category-document-required">{isRequired}</span>
           <button className="card-category-document-delete-btn" onClick={this.deleteDoc.bind(this)}>x</button>

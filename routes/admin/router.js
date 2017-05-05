@@ -200,7 +200,7 @@ router.post('/category/document', function(req, res) {
           category.documents.push(newDoc);
           category.save(function (err, updated) {
             if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
-            else res.status(204).end(); // TODO TEST
+            else res.status(201).json(newDoc).end(); // TODO TEST
           });
         }
       });
@@ -224,7 +224,7 @@ router.delete('/category/document', function(req, res) {
         } else if (!category) {
           res.status(404).json({ error : 'category not found' }); // TODO TEST
         } else {
-          let toRemove = req.body.name;
+          let toRemove = req.query.docname;
           let docs = category.documents;
           let deletedOne = docs.some(function(doc) {
             if (doc.name == toRemove) {
@@ -235,7 +235,9 @@ router.delete('/category/document', function(req, res) {
               });
               return true;
             }
-            else return false;
+            else {
+              return false;
+            }
           });
           if (!deletedOne) {
             res.status(404).json({ error : `document '${toRemove}' not found for category '${category.categoryName}'` }); // TODO TEST
