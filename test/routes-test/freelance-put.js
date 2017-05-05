@@ -70,14 +70,8 @@ describe('Freelance-put test: ', function() {
       data.push({
         "day" : new Date(),
         "begin" : new Date(),
-        "end" : "sneaky wrong data type",
-        "location" : "behind you"
-      });
-      data.push({
-        "day" : 1,
-        "begin" : new Date(),
         "end" : new Date(),
-        "location" : "Hawaii"
+        "location" : 1
       });
 
       request(app)
