@@ -7,6 +7,9 @@
  */
 
 function Day(begin, end, location, isRepeated, day) {
+	function dateToUTC(date) {
+    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+	}
 
 	if(!begin || !end || !location) {
 		return;
@@ -20,11 +23,10 @@ function Day(begin, end, location, isRepeated, day) {
 	if (!(typeof location === 'string')) {
 		return;
 	}
-
 	let a = {
 		day: null,
-		begin: begin,
-		end: end,
+		begin: dateToUTC(begin),
+		end: dateToUTC(end),
 		location: location,
 		isRepeated: isRepeated || false
 	}

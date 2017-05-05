@@ -176,12 +176,29 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     startInput.disabled = !evt.target.checked;
     startInput.required = evt.target.checked;
+    startInput.value = '';
 
     endInput.disabled = !evt.target.checked;
     endInput.required = evt.target.checked;
+    endInput.value = '';
+
 
     locationInput.disabled = !evt.target.checked;
     locationInput.required = evt.target.checked;
+    locationInput.value = '';
+
+    // handle special case when only checked day is unchecked (delete all repeated days)
+
+
+    if(!day.checked) {
+      savedRepeatedDates = savedRepeatedDates.filter(function(repeatedDay) {
+        console.log('rep',repeatedDay.begin.toLocaleString());
+        return new Date(repeatedDay.begin.toLocaleString()).getDay() != day;
+      });
+
+      updateDates();
+    }
+
   }
 
   onRadioChange(evt) {
@@ -337,7 +354,24 @@ function renderSingleDates(days) {
 
 function renderRepeatedDates(days) {
   savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
-  console.log(savedRepeatedDates);
+  let form = document.getElementById('emergency-form-repetition');
+
+  savedRepeatedDates.forEach(function(day) {
+    let dayOfWeek = new Date(day.day).getDay();
+    let end = document.getElementById('emergency-time-' + dayOfWeek + '-end');
+    let begin = document.getElementById('emergency-time-' + dayOfWeek + '-start');
+    let location = document.getElementById('emergency-location-' + dayOfWeek + '');
+    let check = end.parentNode.firstChild;
+    if(check.checked) {
+      return; // already set this day of the week
+    } else {
+      check.checked = true;
+    }
+
+    end.value = new Date(day.end).toLocaleTimeString();
+    begin.value = new Date(day.begin).toLocaleTimeString();
+    location.value = day.location;
+  });
 }
 
 /**
