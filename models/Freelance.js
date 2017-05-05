@@ -46,7 +46,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
-		availability	: [{type:Object, default:[] }],
+		availability	: { type:Array, default:[] },
 		//TODO add certifications
 	},
 	{
