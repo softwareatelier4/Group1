@@ -106,6 +106,9 @@ class ContainerClaims extends React.Component {
 // Categories
 
 class CardCategoryDocuments extends React.Component {
+  deleteDoc (e) {
+    alert("Not implemented yet ¯\\_(ツ)_/¯")
+  }
   render() {
     let docs = [];
     for (let i = 0; i < this.props.documents.length; ++i) {
@@ -115,6 +118,7 @@ class CardCategoryDocuments extends React.Component {
         <li key={i}>
           <span className="card-category-document-name">{doc.name}</span>
           <span className="card-category-document-required">{isRequired}</span>
+          <button className="card-category-document-delete-btn" onClick={this.deleteDoc.bind(this)}>x</button>
         </li>
       );
     }

@@ -122,8 +122,32 @@ button:active {
 .card-category-documents {
   width: 86%;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid gray;
   margin-top: 5px;
+}
+
+.card-category-documents > ul {
+  margin: 0;
+  padding: 0;
+}
+
+.card-category-documents > ul > li {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 30px;
+  padding: 5px 0;
+  border-bottom: 1px solid gray;
+}
+
+.card-category-documents > ul > li:last-child {
+  border-bottom: 0;
+}
+
+.card-category-documents button.card-category-document-delete-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
 }
 
 .card-category > input,
