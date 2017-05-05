@@ -53,6 +53,7 @@ router.get('/', function(req, res, next) {
           destinations.push(freelance.address);
           freelance.distance = Number.MAX_SAFE_INTEGER;
           freelance.duration = Number.MAX_SAFE_INTEGER;
+          freelance.emergency = {};
         });
 
 			  if (!req.query.origin) {
@@ -84,6 +85,13 @@ router.get('/', function(req, res, next) {
                 results[i].distance = Number.MAX_SAFE_INTEGER;
                 results[i].duration = Number.MAX_SAFE_INTEGER;
               }
+              results[i].emergency = {
+                available : true,
+                distance : 1000000,
+                duration : 2000000,
+                end : new Date(),
+                location : 'Zurigo'
+              };
             });
             res.json(results).end();
           }
