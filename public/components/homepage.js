@@ -52,7 +52,7 @@ class FiltersContainer extends React.Component {
     return (<div id="filters-container">
       <div id="filters">
         <div id="filter-category">
-          <span>Category: </span>
+          <span id="category-label">Category: </span>
           <select id="filter-category-dropdown" name="filter-category-dropdown" defaultValue="" onChange={applyFilters}>
             <option value="">Anything</option>
             {categories}

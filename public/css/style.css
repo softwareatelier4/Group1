@@ -19,6 +19,7 @@ html {
   --accent-color: #F44336; /* change hover color accordingly */
   --accent-hover: #c9372c;
   --basic-white: #fff;
+  --basic-white-hover: #d6d3d3;
   --background: #f7f7f7;
   --home-search-border: #c9c9c9;
   --home-search-border-focus: #969696;

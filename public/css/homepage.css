@@ -104,18 +104,53 @@ body {
 #filters {
   display: flex;
   flex-flow: row;
-  justify-content: left;
+  justify-content: space-between;
 }
 
 #filters > div {
   margin: 0 1em;
 }
 
-#filter-category-dropdown, #filter-location-dropdown {
+#filter-category, #filter-distance, #filter-duration {
+  font-size: 0.8em;
+  width: 22vh;
+}
+
+#filter-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--box-shadow-material);
+  border-radius: 2px;
+}
+
+#category-label {
+  width: 100%;
+  padding: 5px 0;
+  text-align: center;
+  color: var(--basic-white);
+  background-color: var(--accent-color);
+  border-radius: 2px 2px 0 0;
+}
+
+#filter-category-dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 5px 30%;
+  text-align-last: center;
+  font-size: 1em;
   background-color: white;
-  margin: 0 18px;
-  width: 100px;
+  width: 100%;
   outline: none;
+  border: none;
+  border-radius: 0 0 2px 2px;
+  color: var(--accent-color);
+}
+
+#filter-category-dropdown:hover {
+  background-color: var(--basic-white-hover);
+  cursor: pointer;
 }
 
 #freelancer-create-btn {
