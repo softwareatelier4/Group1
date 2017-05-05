@@ -55,6 +55,26 @@ for (var i = availabilities.data.length - 1; i >= 0; i--) {
   var rndl = Math.floor(Math.random() * locations.length);
   availabilities.data[i].location = locations[rndl];
 }
+// The first 'staticUsers' users are static and can be used for tests
+const staticUsers = 6;
+// bind non-static users to Freelance profiles
+for (var i = staticUsers; i < usersSize; i++) {
+  var rndf = Math.floor(Math.random() * freelancersSize);
+  users.data[i].freelancer = freelancers.data[i]._id;
+  freelancers.data[i].owner = users.data[i]._id;
+  // give non-static users an availability schedule
+  for (var j = 0; j < 10; j++) {
+      // var rndu = staticUsers + Math.floor(Math.random() * (usersSize - staticUsers);
+      var d = new Date(new Date(availabilities.data[j].begin).getUTCFullYear(),new Date(availabilities.data[j].begin).getUTCMonth(),new Date(availabilities.data[j].begin).getUTCDay(),12,0,0,0);
+      var a = {
+        day: d,
+        begin: Date(availabilities.data[j].begin),
+        end: Date(availabilities.data[j].end),
+        location: availabilities.data[j].location
+      }
+      freelancers.data[i].availability.push(a);
+    }
+}
 
 // utility function to dump the whole seed data array of a model
 function dump(data){
