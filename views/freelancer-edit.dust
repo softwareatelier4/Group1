@@ -26,6 +26,7 @@
     <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
       {?logged}
         <div id='react-freelancer-edit'></div>
+        <div id='react-freelancer-emergency-single-list'></div>
       {:else}
         <div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
       {/logged}
