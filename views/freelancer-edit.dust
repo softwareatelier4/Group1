@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JobAdvisor</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
+    <link rel="stylesheet" type="text/css" href="../css/freelancer-edit.css" />
+
+  </head>
+  <body>
+    <div id='topbar'>
+      <!-- Title -->
+      <div id="react-title"></div>
+      <!-- Login - show only if not already logged -->
+      {^logged}
+        <div id="react-login"></div>
+        <div id="react-register"></div>
+      {:else}
+        <div id="react-username">{username}</div>
+        <div id="react-logout"></div>
+      {/logged}
+      <!-- Create -->
+      <div id="react-freelancer-create-btn"></div>
+    </div>
+    <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
+      {?logged}
+        <div id='react-freelancer-edit'></div>
+      {:else}
+        <div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
+      {/logged}
+    </div>
+    <!-- Utils -->
+    <script src="../js/ajax.js"></script>
+    <script src="../js/Day.js"></script>
+    <!-- React -->
+    <script src="../js/react-15.0.1.js"></script>
+    <script src="../js/react-dom-15.0.1.js"></script>
+    <script src="../js/browser.min.js"></script>
+    <!-- Scripts -->
+    <script src="../components/freelancer-edit.js" type="text/babel"></script>
+    <script src="../components/topbar.js" type="text/babel"></script>
+
+  </body>
+</html>

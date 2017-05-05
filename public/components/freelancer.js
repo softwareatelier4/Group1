@@ -5,10 +5,15 @@
  * CSS styling in css/freelancer.css
  */
 
+let userName;
+
 ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
 function renderComponent(data) {
   // freelancer info
+  if (data.owner) {
+    userName = data.owner.username;
+  }
   const tags = data.tags;
   const listTags = tags.map((tag, index) =>
     <li key={index}>
@@ -54,11 +59,13 @@ function renderReviews(data) {
   const listReviews = reviews.map((review, index) =>
     <Review
       key={index}
+      id={review._id}
       author={review.author}
       text={review.text}
       score={review.score}
       date={review.date}
       reviewCount={reviews.length}
+      reply={review.reply}
       display={(review.text && review.text != "Enter text...") ? "inherit" : "none"}
     />
   );
@@ -261,7 +268,6 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.clearText = this.clearText.bind(this);
   }
 
   handleSubmit(evt) {
@@ -287,10 +293,6 @@ class ReviewForm extends React.Component {
     });
   }
 
-  clearText(evt) {
-    evt.target.value = "";
-  }
-
   generateRadioButtons() {
     const MAX_SCORE = 5;
     let group = [];
@@ -305,12 +307,12 @@ class ReviewForm extends React.Component {
     return (
       <div className="review-form">
         <h3>Post a review</h3>
-        <form id="review-form" onSubmit={this.handleSubmit}>
+        <form id="review-form" onSubmit={this.handleSubmit} method="post">
           <div className="score-selector">
             <label>Score: </label>
             {this.generateRadioButtons()}
           </div>
-          <textarea className="review-form-comment" name="comment" defaultValue="Enter text..." onClick={this.clearText}>
+          <textarea className="review-form-comment" name="comment" placeholder="Enter text...">
           </textarea>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
@@ -319,16 +321,89 @@ class ReviewForm extends React.Component {
   }
 }
 
-class Review extends React.Component {
+class ReplyForm extends React.Component {
+
+  handleSubmitReply(e) {
+    e.preventDefault();
+    let form = e.target;
+
+    const formData = {};
+    formData['text'] = form.elements['comment'].value;
+    formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
+    formData['score'] = 0;
+    formData['reply'] = form.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
+    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+      /**
+       * we discard received data, we get and re-render all reviews and freelance info
+       * since we do not update them live, and here we would have to render the component
+       * again anyway (new review and new average)
+       */
+       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
+         renderReviews(data);
+       });
+    });
+  }
+
   render() {
     return (
-      <article style={{display: this.props.display}}>
+      <div className="reply-form">
+        <h5>Post reply:</h5>
+        <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
+          <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
+          </textarea>
+          <input name="submit-button" className="submit-button" type="submit" value="Reply"/>
+        </form>
+      </div>
+    )
+  }
+}
+
+class Review extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { replying: false };
+  }
+
+  replyToReview(e) {
+    this.setState({
+      replying: !this.state.replying
+    })
+  }
+
+  render() {
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
+    return (
+      <article style={{display: this.props.display}} data-id={this.props.id}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
           <span className="review-date">Date: {this.props.date}</span>
           <span className="review-score">Score: {this.props.score}/5</span>
         </div>
         <div className="review-text">{this.props.text}</div>
+        <div className="reply-container">
+          {this.props.reply ? (<span>{this.props.reply ?
+            (<div>
+              <p className="reply-date">{this.props.reply.date}</p>
+              <p className="reply-text">{this.props.reply.text}</p>
+              </div>) : (null)}</span>) :
+          (
+            <div>
+            {this.state.replying ? (<ReplyForm/>) : (null)}
+            {isOwner ? (
+              <button onClick={this.replyToReview.bind(this)}>
+                {this.state.replying ? ("Cancel") : ("Reply")}
+              </button>
+              ) : (null)}
+
+            </div>
+          )}
+        </div>
       </article>
     );
   }
