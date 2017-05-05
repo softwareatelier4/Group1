@@ -153,40 +153,47 @@ router.post('/:freelanceid/review', function(req, res, next) {
 // PUT freelance/:freelanceid/availability/
 router.put('/:freelanceid/availability', function(req, res, next) {
   let days_array = req.body;
-  let bad_data = false;
 
   // check if the request is valid
-  days_array.forEach(function(day) {
-    if (
-      !day.day
-      || !day.begin
-      || !day.end
-      || !day.location
-      || !(day.day instanceof Date)
-      || !(day.begin instanceof Date)
-      || !(day.end instanceof Date)
-      || !(typeof day.location === 'string')
-    ) {
-      res.sendStatus(400);
-      return next();
-    }
-  });
-
-  Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
-    if (err) res.status(500).json(utils.formatErrorMessage(err));
-    else if (!freelance) {
-      res.status(404).json({
-        message: "Freelance not found with the given id."
-      });
-    } else {
-      freelance.availability = days_array;
-      freelance.save(function (err, updated) {
-        if (err) res.status(400).json(utils.formatErrorMessage(err));
-        res.status(204).end();
-      });
-    }
-  });
-
+  // if (!days_array.every(function(day) {
+  //   // day.day = new Date(day.day);
+  //   // day.begin = new Date(day.begin);
+  //   // day.end = new Date(day.end);
+  //   // console.log(day);
+  //   return (
+  //     day.day
+  //     && day.begin
+  //     && day.end
+  //     && day.location
+  //     // Cannot check, they are all 'string'
+  //     // && (day.day instanceof Date)
+  //     // && (day.begin instanceof Date)
+  //     // && (day.end instanceof Date)
+  //     && (typeof day.location === 'string')
+  //   );
+  // })) {
+  //   res.status(400).end();
+  // } else {
+    Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+      if (err) res.status(500).json(utils.formatErrorMessage(err));
+      else if (!freelance) {
+        res.status(404).json({
+          message: "Freelance not found with the given id."
+        });
+      } else {
+        console.log("HERE");
+        freelance.availability = days_array;
+        freelance.save(function (err, updated) {
+          if (err) {
+            res.status(500).json(utils.formatErrorMessage(err));
+          }
+          else {
+            res.status(204).end();
+          }
+        });
+      }
+    });
+  // }
 });
 
 
