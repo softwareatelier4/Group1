@@ -33,6 +33,21 @@ var usersData = {
       "password"  : "perdonamierastil",
       "email"     : "summonmonster@erastile.er",
       "freelancer": "58cc4941fc13ae612c00000e"
+    },
+    {
+      "username"  : "Dolben",
+      "password"  : "fooly",
+      "email"     : "Zon-Kuthon@erastile.er"
+    },
+    {
+      "username"  : "Fuin",
+      "password"  : "fooly",
+      "email"     : "Absalom@erastile.er"
+    },
+    {
+      "username"  : "Uial",
+      "password"  : "fooly",
+      "email"     : "reilus@erastile.er"
     }
   ]
 }
