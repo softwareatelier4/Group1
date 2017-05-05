@@ -107,8 +107,23 @@ class ContainerClaims extends React.Component {
 
 class CardCategoryDocuments extends React.Component {
   render() {
+    let docs = [];
+    for (let i = 0; i < this.props.documents.length; ++i) {
+      let doc = this.props.documents[i];
+      let isRequired = (doc.required) ? 'required' : 'not required';
+      docs.push(
+        <li key={i}>
+          <span className="card-category-document-name">{doc.name}</span>
+          <span className="card-category-document-required">{isRequired}</span>
+        </li>
+      );
+    }
     return (
-      <div className="card-category-documents" style={{display: 'none'}}>Hello world, noobs!</div>
+      <div className="card-category-documents" style={{display: 'none'}}>
+        <ul>
+          {docs}
+        </ul>
+      </div>
     )
   }
 }
@@ -197,7 +212,7 @@ class ContainerCategories extends React.Component {
           ajaxRequest('POST', `/admin/category${query}`, { ajax : true }, { categoryName : name }, function(res) {
             if (res && res._id) {
               let adminCategories = document.getElementById('admin-categories');
-              addReactElement(<CardCategory name={name} _id={res._id} />, adminCategories);
+              addReactElement(<CardCategory name={name} _id={res._id} documents={res.documents}/>, adminCategories);
               let newCategoryMessage = document.getElementById('new-category-message');
               newCategoryMessage.innerHTML = '';
             }
