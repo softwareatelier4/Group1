@@ -1,60 +1,16 @@
+
+let savedSingleDates = [];
+let savedRepeatedDates = [];
+let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
+
 function renderError(errorString) {
   document.getElementById('emergency-single-date-error').innerHTML = errorString;
 }
 
 
-
-class FreelancerEmergencySingleDate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.deleteDate = this.deleteDate.bind(this);
-  }
-
-  deleteDate(evt) {
-    console.log(evt.target.parentNode);
-  }
-
-  render() {
-    let day = this.props.day;
-    let timeSettings = { hour12: false,  hour: "numeric",  minute: "numeric" } ;
-    return (
-      <li>
-        {
-          day.day.toLocaleDateString('en-GB')
-          + " from " + day.begin.toLocaleTimeString('en-US',  timeSettings)
-          + " to " + day.end.toLocaleTimeString('en-US',  timeSettings)
-          + " in " + day.location
-        }
-        <input type="button" value="Delete" onClick={this.deleteDate} />
-      </li>
-    );
-  }
-}
-
-let testingDates = [
-  new Day(new Date(), new Date(), "L", false),
-  new Day(new Date(), new Date(), "L", false),
-  new Day(new Date(), new Date(), "L", false)
-];
-
-renderSingleDates(testingDates);
-function renderSingleDates(days) {
-  // get single days (not set via weekly schedule)
-  let singleDays = days.filter((day) => { return !day.isRepeated; });
-
-  let dayList = singleDays.map((day, index) => <FreelancerEmergencySingleDate day={day} key={index} /> );
-  console.log(dayList);
-  ReactDOM.render(
-    <ul>
-      <label>Single dates saved:</label>
-      {dayList}
-    </ul>,
-    document.getElementById('react-freelancer-emergency-single-list')
-  );
-}
-
-
-
+/**
+ * Componenets
+ */
 class FreelancerSingleDateForm extends React.Component {
   constructor(props) {
     super(props);
@@ -63,6 +19,7 @@ class FreelancerSingleDateForm extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault();
+    renderError("");
 
     let start = document.getElementById('emergency-single-start').value;
     let end = document.getElementById('emergency-single-end').value;
@@ -73,23 +30,18 @@ class FreelancerSingleDateForm extends React.Component {
     let endDate = new Date(date + 'T' + end);
 
     if(startDate >= endDate) {
-      document.getElementById('emergency-single-date-error').innerHTML = "Invalid time interval";
-      return;
+      return renderError("Invalid time interval");
+    }
+
+    if(startDate < Date.now()) {
+      return renderError("Past dates are not valid");
     }
 
     let day = Day(startDate, endDate, location);
-    console.log(day);
+    savedSingleDates.push(day);
+    updateDates();
+    document.getElementById('emergency-form-single-date').reset();
 
-    // TODO ajax
-    let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
-    // ajaxRequest("PUT", freelancerId + "/availability", {}, {}, function(newDays) {
-    //   if(!newDays) {
-    //     console.log("No data received");
-    //   }
-    // });
-    //
-    testingDates.push(day);
-    renderSingleDates(testingDates);
   }
 
   render() {
@@ -115,11 +67,11 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     this.onRadioChange = this.onRadioChange.bind(this);
 
     this.generateDays = this.generateDays.bind(this);
-
   }
 
   handleSubmit(evt) {
     evt.preventDefault();
+    renderError("");
 
     let form = evt.target;
     let daysInfo = form['recurrence-days'];
@@ -130,7 +82,6 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       repetition = Number(document.getElementById('emergency-repetition-weeks').value);
     } else { // if (repetition == "until") {
       repetition = new Date(document.getElementById('emergency-repetition-end-date').value);
-      console.log(repetition);
     }
 
     let thisRef = this;
@@ -160,22 +111,19 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
         // check valid time interval (non empty)
         if(startDate >= endDate) {
-          renderError("Invalid time interval");
-          return;
+          return renderError("Invalid time interval");
         }
 
-        let dayObject = new Day(startDate, endDate, location);
+        let dayObject = new Day(startDate, endDate, location, true);
         let dayCopies = thisRef.generateDays(repetition, dayObject);
 
         scheduledDays = scheduledDays.concat(dayCopies);
       }
     });
 
-    //TODO ajax
     if(scheduledDays.length == 0) return renderError("Schedule at least a one day");
-
-    console.log(scheduledDays);
-
+    savedRepeatedDates = scheduledDays;
+    updateDates();
   }
 
   /**
@@ -194,7 +142,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       newBegin.setDate(day.begin.getDate() + 7 * weeksAhead);
       newEnd.setTime(day.end.getTime());
       newEnd.setDate(day.end.getDate() + 7 * weeksAhead);
-      return new Day(newBegin, newEnd, day.location)
+      return new Day(newBegin, newEnd, day.location, true)
     }
 
     switch (typeof repetition) {
@@ -313,18 +261,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
   }
 }
 
-
-
 class FreelancerEmergencyForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(evt) {
-    evt.preventDefault();
-
-  }
   render() {
     return (
       <div>
@@ -343,8 +280,88 @@ class FreelancerEditView extends React.Component {
   }
 }
 
+class FreelancerEmergencySingleDate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.deleteDate = this.deleteDate.bind(this);
+  }
+
+  deleteDate(evt) {
+    let index = evt.target.parentNode.getAttribute('data-key');
+    savedSingleDates.splice(index, 1);
+    updateDates();
+  }
+
+  render() {
+    let day = this.props.day;
+    let begin = new Date(day.begin);
+    let end = new Date(day.end);
+    let date = new Date(day.day);
+    let timeSettings = { hour12: false,  hour: "numeric",  minute: "numeric" } ;
+    return (
+      <li data-key={this.props.dataKey}>
+        {
+          date.toLocaleDateString('en-GB')
+          + " from " + begin.toLocaleTimeString('en-US',  timeSettings)
+          + " to " + end.toLocaleTimeString('en-US',  timeSettings)
+          + " in " + day.location
+        }
+        <input type="button" value="Delete" onClick={this.deleteDate} />
+      </li>
+    );
+  }
+}
+
+
 function renderPage() {
   ReactDOM.render(<FreelancerEditView />, document.getElementById('react-freelancer-edit'));
 };
 
+/**
+ * Render list of single days
+ * @param  {Day[]} days array of days to display
+ */
+function renderSingleDates(days) {
+  // get single days (not set via weekly schedule)
+  savedSingleDates = days.filter((day) => { return !day.isRepeated; });
+
+  let dayList = savedSingleDates.map((day, index) => <FreelancerEmergencySingleDate day={day} key={index} dataKey={index} /> );
+  ReactDOM.render(
+    <ul>
+      <label>Single dates saved:</label>
+      {dayList}
+    </ul>,
+    document.getElementById('react-freelancer-emergency-single-list')
+  );
+}
+
+function renderRepeatedDates(days) {
+  savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
+  console.log(savedRepeatedDates);
+}
+
+/**
+ * Sends AJAX request to save `savedSingleDates` + `savedRepeatedDates`
+ */
+function updateDates() {
+  let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
+  ajaxRequest("PUT", freelancerId + "/availability", {}, emergencyDates, function(status) {
+    if(status == 204) {
+      renderSingleDates(savedSingleDates);
+      renderRepeatedDates(savedRepeatedDates);
+    } else {
+      console.log(status);
+    }
+  });
+}
+
+
+/**
+ * On load
+ */
 renderPage();
+// get saved days
+ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+  renderSingleDates(freelancer.availability);
+  renderRepeatedDates(freelancer.availability);
+});
