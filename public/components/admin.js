@@ -103,6 +103,16 @@ class ContainerClaims extends React.Component {
   }
 }
 
+// Categories
+
+class CardCategoryDocuments extends React.Component {
+  render() {
+    return (
+      <div className="card-category-documents" style={{display: 'none'}}>Hello world, noobs!</div>
+    )
+  }
+}
+
 class CardCategory extends React.Component {
   // resetName(e) {
   //   let categoryNameSpan = e.target.parentNode.children[1];
@@ -113,13 +123,21 @@ class CardCategory extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       let categoryNameBtn = e.target.parentNode.children[0];
       let categoryNameSpan = e.target.parentNode.children[1];
+      let categoryDocuments = e.target.parentNode.parentNode.children[2];
+
+      // start editing
       if (!this.editable) {
         this.editable = true;
         this.originalName = categoryNameSpan.innerText;
         categoryNameBtn.innerHTML = 'OK';
         categoryNameSpan.setAttribute('contenteditable', true);
         categoryNameSpan.focus();
-      } else {
+        // show documents cards
+        categoryDocuments.style.display = "initial";
+      }
+
+      // end editing
+      else {
         this.editable = false;
         categoryNameBtn.innerHTML = 'Edit';
         categoryNameSpan.setAttribute('contenteditable', false);
@@ -133,6 +151,8 @@ class CardCategory extends React.Component {
             }
           });
         }
+        // hide documents cards
+        categoryDocuments.style.display = "none";
       }
     }
   }
@@ -154,6 +174,7 @@ class CardCategory extends React.Component {
           <span onKeyDown={this.editName.bind(this)}>{this.props.name}</span>
         </div>
         <button onClick={this.removeCategory}>Remove</button>
+        <CardCategoryDocuments documents={this.props.documents} />
       </div>
     );
   }
@@ -195,7 +216,7 @@ class ContainerCategories extends React.Component {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
       let category = this.props.categories[i];
-      categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} />);
+      categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} documents={category.documents} />);
     }
     return (
       <div id="admin-categories" className="selected">

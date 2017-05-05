@@ -114,8 +114,16 @@ button:active {
   padding: 10px;
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   background-color: var(--basic-white);
+}
+
+.card-category-documents {
+  width: 86%;
+  padding: 10px;
+  border: 1px solid black;
+  margin-top: 5px;
 }
 
 .card-category > input,

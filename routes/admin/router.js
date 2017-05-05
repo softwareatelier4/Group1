@@ -103,7 +103,12 @@ router.post('/category', function(req, res) {
     if (!req.body.categoryName) {
       res.status(400).json({ error : 'no category name given' }); // TESTED
     } else {
-      const newCategory = new Category(req.body);
+      let newCat = new Category(req.body);
+      newCat.documents.push({ // add required "id" document
+        required : true,
+        name : "id",
+      });
+      const newCategory = newCat;
       newCategory.save(function(err, saved) {
         if (err) {
           res.status(500).json({ error : 'database error while saving category' }); // CANNOT TEST
