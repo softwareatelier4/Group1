@@ -106,6 +106,9 @@ class ContainerClaims extends React.Component {
 // Categories
 
 class CardCategoryDocuments extends React.Component {
+  addDoc (e) {
+    alert("Not implemented yet ¯\\_(ツ)_/¯")
+  }
   deleteDoc (e) {
     alert("Not implemented yet ¯\\_(ツ)_/¯")
   }
@@ -124,6 +127,11 @@ class CardCategoryDocuments extends React.Component {
     }
     return (
       <div className="card-category-documents" style={{display: 'none'}}>
+        <div className="card-category-add-document">
+          <input id="new-document-name" placeholder="New document name" />
+          <span>required?</span><input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
+        </div>
         <ul>
           {docs}
         </ul>

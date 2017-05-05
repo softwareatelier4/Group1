@@ -177,6 +177,75 @@ router.delete('/category', function(req, res) {
   }
 });
 
+// add a new document to a category
+router.post('/category/document', function(req, res) {
+  if (adminUsername === req.query.username && adminPassword === req.query.password) {
+    if (!req.query.id) {
+      res.status(400).json({ error : 'no category id given' }); // TODO TEST
+    } else if (
+      (req.body.name == undefined)
+      || (req.body.required == undefined)
+      || !(typeof req.body.name == "string")
+      || !(typeof req.body.required == "boolean")
+    ) {
+      res.status(400).json({ error : 'document fields are missing or of the wrong type' }); // TODO TEST
+    } else {
+      let newDoc = new Object(req.body);
+      Category.findById(req.query.id, function(err, category) {
+        if (err) {
+          res.status(500).json({ error : 'database error while finding category' }); // TODO TEST
+        } else if (!category) {
+          res.status(404).json({ error : 'category not found' }); // TODO TEST
+        } else {
+          category.documents.push(newDoc);
+          category.save(function (err, updated) {
+            if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
+            else res.status(204).end(); // TODO TEST
+          });
+        }
+      });
+    }
+  } else {
+    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
+  }
+});
+
+// remove a document from a category
+router.delete('/category/document', function(req, res) {
+  if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
+    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
+  } else {
+    if (!req.query.id) {
+      res.status(400).json({ error : 'no category id given' }); // TODO TEST
+    } else {
+      Category.findById(req.query.id, function(err, category) {
+        if (err) {
+          res.status(500).json({ error : 'database error while finding category' }); // TODO TEST
+        } else if (!category) {
+          res.status(404).json({ error : 'category not found' }); // TODO TEST
+        } else {
+          let toRemove = req.body.name;
+          let docs = category.documents;
+          let deletedOne = docs.some(function(doc) {
+            if (doc.name == toRemove) {
+              docs.splice(docs.indexOf(doc), 1);
+              category.save(function (err, updated) {
+                if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
+                else res.status(204).end(); // TODO TEST
+              });
+              return true;
+            }
+            else return false;
+          });
+          if (!deletedOne) {
+            res.status(404).json({ error : `document '${toRemove}' not found for category '${category.categoryName}'` }); // TODO TEST
+          }
+        }
+      });
+    }
+  }
+});
+
 router.delete('/claim', function(req, res) {
   if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
     res.status(401).json({ error : 'wrong username or password' }); // TESTED
