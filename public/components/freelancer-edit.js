@@ -408,9 +408,11 @@ function updateDates() {
 /**
  * On load
  */
-renderPage();
-// get and render saved days
-ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
-  renderSingleDates(freelancer.availability);
-  renderRepeatedDates(freelancer.availability);
-});
+if(document.getElementById('react-freelancer-edit')) {
+  renderPage();
+  // get and render saved days
+  ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+    renderSingleDates(freelancer.availability);
+    renderRepeatedDates(freelancer.availability);
+  });
+}

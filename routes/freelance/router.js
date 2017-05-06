@@ -48,7 +48,7 @@ router.get('/edit', function(req, res) {
            res.status(500).json({ error : 'error finding user in database' });
          } else if (!user) {
            res.status(404).json({ error : 'user not found' });
-         } else if (user.freelancer != req.query.freelancer) {
+         } else if (!user.freelancer || user.freelancer != req.query.freelancer) {
            res.redirect('/');
          } else {
            res.render('freelancer-edit', {
@@ -61,17 +61,16 @@ router.get('/edit', function(req, res) {
          }
       });
     } else {
-      // TODO remove, commented for testing
-      // res.render('freelancer-edit', {
-      //   title: "JobAdvisor - Edit Freelancer Profile" ,
-      //   logged: false
-      // });
       res.render('freelancer-edit', {
         title: "JobAdvisor - Edit Freelancer Profile" ,
-        logged: true,
-        username: "MrSatan",
-        userFreelancer: "58cc4942fc13ae612c000023"
+        logged: false
       });
+      // res.render('freelancer-edit', {
+      //   title: "JobAdvisor - Edit Freelancer Profile" ,
+      //   logged: true,
+      //   username: "MrSatan",
+      //   userFreelancer: "58cc4942fc13ae612c000023"
+      // });
 
     }
 
