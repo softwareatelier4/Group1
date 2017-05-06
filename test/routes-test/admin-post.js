@@ -18,7 +18,7 @@ describe('Admin-post test: ', function() {
     before(seed);
     after(utils.dropDbAndCloseConnection);
 
-    it('should get answer 201 on POST /admin/category', function(done) {
+    it('should get answer 201 on POST /admin/category and add required id document', function(done) {
       request(app)
         .post('/admin/category?username=admin&password=asd')
         .send({
@@ -31,7 +31,15 @@ describe('Admin-post test: ', function() {
           if (err) {
             done(err);
           } else {
+            let documentsArray = [];
+            documentsArray.push(
+              {
+                name : "id",
+                required : true
+              }
+            );
             res.body.should.have.property("categoryName", "testCategory");
+            res.body.should.have.property("documents", documentsArray);
             done();
           }
         });
