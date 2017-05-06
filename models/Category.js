@@ -14,8 +14,8 @@ require ('./Freelance');
 
 const Category = exports.Category = new mongoose.Schema({
     categoryName     : { type: String, required: true },
-    freelancers      : [{ type: ObjectID, ref: 'Freelance', default:[] }],
-	  documents	 	 : [{ type: Object, default: [] }],
+    freelancers      : [{ type: ObjectID, ref: 'Freelance', default: [] }],
+	  documents	 	     : { type: Array, default: [] },
 		//id, certificate diploma, letters
   },
   {
@@ -27,7 +27,7 @@ Category.pre('save', function(next) {
 
 	if(this.documents !== null){
 		let final = [];
-		for (object of this.documents){
+		for (let object of this.documents){
 			if(object !== null){
 				if ((object.hasOwnProperty('name') && object.hasOwnProperty('required'))){
 					final.push(object);

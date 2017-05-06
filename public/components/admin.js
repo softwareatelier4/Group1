@@ -103,6 +103,120 @@ class ContainerClaims extends React.Component {
   }
 }
 
+// Categories
+
+class CardCategoryDocuments extends React.Component {
+  addDoc (e) {
+    let docName = e.target.parentNode.children[0];
+    let newDocumentMessage = e.target.parentNode.children[3];
+    let docRequired = e.target.parentNode.children[2];
+    let list = e.target.parentNode.parentNode.children[1];
+    let cardCategoryDocuments = e.target.parentNode.parentNode;
+    let cardCategory = cardCategoryDocuments.parentNode;
+    let categoryId = cardCategory.getAttribute('data-_id');
+
+    let isNameUnique = function(ul, name) {
+      let unique = true;
+      [].forEach.call(ul.children, function(li) {
+        // console.log(li.getAttribute('data-name').toLowerCase() + " and " + name.toLowerCase() + " are " + ((li.getAttribute('data-name').toLowerCase() === name.toLowerCase()) ? "equal" : "different"));
+        if (li.getAttribute('data-name').toLowerCase() === name.toLowerCase()) {
+          unique = false
+        }
+      });
+      return unique;
+    }
+
+    let that = this;
+
+    if (!e.keyCode || e.keyCode == 13) {
+      if (docName.value) {
+        if (isNameUnique(list, docName.value)) {
+          let query = `?username=${g_username}&password=${g_password}&id=${categoryId}`;
+          console.log("Request " + docName.value + " " + docRequired.checked);
+          ajaxRequest('POST', `/admin/category/document${query}`, { ajax : true }, { name : docName.value, required : docRequired.checked }, function(res) {
+            if (res instanceof Object) {
+              let isRequired = (res.required) ? 'required' : 'not required';
+              let i = list.children.length + 1;
+              // create elements
+              let docLiElement = document.createElement("LI");
+              let docNameElement = document.createElement("SPAN");
+              let docRequiredElement = document.createElement("SPAN");
+              let docDelBtnElement = document.createElement("BUTTON");
+              // add attributes
+              docLiElement.setAttribute('data-name', res.name);
+              docLiElement.setAttribute('key', i);
+              docNameElement.setAttribute('className', "card-category-document-name");
+              docRequiredElement.setAttribute('className', "card-category-document-required");
+              docDelBtnElement.setAttribute('className', "card-category-document-delete-btn");
+              // add inner html
+              docNameElement.innerHTML = res.name;
+              docRequiredElement.innerHTML = isRequired;
+              docDelBtnElement.innerHTML = 'x';
+              // add delete function to button
+              docDelBtnElement.addEventListener('click', that.deleteDoc);
+              // build DOM tree
+              docLiElement.appendChild(docNameElement);
+              docLiElement.appendChild(docRequiredElement);
+              docLiElement.appendChild(docDelBtnElement);
+              // add element
+              list.appendChild(docLiElement);
+              // reset error, name, and checkbox
+              newDocumentMessage.innerHTML = '';
+              docName.value = '';
+              docRequired.checked = false;
+            }
+          });
+        } else {
+          newDocumentMessage.innerHTML = 'Existing name';
+        }
+      } else {
+        newDocumentMessage.innerHTML = 'Empty name';
+      }
+    }
+
+  }
+  deleteDoc (e) {
+    let cardCategory = e.target.parentNode.parentNode.parentNode.parentNode;
+    let categoryId = cardCategory.getAttribute('data-_id');
+    let docElement = e.target.parentNode;
+    let docName = docElement.getAttribute('data-name');
+    let query = `?username=${g_username}&password=${g_password}&id=${categoryId}&docname=${docName}`;
+    ajaxRequest('DELETE', `/admin/category/document${query}`, { ajax : true }, {}, function(res) {
+      if (res === 204) {
+        docElement.parentNode.removeChild(docElement);
+      }
+    });
+  }
+  render() {
+    let docs = [];
+    for (let i = 0; i < this.props.documents.length; ++i) {
+      let doc = this.props.documents[i];
+      let isRequired = (doc.required) ? 'required' : 'not required';
+      docs.push(
+        <li data-name={doc.name} key={i}>
+          <span className="card-category-document-name">{doc.name}</span>
+          <span className="card-category-document-required">{isRequired}</span>
+          <button className="card-category-document-delete-btn" onClick={this.deleteDoc}>x</button>
+        </li>
+      );
+    }
+    return (
+      <div className="card-category-documents" style={{display: 'none'}}>
+        <div className="card-category-add-document">
+          <input id="new-document-name" placeholder="New document name" />
+          <span>required?</span>
+          <input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <span className="new-document-message"></span>
+          <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
+        </div>
+        <ul>
+          {docs}
+        </ul>
+      </div>
+    )
+  }
+}
+
 class CardCategory extends React.Component {
   // resetName(e) {
   //   let categoryNameSpan = e.target.parentNode.children[1];
@@ -113,13 +227,21 @@ class CardCategory extends React.Component {
     if (!e.keyCode || e.keyCode == 13) {
       let categoryNameBtn = e.target.parentNode.children[0];
       let categoryNameSpan = e.target.parentNode.children[1];
+      let categoryDocuments = e.target.parentNode.parentNode.children[2];
+
+      // start editing
       if (!this.editable) {
         this.editable = true;
         this.originalName = categoryNameSpan.innerText;
         categoryNameBtn.innerHTML = 'OK';
         categoryNameSpan.setAttribute('contenteditable', true);
         categoryNameSpan.focus();
-      } else {
+        // show documents cards
+        categoryDocuments.style.display = "initial";
+      }
+
+      // end editing
+      else {
         this.editable = false;
         categoryNameBtn.innerHTML = 'Edit';
         categoryNameSpan.setAttribute('contenteditable', false);
@@ -133,6 +255,8 @@ class CardCategory extends React.Component {
             }
           });
         }
+        // hide documents cards
+        categoryDocuments.style.display = "none";
       }
     }
   }
@@ -154,6 +278,7 @@ class CardCategory extends React.Component {
           <span onKeyDown={this.editName.bind(this)}>{this.props.name}</span>
         </div>
         <button onClick={this.removeCategory}>Remove</button>
+        <CardCategoryDocuments documents={this.props.documents} />
       </div>
     );
   }
@@ -176,7 +301,7 @@ class ContainerCategories extends React.Component {
           ajaxRequest('POST', `/admin/category${query}`, { ajax : true }, { categoryName : name }, function(res) {
             if (res && res._id) {
               let adminCategories = document.getElementById('admin-categories');
-              addReactElement(<CardCategory name={name} _id={res._id} />, adminCategories);
+              addReactElement(<CardCategory name={name} _id={res._id} documents={res.documents}/>, adminCategories);
               let newCategoryMessage = document.getElementById('new-category-message');
               newCategoryMessage.innerHTML = '';
             }
@@ -195,7 +320,7 @@ class ContainerCategories extends React.Component {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
       let category = this.props.categories[i];
-      categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} />);
+      categories.push(<CardCategory name={category.categoryName} _id={category._id} key={i} documents={category.documents} />);
     }
     return (
       <div id="admin-categories" className="selected">
