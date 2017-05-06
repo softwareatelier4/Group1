@@ -107,7 +107,47 @@ class ContainerClaims extends React.Component {
 
 class CardCategoryDocuments extends React.Component {
   addDoc (e) {
-    alert("Not implemented yet ¯\\_(ツ)_/¯")
+    let docName = e.target.parentNode.children[0];
+    let docRequired = e.target.parentNode.children[2];
+    let list = e.target.parentNode.parentNode.children[1];
+    let cardCategoryDocuments = e.target.parentNode.parentNode;
+    let cardCategory = cardCategoryDocuments.parentNode;
+    let categoryId = cardCategory.getAttribute('data-_id');
+
+    let isNameUnique = function(ul, name) {
+      let unique = true;
+      [].forEach.call(ul.children, function(li) {
+        // console.log(li.getAttribute('data-name').toLowerCase() + " and " + name.toLowerCase() + " are " + ((li.getAttribute('data-name').toLowerCase() === name.toLowerCase()) ? "equal" : "different"));
+        if (li.getAttribute('data-name').toLowerCase() === name.toLowerCase()) {
+          unique = false
+        }
+      });
+      return unique;
+    }
+
+    let that = this;
+
+    if (!e.keyCode || e.keyCode == 13) {
+      if (docName.value) {
+        if (isNameUnique(list, docName.value)) {
+          let query = `?username=${g_username}&password=${g_password}&id=${categoryId}`;
+          ajaxRequest('POST', `/admin/category/document${query}`, { ajax : true }, { name : docName.value, required : docRequired.checked }, function(res) {
+            if (res instanceof Object) {
+              let isRequired = (res.required) ? 'required' : 'not required';
+              let i = list.children.length + 1;
+              list.innerHTML += `<li data-name=${res.name} key=${i}>
+                <span className="card-category-document-name">${res.name}</span>
+                <span className="card-category-document-required">${isRequired}</span>
+                <button className="card-category-document-delete-btn">x</button>
+              </li>`;
+              let delBtn = list.children[i - 1].children[2];
+              delBtn.onClick = that.deleteDoc.bind(that);
+            }
+          });
+        }
+      }
+    }
+
   }
   deleteDoc (e) {
     let cardCategory = e.target.parentNode.parentNode.parentNode.parentNode;
