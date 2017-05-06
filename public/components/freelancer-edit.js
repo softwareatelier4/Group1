@@ -10,6 +10,13 @@ class FreelancerSingleDateForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.resetForm = this.resetForm.bind(this);
+  }
+
+  resetForm() {
+    document.getElementById('emergency-single-start').value = '';
+    document.getElementById('emergency-single-end').value = '';
+    document.getElementById('emergency-location-single').value = '';
   }
 
   handleSubmit(evt) {
@@ -25,17 +32,24 @@ class FreelancerSingleDateForm extends React.Component {
     let endDate = new Date(date + 'T' + end);
 
     if(startDate >= endDate) {
+      this.resetForm();
       return renderError("Invalid time interval");
     }
 
     if(startDate < Date.now()) {
+      this.resetForm();
       return renderError("Past dates are not valid");
+    }
+
+    if(isConflicting(startDate, false)) {
+      this.resetForm();
+      return renderError("Date conflicts with existing one");
     }
 
     let day = Day(startDate, endDate, location);
     savedSingleDates.push(day);
     updateDates();
-    document.getElementById('emergency-form-single-date').reset();
+    document.getElementById('emergency-form-single-date').value = new Date().toJSON().slice(0,10);
   }
 
   render() {
@@ -59,8 +73,15 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     this.changeCheck = this.changeCheck.bind(this);
     this.onCheckChange = this.onCheckChange.bind(this);
     this.onRadioChange = this.onRadioChange.bind(this);
+    this.resetForm = this.resetForm.bind(this);
 
     this.generateDays = this.generateDays.bind(this);
+  }
+
+  resetForm(dayValue) {
+    document.getElementById("emergency-time-" + dayValue + "-end").value = '';
+    document.getElementById("emergency-time-" + dayValue + "-start").value = '';
+    document.getElementById("emergency-location-" + dayValue).value = '';
   }
 
   handleSubmit(evt) {
@@ -106,9 +127,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
         // check valid time interval (non empty)
         if(startDate >= endDate) {
           renderError("Invalid time interval");
-          document.getElementById("emergency-time-" + day.value + "-end").value = '';
-          document.getElementById("emergency-time-" + day.value + "-start").value = '';
-          document.getElementById("emergency-location-" + day.value).value = '';
+          thisRef.resetForm(day.value);
           return -1;
         }
 
@@ -119,7 +138,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       }
     });
 
-    if(feedback < 0) return;
+    if(feedback < 0) return; // error already printed
 
     if(scheduledDays.length == 0) return renderError("Schedule at least a one day");
     savedRepeatedDates = scheduledDays;
@@ -144,6 +163,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       newBegin.setDate(begin.getDate() + 7 * weeksAhead);
       newEnd.setTime(end.getTime());
       newEnd.setDate(end.getDate() + 7 * weeksAhead);
+      if(isConflicting(newBegin, true)) renderError("Single dates were removed as they conflicted with your weekly schedule");
       return new Day(newBegin, newEnd, day.location, true)
     }
 
@@ -179,16 +199,14 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     startInput.disabled = !evt.target.checked;
     startInput.required = evt.target.checked;
-    startInput.value = '';
 
     endInput.disabled = !evt.target.checked;
     endInput.required = evt.target.checked;
-    endInput.value = '';
-
 
     locationInput.disabled = !evt.target.checked;
     locationInput.required = evt.target.checked;
-    locationInput.value = '';
+
+    this.resetForm(day);
 
     // handle special case when only checked day is unchecked (delete all repeated days)
     if(!check.checked) {
@@ -413,6 +431,43 @@ function updateDates() {
   });
 }
 
+/**
+ * checks a new date does not conflict with existing ones
+ * @param  {Date}  date to save
+ * @param  {Boolean} isRepeated `true` if date is from week schedule, `false` if single date
+ * @return {Boolean}
+ * `true` if `date` is a single date and it conflicts with any existing date (will show error to user)
+ * `true` if `date` is from week schedule and it conflicts with single date, delete (override) existing single date (will show notification to user)
+ * `false` if no conflicts
+ */
+function isConflicting(date, isRepeated) {
+  let conflict = false;
+  // check new date not conflicting with saved single dates
+  for(let i = savedSingleDates.length - 1; i >= 0; i--) {
+    let day = savedSingleDates[i];
+    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+      conflict = true;
+      if(isRepeated) {
+        savedSingleDates.splice(i, 1);
+      } else {
+        return conflict; // new single date conflicting with previous ones, trigger error at once
+      }
+    }
+  }
+
+  // repeaded dates cannot conflict with each other because of how they are input
+  if(isRepeated) return conflict;
+
+  // check new single date does not conflict with existing week schedule
+  for (let i = 0; i < savedRepeatedDates.length; i++) {
+    let day = savedRepeatedDates[i];
+    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+      return true;
+    }
+  }
+
+  return conflict;
+}
 
 /**
  * On load
