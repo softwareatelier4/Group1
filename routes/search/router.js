@@ -68,6 +68,10 @@ router.get('/', function(req, res, next) {
             }
             destinationsEmergency.push('xjhasbdjahwbelaebhajwhbljfbhajw'); // Impossible location
           }
+          if (day)
+            console.log(day.location);
+            else
+            console.log('NO LOCATION');
         });
 
 			  if (!req.query.origin) {
