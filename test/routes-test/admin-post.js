@@ -93,6 +93,34 @@ describe('Admin-post test: ', function() {
 
   });
 
+  describe('POST /admin/category/document', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    // CORRECT: POST: /admin/category/document adds document (res.status: 201)
+    it('should get answer 201 on POST /admin/category/document and add the document', function(done) {
+      request(app)
+        .post('/admin/category/document?username=admin&password=asd')
+        .send({
+          name : "Degree",
+          required : true
+        })
+        .set('Ajax', 'true')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(201)
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("name", "Degree");
+            res.body.should.have.property("required", true);
+            done();
+          }
+        });
+    });
+
+  });
+
 });
 
 function seed(done) {
