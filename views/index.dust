@@ -18,7 +18,7 @@
         <div id="react-username">{username}</div>
         <div id="react-logout"></div>
         {?userFreelancer}
-          <a href="/freelance/edit?freelancer={userFreelancer}">Edit your emergency availability</a>
+          <a id="emergency-edit-link" href="/freelance/edit?freelancer={userFreelancer}">Edit your emergency availability</a>
         {/userFreelancer}
       {/logged}
       <!-- Create -->

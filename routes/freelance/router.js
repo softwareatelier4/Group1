@@ -216,7 +216,6 @@ router.put('/:freelanceid/availability', function(req, res, next) {
           message: "Freelance not found with the given id."
         });
       } else {
-        console.log("HERE");
         freelance.availability = days_array;
         freelance.save(function (err, updated) {
           if (err) {
