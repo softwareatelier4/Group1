@@ -109,6 +109,7 @@ router.get('/:freelanceid', function(req, res, next) {
     				title: "JobAdvisor",
             logged: true,
             username: user.username,
+            userFreelancer: user.freelancer,
     			});
         });
       } else {
