@@ -343,7 +343,7 @@ class ReplyForm extends React.Component {
        });
     });
   }
-  
+
   render() {
     return (
       <div className="reply-form">
@@ -387,7 +387,7 @@ class Review extends React.Component {
         </div>
         <div className="review-text">{this.props.text}</div>
         <div className="reply-container">
-          {this.props.reply ? (<span>{this.props.reply ? 
+          {this.props.reply ? (<span>{this.props.reply ?
             (<div>
               <p className="reply-date">{this.props.reply.date}</p>
               <p className="reply-text">{this.props.reply.text}</p>
@@ -400,7 +400,7 @@ class Review extends React.Component {
                 {this.state.replying ? ("Cancel") : ("Reply")}
               </button>
               ) : (null)}
-            
+
             </div>
           )}
         </div>

@@ -26,12 +26,14 @@
     <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
       {?logged}
         <div id='react-freelancer-edit'></div>
+        <div id='react-freelancer-emergency-single-list'></div>
       {:else}
         <div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
       {/logged}
     </div>
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
+    <script src="../js/Day.js"></script>
     <!-- React -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>

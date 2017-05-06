@@ -54,24 +54,23 @@ router.get('/', function(req, res, next) {
           destinations.push(freelance.address);
           freelance.distance = Number.MAX_SAFE_INTEGER;
           freelance.duration = Number.MAX_SAFE_INTEGER;
-          let day = freelancerAvailableDay(freelance, new Date(req.query.date));
+          // console.log(freelance.availability);
+          let day = req.query.date ? freelancerAvailableDay(freelance, req.query.date) : null;
           if (day) {
             freelance.emergency = {
               available: true,
               end: day.end,
               location: day.location
             };
+            console.log(day.location);
             destinationsEmergency.push(day.location);
           } else {
             freelance.emergency = {
               available: false
             }
+            // console.log('NO LOCATION');
             destinationsEmergency.push('xjhasbdjahwbelaebhajwhbljfbhajw'); // Impossible location
           }
-          if (day)
-            console.log(day.location);
-            else
-            console.log('NO LOCATION');
         });
 
 			  if (!req.query.origin) {
@@ -83,11 +82,13 @@ router.get('/', function(req, res, next) {
         let googleMapsClient = GoogleMaps.createClient({
           // any works, it might stop working for some time after too many requests,
           // in case switch to another
-          key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
+          key: 'AIzaSyAn3U0Cm_JnVhLw0vd30NtqVE6P7b5I1h4'
+          // key: 'AIzaSyDsLQ0CuDFEGnjaoQuKxKWfi4iDn1n8WhU'
           // key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
           // key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
           // key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
+          // key: 'AIzaSyCtFrJx4YIiNzA362xJGat0guqBLQ6Ie0w'
         });
         googleMapsClient.distanceMatrix({
           origins: [ req.query.origin ],
@@ -128,11 +129,14 @@ router.get('/', function(req, res, next) {
 });
 
 // Check if a freelancer is available in a given moment
-function freelancerAvailableDay(freelancer, date) {
+function freelancerAvailableDay(freelancer, dateStr) {
+  let date = new Date(dateStr);
   for (let day of freelancer.availability) {
-    if (date.getTime() < day.begin.getTime()) {
+    let begin = new Date(day.begin);
+    let end = new Date(day.end);
+    if (date.getTime() < begin.getTime()) {
       return null;
-    } else if (date.getTime() <= day.end.getTime()) {
+    } else if (date.getTime() <= end.getTime()) {
       return day;
     }
   }

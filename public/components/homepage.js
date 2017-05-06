@@ -24,7 +24,7 @@ class SearchContainer extends React.Component {
         query += `&origin=${origin}`;
       }
       mostRecentQuery = query;
-      ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
+      ajaxRequest('GET', query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
     }
   }
   render() {
@@ -44,12 +44,13 @@ class SearchContainer extends React.Component {
 // Container for all filters
 class FiltersContainer extends React.Component {
   toggleEmergency() {
-    let emergency = document.getElementById('filter-emergency-temp').checked;
-    if (emergency) {
-      renderFreelancersEmergency(g_freelancers);
-    } else {
-      renderFreelancers(g_freelancers);
-    }
+    // let emergency = document.getElementById('filter-emergency-temp').checked;
+    // if (emergency) {
+    //   renderFreelancersEmergency(g_freelancers);
+    // } else {
+    //   renderFreelancers(g_freelancers);
+    // }
+    renderFreelancers(g_freelancers);
   }
   render() {
     let categories = [];
@@ -153,8 +154,8 @@ class FreelancerCard extends React.Component {
         className="freelancer-card"
         onClick={this.redirectFreelancer(this)}
         data-category={this.props.category}
-        data-distance={this.props.distance}
-        data-duration={this.props.duration}
+        data-distance={distance}
+        data-duration={duration}
         data-emergency-available={emergency.available}
       >
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -210,7 +211,8 @@ class FreelancersContainer extends React.Component {
 }
 
 // Hide a freelancer card if the filters don't match the attributes
-function applyFilters(e, isEmergency) {
+function applyFilters() {
+  let isEmergency = document.getElementById('filter-emergency-temp').checked;
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
   let origin = document.getElementById('search-where').value;
@@ -228,14 +230,15 @@ function applyFilters(e, isEmergency) {
   durationStr += (duration == maxDuration) ? "+ min" : " min";
   document.getElementById('max-duration-label').innerHTML = durationStr;
   duration *= 60;
+  let count = 0; let count2 = 0;
   for (let freelancer of freelancers) {
     let fCategory = freelancer.getAttribute('data-category');
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
-    let fAvailableForEmergency = Boolean(freelancer.getAttribute('data-emergency-available'))
+    let fAvailableForEmergency = freelancer.getAttribute('data-emergency-available');
     // Check if element must be visible or not
     if ((category && category !== fCategory) // Category doesn't correspond
-        || (isEmergency && !fAvailableForEmergency)
+        || (isEmergency && fAvailableForEmergency === 'false') // If search for emergency and freelancer is not available
         || ((origin !== "" || geolocalization !== "") // There is a valid geolocation
            && ((distance / 1000 != maxDistance && fDistance > distance) // Freelancer is not in range
                || duration / 60 != maxDuration && fDuration > duration))) {
@@ -260,8 +263,7 @@ function renderPage(data) {
           query += `&origin=${geolocalization}`
         }
         console.log(query);
-
-        ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+        ajaxRequest("GET", query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
       }
     }, null, { enableHighAccuracy : false, maximumAge : 600 });
   }
@@ -282,35 +284,31 @@ function renderFreelancerCreateBtn() {
 function renderFreelancers(freelancers) {
   g_freelancers = freelancers;
   // Sort by distance
+  let isEmergency = document.getElementById('filter-emergency-temp').checked ? 'true' : ''; // `false` must be empty string
   if (freelancers) {
-    freelancers.sort(function(a, b) {
-      if (a.distance < b.distance) {
-        return -1;
-      } else if (a.distance > b.distance) {
-        return 1;
-      }
-      return 0;
-    });
+    if (isEmergency) {
+      freelancers.sort(function(a, b) {
+        if (a.emergency.distance < b.emergency.distance) {
+          return -1;
+        } else if (a.emergency.distance > b.emergency.distance) {
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      freelancers.sort(function(a, b) {
+        if (a.distance < b.distance) {
+          return -1;
+        } else if (a.distance > b.distance) {
+          return 1;
+        }
+        return 0;
+      });
+    }
   }
-  ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
-  applyFilters();
-}
-
-function renderFreelancersEmergency(freelancers) {
-  g_freelancers = freelancers;
-  // Sort by distance
-  if (freelancers) {
-    freelancers.sort(function(a, b) {
-      if (a.emergency.distance < b.emergency.distance) {
-        return -1;
-      } else if (a.emergency.distance > b.emergency.distance) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-  ReactDOM.render(<FreelancersContainer freelancers={freelancers} isemergency="true" />, document.getElementById('react-freelancers-container'));
-  applyFilters(null, true);
+  ReactDOM.render(<FreelancersContainer freelancers={freelancers} isemergency={isEmergency} />,
+                  document.getElementById('react-freelancers-container'),
+                  applyFilters);
 }
 
 renderPage();

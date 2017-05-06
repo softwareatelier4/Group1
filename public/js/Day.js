@@ -1,19 +1,23 @@
-function Day(begin, end, location, day){
+/**
+ * A Day object to use for emergency availability details
+ * @param {Date} begin    available from (time) (day of week matters)
+ * @param {Date} end      available until (time) (day of week matters)
+ * @param {String} location available where
+ * @param {Date} day      day of week (time is midnight by default, day of week is the same as `end` and `begin`)
+ */
 
-	if(!begin || !end || !location){
-		console.log(69+' a field in a Day is undefined');
+function Day(begin, end, location, isRepeated, day) {
+
+	if(!begin || !end || !location) {
 		return;
 	}
-	if(!(begin instanceof Date)){
-		console.log('begin is of the wrong type. Must be Date.');
+	if(!(begin instanceof Date)) {
 		return;
 	}
 	if (!(end instanceof Date)) {
-		console.log('end is of the wrong type. Must be Date.');
 		return;
 	}
 	if (!(typeof location === 'string')) {
-		console.log('location is of the wrong type. Must be String.');
 		return;
 	}
 
@@ -21,15 +25,15 @@ function Day(begin, end, location, day){
 		day: null,
 		begin: begin,
 		end: end,
-		location: location
+		location: location,
+		isRepeated: isRepeated || false
 	}
 
-	if(!day){
-		a.day = new Date(begin.getUTCFullYear(),begin.getUTCMonth(),begin.getUTCDay(),12,0,0,0);
-	} else if (day instanceof Date){
+	if(!day) {
+		a.day = new Date(begin.getUTCFullYear(), begin.getUTCMonth(), begin.getUTCDate(), 12, 0, 0, 0);
+	} else if (day instanceof Date) {
 		a.day = day;
-	} else{
-		console.log(23+' Day.day is not of type Date');
+	} else {
 		return;
 	}
 
