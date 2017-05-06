@@ -3,6 +3,10 @@
  * js components in components/manage-freelancer.js
  */
 
+form#emergency-form-repetition {
+  padding-bottom: 1em;
+}
+
 form#emergency-form-repetition div {
   display: flex;
   flex-direction: column;

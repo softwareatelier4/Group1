@@ -47,8 +47,10 @@ function sortBegin(day1, day2){
 /**
  * Get HH:MM time string of the given date (no timezone conversions applied)
  * @param  {Date} date
- * @return {String} 
+ * @return {String}
  */
 function toTimeString(date) {
 	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
 }
+
+const dayStrings = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 

@@ -58,7 +58,7 @@ class FreelancerSingleDateForm extends React.Component {
         <label>Select specific day(s):</label>
         <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
         From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
-        <input type="text" id="emergency-location-single" placeholder="Location" required />
+        in <input type="text" id="emergency-location-single" placeholder="Location" required />
         <input type="submit" value="Add single date" />
         <span id="emergency-single-date-error"></span>
       </form>
@@ -163,7 +163,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
       newBegin.setDate(begin.getDate() + 7 * weeksAhead);
       newEnd.setTime(end.getTime());
       newEnd.setDate(end.getDate() + 7 * weeksAhead);
-      if(isConflicting(newBegin, true)) renderError("Single dates were removed as they conflicted with your weekly schedule");
+      if(isConflicting(newBegin, true)) renderError("Some single dates were removed as they conflicted with your weekly schedule");
       return new Day(newBegin, newEnd, day.location, true)
     }
 
@@ -240,43 +240,43 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
             From <input type="time" id="emergency-time-1-start" disabled /> to <input type="time" id="emergency-time-1-end" disabled />
-            <input type="text" id="emergency-location-1" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-1" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="2" />
             <label>Tu</label>
             From <input type="time" id="emergency-time-2-start" disabled /> to <input type="time" id="emergency-time-2-end" disabled />
-            <input type="text" id="emergency-location-2" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-2" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="3" />
             <label>We</label>
             From <input type="time" id="emergency-time-3-start" disabled /> to <input type="time" id="emergency-time-3-end" disabled />
-            <input type="text" id="emergency-location-3" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-3" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="4" />
             <label>Th</label>
             From <input type="time" id="emergency-time-4-start" disabled /> to <input type="time" id="emergency-time-4-end" disabled />
-            <input type="text" id="emergency-location-4" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-4" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="5" />
             <label>Fr</label>
             From <input type="time" id="emergency-time-5-start" disabled /> to <input type="time" id="emergency-time-5-end" disabled />
-            <input type="text" id="emergency-location-5" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-5" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="6" />
             <label>Sa</label>
             From <input type="time" id="emergency-time-6-start" disabled /> to <input type="time" id="emergency-time-6-end" disabled />
-            <input type="text" id="emergency-location-6" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-6" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="0" />
             <label>Su</label>
             From <input type="time" id="emergency-time-0-start" disabled /> to <input type="time" id="emergency-time-0-end" disabled />
-            <input type="text" id="emergency-location-0" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-0" placeholder="Location" disabled />
           </span>
         </div>
 
@@ -303,8 +303,9 @@ class FreelancerEmergencyForm extends React.Component {
   render() {
     return (
       <div>
-        <FreelancerSingleDateForm />
         <FreelancerEmergencyRepetitionForm />
+        <hr/>
+        <FreelancerSingleDateForm />
       </div>
     );
   }
@@ -339,7 +340,8 @@ class FreelancerEmergencySingleDate extends React.Component {
     return (
       <li data-key={this.props.dataKey}>
         {
-          date.toLocaleDateString('en-GB')
+          dayStrings[date.getDay()] + ' '
+          + date.toLocaleDateString('en-GB')
           + " from " + begin.toLocaleTimeString('en-US',  timeSettings)
           + " to " + end.toLocaleTimeString('en-US',  timeSettings)
           + " in " + day.location
