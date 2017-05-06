@@ -108,6 +108,7 @@ class ContainerClaims extends React.Component {
 class CardCategoryDocuments extends React.Component {
   addDoc (e) {
     let docName = e.target.parentNode.children[0];
+    let newDocumentMessage = e.target.parentNode.children[3];
     let docRequired = e.target.parentNode.children[2];
     let list = e.target.parentNode.parentNode.children[1];
     let cardCategoryDocuments = e.target.parentNode.parentNode;
@@ -131,36 +132,45 @@ class CardCategoryDocuments extends React.Component {
       if (docName.value) {
         if (isNameUnique(list, docName.value)) {
           let query = `?username=${g_username}&password=${g_password}&id=${categoryId}`;
+          console.log("Request " + docName.value + " " + docRequired.checked);
           ajaxRequest('POST', `/admin/category/document${query}`, { ajax : true }, { name : docName.value, required : docRequired.checked }, function(res) {
             if (res instanceof Object) {
               let isRequired = (res.required) ? 'required' : 'not required';
               let i = list.children.length + 1;
               // create elements
-              let docLi = document.createElement("LI");
-              let docName = document.createElement("SPAN");
-              let docRequired = document.createElement("SPAN");
-              let docDelBtn = document.createElement("BUTTON");
+              let docLiElement = document.createElement("LI");
+              let docNameElement = document.createElement("SPAN");
+              let docRequiredElement = document.createElement("SPAN");
+              let docDelBtnElement = document.createElement("BUTTON");
               // add attributes
-              docLi.setAttribute('data-name', res.name);
-              docLi.setAttribute('key', i);
-              docName.setAttribute('className', "card-category-document-name");
-              docRequired.setAttribute('className', "card-category-document-required");
-              docDelBtn.setAttribute('className', "card-category-document-delete-btn");
+              docLiElement.setAttribute('data-name', res.name);
+              docLiElement.setAttribute('key', i);
+              docNameElement.setAttribute('className', "card-category-document-name");
+              docRequiredElement.setAttribute('className', "card-category-document-required");
+              docDelBtnElement.setAttribute('className', "card-category-document-delete-btn");
               // add inner html
-              docName.innerHTML = res.name;
-              docRequired.innerHTML = isRequired;
-              docDelBtn.innerHTML = 'x';
+              docNameElement.innerHTML = res.name;
+              docRequiredElement.innerHTML = isRequired;
+              docDelBtnElement.innerHTML = 'x';
               // add delete function to button
-              docDelBtn.addEventListener('click', that.deleteDoc);
+              docDelBtnElement.addEventListener('click', that.deleteDoc);
               // build DOM tree
-              docLi.appendChild(docName);
-              docLi.appendChild(docRequired);
-              docLi.appendChild(docDelBtn);
+              docLiElement.appendChild(docNameElement);
+              docLiElement.appendChild(docRequiredElement);
+              docLiElement.appendChild(docDelBtnElement);
               // add element
-              list.appendChild(docLi);
+              list.appendChild(docLiElement);
+              // reset error, name, and checkbox
+              newDocumentMessage.innerHTML = '';
+              docName.value = '';
+              docRequired.checked = false;
             }
           });
+        } else {
+          newDocumentMessage.innerHTML = 'Existing name';
         }
+      } else {
+        newDocumentMessage.innerHTML = 'Empty name';
       }
     }
 
@@ -194,7 +204,8 @@ class CardCategoryDocuments extends React.Component {
       <div className="card-category-documents" style={{display: 'none'}}>
         <div className="card-category-add-document">
           <input id="new-document-name" placeholder="New document name" />
-          <span>required?</span><input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <span>required?</span>
+          <input type="checkbox" id="new-document-required" placeholder="New document name" />
           <span className="new-document-message"></span>
           <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
         </div>
