@@ -135,13 +135,29 @@ class CardCategoryDocuments extends React.Component {
             if (res instanceof Object) {
               let isRequired = (res.required) ? 'required' : 'not required';
               let i = list.children.length + 1;
-              list.innerHTML += `<li data-name=${res.name} key=${i}>
-                <span className="card-category-document-name">${res.name}</span>
-                <span className="card-category-document-required">${isRequired}</span>
-                <button className="card-category-document-delete-btn">x</button>
-              </li>`;
-              let delBtn = list.children[i - 1].children[2];
-              delBtn.onClick = that.deleteDoc.bind(that);
+              // create elements
+              let docLi = document.createElement("LI");
+              let docName = document.createElement("SPAN");
+              let docRequired = document.createElement("SPAN");
+              let docDelBtn = document.createElement("BUTTON");
+              // add attributes
+              docLi.setAttribute('data-name', res.name);
+              docLi.setAttribute('key', i);
+              docName.setAttribute('className', "card-category-document-name");
+              docRequired.setAttribute('className', "card-category-document-required");
+              docDelBtn.setAttribute('className', "card-category-document-delete-btn");
+              // add inner html
+              docName.innerHTML = res.name;
+              docRequired.innerHTML = isRequired;
+              docDelBtn.innerHTML = 'x';
+              // add delete function to button
+              docDelBtn.addEventListener('click', that.deleteDoc);
+              // build DOM tree
+              docLi.appendChild(docName);
+              docLi.appendChild(docRequired);
+              docLi.appendChild(docDelBtn);
+              // add element
+              list.appendChild(docLi);
             }
           });
         }
@@ -170,7 +186,7 @@ class CardCategoryDocuments extends React.Component {
         <li data-name={doc.name} key={i}>
           <span className="card-category-document-name">{doc.name}</span>
           <span className="card-category-document-required">{isRequired}</span>
-          <button className="card-category-document-delete-btn" onClick={this.deleteDoc.bind(this)}>x</button>
+          <button className="card-category-document-delete-btn" onClick={this.deleteDoc}>x</button>
         </li>
       );
     }
@@ -179,6 +195,7 @@ class CardCategoryDocuments extends React.Component {
         <div className="card-category-add-document">
           <input id="new-document-name" placeholder="New document name" />
           <span>required?</span><input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <span className="new-document-message"></span>
           <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
         </div>
         <ul>
