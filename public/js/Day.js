@@ -7,9 +7,6 @@
  */
 
 function Day(begin, end, location, isRepeated, day) {
-	function dateToUTC(date) {
-    return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-	}
 
 	if(!begin || !end || !location) {
 		return;
@@ -23,18 +20,19 @@ function Day(begin, end, location, isRepeated, day) {
 	if (!(typeof location === 'string')) {
 		return;
 	}
+
 	let a = {
 		day: null,
-		begin: dateToUTC(begin),
-		end: dateToUTC(end),
+		begin: begin.toUTCString(),
+		end: end.toUTCString(),
 		location: location,
 		isRepeated: isRepeated || false
 	}
 
 	if(!day) {
-		a.day = new Date(begin.getUTCFullYear(), begin.getUTCMonth(), begin.getUTCDate(), 12, 0, 0, 0);
+		a.day = begin.toUTCString();
 	} else if (day instanceof Date) {
-		a.day = day;
+		a.day = day.toUTCString();
 	} else {
 		return;
 	}
@@ -43,5 +41,14 @@ function Day(begin, end, location, isRepeated, day) {
 }
 
 function sortBegin(day1, day2){
-	return day1.begin < day2.begin;
+	return new Date(day1.begin) < new Date(day2.begin);
+}
+
+/**
+ * Get HH:MM time string of the given date (no timezone conversions applied)
+ * @param  {Date} date
+ * @return {String} 
+ */
+function toTimeString(date) {
+	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
 }
