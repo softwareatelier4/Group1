@@ -394,6 +394,7 @@ function renderRepeatedDates(days) {
  */
 function updateDates() {
   let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
+  console.log("savedRepeatedDates", savedRepeatedDates);
   ajaxRequest("PUT", freelancerId + "/availability", {}, emergencyDates, function(status) {
     if(status == 204) {
       renderSingleDates(savedSingleDates);
