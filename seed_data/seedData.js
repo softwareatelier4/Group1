@@ -19,11 +19,12 @@ var users = require('./usersData');
 var usersSize = users.data.length;
 var claims = require('./claimsData');
 var claimsSize = claims.data.length;
+var availabilities = require('./availabilityData');
+var availabilitySize = availabilities.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var n = Math.floor(Math.random() * catSize);
-  // console.log(categories.data[n]['_id']);
   var rndId = categories.data[n]['_id'];
   freelancers.data[i]['category'] = rndId;
   categories.data[n].freelancers.push(freelancers.data[i]['_id']);
@@ -43,14 +44,39 @@ for (var i = freelancersSize - 1; i >= 0; i--) {
     tags.data[n].freelancers.push(freelancers.data[i]['_id']);
   }
 }
-// hardcode the location
+// hardcode the location for freelancer
 var locations = ["Acquarossa", "Agno", "Alto Malcantone", "Airolo", "Aranno", "Arbedo-Castione", "Arogno", "Ascona", "Astano", "Avegno-Gordevio", "Balerna", "Bedano", "Bedigliora", "Bedretto", "Bellinzona", "Biasca", "Bioggio", "Bissone", "Blenio", "Bodio", "Bosco/Gurin", "Breggia", "Brione (Verzasca)", "Brione sopra Minusio", "Brissago", "Brusino Arsizio", "Cademario", "Cadempino", "Cadenazzo", "Camorino", "Campo (Vallemaggia)", "Canobbio", "Capriasca", "Caslano", "Castel San Pietro", "Centovalli", "Cerentino", "Cevio", "Chiasso", "Claro", "Coldrerio", "Collina d'Oro", "Comano", "Corippo", "Cresciano", "Croglio", "Cugnasco-Gerra", "Cureglia", "Curio", "Dalpe", "Faido", "Frasco", "Gambarogno", "Giornico", "Giubiasco", "Gnosca", "Gordola", "Gorduno", "Grancia", "Gravesano", "Gresso", "Gudo", "Iragna", "Isone", "Isorno", "Lamone", "Lavertezzo", "Lavizzara", "Linescio", "Locarno", "Lodrino", "Losone", "Lugano", "Lumino", "Maggia", "Magliaso", "Manno", "Maroggia", "Massagno", "Melano", "Melide", "Mendrisio", "Mergoscia", "Mezzovico-Vira", "Miglieglia", "Minusio", "Moleno", "Monte Carasso", "Monteceneri", "Monteggio", "Morbio Inferiore", "Morcote", "Mosogno", "Muralto", "Muzzano", "Neggio", "Novaggio", "Novazzano", "Onsernone", "Origlio", "Orselina", "Osogna", "Paradiso", "Personico", "Pianezzo", "Pollegio", "Ponte Capriasca", "Ponte Tresa", "Porza", "Prato (Leventina)", "Preonzo", "Pura", "Quinto", "Riva San Vitale", "Ronco sopra Ascona", "Rovio", "Sant'Antonino", "Sant'Antonio", "Savosa", "Sementina", "Serravalle", "Sessa", "Sobrio", "Sonogno", "Sorengo", "Stabio", "Tenero-Contra", "Terre di Pedemonte", "Torricella-Taverne", "Vacallo", "Vergeletto", "Vernate", "Vezia", "Vico Morcote", "Vogorno"];
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var rndl = Math.floor(Math.random() * locations.length);
   freelancers.data[i].address = locations[rndl];
 }
-// dump(freelancers.data);
+// hardcode location for availability
+for (var i = availabilities.data.length - 1; i >= 0; i--) {
+  var rndl = Math.floor(Math.random() * locations.length);
+  availabilities.data[i].location = locations[rndl];
+}
+// The first 'staticUsers' users are static and can be used for tests
+const staticUsers = 6;
+// bind non-static users to Freelance profiles
+for (var i = staticUsers; i < usersSize; i++) {
+  var rndf = Math.floor(Math.random() * freelancersSize);
+  users.data[i].freelancer = freelancers.data[i]._id;
+  freelancers.data[i].owner = users.data[i]._id;
+  // give non-static users an availability schedule
+  for (var j = 0; j < 10; j++) {
+      // var rndu = staticUsers + Math.floor(Math.random() * (usersSize - staticUsers);
+      var d = new Date(new Date(availabilities.data[j].begin).getUTCFullYear(),new Date(availabilities.data[j].begin).getUTCMonth(),new Date(availabilities.data[j].begin).getUTCDay(),12,0,0,0);
+      var a = {
+        day: d,
+        begin: new Date(availabilities.data[j].begin),
+        end: new Date(availabilities.data[j].end),
+        location: availabilities.data[j].location
+      }
+      freelancers.data[i].availability.push(a);
+    }
+}
 
+// utility function to dump the whole seed data array of a model
 function dump(data){
   for (var i = data.length - 1; i >= 0; i--) {
     console.log(data[i]);

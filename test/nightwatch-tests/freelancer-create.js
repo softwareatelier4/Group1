@@ -17,7 +17,6 @@ module.exports = {
       .assert.visible('input[name=address]')
       .assert.visible('input[name=phone]')
       .assert.visible('input[name=email]')
-      .clearValue('input[name=first-name]')
       .setValue('input[name=first-name]', 'Nightwatch')
       .setValue('input[name=job-title]', 'Tester')
       .click('select[name="category"] option[value="58cc4b15fc13ae5ec7000123"]')

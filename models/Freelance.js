@@ -46,7 +46,7 @@ const Freelance = exports.Freelance = new mongoose.Schema({
 		avgScore 			: { type: Number, default: 0 },
 		reviews				: [{ type: ObjectID, ref: "Review", default: [] }],
 		tags					: [{ type: ObjectID, ref: "Tag", default: [] }],
-		availability	: { type:Array, default:[] },
+		availability	: { type: Array, default: [] },
 		//TODO add certifications
 	},
 	{
@@ -76,7 +76,7 @@ Freelance.pre('save', function (next) {
 				this.price.max = this.price.min;
 			}
 		} else {
-			this.price = {min:0, max:0};
+			this.price = { min: 0, max: 0 };
 		}
 	}
 
@@ -86,7 +86,7 @@ Freelance.pre('save', function (next) {
 //call of asynchronous, parallel pre
 // method 'validate' is not executed until done() is called.
 // validate is also called for every update, not only save.
-Freelance.pre('validate', true, function(next, done){
+Freelance.pre('validate', true, function(next, done) {
 	var count = 0;
 	next();
 	this.avgScore = 0;

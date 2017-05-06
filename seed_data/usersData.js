@@ -17,6 +17,7 @@ var usersData = {
       "email"     : "baggins@theshire.tol"
     },
     {
+      "_id"       : "590c66f0fc13ae73cd00002b",
       "username"  : "Rinik Mentesalda",
       "password"  : "popo",
       "email"     : "summonmonster@abadar.ab"
@@ -32,7 +33,25 @@ var usersData = {
       "username"  : "Robb Bis",
       "password"  : "perdonamierastil",
       "email"     : "summonmonster@erastile.er",
-      "freelancer": "58cc4941fc13ae612c00000e"
+      "freelancer": "58cc4941fc13ae612c00000a"
+    },
+    {
+      "_id"       : "590c66f0fc13ae73cd000028",
+      "username"  : "Dolben",
+      "password"  : "fooly",
+      "email"     : "Zon-Kuthon@erastile.er"
+    },
+    {
+      "_id"       : "590c66f0fc13ae73cd000029",
+      "username"  : "Fuin",
+      "password"  : "fooly",
+      "email"     : "Absalom@erastile.er"
+    },
+    {
+      "_id"       : "590c66f0fc13ae73cd00002a",
+      "username"  : "Uial",
+      "password"  : "fooly",
+      "email"     : "reilus@erastile.er"
     }
   ]
 }

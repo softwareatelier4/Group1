@@ -139,6 +139,19 @@ describe('FREELANCE : ', function(done){
       });
     });
 
+		it('should have a default avgScore of 0', function(done){
+			let freelance = new Freelance();
+			freelance.firstName = 'Mark';
+			freelance.familyName = 'Knopfer';
+			freelance.title = 'I am alive yeah';
+			freelance.email = 'ripperoni@pepe.pe';
+			freelance.save(function(err, saved){
+				should.not.exist(err, 'No error should occur');
+				saved.avgScore.should.equal(0);
+				done();
+			});
+		});
+
     it('should not accept any other values for `state`', function(done){
       let freelance = new Freelance();
       freelance.firstName = 'Mark';
@@ -151,6 +164,23 @@ describe('FREELANCE : ', function(done){
         done();
       });
     });
+
+		it('if availability is empty; null; or undefined, it should get assigned the value []',
+		function(done){
+		let freelance = new Freelance();
+		freelance.firstName = 'Mark';
+		freelance.familyName = 'Knopfer';
+		freelance.title = 'I am alive yeah';
+		freelance.email = 'ripperoni@pepe.pe';
+		freelance.price = {min: 20, max: 100};
+		freelance.review = [];
+		freelance.avgScore = 0;
+		freelance.save(function(err, saved){
+			should.not.exist(err, 'No error should occur');
+			freelance.availability.isMongooseArray.should.equal(true);
+			done();
+		});
+	});
 
   });
 });

@@ -150,6 +150,10 @@ describe('Search test: ', function() {
     });
 
   });
+
+  describe('freelancerIsAvailable', function() {
+
+  });
 });
 
 function seed(done) {
