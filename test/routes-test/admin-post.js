@@ -106,7 +106,7 @@ describe('Admin-post test: ', function() {
     // CORRECT: POST: /admin/category/document adds document (res.status: 201)
     it('should get answer 201 on POST /admin/category/document and add the document', function(done) {
       request(app)
-        .post('/admin/category/document?username=admin&password=asd')
+        .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
         .send({
           name : "Degree",
           required : true
