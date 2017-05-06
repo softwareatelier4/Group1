@@ -38,6 +38,12 @@ describe('Admin-post test: ', function() {
                 required : true
               }
             );
+            documentsArray.push(
+              {
+                name : "other",
+                required : false
+              }
+            );
             res.body.should.have.property("categoryName", "testCategory");
             res.body.should.have.property("documents", documentsArray);
             done();

@@ -126,6 +126,12 @@ button:active {
   margin-top: 5px;
 }
 
+.card-category-add-document {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .card-category-documents > ul {
   padding: 10px;
   margin: 0;

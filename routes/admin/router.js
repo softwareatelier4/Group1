@@ -108,6 +108,10 @@ router.post('/category', function(req, res) {
         required : true,
         name : "id",
       });
+      newCat.documents.push({ // add not required other document
+        required : false,
+        name : "other",
+      });
       const newCategory = newCat;
       newCategory.save(function(err, saved) {
         if (err) {
