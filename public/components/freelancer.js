@@ -6,6 +6,7 @@
  */
 
 let userName;
+let documents;
 
 ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
@@ -45,6 +46,8 @@ function renderComponent(data) {
 
     document.getElementById('freelancer-root')
   );
+
+  documents = data.category.documents;
 
   renderReviews(data);
 }
@@ -162,7 +165,6 @@ class FreelancerClaimForm extends React.Component {
             let freelancerClaimForm = document.getElementById('freelancer-claim-form');
             freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
           });
-
         } else if (claimData === 451) {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'Please log in to claim a freelancer profile';
@@ -188,6 +190,8 @@ class FreelancerClaimForm extends React.Component {
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <p>Upload these necessary documents:</p>
           <p>Upload any other optional document such as:</p>
+          <div id="required-docs">{this.props.reqDocs}</div>
+          <div id="optional-docs">{this.props.optDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
           <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
@@ -208,7 +212,18 @@ class FreelancerClaim extends React.Component {
         if (!this.isClaiming) {
           this.isClaiming = true;
           claimBtn.innerHTML = 'CANCEL';
-          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} />, freelancerClaim);
+
+          let listReqDocs = documents.filter(x => x.required).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+          let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
         } else {
           this.isClaiming = false;
           claimBtn.innerHTML = 'CLAIM';
