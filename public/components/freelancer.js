@@ -142,7 +142,7 @@ class FreelancerClaimForm extends React.Component {
   claim() {
     let files = document.getElementById('freelancer-claim-form-files').files;
     let reqFiles = document.getElementById('required-docs').childElementCount;
-    if (files.length < reqFiles) {
+    if (files.length < reqFiles || files.length === 0) {
       let message = document.getElementById('freelancer-claim-form-message');
       message.innerHTML = 'Not enough required files submitted';
     } else {
