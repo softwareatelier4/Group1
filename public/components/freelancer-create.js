@@ -114,7 +114,7 @@ class CreationForm extends React.Component {
             <label>
               Job Category
             </label>
-            <select name="category" ref="category" required>
+            <select id="category-list" name="category" ref="category" required>
               <option value="" selected disabled hidden>Please select a job category</option>
               {this.props.categories}
             </select>
@@ -164,16 +164,38 @@ function doAjaxAndRenderForm(isMyself) {
   );
 }
 
+function switchCategory(e) {
+  let selCategory = categories.filter(x => x.categoryName == e.target.options[e.target.selectedIndex].text)[0];
+  let reqDocuments = selCategory.documents.filter(x => x.required).map((document, index) =>
+      <li key={index}>
+      {document.name}
+      </li>
+    );
+  let optDocuments = selCategory.documents.filter(x => !(x.required)).map((document, index) =>
+      <li key={index}>
+      {document.name}
+      </li>
+    );
+  ReactDOM.render(
+    <FreelancerClaimForm reqDocs={reqDocuments} optDocs={optDocuments}/>,
+    document.getElementById('react-claim-form-root')
+  );
+}
+
+let categories;
 /**
  * Render form component as a result of AJAX
  * @param  {Object}  data
  * @param  {Boolean} isMyself
  */
 function renderComponent(data, isMyself) {
-  const categories = data;
+  categories = data;
   const listCategories = categories.map((category, index) =>
     <option key={index} value={category._id}>{category.categoryName}</option>
   );
+
+  // const documents = data.category.documents;
+  // const listReqDocs = documents.filter
 
   ReactDOM.render(
    <CreationForm
@@ -190,6 +212,8 @@ function renderComponent(data, isMyself) {
       document.getElementById('react-claim-form-root')
     );
   }
+
+  document.getElementById('category-list').addEventListener("change", switchCategory);
 }
 
 /**
@@ -206,6 +230,8 @@ class FreelancerClaimForm extends React.Component {
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <p>Upload these necessary documents:</p>
           <p>Upload any other optional document such as:</p>
+          <div id="required-docs">{this.props.reqDocs}</div>
+          <div id="optional-docs">{this.props.optDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
           <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
