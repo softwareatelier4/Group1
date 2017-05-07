@@ -270,6 +270,27 @@ describe('Admin-post test: ', function() {
       });
     });
 
+    // ERROR: POST: /admin/category/document category not found (404)
+    it('should respond 404 on POST /admin/category/document if category is not found', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=' + new ObjectId())
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(404)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "category not found");
+          done();
+        }
+      });
+    });
+
   });
 
 });

@@ -197,9 +197,9 @@ router.post('/category/document', function(req, res) {
       let newDoc = new Object(req.body);
       Category.findById(req.query.id, function(err, category) {
         if (err) {
-          res.status(500).json({ error : 'database error while finding category' }); // TODO TEST
+          res.status(500).json({ error : 'database error while finding category' }); // TESTED
         } else if (!category) {
-          res.status(404).json({ error : 'category not found' }); // TODO TEST
+          res.status(404).json({ error : 'category not found' }); // TESTED
         } else {
           category.documents.push(newDoc);
           category.save(function (err, updated) {
