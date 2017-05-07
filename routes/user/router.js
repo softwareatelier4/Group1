@@ -27,6 +27,7 @@ router.get('/register', function(req, res) {
         title: "JobAdvisor",
         logged: true,
         username: user.username,
+        userFreelancer: user.freelancer,
       });
     });
   } else {

@@ -21,7 +21,6 @@ router.get('/', function(req, res, next) {
   var pattern = '';
   if (keyword) {
     for(let word of keyword.split(' ')) {
-      console.log(word);
       pattern += word + '|';
     }
   }
@@ -43,20 +42,38 @@ router.get('/', function(req, res, next) {
       query.push({ _id : id});
     });
 
-    Freelance.find({ $or : query }).populate('category').lean().exec(function(err, results) {
+    Freelance.find({ $or : query }).populate('category').lean().exec(function(err, freelancers) {
       if (err) {
         res.status(400).json(err);
       } else {
         let destinations = [];
-        results.forEach(function(freelance) {
+        let destinationsEmergency = [];
+        freelancers.forEach(function(freelance) {
           utils.addLinks(freelance, "freelance");
           destinations.push(freelance.address);
           freelance.distance = Number.MAX_SAFE_INTEGER;
           freelance.duration = Number.MAX_SAFE_INTEGER;
+          // console.log(freelance.availability);
+          let day = req.query.date ? freelancerAvailableDay(freelance, req.query.date) : null;
+          if (day) {
+            freelance.emergency = {
+              available: true,
+              end: day.end,
+              location: day.location
+            };
+            console.log(day.location);
+            destinationsEmergency.push(day.location);
+          } else {
+            freelance.emergency = {
+              available: false
+            }
+            // console.log('NO LOCATION');
+            destinationsEmergency.push('xjhasbdjahwbelaebhajwhbljfbhajw'); // Impossible location
+          }
         });
 
 			  if (!req.query.origin) {
-          res.json(results).end();
+          res.json(freelancers).end();
           return;
 			  }
 
@@ -69,7 +86,6 @@ router.get('/', function(req, res, next) {
           // key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
           // key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
-          // key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
           key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
           // key: 'AIzaSyCtFrJx4YIiNzA362xJGat0guqBLQ6Ie0w'
         });
@@ -81,20 +97,50 @@ router.get('/', function(req, res, next) {
             let distances = response.json.rows[0].elements;
             distances.forEach(function(el, i) {
               if (el.distance) {
-                results[i].distance = el.distance.value;
-                results[i].duration = el.duration.value;
+                freelancers[i].distance = el.distance.value;
+                freelancers[i].duration = el.duration.value;
               } else {
-                results[i].distance = Number.MAX_SAFE_INTEGER;
-                results[i].duration = Number.MAX_SAFE_INTEGER;
+                freelancers[i].distance = Number.MAX_SAFE_INTEGER;
+                freelancers[i].duration = Number.MAX_SAFE_INTEGER;
               }
             });
-            res.json(results).end();
+            googleMapsClient.distanceMatrix({
+              origins: [ req.query.origin ],
+              destinations: destinationsEmergency
+            }, function(err, response) {
+              let distancesEmergency = response.json.rows[0].elements;
+              distancesEmergency.forEach(function(r, i) {
+                if (r.distance) {
+                  freelancers[i].emergency.distance = r.distance.value;
+                  freelancers[i].emergency.duration = r.duration.value;
+                } else {
+                  freelancers[i].emergency.distance = Number.MAX_SAFE_INTEGER;
+                  freelancers[i].emergency.duration = Number.MAX_SAFE_INTEGER;
+                }
+              });
+              res.json(freelancers).end();
+            });
           }
         });
       }
     });
   });
 });
+
+// Check if a freelancer is available in a given moment
+function freelancerAvailableDay(freelancer, dateStr) {
+  let date = new Date(dateStr);
+  for (let day of freelancer.availability) {
+    let begin = new Date(day.begin);
+    let end = new Date(day.end);
+    if (date.getTime() < begin.getTime()) {
+      return null;
+    } else if (date.getTime() <= end.getTime()) {
+      return day;
+    }
+  }
+  return null;
+}
 
 /** router for search */
 module.exports = router;

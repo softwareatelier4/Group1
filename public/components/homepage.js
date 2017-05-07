@@ -1,5 +1,6 @@
 'use strict';
 
+let g_freelancers;
 let geolocalization = '';
 let mostRecentQuery = '';
 // Container for the search bar and the search button
@@ -23,7 +24,7 @@ class SearchContainer extends React.Component {
         query += `&origin=${origin}`;
       }
       mostRecentQuery = query;
-      ajaxRequest('GET', query, { ajax : true }, {}, renderFreelancers);
+      ajaxRequest('GET', query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
     }
   }
   render() {
@@ -42,6 +43,15 @@ class SearchContainer extends React.Component {
 
 // Container for all filters
 class FiltersContainer extends React.Component {
+  toggleEmergency() {
+    // let emergency = document.getElementById('filter-emergency-temp').checked;
+    // if (emergency) {
+    //   renderFreelancersEmergency(g_freelancers);
+    // } else {
+    //   renderFreelancers(g_freelancers);
+    // }
+    renderFreelancers(g_freelancers);
+  }
   render() {
     let categories = [];
     for (let i = 0; i < this.props.categories.length; ++i) {
@@ -66,6 +76,10 @@ class FiltersContainer extends React.Component {
         <div id="filter-duration">
           <span id="max-duration-label">Max duration: </span>
           <input id="filter-duration-temp" name="filter-duration-temp" placeholder="Duration in minutes" type="range" min="0" max="240" defaultValue="240" step="10"onKeyDown={applyFilters} onInput={applyFilters} onChange={applyFilters}/>
+        </div>
+        <div id="filter-emergency">
+          <span id="max-emergency-label">Emergency: </span>
+          <input id="filter-emergency-temp" name="filter-emergency-temp" type="checkbox" onChange={this.toggleEmergency}/>
         </div>
       </div>
     </div>);
@@ -116,21 +130,42 @@ class FreelancerCard extends React.Component {
       return 'Not reachable by car';
     }
   }
+  formatEmergencyMessage(emergency) {
+    if (emergency && emergency.end && emergency.location) {
+      let endTime = new Date(emergency.end);
+      let h = endTime.getHours();
+      let m = endTime.getMinutes();
+      return `Available for emergency until ${h}:${m} in ${emergency.location}`;
+    }
+    return '';
+  }
   redirectFreelancer(freelancer) {
     return function() {
       document.location = `/freelance/${freelancer.props._id}`;
     }
   }
   render () {
+    let emergency = this.props.emergency;
+    // If is rendering card for emergency, use emergency location and distance
+    let distance = this.props.isemergency ? emergency.distance : this.props.distance;
+    let duration = this.props.isemergency ? emergency.duration : this.props.duration;
     return (
-      <div className="freelancer-card" onClick={this.redirectFreelancer(this)} data-category={this.props.category} data-distance={this.props.distance} data-duration={this.props.duration}>
+      <div
+        className="freelancer-card"
+        onClick={this.redirectFreelancer(this)}
+        data-category={this.props.category}
+        data-distance={distance}
+        data-duration={duration}
+        data-emergency-available={emergency.available}
+      >
         <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-card-info">
           <h1 className="job-title  ">{this.props.title}</h1>
           <h2>{this.props.firstName} {this.props.familyName}</h2>
           <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
           <span>Price range: {this.formatPrice(this.props.price)}</span>
-          <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(this.props.distance)}{this.formatDuration(this.props.duration)}</span>
+          <span className="distance-info" name={"distance-" + this.props._id}>Distance: {this.formatDistance(distance)}{this.formatDuration(duration)}</span>
+          <span>{this.formatEmergencyMessage(emergency)}</span>
         </div>
         <span className="category" data-category={this.props.categoryID}>{this.props.category}</span>
       </div>
@@ -162,6 +197,8 @@ class FreelancersContainer extends React.Component {
         distance   = {freelancer.distance}
         duration   = {freelancer.duration}
         _id        = {freelancer._id}
+        emergency  = {freelancer.emergency}
+        isemergency = {this.props.isemergency}
         key        = {i}
         />);
     }
@@ -173,14 +210,9 @@ class FreelancersContainer extends React.Component {
   }
 }
 
-function filterDistanceTest(e) {
-  if (e.keyCode && e.keyCode == 13) {
-    applyFilters();
-  }
-}
-
 // Hide a freelancer card if the filters don't match the attributes
 function applyFilters() {
+  let isEmergency = document.getElementById('filter-emergency-temp').checked;
   let freelancers = document.getElementsByClassName('freelancer-card');
   let category = document.getElementById('filter-category-dropdown').value;
   let origin = document.getElementById('search-where').value;
@@ -198,13 +230,18 @@ function applyFilters() {
   durationStr += (duration == maxDuration) ? "+ min" : " min";
   document.getElementById('max-duration-label').innerHTML = durationStr;
   duration *= 60;
+  let count = 0; let count2 = 0;
   for (let freelancer of freelancers) {
     let fCategory = freelancer.getAttribute('data-category');
     let fDistance = Number(freelancer.getAttribute('data-distance'));
     let fDuration = Number(freelancer.getAttribute('data-duration'));
-    if ((category && category !== fCategory)
-        || ((origin !== "" || geolocalization !== "") && (distance/1000 != maxDistance && fDistance > distance
-                              || duration/60 != maxDuration && fDuration > duration))) {
+    let fAvailableForEmergency = freelancer.getAttribute('data-emergency-available');
+    // Check if element must be visible or not
+    if ((category && category !== fCategory) // Category doesn't correspond
+        || (isEmergency && fAvailableForEmergency === 'false') // If search for emergency and freelancer is not available
+        || ((origin !== "" || geolocalization !== "") // There is a valid geolocation
+           && ((distance / 1000 != maxDistance && fDistance > distance) // Freelancer is not in range
+               || duration / 60 != maxDuration && fDuration > duration))) {
       freelancer.style.display = 'none';
     } else {
       freelancer.style.display = 'flex';
@@ -226,8 +263,7 @@ function renderPage(data) {
           query += `&origin=${geolocalization}`
         }
         console.log(query);
-
-        ajaxRequest("GET", query, { ajax : true }, {}, renderFreelancers);
+        ajaxRequest("GET", query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
       }
     }, null, { enableHighAccuracy : false, maximumAge : 600 });
   }
@@ -246,17 +282,33 @@ function renderFreelancerCreateBtn() {
 }
 
 function renderFreelancers(freelancers) {
+  g_freelancers = freelancers;
   // Sort by distance
-  freelancers.sort(function(a, b) {
-    if (a.distance < b.distance) {
-      return -1;
-    } else if (a.distance > b.distance) {
-      return 1;
+  let isEmergency = document.getElementById('filter-emergency-temp').checked ? 'true' : ''; // `false` must be empty string
+  if (freelancers) {
+    if (isEmergency) {
+      freelancers.sort(function(a, b) {
+        if (a.emergency.distance < b.emergency.distance) {
+          return -1;
+        } else if (a.emergency.distance > b.emergency.distance) {
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      freelancers.sort(function(a, b) {
+        if (a.distance < b.distance) {
+          return -1;
+        } else if (a.distance > b.distance) {
+          return 1;
+        }
+        return 0;
+      });
     }
-    return 0;
-  });
-  ReactDOM.render(<FreelancersContainer freelancers={freelancers} />, document.getElementById('react-freelancers-container'));
-  applyFilters();
+  }
+  ReactDOM.render(<FreelancersContainer freelancers={freelancers} isemergency={isEmergency} />,
+                  document.getElementById('react-freelancers-container'),
+                  applyFilters);
 }
 
 renderPage();

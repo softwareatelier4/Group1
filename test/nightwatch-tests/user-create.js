@@ -25,7 +25,9 @@ module.exports = {
       .setValue('input[name=email]', 'test@night.watch')
       // click "Also create a freelancer profile for myself"
       .click('input[name=register-tick]')
+      .pause(1000)
       .click('input[name=submit-button]')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
       .assert.containsText('div#react-username', 'nightwatch-user')
@@ -33,12 +35,14 @@ module.exports = {
       .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
       // logout
       .click('button#freelancer-logout-btn')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
       .waitForElementPresent('button#user-register-btn', 1000)
 
       // CORRECT: User being redirected to home when the tick is not ticked
       .click('button#user-register-btn')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementVisible('div#register-form', 1000)
       .assert.visible('input[name=username]')
@@ -51,6 +55,7 @@ module.exports = {
       .setValue('input[name=email]', 'test@night.watch')
       // do not click "Also create a freelancer profile for myself"
       .click('input[name=submit-button]')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
       .assert.containsText('div#react-username', 'nightwatch-user2')
@@ -59,12 +64,14 @@ module.exports = {
       .assert.visible('input[name=search-where]')
       // logout
       .click('button#freelancer-logout-btn')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
       .waitForElementPresent('button#user-register-btn', 1000)
 
       // ERROR: Registration with an already used username
       .click('button#user-register-btn')
+      .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementVisible('div#register-form', 1000)
       .assert.visible('input[name=username]')
@@ -76,6 +83,7 @@ module.exports = {
       .setValue('input[name=confirm-password]', 'test')
       .setValue('input[name=email]', 'test@night.watch')
       .click('input[name=submit-button]')
+      .pause(1000)
       // should still be on register form
       .assert.visible('div#register-form')
       .end();
