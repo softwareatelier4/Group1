@@ -53,7 +53,7 @@ router.get('/', function(req, res, next) {
           destinations.push(freelance.address);
           freelance.distance = Number.MAX_SAFE_INTEGER;
           freelance.duration = Number.MAX_SAFE_INTEGER;
-          console.log(freelance.availability);
+          // console.log(freelance.availability);
           let day = req.query.date ? freelancerAvailableDay(freelance, req.query.date) : null;
           if (day) {
             freelance.emergency = {
@@ -61,7 +61,6 @@ router.get('/', function(req, res, next) {
               end: day.end,
               location: day.location
             };
-            console.log(day.location);
             destinationsEmergency.push(day.location);
           } else {
             freelance.emergency = {
