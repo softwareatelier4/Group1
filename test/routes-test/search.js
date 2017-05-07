@@ -62,6 +62,7 @@ describe('Search test: ', function() {
     it('Should respond with a 200 and return the correct data with emergency information', function(done) {
       var today = new Date();
       today.setHours(9);
+      today.toUTCString()
       request(app)
         .get(`/search?origin=Bellinzona+Switzerland&date=${today}`)
         .set('Accept', 'application/json')
