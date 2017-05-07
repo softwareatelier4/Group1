@@ -24,7 +24,7 @@ class SearchContainer extends React.Component {
         query += `&origin=${origin}`;
       }
       mostRecentQuery = query;
-      ajaxRequest('GET', query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
+      ajaxRequest('GET', query + `&date=${new Date().toUTCString()}`, { ajax : true }, {}, renderFreelancers);
     }
   }
   render() {
@@ -255,7 +255,7 @@ function renderPage(data) {
           query += `&origin=${geolocalization}`
         }
         console.log(query);
-        ajaxRequest("GET", query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
+        ajaxRequest("GET", query + `&date=${new Date().toUTCString()}`, { ajax : true }, {}, renderFreelancers);
       }
     }, null, { enableHighAccuracy : false, maximumAge : 600 });
   }
