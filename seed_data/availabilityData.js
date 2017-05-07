@@ -1,6 +1,6 @@
-const today = new Date();
-const dates = [];
-for (let i = 0; i < 30; ++ i) {
+var today = new Date();
+var dates = [];
+for (var i = 0; i < 30; ++ i) {
   let d = new Date();
   d.setDate(today.getDate() + i);
   ds = `${d.getUTCFullYear()}-`;
