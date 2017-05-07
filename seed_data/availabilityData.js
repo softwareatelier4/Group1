@@ -1,7 +1,9 @@
+'use strict';
+
 var today = new Date();
 var dates = [];
 for (var i = 0; i < 30; ++ i) {
-  let d = new Date();
+  var d = new Date();
   d.setDate(today.getDate() + i);
   ds = `${d.getUTCFullYear()}-`;
   ds += d.getUTCMonth() + 1 < 10 ? `0${d.getUTCMonth() + 1}-` : `${d.getUTCMonth() + 1}-`;
