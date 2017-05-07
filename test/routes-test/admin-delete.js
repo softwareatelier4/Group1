@@ -366,35 +366,17 @@ describe('Admin-delete test: ', function() {
 
     // CORRECT: DELETE: /admin/category/document adds document (res.status: 204)
     it('should respond 204 on DELETE /admin/category/document and delete the document', function(done) {
-      // post a document first
+      // delete "Degree, one of the documents added in the seed"
       request(app)
-      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
-      .send({
-        name : "Degree",
-        required : true
-      })
+      .delete('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123&docname=Degree')
       .set('Ajax', 'true')
-      .expect('Content-Type', /json/, 'it should respond with json')
-      .expect(201)
+      .expect(204)
       .end(function(err, res) {
         if (err) {
           done(err);
         } else {
-          res.body.should.have.property("name", "Degree");
-          res.body.should.have.property("required", true);
-          // delete it
-          request(app)
-          .delete('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123&docname=Degree')
-          .set('Ajax', 'true')
-          .expect(204)
-          .end(function(err, res) {
-            if (err) {
-              done(err);
-            } else {
-              // last test tries to delete doc again, should get 404
-              done();
-            }
-          });
+          // last test tries to delete doc again, should get 404
+          done();
         }
       });
     });
@@ -473,7 +455,7 @@ describe('Admin-delete test: ', function() {
         if (err) {
           done(err);
         } else {
-          res.body.should.have.property("error", "document 'Degree' not found for category 'Engineering'")
+          res.body.should.have.property("error", "document 'Degree' not found for category 'Accounting'")
           done();
         }
       });
