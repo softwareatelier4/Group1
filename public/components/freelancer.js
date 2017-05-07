@@ -138,6 +138,7 @@ class FreelancerView extends React.Component {
 class FreelancerClaimForm extends React.Component {
   claim() {
     let files = document.getElementById('freelancer-claim-form-files').files;
+    // let optionalFiles = document.getElementById("freelancer-claim-form-optional-files").files;
     if (files.length === 0) {
       let message = document.getElementById('freelancer-claim-form-message');
       message.innerHTML = 'No file was given';
@@ -185,7 +186,10 @@ class FreelancerClaimForm extends React.Component {
         <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload these necessary documents:</p>
+          <p>Upload any other optional document such as:</p>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+          <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
         <button id="freelancer-claim-btn" onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
@@ -343,7 +347,7 @@ class ReplyForm extends React.Component {
        });
     });
   }
-  
+
   render() {
     return (
       <div className="reply-form">
@@ -387,7 +391,7 @@ class Review extends React.Component {
         </div>
         <div className="review-text">{this.props.text}</div>
         <div className="reply-container">
-          {this.props.reply ? (<span>{this.props.reply ? 
+          {this.props.reply ? (<span>{this.props.reply ?
             (<div>
               <p className="reply-date">{this.props.reply.date}</p>
               <p className="reply-text">{this.props.reply.text}</p>
@@ -400,7 +404,7 @@ class Review extends React.Component {
                 {this.state.replying ? ("Cancel") : ("Reply")}
               </button>
               ) : (null)}
-            
+
             </div>
           )}
         </div>
