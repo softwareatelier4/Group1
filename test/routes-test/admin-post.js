@@ -99,6 +99,200 @@ describe('Admin-post test: ', function() {
 
   });
 
+  describe('POST /admin/category/document', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    // CORRECT: POST: /admin/category/document adds document (res.status: 201)
+    it('should respond 201 on POST /admin/category/document and add the document', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(201)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("name", "Degree");
+          res.body.should.have.property("required", true);
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document not admin (401)
+    it('should respond 401 on POST /admin/category/document if not admin', function(done) {
+      request(app)
+      .post('/admin/category/document?username=wannabe_admin&password=pls_can_i_be_admin&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(401)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "wrong username or password");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document category not given (400)
+    it('should respond 400 on POST /admin/category/document if no category id is given', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd')
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "no category id given");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document no doc.name (400)
+    it('should respond 400 on POST /admin/category/document if no document.name is given', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "document fields are missing or of the wrong type");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document no doc.required (400)
+    it('should respond 400 on POST /admin/category/document if no document.required is given', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        name : "Degree"
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "document fields are missing or of the wrong type");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document name not string (400)
+    it('should respond 400 on POST /admin/category/document if document.name is not a string', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        name : 1,
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "document fields are missing or of the wrong type");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document required not bool (400)
+    it('should respond 400 on POST /admin/category/document if document.required is not a boolean', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123')
+      .send({
+        name : "Degree",
+        required : "of course it's required, you didn't study for nothing"
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "document fields are missing or of the wrong type");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document db error category (500)
+    it('should respond 500 on POST /admin/category/document if category id is invalid', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=something_which_is_not_a_valid_id')
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(500)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "database error while finding category");
+          done();
+        }
+      });
+    });
+
+    // ERROR: POST: /admin/category/document category not found (404)
+    it('should respond 404 on POST /admin/category/document if category is not found', function(done) {
+      request(app)
+      .post('/admin/category/document?username=admin&password=asd&id=' + new ObjectId())
+      .send({
+        name : "Degree",
+        required : true
+      })
+      .set('Ajax', 'true')
+      .expect('Content-Type', /json/, 'it should respond with json')
+      .expect(404)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "category not found");
+          done();
+        }
+      });
+    });
+
+  });
+
 });
 
 function seed(done) {
