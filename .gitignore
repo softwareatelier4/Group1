@@ -8,3 +8,5 @@ test/nightwatch-reports/
 npm-debug.log
 test/nightwatch-screenshots/
 public/claims/
+selenium-server-standalone-2.48.2.jar
+phantomjsdriver.log
