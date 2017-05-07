@@ -63,6 +63,7 @@ for (var i = staticUsers; i < usersSize; i++) {
   var rndf = Math.floor(Math.random() * freelancersSize);
   users.data[i].freelancer = freelancers.data[i]._id;
   freelancers.data[i].owner = users.data[i]._id;
+  freelancers.data[i].status = 'verified';
   // give non-static users an availability schedule
   for (var j = 0; j < 10; j++, k++) {
       // var rndu = staticUsers + Math.floor(Math.random() * (usersSize - staticUsers);
