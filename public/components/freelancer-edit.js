@@ -3,11 +3,6 @@ let savedSingleDates = [];
 let savedRepeatedDates = [];
 let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
 
-function renderError(errorString) {
-  document.getElementById('emergency-single-date-error').innerHTML = errorString;
-}
-
-
 /**
  * Componenets
  */
@@ -15,6 +10,13 @@ class FreelancerSingleDateForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.resetForm = this.resetForm.bind(this);
+  }
+
+  resetForm() {
+    document.getElementById('emergency-single-start').value = '';
+    document.getElementById('emergency-single-end').value = '';
+    document.getElementById('emergency-location-single').value = '';
   }
 
   handleSubmit(evt) {
@@ -30,18 +32,24 @@ class FreelancerSingleDateForm extends React.Component {
     let endDate = new Date(date + 'T' + end);
 
     if(startDate >= endDate) {
+      this.resetForm();
       return renderError("Invalid time interval");
     }
 
     if(startDate < Date.now()) {
+      this.resetForm();
       return renderError("Past dates are not valid");
+    }
+
+    if(isConflicting(startDate, false)) {
+      this.resetForm();
+      return renderError("Date conflicts with existing one");
     }
 
     let day = Day(startDate, endDate, location);
     savedSingleDates.push(day);
     updateDates();
-    document.getElementById('emergency-form-single-date').reset();
-
+    document.getElementById('emergency-form-single-date').value = new Date().toJSON().slice(0,10);
   }
 
   render() {
@@ -50,8 +58,8 @@ class FreelancerSingleDateForm extends React.Component {
         <label>Select specific day(s):</label>
         <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
         From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
-        <input type="text" id="emergency-location-single" placeholder="Location" required />
-        <input type="submit" value="+" />
+        in <input type="text" id="emergency-location-single" placeholder="Location" required />
+        <input type="submit" value="Add single date" />
         <span id="emergency-single-date-error"></span>
       </form>
     );
@@ -65,8 +73,15 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     this.changeCheck = this.changeCheck.bind(this);
     this.onCheckChange = this.onCheckChange.bind(this);
     this.onRadioChange = this.onRadioChange.bind(this);
+    this.resetForm = this.resetForm.bind(this);
 
     this.generateDays = this.generateDays.bind(this);
+  }
+
+  resetForm(dayValue) {
+    document.getElementById("emergency-time-" + dayValue + "-end").value = '';
+    document.getElementById("emergency-time-" + dayValue + "-start").value = '';
+    document.getElementById("emergency-location-" + dayValue).value = '';
   }
 
   handleSubmit(evt) {
@@ -86,7 +101,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     let thisRef = this;
 
-    daysInfo.forEach(function(day) {
+    let feedback = daysInfo.forEach(function(day) {
       if(day.checked) {
         let date = new Date(document.getElementById('emergency-repetition-start-date').value);
         // set first day after starting date
@@ -111,7 +126,9 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
         // check valid time interval (non empty)
         if(startDate >= endDate) {
-          return renderError("Invalid time interval");
+          renderError("Invalid time interval");
+          thisRef.resetForm(day.value);
+          return -1;
         }
 
         let dayObject = new Day(startDate, endDate, location, true);
@@ -120,6 +137,8 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
         scheduledDays = scheduledDays.concat(dayCopies);
       }
     });
+
+    if(feedback < 0) return; // error already printed
 
     if(scheduledDays.length == 0) return renderError("Schedule at least a one day");
     savedRepeatedDates = scheduledDays;
@@ -136,12 +155,15 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     let days = [];
 
     let copyAndIncrementWeek = (day, weeksAhead) => {
+      let begin = new Date(day.begin);
+      let end = new Date(day.end);
       let newBegin = new Date();
       let newEnd = new Date();
-      newBegin.setTime(day.begin.getTime());
-      newBegin.setDate(day.begin.getDate() + 7 * weeksAhead);
-      newEnd.setTime(day.end.getTime());
-      newEnd.setDate(day.end.getDate() + 7 * weeksAhead);
+      newBegin.setTime(begin.getTime());
+      newBegin.setDate(begin.getDate() + 7 * weeksAhead);
+      newEnd.setTime(end.getTime());
+      newEnd.setDate(end.getDate() + 7 * weeksAhead);
+      if(isConflicting(newBegin, true)) renderError("Some single dates were removed as they conflicted with your weekly schedule");
       return new Day(newBegin, newEnd, day.location, true)
     }
 
@@ -154,7 +176,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
       case 'object': // create a day copy per week, until date
         let newDay;
-        for(let i = 0; (newDay = copyAndIncrementWeek(day, i)).day < repetition; i++) {
+        for(let i = 0; (newDay = copyAndIncrementWeek(day, i)) && new Date(newDay.begin) < repetition; i++) {
           days.push(newDay);
         }
     }
@@ -169,6 +191,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
   }
 
   onCheckChange(evt) {
+    let check = evt.target;
     let day = evt.target.value;
     let startInput = document.getElementById('emergency-time-' + day + '-start');
     let endInput = document.getElementById('emergency-time-' + day + '-end');
@@ -182,14 +205,29 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     locationInput.disabled = !evt.target.checked;
     locationInput.required = evt.target.checked;
+
+    this.resetForm(day);
+
+    // handle special case when only checked day is unchecked (delete all repeated days)
+    if(!check.checked) {
+      savedRepeatedDates = savedRepeatedDates.filter(function(repeatedDay) {
+        return new Date(new Date(repeatedDay.begin)).getDay() != day;
+      });
+
+      updateDates();
+    }
+
   }
 
   onRadioChange(evt) {
     let radio = evt.target;
     let repetitionWeeks = document.getElementById('emergency-repetition-weeks');
+    let repetitionUntil = document.getElementById('emergency-repetition-end-date');
     let isNumberOfWeeks = radio.value == "weeks";
+
     repetitionWeeks.disabled = !isNumberOfWeeks;
     repetitionWeeks.required = isNumberOfWeeks;
+    repetitionUntil.disabled = isNumberOfWeeks;
   }
 
 
@@ -197,48 +235,48 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Weekly schedule:</label>
+          <label>Weekly schedule (prefilled with previously saved schedule) <span id="emergency-repetition-saved-until"></span>:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
             From <input type="time" id="emergency-time-1-start" disabled /> to <input type="time" id="emergency-time-1-end" disabled />
-            <input type="text" id="emergency-location-1" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-1" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="2" />
             <label>Tu</label>
             From <input type="time" id="emergency-time-2-start" disabled /> to <input type="time" id="emergency-time-2-end" disabled />
-            <input type="text" id="emergency-location-2" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-2" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="3" />
             <label>We</label>
             From <input type="time" id="emergency-time-3-start" disabled /> to <input type="time" id="emergency-time-3-end" disabled />
-            <input type="text" id="emergency-location-3" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-3" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="4" />
             <label>Th</label>
             From <input type="time" id="emergency-time-4-start" disabled /> to <input type="time" id="emergency-time-4-end" disabled />
-            <input type="text" id="emergency-location-4" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-4" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="5" />
             <label>Fr</label>
             From <input type="time" id="emergency-time-5-start" disabled /> to <input type="time" id="emergency-time-5-end" disabled />
-            <input type="text" id="emergency-location-5" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-5" placeholder="Location" disabled />
           </span>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="6" />
             <label>Sa</label>
             From <input type="time" id="emergency-time-6-start" disabled /> to <input type="time" id="emergency-time-6-end" disabled />
-            <input type="text" id="emergency-location-6" placeholder="Location" disabled />
+             in <input type="text" id="emergency-location-6" placeholder="Location" disabled />
           </span>
           <span>
-            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="7" />
+            <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="0" />
             <label>Su</label>
-            From <input type="time" id="emergency-time-7-start" disabled /> to <input type="time" id="emergency-time-7-end" disabled />
-            <input type="text" id="emergency-location-7" placeholder="Location" disabled />
+            From <input type="time" id="emergency-time-0-start" disabled /> to <input type="time" id="emergency-time-0-end" disabled />
+             in <input type="text" id="emergency-location-0" placeholder="Location" disabled />
           </span>
         </div>
 
@@ -251,11 +289,11 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
           </label>
           <label>
             <input type="radio" name="emergency-repetition-type" value="until" onChange={this.onRadioChange} />
-            Until <input type="date" id="emergency-repetition-end-date" defaultValue={new Date().toJSON().slice(0,10)}/>
+            Until <input type="date" id="emergency-repetition-end-date" defaultValue={new Date().toJSON().slice(0,10)} disabled/>
           </label>
         </div>
 
-        <input type="submit" />
+        <input type="submit" value="Update weekly schedule"/>
       </form>
     );
   }
@@ -265,8 +303,9 @@ class FreelancerEmergencyForm extends React.Component {
   render() {
     return (
       <div>
-        <FreelancerSingleDateForm />
         <FreelancerEmergencyRepetitionForm />
+        <hr/>
+        <FreelancerSingleDateForm />
       </div>
     );
   }
@@ -301,7 +340,8 @@ class FreelancerEmergencySingleDate extends React.Component {
     return (
       <li data-key={this.props.dataKey}>
         {
-          date.toLocaleDateString('en-GB')
+          dayStrings[date.getDay()] + ' '
+          + date.toLocaleDateString('en-GB')
           + " from " + begin.toLocaleTimeString('en-US',  timeSettings)
           + " to " + end.toLocaleTimeString('en-US',  timeSettings)
           + " in " + day.location
@@ -312,6 +352,13 @@ class FreelancerEmergencySingleDate extends React.Component {
   }
 }
 
+/**
+ * Helper and rendering functions
+ */
+
+function renderError(errorString) {
+  document.getElementById('emergency-single-date-error').innerHTML = errorString;
+}
 
 function renderPage() {
   ReactDOM.render(<FreelancerEditView />, document.getElementById('react-freelancer-edit'));
@@ -335,9 +382,39 @@ function renderSingleDates(days) {
   );
 }
 
+/**
+ * fill in checkboxes based on saved data
+ * @param  {Day[]} days to display (may also contain non-repeated ones, they are filtered)
+ */
 function renderRepeatedDates(days) {
   savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
-  console.log(savedRepeatedDates);
+  let form = document.getElementById('emergency-form-repetition');
+  let displayUntil = document.getElementById('emergency-repetition-saved-until');
+  displayUntil.innerHTML = "";
+  savedRepeatedDates.forEach(function(day) {
+    let dayOfWeek = new Date(day.begin).getDay();
+    let end = document.getElementById('emergency-time-' + dayOfWeek + '-end');
+    let begin = document.getElementById('emergency-time-' + dayOfWeek + '-start');
+    let location = document.getElementById('emergency-location-' + dayOfWeek + '');
+    let check = end.parentNode.firstChild;
+    if(check.checked) {
+      let lastDay = savedRepeatedDates[savedRepeatedDates.length - 1];
+      displayUntil.innerHTML = "Repeats until " + new Date(lastDay.begin).toLocaleDateString('en-GB');
+      return; // already set this day of the week
+    } else {
+      check.checked = true;
+      end.disabled = false;
+      end.required = true;
+      begin.disabled = false;
+      begin.required = true;
+      location.disabled = false;
+      location.required = true;
+    }
+
+    end.value = toTimeString(new Date(day.end));
+    begin.value = toTimeString(new Date(day.begin));
+    location.value = day.location;
+  });
 }
 
 /**
@@ -345,6 +422,7 @@ function renderRepeatedDates(days) {
  */
 function updateDates() {
   let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
+  console.log("savedRepeatedDates", savedRepeatedDates);
   ajaxRequest("PUT", freelancerId + "/availability", {}, emergencyDates, function(status) {
     if(status == 204) {
       renderSingleDates(savedSingleDates);
@@ -355,13 +433,52 @@ function updateDates() {
   });
 }
 
+/**
+ * checks a new date does not conflict with existing ones
+ * @param  {Date}  date to save
+ * @param  {Boolean} isRepeated `true` if date is from week schedule, `false` if single date
+ * @return {Boolean}
+ * `true` if `date` is a single date and it conflicts with any existing date (will show error to user)
+ * `true` if `date` is from week schedule and it conflicts with single date, delete (override) existing single date (will show notification to user)
+ * `false` if no conflicts
+ */
+function isConflicting(date, isRepeated) {
+  let conflict = false;
+  // check new date not conflicting with saved single dates
+  for(let i = savedSingleDates.length - 1; i >= 0; i--) {
+    let day = savedSingleDates[i];
+    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+      conflict = true;
+      if(isRepeated) {
+        savedSingleDates.splice(i, 1);
+      } else {
+        return conflict; // new single date conflicting with previous ones, trigger error at once
+      }
+    }
+  }
+
+  // repeaded dates cannot conflict with each other because of how they are input
+  if(isRepeated) return conflict;
+
+  // check new single date does not conflict with existing week schedule
+  for (let i = 0; i < savedRepeatedDates.length; i++) {
+    let day = savedRepeatedDates[i];
+    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+      return true;
+    }
+  }
+
+  return conflict;
+}
 
 /**
  * On load
  */
-renderPage();
-// get saved days
-ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
-  renderSingleDates(freelancer.availability);
-  renderRepeatedDates(freelancer.availability);
-});
+if(document.getElementById('react-freelancer-edit')) {
+  renderPage();
+  // get and render saved days
+  ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+    renderSingleDates(freelancer.availability);
+    renderRepeatedDates(freelancer.availability);
+  });
+}
