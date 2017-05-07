@@ -44,12 +44,6 @@ class SearchContainer extends React.Component {
 // Container for all filters
 class FiltersContainer extends React.Component {
   toggleEmergency() {
-    // let emergency = document.getElementById('filter-emergency-temp').checked;
-    // if (emergency) {
-    //   renderFreelancersEmergency(g_freelancers);
-    // } else {
-    //   renderFreelancers(g_freelancers);
-    // }
     renderFreelancers(g_freelancers);
   }
   render() {
@@ -151,8 +145,6 @@ class FreelancerCard extends React.Component {
     // If is rendering card for emergency, use emergency location and distance
     let distance = this.props.isemergency ? emergency.distance : this.props.distance;
     let duration = this.props.isemergency ? emergency.duration : this.props.duration;
-    if (this.props.isemergency)
-      console.log(emergency.location);
     return (
       <div
         className="freelancer-card"

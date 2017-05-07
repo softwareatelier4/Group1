@@ -50,30 +50,22 @@ for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var rndl = Math.floor(Math.random() * locations.length);
   freelancers.data[i].address = locations[rndl];
 }
-// hardcode location for availability
-for (var i = availabilities.data.length - 1; i >= 0; i--) {
-  var rndl = Math.floor(Math.random() * locations.length);
-  availabilities.data[i].location = locations[rndl];
-}
+
 // The first 'staticUsers' users are static and can be used for tests
 const staticUsers = 6;
 // bind non-static users to Freelance profiles
-let k = 0;
-for (var i = staticUsers; i < usersSize; i++) {
-  var rndf = Math.floor(Math.random() * freelancersSize);
+for (var i = staticUsers, k = 0; i < usersSize; i++) {
+  // var rndf = Math.floor(Math.random() * freelancersSize);
   users.data[i].freelancer = freelancers.data[i]._id;
   freelancers.data[i].owner = users.data[i]._id;
   // give non-static users an availability schedule
   for (var j = 0; j < 10; j++, k++) {
-      // var rndu = staticUsers + Math.floor(Math.random() * (usersSize - staticUsers);
-      // var d = new Date(new Date(availabilities.data[j].begin).getUTCFullYear(),new Date(availabilities.data[j].begin).getUTCMonth(),new Date(availabilities.data[j].begin).getUTCDay(),12,0,0,0);
-      var a = {
+      freelancers.data[i].availability.push({
         day: new Date(availabilities.data[k].day),
         begin: new Date(availabilities.data[k].begin),
         end: new Date(availabilities.data[k].end),
         location: availabilities.data[k].location
-      }
-      freelancers.data[i].availability.push(a);
+      });
     }
 }
 
