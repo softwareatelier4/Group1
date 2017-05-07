@@ -141,10 +141,10 @@ class FreelancerView extends React.Component {
 class FreelancerClaimForm extends React.Component {
   claim() {
     let files = document.getElementById('freelancer-claim-form-files').files;
-    // let optionalFiles = document.getElementById("freelancer-claim-form-optional-files").files;
-    if (files.length === 0) {
+    let reqFiles = document.getElementById('required-docs').childElementCount;
+    if (files.length < reqFiles) {
       let message = document.getElementById('freelancer-claim-form-message');
-      message.innerHTML = 'No file was given';
+      message.innerHTML = 'Not enough required files submitted';
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claimData) {
         if (claimData._id) {

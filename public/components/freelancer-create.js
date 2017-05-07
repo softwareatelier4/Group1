@@ -46,9 +46,10 @@ class CreationForm extends React.Component {
 
   claim(createdFreelancerId) {
     let files = document.getElementById('freelancer-claim-form-files').files;
-    if (files.length === 0) {
+    let reqFiles = document.getElementById('required-docs').childElementCount;
+    if (files.length < reqFiles) {
       let message = document.getElementById('freelancer-claim-form-message');
-      message.innerHTML = 'No file was given';
+      message.innerHTML = 'Not enough required files submitted';
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : createdFreelancerId }, function(claimData) {
         if (claimData._id) {
@@ -193,9 +194,6 @@ function renderComponent(data, isMyself) {
   const listCategories = categories.map((category, index) =>
     <option key={index} value={category._id}>{category.categoryName}</option>
   );
-
-  // const documents = data.category.documents;
-  // const listReqDocs = documents.filter
 
   ReactDOM.render(
    <CreationForm
