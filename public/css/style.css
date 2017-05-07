@@ -127,3 +127,18 @@ a#title {
 }
 
 /* End submit button */
+
+/* Freelancer claim form */
+
+#freelancer-claim-form-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#freelancer-claim-form-form * {
+  width: 50%;
+  font-size: 0.8em;
+}
+
+/* End freelancer claim form */
