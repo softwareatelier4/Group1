@@ -185,7 +185,7 @@ router.delete('/category', function(req, res) {
 router.post('/category/document', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
     if (!req.query.id) {
-      res.status(400).json({ error : 'no category id given' }); // TODO TEST
+      res.status(400).json({ error : 'no category id given' }); // TESTED
     } else if (
       (req.body.name == undefined)
       || (req.body.required == undefined)
@@ -203,22 +203,20 @@ router.post('/category/document', function(req, res) {
         } else {
           category.documents.push(newDoc);
           category.save(function (err, updated) {
-            if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
-            else res.status(201).json(newDoc).end(); // TODO TEST
+            if (err) res.status(400).json(utils.formatErrorMessage(err)); // CANNOT TEST
+            else res.status(201).json(newDoc).end(); // TESTED
           });
         }
       });
     }
   } else {
-    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
+    res.status(401).json({ error : 'wrong username or password' }); // TESTED
   }
 });
 
 // remove a document from a category
 router.delete('/category/document', function(req, res) {
-  if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
-    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
-  } else {
+  if (adminUsername === req.query.username || adminPassword === req.query.password) {
     if (!req.query.id) {
       res.status(400).json({ error : 'no category id given' }); // TODO TEST
     } else {
@@ -234,7 +232,7 @@ router.delete('/category/document', function(req, res) {
             if (doc.name == toRemove) {
               docs.splice(docs.indexOf(doc), 1);
               category.save(function (err, updated) {
-                if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
+                if (err) res.status(400).json(utils.formatErrorMessage(err)); // CANNOT TEST
                 else res.status(204).end(); // TODO TEST
               });
               return true;
@@ -249,6 +247,8 @@ router.delete('/category/document', function(req, res) {
         }
       });
     }
+  } else {
+    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
   }
 });
 
