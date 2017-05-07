@@ -153,5 +153,7 @@ function freelancerAvailableDay(freelancer, dateStr) {
   return null;
 }
 
+router.freelancerAvailableDay = freelancerAvailableDay;
+
 /** router for search */
 module.exports = router;
