@@ -5,7 +5,7 @@ var dates = [];
 for (var i = 0; i < 30; ++ i) {
   var d = new Date();
   d.setDate(today.getDate() + i);
-  ds = `${d.getUTCFullYear()}-`;
+  var ds = `${d.getUTCFullYear()}-`;
   ds += d.getUTCMonth() + 1 < 10 ? `0${d.getUTCMonth() + 1}-` : `${d.getUTCMonth() + 1}-`;
   ds += d.getUTCDate() < 10 ? `0${d.getUTCDate()}` : `${d.getUTCDate()}`;
   dates.push(ds);
