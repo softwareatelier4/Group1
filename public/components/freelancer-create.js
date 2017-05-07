@@ -204,10 +204,7 @@ class FreelancerClaimForm extends React.Component {
         <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
-          <p>Upload these necessary documents:</p>
-          <p>Upload any other optional document such as:</p>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
-          <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
         <div id="freelancer-claim-form-message"></div>
       </div>
