@@ -133,8 +133,10 @@ class FreelancerCard extends React.Component {
   formatEmergencyMessage(emergency) {
     if (emergency && emergency.end && emergency.location) {
       let endTime = new Date(emergency.end);
-      let h = endTime.getHours();
-      let m = endTime.getMinutes();
+      let h = endTime.getUTCHours();
+      h = h < 10 ? `0${h}` : h;
+      let m = endTime.getUTCMinutes();
+      m = m < 10 ? `0${m}` : m;
       return `Available for emergency until ${h}:${m} in ${emergency.location}`;
     }
     return '';
@@ -149,6 +151,8 @@ class FreelancerCard extends React.Component {
     // If is rendering card for emergency, use emergency location and distance
     let distance = this.props.isemergency ? emergency.distance : this.props.distance;
     let duration = this.props.isemergency ? emergency.duration : this.props.duration;
+    if (this.props.isemergency)
+      console.log(emergency.location);
     return (
       <div
         className="freelancer-card"
