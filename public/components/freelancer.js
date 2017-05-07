@@ -156,14 +156,19 @@ class FreelancerClaimForm extends React.Component {
           freelancerClaimStatusName.innerHTML = 'IN PROGRESS';
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
+          let claimidOpt = document.getElementById('freelancer-claim-form-claimid-optional');
           claimid.value = claimData._id;
+          claimidOpt.value = claimData._id;
 
           // Submit files
-          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
-          ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
-            // Delete form
-            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          let formDataRequired = new FormData(document.getElementById('freelancer-claim-form-form'));
+          ajaxRequest('POST', '/claim/upload', null, formDataRequired, function(status) {
+            let formDataOptional = new FormData(document.getElementById('freelancer-claim-form-form-optional'));
+            ajaxRequest('POST', '/claim/uploadopt', null, formDataOptional, function(status) {
+              // Delete form
+              let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            });
           });
         } else if (claimData === 451) {
           let message = document.getElementById('freelancer-claim-form-message');
@@ -189,10 +194,14 @@ class FreelancerClaimForm extends React.Component {
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <p>Upload these necessary documents:</p>
-          <p>Upload any other optional document such as:</p>
           <div id="required-docs">{this.props.reqDocs}</div>
-          <div id="optional-docs">{this.props.optDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+        </form>
+        <form id="freelancer-claim-form-form-optional" encType="multipart/form-data" action="/claim/upload" method="post">
+        <input id="freelancer-claim-form-claimid-optional" type="hidden" name="claimid" value=""/>
+          <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload any other optional document such as:</p>
+          <div id="optional-docs">{this.props.optDocs}</div>
           <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
         <button id="freelancer-claim-btn" onClick={this.claim.bind(this)}>Claim</button>

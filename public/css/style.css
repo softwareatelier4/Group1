@@ -130,7 +130,7 @@ a#title {
 
 /* Freelancer claim form */
 
-#freelancer-claim-form-form {
+/*#freelancer-claim-form-form {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -139,6 +139,6 @@ a#title {
 #freelancer-claim-form-form * {
   width: 50%;
   font-size: 0.8em;
-}
+}*/
 
 /* End freelancer claim form */
