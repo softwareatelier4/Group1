@@ -360,6 +360,109 @@ describe('Admin-delete test: ', function() {
 
   });
 
+  describe('DELETE /admin/category/document', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    // CORRECT: DELETE: /admin/category/document adds document (res.status: 204)
+    it('should respond 204 on DELETE /admin/category/document and delete the document', function(done) {
+      // delete "Degree, one of the documents added in the seed"
+      request(app)
+      .delete('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123&docname=Degree')
+      .set('Ajax', 'true')
+      .expect(204)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          // last test tries to delete doc again, should get 404
+          done();
+        }
+      });
+    });
+
+    // ERROR: DELETE: admin/category/document not admin (401)
+    it('should respond 401 on DELETE /admin/category/document if not admin', function(done) {
+      request(app)
+      .delete('/admin/category/document?username=secretly_not_admin&password=pls&id=58cc4b15fc13ae5ec7000123&docname=other')
+      .set('Ajax', 'true')
+      .expect(401)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "wrong username or password")
+          done();
+        }
+      });
+    });
+
+    // ERROR: DELETE: admin/category/document no category id (400)
+    it('should respond 400 on DELETE /admin/category/document if no category id is given', function(done) {
+      request(app)
+      .delete('/admin/category/document?username=admin&password=asd&docname=other')
+      .set('Ajax', 'true')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "no category id given")
+          done();
+        }
+      });
+    });
+
+    // ERROR: DELETE: admin/category/document db error category (500)
+    it('should respond 401 on DELETE /admin/category/document if category id is invalid', function(done) {
+      request(app)
+      .delete('/admin/category/document?username=admin&password=asd&id=not_an_objectid&docname=other')
+      .set('Ajax', 'true')
+      .expect(500)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "database error while finding category")
+          done();
+        }
+      });
+    });
+
+    // ERROR: DELETE: admin/category/document categ. not found (404)
+    it('should respond 404 on DELETE /admin/category/document if the category is not found', function(done) {
+      request(app)
+      .delete('/admin/category/document?username=admin&password=asd&docname=other&id=' + new ObjectId())
+      .set('Ajax', 'true')
+      .expect(404)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "category not found")
+          done();
+        }
+      });
+    });
+
+    // ERROR: DELETE: admin/category/document document not found (404)
+    it('should respond 404 on DELETE /admin/category/document for non-existing document', function(done) {
+      request(app)
+      .delete('/admin/category/document?username=admin&password=asd&id=58cc4b15fc13ae5ec7000123&docname=Degree')
+      .set('Ajax', 'true')
+      .expect(404)
+      .end(function(err, res) {
+        if (err) {
+          done(err);
+        } else {
+          res.body.should.have.property("error", "document 'Degree' not found for category 'Accounting'")
+          done();
+        }
+      });
+    });
+
+  });
+
 });
 
 function seed(done) {

@@ -185,48 +185,46 @@ router.delete('/category', function(req, res) {
 router.post('/category/document', function(req, res) {
   if (adminUsername === req.query.username && adminPassword === req.query.password) {
     if (!req.query.id) {
-      res.status(400).json({ error : 'no category id given' }); // TODO TEST
+      res.status(400).json({ error : 'no category id given' }); // TESTED
     } else if (
       (req.body.name == undefined)
       || (req.body.required == undefined)
       || !(typeof req.body.name == "string")
       || !(typeof req.body.required == "boolean")
     ) {
-      res.status(400).json({ error : 'document fields are missing or of the wrong type' }); // TODO TEST
+      res.status(400).json({ error : 'document fields are missing or of the wrong type' }); // TESTED
     } else {
       let newDoc = new Object(req.body);
       Category.findById(req.query.id, function(err, category) {
         if (err) {
-          res.status(500).json({ error : 'database error while finding category' }); // TODO TEST
+          res.status(500).json({ error : 'database error while finding category' }); // TESTED
         } else if (!category) {
-          res.status(404).json({ error : 'category not found' }); // TODO TEST
+          res.status(404).json({ error : 'category not found' }); // TESTED
         } else {
           category.documents.push(newDoc);
           category.save(function (err, updated) {
-            if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
-            else res.status(201).json(newDoc).end(); // TODO TEST
+            if (err) res.status(400).json(utils.formatErrorMessage(err)); // CANNOT TEST
+            else res.status(201).json(newDoc).end(); // TESTED
           });
         }
       });
     }
   } else {
-    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
+    res.status(401).json({ error : 'wrong username or password' }); // TESTED
   }
 });
 
 // remove a document from a category
 router.delete('/category/document', function(req, res) {
-  if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
-    res.status(401).json({ error : 'wrong username or password' }); // TODO TEST
-  } else {
+  if (adminUsername === req.query.username || adminPassword === req.query.password) {
     if (!req.query.id) {
-      res.status(400).json({ error : 'no category id given' }); // TODO TEST
+      res.status(400).json({ error : 'no category id given' }); // TESTED
     } else {
       Category.findById(req.query.id, function(err, category) {
         if (err) {
-          res.status(500).json({ error : 'database error while finding category' }); // TODO TEST
+          res.status(500).json({ error : 'database error while finding category' }); // TESTED
         } else if (!category) {
-          res.status(404).json({ error : 'category not found' }); // TODO TEST
+          res.status(404).json({ error : 'category not found' }); // TESTED
         } else {
           let toRemove = req.query.docname;
           let docs = category.documents;
@@ -234,8 +232,8 @@ router.delete('/category/document', function(req, res) {
             if (doc.name == toRemove) {
               docs.splice(docs.indexOf(doc), 1);
               category.save(function (err, updated) {
-                if (err) res.status(400).json(utils.formatErrorMessage(err)); // TODO TEST
-                else res.status(204).end(); // TODO TEST
+                if (err) res.status(400).json(utils.formatErrorMessage(err)); // CANNOT TEST
+                else res.status(204).end(); // TESTED
               });
               return true;
             }
@@ -244,11 +242,15 @@ router.delete('/category/document', function(req, res) {
             }
           });
           if (!deletedOne) {
-            res.status(404).json({ error : `document '${toRemove}' not found for category '${category.categoryName}'` }); // TODO TEST
+            res.status(404).json({
+              error : `document '${toRemove}' not found for category '${category.categoryName}'`
+            }); // TESTED
           }
         }
       });
     }
+  } else {
+    res.status(401).json({ error : 'wrong username or password' }); // TESTED
   }
 });
 
