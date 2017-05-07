@@ -192,7 +192,7 @@ router.post('/category/document', function(req, res) {
       || !(typeof req.body.name == "string")
       || !(typeof req.body.required == "boolean")
     ) {
-      res.status(400).json({ error : 'document fields are missing or of the wrong type' }); // TODO TEST
+      res.status(400).json({ error : 'document fields are missing or of the wrong type' }); // TESTED
     } else {
       let newDoc = new Object(req.body);
       Category.findById(req.query.id, function(err, category) {
