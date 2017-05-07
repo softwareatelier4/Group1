@@ -24,7 +24,7 @@ class SearchContainer extends React.Component {
         query += `&origin=${origin}`;
       }
       mostRecentQuery = query;
-      ajaxRequest('GET', query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
+      ajaxRequest('GET', query + `&date=${new Date().toUTCString()}`, { ajax : true }, {}, renderFreelancers);
     }
   }
   render() {
@@ -127,11 +127,7 @@ class FreelancerCard extends React.Component {
   formatEmergencyMessage(emergency) {
     if (emergency && emergency.end && emergency.location) {
       let endTime = new Date(emergency.end);
-      let h = endTime.getUTCHours();
-      h = h < 10 ? `0${h}` : h;
-      let m = endTime.getUTCMinutes();
-      m = m < 10 ? `0${m}` : m;
-      return `Available for emergency until ${h}:${m} in ${emergency.location}`;
+      return `Available for emergency until ${toTimeString(endTime)} in ${emergency.location}`;
     }
     return '';
   }
@@ -259,7 +255,7 @@ function renderPage(data) {
           query += `&origin=${geolocalization}`
         }
         console.log(query);
-        ajaxRequest("GET", query + `&date=${new Date()}`, { ajax : true }, {}, renderFreelancers);
+        ajaxRequest("GET", query + `&date=${new Date().toUTCString()}`, { ajax : true }, {}, renderFreelancers);
       }
     }, null, { enableHighAccuracy : false, maximumAge : 600 });
   }
