@@ -61,13 +61,11 @@ router.get('/', function(req, res, next) {
               end: day.end,
               location: day.location
             };
-            console.log(day.location);
             destinationsEmergency.push(day.location);
           } else {
             freelance.emergency = {
               available: false
             }
-            // console.log('NO LOCATION');
             destinationsEmergency.push('xjhasbdjahwbelaebhajwhbljfbhajw'); // Impossible location
           }
         });
@@ -88,13 +86,19 @@ router.get('/', function(req, res, next) {
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
           // key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
           // key: 'AIzaSyCtFrJx4YIiNzA362xJGat0guqBLQ6Ie0w'
-          key: 'AIzaSyCubmhdnWsJ-AQHOJkzOYF4FpNLxtHwsvM'
+          key: 'AIzaSyDYyfMM5Whkssys3dI1LwgkNW1yWc1-9R4'
+          // key: 'AIzaSyCubmhdnWsJ-AQHOJkzOYF4FpNLxtHwsvM'
         });
+        // Distance from freelancer location
         googleMapsClient.distanceMatrix({
           origins: [ req.query.origin ],
           destinations: destinations
         }, function(err, response) {
-          if (!err) {
+          if (err) {
+            res.status(500).json({ error : 'google maps error in distance matrix for freelancer location' });
+          } else if (!response) {
+            res.status(404).json({ error : 'distance matrix not found for freelancer emergency location' });
+          } else {
             let distances = response.json.rows[0].elements;
             distances.forEach(function(el, i) {
               if (el.distance) {
@@ -105,21 +109,28 @@ router.get('/', function(req, res, next) {
                 freelancers[i].duration = Number.MAX_SAFE_INTEGER;
               }
             });
+            // Distance from freelancer emergency location
             googleMapsClient.distanceMatrix({
               origins: [ req.query.origin ],
               destinations: destinationsEmergency
             }, function(err, response) {
-              let distancesEmergency = response.json.rows[0].elements;
-              distancesEmergency.forEach(function(r, i) {
-                if (r.distance) {
-                  freelancers[i].emergency.distance = r.distance.value;
-                  freelancers[i].emergency.duration = r.duration.value;
-                } else {
-                  freelancers[i].emergency.distance = Number.MAX_SAFE_INTEGER;
-                  freelancers[i].emergency.duration = Number.MAX_SAFE_INTEGER;
-                }
-              });
-              res.json(freelancers).end();
+              if (err) {
+                res.status(500).json({ error : 'google maps error in distance matrix for freelancer emergency location' });
+              } else if (!response) {
+                res.status(404).json({ error : 'distance matrix not found for emergency location' });
+              } else {
+                let distancesEmergency = response.json.rows[0].elements;
+                distancesEmergency.forEach(function(r, i) {
+                  if (r.distance) {
+                    freelancers[i].emergency.distance = r.distance.value;
+                    freelancers[i].emergency.duration = r.duration.value;
+                  } else {
+                    freelancers[i].emergency.distance = Number.MAX_SAFE_INTEGER;
+                    freelancers[i].emergency.duration = Number.MAX_SAFE_INTEGER;
+                  }
+                });
+                res.json(freelancers).end();
+              }
             });
           }
         });
@@ -142,6 +153,8 @@ function freelancerAvailableDay(freelancer, dateStr) {
   }
   return null;
 }
+
+router.freelancerAvailableDay = freelancerAvailableDay;
 
 /** router for search */
 module.exports = router;

@@ -41,6 +41,7 @@ module.exports = {
       .click('input[name=login-submit]')
       .waitForElementPresent('button#freelancer-myself', 2000)
       .click('button#freelancer-myself')
+      .pause(500)
       .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
       .setValue('input[name=first-name]', 'Bilbo Baggins')
       .setValue('input[name=job-title]', 'Tester')
