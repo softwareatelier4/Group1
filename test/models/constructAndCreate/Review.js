@@ -59,8 +59,18 @@ describe('REVIEW : ', function(done){
       review.date = Date.now();
       review.save(function(err, saved){
         should.not.exist(err, 'No error should occur');
-        saved.should.eql(review);
-        done();
+				// let review1 = new Review();
+	      // review1.author = 'Mordekaiser';
+	      // review1.title = 'es el numero uno';
+	      // review1.text = 'heuhuehuehue';
+	      // review1.score = 4;
+	      // review1.date = Date.now();
+				// review1.reply = saved._id;
+				// review1.save(function(err, savedReview){
+				// 	savedReview.should.eql(review1);
+				saved.should.eql(review);
+					done();
+				// });
       });
     });
 
@@ -91,6 +101,20 @@ describe('REVIEW : ', function(done){
 		  review.score = 1;
       modelsutils.checkDateCreatedWithin(review, 'date', 1000, done);
     });
+
+		it('should fail if reply points to an invalid ObjectID',
+			function(done){
+			let review = new Review();
+			review.author = 'Bob Knopfler';
+			review.title = 'Sweet product';
+			review.text = 'GG, well played';
+			review.score = 1;
+			review.reply = 'asd';
+			review.save(function(err, saved){
+        should.exist(err);
+        done();
+      });
+		});
 
   });
 });
