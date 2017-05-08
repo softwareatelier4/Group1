@@ -41,6 +41,10 @@ router.post('/upload', upload.array('idfile'), function(req, res) {
   res.sendStatus(202);
 });
 
+router.post('/uploadopt', upload.array('idfileopt'), function(req, res) {
+  res.sendStatus(202);
+});
+
 // Note: statuses 451, 452 and 453 are needed for error identification on front-end
 // This way, specific error messages can be displayed
 router.post('/new', function(req, res) {

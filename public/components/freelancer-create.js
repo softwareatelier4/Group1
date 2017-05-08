@@ -46,22 +46,32 @@ class CreationForm extends React.Component {
 
   claim(createdFreelancerId) {
     let files = document.getElementById('freelancer-claim-form-files').files;
-    if (files.length === 0) {
+    let reqFiles = document.getElementById('required-docs').childElementCount;
+    if (files.length < reqFiles) {
       let message = document.getElementById('freelancer-claim-form-message');
-      message.innerHTML = 'No file was given';
+      message.innerHTML = 'Not enough required files submitted';
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : createdFreelancerId }, function(claimData) {
         if (claimData._id) {
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
+          let claimidOpt = document.getElementById('freelancer-claim-form-claimid-optional');
           claimid.value = claimData._id;
+          claimidOpt.value = claimData._id;
 
           // Submit files
-          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
-          ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
+          let formDataRequired = new FormData(document.getElementById('freelancer-claim-form-form'));
+          ajaxRequest('POST', '/claim/upload', null, formDataRequired, function(status) {
             if(status == 202) {
-              // redirect to the created profile
-              window.location = "/freelance/" + createdFreelancerId;
+              let formDataOptional = new FormData(document.getElementById('freelancer-claim-form-form-optional'));
+              ajaxRequest('POST', '/claim/uploadopt', null, formDataOptional, function(status) {
+                if(status == 202) {
+                  // redirect to the created profile
+                  window.location = "/freelance/" + createdFreelancerId;
+                } else {
+                  console.log(status.error);
+                }
+              });
             } else {
               console.log(status.error);
             }
@@ -114,7 +124,7 @@ class CreationForm extends React.Component {
             <label>
               Job Category
             </label>
-            <select name="category" ref="category" required>
+            <select id="category-list" name="category" ref="category" required>
               <option value="" selected disabled hidden>Please select a job category</option>
               {this.props.categories}
             </select>
@@ -164,13 +174,32 @@ function doAjaxAndRenderForm(isMyself) {
   );
 }
 
+function switchCategory(e) {
+  let selCategory = categories.filter(x => x.categoryName == e.target.options[e.target.selectedIndex].text)[0];
+  let reqDocuments = selCategory.documents.filter(x => x.required).map((document, index) =>
+      <li key={index}>
+      {document.name}
+      </li>
+    );
+  let optDocuments = selCategory.documents.filter(x => !(x.required)).map((document, index) =>
+      <li key={index}>
+      {document.name}
+      </li>
+    );
+  ReactDOM.render(
+    <FreelancerClaimForm reqDocs={reqDocuments} optDocs={optDocuments}/>,
+    document.getElementById('react-claim-form-root')
+  );
+}
+
+let categories;
 /**
  * Render form component as a result of AJAX
  * @param  {Object}  data
  * @param  {Boolean} isMyself
  */
 function renderComponent(data, isMyself) {
-  const categories = data;
+  categories = data;
   const listCategories = categories.map((category, index) =>
     <option key={index} value={category._id}>{category.categoryName}</option>
   );
@@ -190,6 +219,8 @@ function renderComponent(data, isMyself) {
       document.getElementById('react-claim-form-root')
     );
   }
+
+  document.getElementById('category-list').addEventListener("change", switchCategory);
 }
 
 /**
@@ -204,7 +235,16 @@ class FreelancerClaimForm extends React.Component {
         <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload these necessary documents:</p>
+          <div id="required-docs">{this.props.reqDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+        </form>
+        <form id="freelancer-claim-form-form-optional" encType="multipart/form-data" action="/claim/upload" method="post">
+          <input id="freelancer-claim-form-claimid-optional" type="hidden" name="claimid" value=""/>
+          <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload any other optional document such as:</p>
+          <div id="optional-docs">{this.props.optDocs}</div>
+          <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
         <div id="freelancer-claim-form-message"></div>
       </div>

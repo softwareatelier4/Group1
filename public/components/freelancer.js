@@ -6,6 +6,7 @@
  */
 
 let userName;
+let documents;
 
 ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
 
@@ -45,6 +46,8 @@ function renderComponent(data) {
 
     document.getElementById('freelancer-root')
   );
+
+  documents = data.category.documents;
 
   renderReviews(data);
 }
@@ -138,9 +141,10 @@ class FreelancerView extends React.Component {
 class FreelancerClaimForm extends React.Component {
   claim() {
     let files = document.getElementById('freelancer-claim-form-files').files;
-    if (files.length === 0) {
+    let reqFiles = document.getElementById('required-docs').childElementCount;
+    if (files.length < reqFiles || files.length === 0) {
       let message = document.getElementById('freelancer-claim-form-message');
-      message.innerHTML = 'No file was given';
+      message.innerHTML = 'Not enough required files submitted';
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claimData) {
         if (claimData._id) {
@@ -152,16 +156,20 @@ class FreelancerClaimForm extends React.Component {
           freelancerClaimStatusName.innerHTML = 'IN PROGRESS';
           // Send files
           let claimid = document.getElementById('freelancer-claim-form-claimid');
+          let claimidOpt = document.getElementById('freelancer-claim-form-claimid-optional');
           claimid.value = claimData._id;
+          claimidOpt.value = claimData._id;
 
           // Submit files
-          let formData = new FormData(document.getElementById('freelancer-claim-form-form'));
-          ajaxRequest('POST', '/claim/upload', null, formData, function(status) {
-            // Delete form
-            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          let formDataRequired = new FormData(document.getElementById('freelancer-claim-form-form'));
+          ajaxRequest('POST', '/claim/upload', null, formDataRequired, function(status) {
+            let formDataOptional = new FormData(document.getElementById('freelancer-claim-form-form-optional'));
+            ajaxRequest('POST', '/claim/uploadopt', null, formDataOptional, function(status) {
+              // Delete form
+              let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            });
           });
-
         } else if (claimData === 451) {
           let message = document.getElementById('freelancer-claim-form-message');
           message.innerHTML = 'Please log in to claim a freelancer profile';
@@ -185,7 +193,16 @@ class FreelancerClaimForm extends React.Component {
         <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
           <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload these necessary documents:</p>
+          <div id="required-docs">{this.props.reqDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
+        </form>
+        <form id="freelancer-claim-form-form-optional" encType="multipart/form-data" action="/claim/upload" method="post">
+          <input id="freelancer-claim-form-claimid-optional" type="hidden" name="claimid" value=""/>
+          <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
+          <p>Upload any other optional document such as:</p>
+          <div id="optional-docs">{this.props.optDocs}</div>
+          <input id="freelancer-claim-form-optional-files" name="idfileopt" type="file" multiple="true" />
         </form>
         <button id="freelancer-claim-btn" onClick={this.claim.bind(this)}>Claim</button>
         <div id="freelancer-claim-form-message"></div>
@@ -204,7 +221,18 @@ class FreelancerClaim extends React.Component {
         if (!this.isClaiming) {
           this.isClaiming = true;
           claimBtn.innerHTML = 'CANCEL';
-          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} />, freelancerClaim);
+
+          let listReqDocs = documents.filter(x => x.required).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+          let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
         } else {
           this.isClaiming = false;
           claimBtn.innerHTML = 'CLAIM';
