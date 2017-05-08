@@ -48,6 +48,9 @@ module.exports = {
       .click('button#freelancer-claim-btn')
       .pause(2000)
       .assert.containsText('div#freelancer-claim-form-message', 'Not enough required files submitted')
+      // display of correct document types
+      .assert.containsText('div#required-docs li:first-child', 'id')
+      .assert.containsText('div#optional-docs li:first-child', 'others')
       // Cannot do the following, since can't figure out how to 'upload' multiple required files with Nightwatch
       // .setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
       // .click('button#freelancer-claim-btn')
