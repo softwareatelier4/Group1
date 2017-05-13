@@ -19,7 +19,7 @@ const User = exports.User = new mongoose.Schema({
     password    : { type: String, required: true },
     email				: { type: String, required: true },
 		claiming		: { type: Boolean, default: false},
-    freelancer	: { type: Array, default: []},
+    freelancer	: { type: Array, default: [] },
   },
   {
     versionKey: false,
