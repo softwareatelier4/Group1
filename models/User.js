@@ -4,7 +4,7 @@
 * username        String      username Required
 * password        String      password Required
 * email						String		  email Required
-* freelancer 			ObjectID 		freelancer profile linked to this user
+* freelancer 			Array 			freelancer profiles linked to this user (ObjectIDs)
 *
 * _id (ObjectID) will be added automatically by mongoose if not specified
 */
@@ -19,7 +19,7 @@ const User = exports.User = new mongoose.Schema({
     password    : { type: String, required: true },
     email				: { type: String, required: true },
 		claiming		: { type: Boolean, default: false},
-    freelancer	: { type: ObjectID, ref: 'Freelance'},
+    freelancer	: { type: Array, default: []},
   },
   {
     versionKey: false,
