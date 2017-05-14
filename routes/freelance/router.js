@@ -10,6 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
 const User = mongoose.model('User');
+const Tag = mongoose.model('Tag');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
@@ -236,13 +237,50 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // POST freelance/
 router.post('/', function(req, res, next) {
-  const newFreelance = new Freelance(req.body);
+  let tags = req.body.tags.split(',');
+  let parameters = req.body;
+  delete parameters.tags;
+  const newFreelance = new Freelance(parameters);
+  // Save Freelance to get its id.
   newFreelance.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
     }
-    res.status(201).json(saved);
-  })
+    // Now we can parse, create and save the tags.
+    let tagObjects = [];
+    let count = 0;
+    console.log("we have got " + count);
+    for (let tag in tags) {
+      const newTag = new Tag({
+        tagName: tag,
+      });
+      newTag.freelancers.push(saved);
+      newTag.save(function(errTag, savedTag) {
+        if (err) {
+          res.status(400).json(utils.formatErrorMessage(errTag));
+        }
+        console.log("pushing to saved: " + JSON.stringify(savedTag));
+        saved.tags.push(savedTag);
+        count++;
+        if (tags.length == count) {
+          sendResponse();
+        }
+        console.log("new saved: " + JSON.stringify(saved));
+      });
+    }
+    
+    function sendResponse() {
+      console.log("saved: " + JSON.stringify(saved));
+      saved.save(function(err, saved2) {
+        console.log("saved all! " + JSON.stringify(saved2));
+        res.status(201).json(saved2);
+      });
+    }
+  });
+  
+  
+  console.log("freelance: "+ JSON.stringify(req.body));
+  
 });
 
 module.exports = router;

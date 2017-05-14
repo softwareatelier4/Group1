@@ -32,7 +32,6 @@ class CreationForm extends React.Component {
     }
 
     let form = this;
-
     ajaxRequest("POST", "/freelance", {}, formData, function(data) {
       if(form.props.isMyself) {
         // send claim request if registering myself
@@ -147,7 +146,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="picture-url" className="picture-url" name="picture-url" type="text"/>
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
             <span className="bar"></span>
             <label>
               Picture URL
