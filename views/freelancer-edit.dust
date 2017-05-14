@@ -7,6 +7,11 @@
     <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
     <link rel="stylesheet" type="text/css" href="../css/freelancer-edit.css" />
 
+    <!-- calendar -->
+    <link rel='stylesheet' href='../css/fullcalendar.css' />
+    <script src='../js/jquery.min.js'></script>
+    <script src='../js/moment.min.js'></script>
+    <script src='../js/fullcalendar.js'></script>
   </head>
   <body>
     <div id='topbar'>
@@ -27,6 +32,9 @@
       {?logged}
         <div id='react-freelancer-edit'></div>
         <div id='react-freelancer-emergency-single-list'></div>
+
+        <div id='calendar'></div>
+
       {:else}
         <div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
       {/logged}

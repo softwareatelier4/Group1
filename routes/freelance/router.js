@@ -61,16 +61,16 @@ router.get('/edit', function(req, res) {
          }
       });
     } else {
-      res.render('freelancer-edit', {
-        title: "JobAdvisor - Edit Freelancer Profile" ,
-        logged: false
-      });
       // res.render('freelancer-edit', {
       //   title: "JobAdvisor - Edit Freelancer Profile" ,
-      //   logged: true,
-      //   username: "MrSatan",
-      //   userFreelancer: "58cc4942fc13ae612c000023"
+      //   logged: false
       // });
+      res.render('freelancer-edit', {
+        title: "JobAdvisor - Edit Freelancer Profile" ,
+        logged: true,
+        username: "MrSatan",
+        userFreelancer: "58cc4942fc13ae612c000023"
+      });
 
     }
 

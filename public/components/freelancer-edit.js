@@ -3,6 +3,8 @@ let savedSingleDates = [];
 let savedRepeatedDates = [];
 let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
 
+const SINGLE_DATES_COLOR = 'green';
+
 /**
  * Componenets
  */
@@ -41,14 +43,24 @@ class FreelancerSingleDateForm extends React.Component {
       return renderError("Past dates are not valid");
     }
 
-    if(isConflicting(startDate, false)) {
-      this.resetForm();
+
+    let day = Day(startDate, endDate, location);
+    if(isConflicting(day, false)) {
       return renderError("Date conflicts with existing one");
     }
 
-    let day = Day(startDate, endDate, location);
     savedSingleDates.push(day);
+    // add to calendar
+    $('#calendar').fullCalendar('renderEvent', {
+      title: day.location,
+      start: new Date(day.begin),
+      end: new Date(day.end),
+      allDay: false,
+      color: SINGLE_DATES_COLOR
+    });
+
     updateDates();
+    this.resetForm();
     document.getElementById('emergency-form-single-date').value = new Date().toJSON().slice(0,10);
   }
 
@@ -373,6 +385,10 @@ function renderSingleDates(days) {
   savedSingleDates = days.filter((day) => { return !day.isRepeated; });
 
   let dayList = savedSingleDates.map((day, index) => <FreelancerEmergencySingleDate day={day} key={index} dataKey={index} /> );
+  // display dates sorted
+  dayList.sort(function (a, b) {
+    return new Date(a.props.day.begin) - new Date(b.props.day.begin);
+  });
   ReactDOM.render(
     <ul>
       <label>Single dates saved:</label>
@@ -420,13 +436,14 @@ function renderRepeatedDates(days) {
 /**
  * Sends AJAX request to save `savedSingleDates` + `savedRepeatedDates`
  */
-function updateDates() {
+function updateDates(rerenderCalendar) {
   let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
   console.log("savedRepeatedDates", savedRepeatedDates);
   ajaxRequest("PUT", freelancerId + "/availability", {}, emergencyDates, function(status) {
     if(status == 204) {
       renderSingleDates(savedSingleDates);
       renderRepeatedDates(savedRepeatedDates);
+      if(rerenderCalendar) renderCalendar();
     } else {
       console.log(status);
     }
@@ -442,15 +459,15 @@ function updateDates() {
  * `true` if `date` is from week schedule and it conflicts with single date, delete (override) existing single date (will show notification to user)
  * `false` if no conflicts
  */
-function isConflicting(date, isRepeated) {
+function isConflicting(dayToAdd, isRepeated) {
   let conflict = false;
   // check new date not conflicting with saved single dates
   for(let i = savedSingleDates.length - 1; i >= 0; i--) {
     let day = savedSingleDates[i];
-    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+    if(areOverlapping(dayToAdd, day)) {
       conflict = true;
       if(isRepeated) {
-        savedSingleDates.splice(i, 1);
+        savedSingleDates.splice(i, 1); // TODO change
       } else {
         return conflict; // new single date conflicting with previous ones, trigger error at once
       }
@@ -463,12 +480,72 @@ function isConflicting(date, isRepeated) {
   // check new single date does not conflict with existing week schedule
   for (let i = 0; i < savedRepeatedDates.length; i++) {
     let day = savedRepeatedDates[i];
-    if(date.toLocaleDateString('en-GB') == new Date(day.day).toLocaleDateString('en-GB')) {
+    if(areOverlapping(dayToAdd, day)) {
       return true;
     }
   }
 
   return conflict;
+}
+
+function deleteSavedDate(dateToDelete, calendarEventId, isRepeated) {
+  if(isRepeated) {
+    //TODO delete all
+  } else {
+    savedSingleDates = savedSingleDates.filter(function(day) {
+      return new Date(day.begin).toUTCString() != dateToDelete.toUTCString();
+    });
+  }
+  updateDates();
+}
+
+function renderCalendar() {
+  let calendarSingleEvents = savedSingleDates.map((day) => {
+    return {
+      title: day.location,
+      start: new Date(day.begin),
+      end: new Date(day.end),
+      allDay: false
+    }
+  });
+
+  $('#calendar').fullCalendar({
+    eventSources: [
+      {
+        events: calendarSingleEvents,
+        color: SINGLE_DATES_COLOR
+      }
+
+    ],
+
+    eventRender: function(event, element) {
+      // add delete button
+      element.find(".fc-bg").css("pointer-events", "none");
+        element.append("<button type='button' class='delete-event'>X</button>" );
+        element.find(".delete-event").click(function(){
+          deleteSavedDate(new Date(event.start._i), false);
+          $('#calendar').fullCalendar('removeEvents',event._id);
+      });
+    },
+
+    header: {
+      left:   'title',
+      center: 'month, agendaWeek',
+      right:  'today prev,next',
+    },
+    defaultView: 'agendaWeek',
+    firstDay: 1,
+    timezone: 'local',
+    timeFormat: 'HH:mm',
+    slotLabelFormat: 'HH:mm',
+    allDaySlot: false,
+    views: {
+      week: {
+        columnFormat: 'ddd D/M'
+      }
+    }
+  });
+
 }
 
 /**
@@ -480,5 +557,6 @@ if(document.getElementById('react-freelancer-edit')) {
   ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
     renderSingleDates(freelancer.availability);
     renderRepeatedDates(freelancer.availability);
+    renderCalendar();
   });
 }
