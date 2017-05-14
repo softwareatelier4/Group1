@@ -249,8 +249,7 @@ router.post('/', function(req, res, next) {
     // Now we can parse, create and save the tags.
     let tagObjects = [];
     let count = 0;
-    console.log("we have got " + count);
-    for (let tag in tags) {
+    for (let tag of tags) {
       const newTag = new Tag({
         tagName: tag,
       });
@@ -259,28 +258,20 @@ router.post('/', function(req, res, next) {
         if (err) {
           res.status(400).json(utils.formatErrorMessage(errTag));
         }
-        console.log("pushing to saved: " + JSON.stringify(savedTag));
         saved.tags.push(savedTag);
         count++;
         if (tags.length == count) {
           sendResponse();
         }
-        console.log("new saved: " + JSON.stringify(saved));
       });
     }
     
     function sendResponse() {
-      console.log("saved: " + JSON.stringify(saved));
       saved.save(function(err, saved2) {
-        console.log("saved all! " + JSON.stringify(saved2));
         res.status(201).json(saved2);
       });
     }
   });
-  
-  
-  console.log("freelance: "+ JSON.stringify(req.body));
-  
 });
 
 module.exports = router;
