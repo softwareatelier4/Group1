@@ -237,7 +237,10 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // POST freelance/
 router.post('/', function(req, res, next) {
-  let tags = req.body.tags.split(',');
+  if (req.body.tags != undefined) {
+    var tags = req.body.tags.split(',');
+  }
+  
   let parameters = req.body;
   delete parameters.tags;
   const newFreelance = new Freelance(parameters);
@@ -245,33 +248,38 @@ router.post('/', function(req, res, next) {
   newFreelance.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
+      return;
     }
     // Now we can parse, create and save the tags.
     let tagObjects = [];
     let count = 0;
-    for (let tag of tags) {
-      const newTag = new Tag({
-        tagName: tag,
-      });
-      newTag.freelancers.push(saved);
-      newTag.save(function(errTag, savedTag) {
-        if (err) {
-          res.status(400).json(utils.formatErrorMessage(errTag));
-        }
-        saved.tags.push(savedTag);
-        count++;
-        if (tags.length == count) {
-          sendResponse();
-        }
-      });
+    if (tags != undefined) {
+      for (let tag of tags) {
+        const newTag = new Tag({
+          tagName: tag,
+        });
+        newTag.freelancers.push(saved);
+        newTag.save(function(errTag, savedTag) {
+          if (err) {
+            res.status(400).json(utils.formatErrorMessage(errTag));
+          }
+          saved.tags.push(savedTag);
+          count++;
+          if (tags.length == count) {
+            sendResponse();
+          }
+        });
+      } 
+    } else {
+      // If no tag are present, send response immediately.
+      sendResponse();
     }
-    
     function sendResponse() {
       saved.save(function(err, saved2) {
         res.status(201).json(saved2);
       });
     }
-  });
+  });  
 });
 
 module.exports = router;
