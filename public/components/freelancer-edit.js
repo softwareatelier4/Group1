@@ -35,12 +35,10 @@ class FreelancerSingleDateForm extends React.Component {
     let endDate = new Date(date + 'T' + end);
 
     if(startDate >= endDate) {
-      this.resetForm();
       return renderError("Invalid time interval");
     }
 
     if(startDate < Date.now()) {
-      this.resetForm();
       return renderError("Past dates are not valid");
     }
 
@@ -52,13 +50,16 @@ class FreelancerSingleDateForm extends React.Component {
 
     savedSingleDates.push(day);
     // add to calendar
-    $('#calendar').fullCalendar('renderEvent', {
-      title: day.location,
-      start: new Date(day.begin),
-      end: new Date(day.end),
-      allDay: false,
-      color: SINGLE_DATES_COLOR
-    });
+    $('#calendar').fullCalendar(
+      'renderEvent', {
+        title: day.location,
+        start: new Date(day.begin),
+        end: new Date(day.end),
+        allDay: false,
+        color: SINGLE_DATES_COLOR,
+      },
+      true //stick
+    );
 
     updateDates();
     this.resetForm();
@@ -329,39 +330,6 @@ class FreelancerEditView extends React.Component {
   }
 }
 
-class FreelancerEmergencySingleDate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.deleteDate = this.deleteDate.bind(this);
-  }
-
-  deleteDate(evt) {
-    let index = evt.target.parentNode.getAttribute('data-key');
-    savedSingleDates.splice(index, 1);
-    updateDates();
-  }
-
-  render() {
-    let day = this.props.day;
-    let begin = new Date(day.begin);
-    let end = new Date(day.end);
-    let date = new Date(day.day);
-    let timeSettings = { hour12: false,  hour: "numeric",  minute: "numeric" } ;
-    return (
-      <li data-key={this.props.dataKey}>
-        {
-          dayStrings[date.getDay()] + ' '
-          + date.toLocaleDateString('en-GB')
-          + " from " + begin.toLocaleTimeString('en-US',  timeSettings)
-          + " to " + end.toLocaleTimeString('en-US',  timeSettings)
-          + " in " + day.location
-        }
-        <input type="button" value="Delete" onClick={this.deleteDate} />
-      </li>
-    );
-  }
-}
-
 /**
  * Helper and rendering functions
  */
@@ -373,28 +341,6 @@ function renderError(errorString) {
 function renderPage() {
   ReactDOM.render(<FreelancerEditView />, document.getElementById('react-freelancer-edit'));
 };
-
-/**
- * Render list of single days
- * @param  {Day[]} days array of days to display
- */
-function renderSingleDates(days) {
-  // get single days (not set via weekly schedule)
-  savedSingleDates = days.filter((day) => { return !day.isRepeated; });
-
-  let dayList = savedSingleDates.map((day, index) => <FreelancerEmergencySingleDate day={day} key={index} dataKey={index} /> );
-  // display dates sorted
-  dayList.sort(function (a, b) {
-    return new Date(a.props.day.begin) - new Date(b.props.day.begin);
-  });
-  ReactDOM.render(
-    <ul>
-      <label>Single dates saved:</label>
-      {dayList}
-    </ul>,
-    document.getElementById('react-freelancer-emergency-single-list')
-  );
-}
 
 /**
  * Sends AJAX request to save `savedSingleDates` + `savedRepeatedDates`
@@ -468,19 +414,17 @@ function resetRepetedDayInput(dayOfWeek, checked) {
  * Called when deleting from calendar, deletes date(s) from saved ones
  * @param  {Date}  dateToDelete (begin)
  * @param  {Boolean} isRepeated   true if date is of weekly schedule (all occurrences are deleted)
+ * @param  {Boolean} deleteAll   if true and `isRepeated = true`, delete all occurrences
  */
-function deleteSavedDate(dateToDelete, isRepeated) {
+function deleteSavedDate(dateToDelete, isRepeated, deleteAll) {
   if(isRepeated) {
-    let dayCount = 0;
-
     // delete all occurences (same day and time interval)
     savedRepeatedDates = savedRepeatedDates.filter(function(day) {
       let isSameDay = new Date(day.begin).getDay() == dateToDelete.getDay();
       let isSameInterval = new Date(day.begin).toTimeString() == dateToDelete.toTimeString();
-      // count remaining dates for a given day of the week
-      if(isSameDay && !isSameInterval) dayCount++;
-      // filter
-      return !isSameDay && !isSameInterval;
+      // filter based on `deleteAll` param
+      return (deleteAll && !isSameDay && !isSameInterval) // delete all occurrences
+              || (!deleteAll && new Date(day.begin).toUTCString() != dateToDelete.toUTCString()) ; // delete single date
     });
 
   } else {
@@ -495,6 +439,11 @@ function deleteSavedDate(dateToDelete, isRepeated) {
  * Render calendar with single and repeated saved dates
  */
 function renderCalendar() {
+  let calendarDefaultView = 'agendaWeek';
+  if(document.getElementById('calendar').hasChildNodes()) { // keep same view if rerendering
+    calendarDefaultView = $('#calendar').fullCalendar('getView').type;
+  }
+
   $('#calendar').fullCalendar('destroy'); // reset
 
   let calendarSingleEvents = savedSingleDates.map((day) => {
@@ -536,8 +485,36 @@ function renderCalendar() {
       element.find(".fc-bg").css("pointer-events", "none");
         element.append("<button type='button' class='delete-event'>X</button>" );
         element.find(".delete-event").click(function(){
-          deleteSavedDate(new Date(event.start._i), isRepeated);
-          if(!isRepeated) $('#calendar').fullCalendar('removeEvents', event._id);
+
+          if(isRepeated) {
+            // confirmation dialog for deleting repeating events
+            $.confirm({
+              title: 'Delete event',
+              content: 'You selected a repeating event, how do you want to proceed?',
+              buttons: {
+                deleteSingle: {
+                  text: 'Delete only this event',
+                  btnClass: 'btn-blue',
+                  action: function() {
+                    deleteSavedDate(new Date(event.start._i), isRepeated);
+                  }
+                },
+                deleteAll: {
+                  text: 'Delete all repetitions',
+                  keys: ['enter', 'shift'],
+                  action: function() {
+                    deleteSavedDate(new Date(event.start._i), isRepeated, true);
+                  }
+                },
+                cancel: function () {
+                  return;
+                },
+              }
+            });
+          } else {
+            deleteSavedDate(new Date(event.start._i), isRepeated);
+            $('#calendar').fullCalendar('removeEvents', event._id);
+          }
       });
     },
 
@@ -546,7 +523,7 @@ function renderCalendar() {
       center: 'month, agendaWeek',
       right:  'today prev,next',
     },
-    defaultView: 'agendaWeek',
+    defaultView: calendarDefaultView,
     firstDay: 1,
     timezone: 'local',
     timeFormat: 'HH:mm',
@@ -572,7 +549,7 @@ if(document.getElementById('react-freelancer-edit')) {
     savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
     savedSingleDates = days.filter((day) => { return !day.isRepeated; });
 
-    console.log(savedRepeatedDates);
+    console.log('Saved days', days);
     renderCalendar();
   });
 }

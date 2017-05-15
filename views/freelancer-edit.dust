@@ -12,6 +12,9 @@
     <script src='../js/jquery.min.js'></script>
     <script src='../js/moment.min.js'></script>
     <script src='../js/fullcalendar.js'></script>
+    <!-- calendar deletion dialog -->
+    <link rel="stylesheet" href="../css/jquery-confirm.min.css">
+    <script src="../js/jquery-confirm.min.js"></script>
   </head>
   <body>
     <div id='topbar'>
