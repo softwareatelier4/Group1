@@ -23,3 +23,7 @@ form#emergency-form-repetition div {
   right: 0;
   z-index: 3;
 }
+
+#calendar {
+  margin-top: 1.5em;
+}
