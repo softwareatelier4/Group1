@@ -69,10 +69,10 @@ class FreelancerSingleDateForm extends React.Component {
   render() {
     return (
       <form id="emergency-form-single-date" onSubmit={this.handleSubmit}>
-        <label>Select specific day(s):</label>
+        <label>Add specific date(s):</label>
         <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
         From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
-        in <input type="text" id="emergency-location-single" placeholder="Location" required />
+        in <input type="text" id="emergency-location-single" placeholder="Location" required /><br/>
         <input type="submit" value="Add single date" />
       </form>
     );
@@ -245,7 +245,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Weekly schedule <span id="emergency-repetition-saved-until"></span>:</label>
+          <label>Add repeated dates <span id="emergency-repetition-saved-until"></span>:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
@@ -291,7 +291,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
         </div>
 
         <div id="emergency-form-repetition-type">
-          <label>Use schedule from:
+          <label>Start schedule from:
             <input type="date" id="emergency-repetition-start-date" defaultValue={new Date().toJSON().slice(0,10)}/>
           </label>
           <label><input type="radio" name="emergency-repetition-type" value="weeks" defaultChecked={true} onChange={this.onRadioChange} />

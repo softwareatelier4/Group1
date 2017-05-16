@@ -33,9 +33,15 @@
     </div>
     <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
       {?logged}
+        <h3>Add emergency availability:</h3>
         <div id='react-freelancer-edit'></div>
         <div id='react-freelancer-emergency-single-list'></div>
 
+        <h3>Your emergency schedule:</h3>
+        <ul id="calendar-legend">
+          <li id="calendar-legend-single"> Single dates </li>
+          <li id="calendar-legend-repeated"> Repeated dates </li>
+        </ul>
         <div id='calendar'></div>
 
       {:else}
