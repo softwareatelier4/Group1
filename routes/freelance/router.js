@@ -255,21 +255,50 @@ router.post('/', function(req, res, next) {
     let count = 0;
     if (tags != undefined) {
       for (let tag of tags) {
-        const newTag = new Tag({
-          tagName: tag,
-        });
-        newTag.freelancers.push(saved);
-        newTag.save(function(errTag, savedTag) {
-          if (err) {
-            res.status(400).json(utils.formatErrorMessage(errTag));
+        // Check if this tag was already created.
+        Tag.find({'name' : tag}).exec(function(err, tag) {
+          // Tag already exists.
+          console.log("err: " + err);
+          console.log("tag: " + JSON.stringify(tag));
+          if (tag) {
+            // Add this new freelance to the freelancers that have this tag.
+            console.log("saved: " + JSON.stringify(saved));
+            tag.freelancers.push(saved);
+            console.log("Found duplicate of tag: " + JSON.stringify(tag));
+            newTag.save(function(errTag, savedTag) {
+              if (err) {
+                console.log("error: " + err);
+                res.status(400).json(utils.formatErrorMessage(errTag));
+              }
+              console.log("saved: " + savedTag);
+              saved.tags.push(savedTag);
+              count++;
+              if (tags.length == count) {
+                sendResponse();
+              }
+            });
+          } else {
+            // Tag not present, create it.
+            const newTag = new Tag({
+              tagName: tag,
+            });
+            newTag.freelancers.push(saved);
+            // Save tag and proceed to process response.
+            newTag.save(function(errTag, savedTag) {
+              if (err) {
+                console.log("error: " + err);
+                res.status(400).json(utils.formatErrorMessage(errTag));
+              }
+              console.log("saved: " + savedTag);
+              saved.tags.push(savedTag);
+              count++;
+              if (tags.length == count) {
+                sendResponse();
+              }
+            });
           }
-          saved.tags.push(savedTag);
-          count++;
-          if (tags.length == count) {
-            sendResponse();
-          }
         });
-      } 
+      }
     } else {
       // If no tag are present, send response immediately.
       sendResponse();
