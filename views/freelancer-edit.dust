@@ -33,7 +33,7 @@
     </div>
     <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
       {?logged}
-        <h3>Add emergency availability:</h3>
+        <h3>Add emergency availability for {userFreelancerInfo}:</h3>
         <div id='react-freelancer-edit'></div>
         <div id='react-freelancer-emergency-single-list'></div>
 
