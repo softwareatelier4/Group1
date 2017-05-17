@@ -243,12 +243,12 @@ router.put('/:freelanceid/edit', function(req, res, next) {
            res.status(500).json({ error : 'error finding user in database' }); // TODO: TEST (wrong id)
          } else if (!user) {
            res.status(404).json({ error : 'user not found' }); // TODO: TEST (id not existing)
-         } else if (!user.freelancer || (freelancerIndex = user.freelancer.indexOf(req.body.id)) < 0) {
+         } else if (!user.freelancer || (freelancerIndex = user.freelancer.indexOf(req.params.freelanceid)) < 0) {
            res.status(403).json({ error : 'user not allowed to edit' }); // TODO: TEST (user not owner)
          } else {
            let data = req.body
            // need to make 2 calls instead of 'findAndUpdate' to run the validators in mongo
-            Freelance.findById(data.id).exec(function(err, freelance){
+            Freelance.findById(req.params.freelanceid).exec(function(err, freelance){
               if(err){
                 res.status(500).json({ error : 'error editing freelance data' }); // TODO: TEST (wrong id)
               } else if (!freelance){
