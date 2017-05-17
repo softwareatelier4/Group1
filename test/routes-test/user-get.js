@@ -34,6 +34,7 @@ describe('User-get test: ', function() {
       request(app)
         .get('/user/' + seedData[4].data[0].username.toString())
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
@@ -47,6 +48,7 @@ describe('User-get test: ', function() {
       request(app)
         .get('/user/a_username_that_is_very_unlikely_to_exist')
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect(404, done);
     });
 
@@ -54,6 +56,7 @@ describe('User-get test: ', function() {
       request(app)
         .head('/user/' + seedData[4].data[0].username.toString())
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect(405, done);
     });
 

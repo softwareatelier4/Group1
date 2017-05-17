@@ -31,6 +31,7 @@ describe('User-put test: ', function() {
         request(app)
         .get('/user/' + seedData[4].data[0].username.toString())
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
@@ -54,6 +55,7 @@ describe('User-put test: ', function() {
         request(app)
         .get('/user/rick_sanchez')
         .set('Accept', 'application/json')
+        .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {

@@ -85,7 +85,7 @@ router.get('/logout', function (req, res) {
 
 // GET user/:username
 router.get('/:username', function(req, res, next) {
-  User.findOne({ username : req.params.username }).select("-password").exec(function(err, user){
+  User.findOne({ username : req.params.username }).select("-password").exec(function(err, user){ //TODO populate freelancers
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
     } else if (!user) {
@@ -95,7 +95,14 @@ router.get('/:username', function(req, res, next) {
       });
     } else {
       let found = Object.create(user);
-      res.status(200).json(found).end();
+      // distinguish between raw and ajax GET request (to render page or return JSON)
+      if (req.headers.ajax) {
+        res.status(200).json(found).end();
+      } else if (req.accepts('text/html')) {
+        res.render('user', user);
+      } else {
+        res.sendStatus(400);
+      }
     }
   });
 });
