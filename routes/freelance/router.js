@@ -258,6 +258,7 @@ router.post('/', function(req, res, next) {
     if (tags != undefined) {
       // For every tag, check if it's already in the database or not
       for (let tag of tags) {
+        tag = tag.replace(/\s+/g, '');
         console.log("THIS IS TAG" + tag);
         // Asynchronous call for checking for the tag
         checkIfTagExists(tag);
