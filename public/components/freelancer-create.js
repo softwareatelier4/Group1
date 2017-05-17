@@ -32,7 +32,6 @@ class CreationForm extends React.Component {
     }
 
     let form = this;
-
     ajaxRequest("POST", "/freelance", {}, formData, function(data) {
       if(form.props.isMyself) {
         // send claim request if registering myself
@@ -131,6 +130,30 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
+            <input ref="description" className="job-description" name="job-description" type="text" required/>
+            <span className="bar"></span>
+            <label>
+              Job Description
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="tags" className="job-tags" name="job-tags" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Job tags (separated by a comma)
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Picture URL
+            </label>
+          </div>
+
+          <div className="group">
             <input ref="address" className="address" name="address" type="text" required/>
             <span className="bar"></span>
             <label>
@@ -218,9 +241,11 @@ function renderComponent(data, isMyself) {
       <FreelancerClaimForm />,
       document.getElementById('react-claim-form-root')
     );
+
+    // update required documents based on selected categoy
+    document.getElementById('category-list').addEventListener("change", switchCategory);
   }
 
-  document.getElementById('category-list').addEventListener("change", switchCategory);
 }
 
 /**

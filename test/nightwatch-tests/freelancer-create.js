@@ -13,12 +13,16 @@ module.exports = {
       .assert.visible('input[name=first-name]')
       .assert.visible('input[name=family-name]')
       .assert.visible('input[name=job-title]')
+      .assert.visible('input[name=job-description]')
+      .assert.visible('input[name=job-tags]')
       .assert.visible('select[name="category"]')
       .assert.visible('input[name=address]')
       .assert.visible('input[name=phone]')
       .assert.visible('input[name=email]')
       .setValue('input[name=first-name]', 'Nightwatch')
       .setValue('input[name=job-title]', 'Tester')
+      .setValue('input[name=job-description]', 'Nightwatch Tester Wow')
+      .setValue('input[name=job-tags]', 'Nightwatch ,   Tester, Wow')
       .click('select[name="category"] option[value="58cc4b15fc13ae5ec7000124"]')
       .setValue('input[name=address]', 'USI, Lugano')
       .setValue('input[name=email]', 'test@night.watch')
@@ -28,7 +32,7 @@ module.exports = {
       .assert.containsText('span.freelancer-category', 'Engineering')
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
       .assert.containsText('a.freelancer-email', 'test@night.watch')
-
+      .assert.containsText('ul.tag-list li:first-child', 'Nightwatch')
       // add yourself
       .url( config.baseURL + '/freelance/new')
       // test alert if not logged in
