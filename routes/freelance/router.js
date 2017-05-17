@@ -26,8 +26,7 @@ router.get('/new', function(req, res, next) {
           title: "JobAdvisor - Create Freelancer Profile" ,
           logged: true,
           username: user.username,
-          userFreelancer: user.freelancer,
-          claiming: user.claiming
+          userFreelancer: user.freelancer[0]
         });
       });
     } else {
@@ -44,19 +43,19 @@ router.get('/edit', function(req, res) {
   if (req.accepts('text/html')) {
     if(req.session.user_id) {
        User.findById(req.session.user_id).exec(function(err, user){
+         let freelancerIndex;
          if (err) {
            res.status(500).json({ error : 'error finding user in database' });
          } else if (!user) {
            res.status(404).json({ error : 'user not found' });
-         } else if (!user.freelancer || user.freelancer != req.query.freelancer) {
+         } else if ((freelancerIndex = user.freelancer.indexOf(req.query.freelancer)) < 0) { // freelancer not claimed by user
            res.redirect('/');
          } else {
            res.render('freelancer-edit', {
              title: "JobAdvisor - Edit Freelancer Profile" ,
              logged: true,
              username: user.username,
-             userFreelancer: user.freelancer,
-             claiming: user.claiming
+             userFreelancer: user.freelancer[freelancerIndex]
            });
          }
       });
@@ -108,7 +107,7 @@ router.get('/:freelanceid', function(req, res, next) {
     				title: "JobAdvisor",
             logged: true,
             username: user.username,
-            userFreelancer: user.freelancer,
+            userFreelancer: user.freelancer[0],
     			});
         });
       } else {
