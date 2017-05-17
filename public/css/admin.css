@@ -62,6 +62,7 @@ button:active {
 #admin-view {
   max-width: 800px;
   width: 80%;
+  margin-bottom: 50px;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -114,8 +115,46 @@ button:active {
   padding: 10px;
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   background-color: var(--basic-white);
+}
+
+.card-category-documents {
+  width: 64%;
+  border: 1px solid gray;
+  margin-top: 5px;
+}
+
+.card-category-add-document {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-category-documents > ul {
+  padding: 10px;
+  margin: 0;
+  border-top: 1px solid grey;
+}
+
+.card-category-documents > ul > li {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 30px;
+  padding: 5px 0;
+  border-bottom: 1px solid gray;
+}
+
+.card-category-documents > ul > li:last-child {
+  border-bottom: 0;
+}
+
+.card-category-documents button.card-category-document-delete-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
 }
 
 .card-category > input,

@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
           title: "JobAdvisor",
           logged: true,
           username: user.username,
+          userFreelancer: user.freelancer,
         });
       });
     } else { // not logged in

@@ -19,6 +19,9 @@
       {:else}
         <div id="react-username">{username}</div>
         <div id="react-logout"></div>
+        {?userFreelancer}
+          <a id="emergency-edit-link" href="/freelance/edit?freelancer={userFreelancer}">Edit your emergency availability</a>
+        {/userFreelancer}
       {/logged}
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
@@ -35,6 +38,7 @@
     </div>
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
+    <script src="../js/Day.js"></script>
     <!-- React -->
     <script src="../js/react-15.0.1.js"></script>
     <script src="../js/react-dom-15.0.1.js"></script>

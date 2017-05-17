@@ -2,6 +2,7 @@
 
 const mongoose   = require('mongoose');
 const ObjectId   = mongoose.Types.ObjectId;
+const assert = require('assert');
 const should = require('should');
 const config = require('../config');
 const app = require(config.projectRoot + '/app');
@@ -10,6 +11,7 @@ const seedDb = require('../../seed_data/seedDb');
 const utils = require('../../seed_data/utils');
 const freelanceutils = require('./utils');
 const request = require('supertest');
+const freelancerAvailableDay = require('../../routes/search/router').freelancerAvailableDay;
 
 describe('Search test: ', function() {
 
@@ -53,6 +55,37 @@ describe('Search test: ', function() {
             freelance.duration.should.not.be.lessThan(0);
             freelance.duration.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
           });
+          done();
+        });
+    });
+
+    it('Should respond with a 200 and return the correct data with emergency information', function(done) {
+      var today = new Date();
+      today.setHours(9);
+      today.toUTCString()
+      request(app)
+        .get(`/search?origin=Bellinzona+Switzerland&date=${today}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/, 'it should respond with json')
+        .expect(200)
+        .end(function(err, res) {
+          var availabilityCount = 0;
+          const results = JSON.parse(res.text) || [];
+          results.length.should.be.greaterThan(0);
+          results.forEach(function(freelance, i) {
+            // freelanceutils.checkSearchInfoInResponse(freelance, seedData[1].data[0], true);
+            freelance.should.have.property("emergency");
+            freelance.emergency.duration.should.not.be.lessThan(0);
+            freelance.emergency.duration.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
+            freelance.emergency.distance.should.not.be.lessThan(0);
+            freelance.emergency.duration.should.not.be.greaterThan(Number.MAX_SAFE_INTEGER);
+            if (freelance.emergency.available) {
+              freelance.emergency.distance.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+              freelance.emergency.duration.should.be.lessThan(Number.MAX_SAFE_INTEGER);
+              availabilityCount++;
+            }
+          });
+          availabilityCount.should.be.greaterThan(1);
           done();
         });
     });
@@ -150,6 +183,64 @@ describe('Search test: ', function() {
     });
 
   });
+
+  describe('freelancerAvailableDay', function() {
+
+    let d1 = '2017-04-03T12:10:00Z';
+    let d2 = '2017-04-05T12:10:00Z';
+    let d3 = '2017-04-07T12:10:00Z';
+    let d4 = '2017-04-06T13:10:00Z';
+    let d5 = '2017-04-06T12:10:00Z';
+
+    let f1 =  {
+      availability: []
+    }
+
+    let f2 =  {
+      availability: [
+        {
+          begin : '2017-04-04T12:00:00Z',
+          end   : '2017-04-04T12:20:00Z'
+        },
+        {
+          begin : '2017-04-06T12:00:00Z',
+          end   : '2017-04-06T12:20:00Z'
+        }
+      ]
+    }
+
+    it('should return null if freelancer is not available', function(done) {
+      should.not.exists(freelancerAvailableDay(f1, d1));
+      done();
+    });
+
+    it('should return null if freelancer only available later', function(done) {
+      should.not.exists(freelancerAvailableDay(f2, d1));
+      done();
+    });
+
+    it('should return null if freelancer only available another date', function(done) {
+      should.not.exists(freelancerAvailableDay(f2, d2));
+      done();
+    });
+
+    it('should return null if freelancer only available before', function(done) {
+      should.not.exists(freelancerAvailableDay(f2, d3));
+      done();
+    });
+
+    it('should return null if freelancer only available another hour', function(done) {
+      should.not.exists(freelancerAvailableDay(f2, d4));
+      done();
+    });
+
+    it('should return not null if freelancer is available', function(done) {
+      should.exists(freelancerAvailableDay(f2, d5));
+      done();
+    });
+
+  });
+
 });
 
 function seed(done) {
