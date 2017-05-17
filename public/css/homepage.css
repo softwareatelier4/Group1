@@ -169,21 +169,25 @@ body {
 #freelancer-create-btn {
   width: 100%;
   height: 65px;
-  background-color: var(--basic-white);
-  color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: var(--basic-white);
   border: 0px;
   font-size: var(--input-font-size);
   padding: 20px;
 }
 
 #freelancer-create-btn:hover {
-  box-shadow: var(--box-shadow-material-hover);
+  background: var(--accent-hover);
   cursor: pointer;
 }
 
 #freelancer-create-btn:focus {
   outline: none;
   background-color: var(--background);
+}
+
+#freelancer-create-btn:active {
+
 }
 
 

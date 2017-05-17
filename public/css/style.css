@@ -51,6 +51,7 @@ html {
 #react-title {
   display: flex;
   flex-direction: column;
+  margin-right: 20px;
 }
 
 /* Topbar */
@@ -98,6 +99,7 @@ a#title {
 #react-register {
   display: flex;
   align-items: center;
+  margin-right: 20px;
 }
 
 #login-form {
