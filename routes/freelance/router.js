@@ -233,6 +233,50 @@ router.put('/:freelanceid/availability', function(req, res, next) {
   }
 });
 
+// PUT freelance/:freelanceid/edit/
+router.put('/:freelanceid/edit', function(req, res, next) {
+  // checks if user is correct
+  if(req.session.user_id) {
+       User.findById(req.session.user_id).exec(function(err, user){
+        let freelancerIndex;
+         if (err) {
+           res.status(500).json({ error : 'error finding user in database' }); // TODO: TEST (wrong id)
+         } else if (!user) {
+           res.status(404).json({ error : 'user not found' }); // TODO: TEST (id not existing)
+         } else if (!user.freelancer || (freelancerIndex = user.freelancer.indexOf(req.body.id)) < 0) {
+           res.status(403).json({ error : 'user not allowed to edit' }); // TODO: TEST (user not owner)
+         } else {
+           let data = req.body
+           // need to make 2 calls instead of 'findAndUpdate' to run the validators in mongo
+            Freelance.findById(data.id).exec(function(err, freelance){
+              if(err){
+                res.status(500).json({ error : 'error editing freelance data' }); // TODO: TEST (wrong id)
+              } else if (!freelance){
+                res.status(404).json({ error : 'freelance not found for editing' }); // TODO: TEST (id not existing)
+              } else {
+                freelance.phone = data.phone || freelance.phone;
+                freelance.email = data.email || freelance.email;
+                freelance.description = data.description || freelance.description;
+                freelance.address = data.address || freelance.address;
+                freelance.price = data.price || freelance.price;
+                if(data.tags.length > 0) freelance.tags = data.tags;
+
+                freelance.save(function(err, updatedfreelance){
+                  if(err){
+                    res.status(500).json({ error : 'error updating freelance' }); // NOT TESTABLE
+                  } else if (!updatedfreelance){
+                    res.status(404).json({ error : 'freelance not found' }); // NOT TESTABLE
+                  } else {
+                    res.status(201).json(updatedfreelance); // TODO: TEST (correct execution)
+                  }
+                });
+              }
+            });
+         }
+      });
+    }
+});
+
 
 // POST freelance/
 router.post('/', function(req, res, next) {
