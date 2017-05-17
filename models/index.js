@@ -11,6 +11,7 @@ require('./Tag');
 require('./Category');
 require('./User');
 require('./Claim');
+require('./Duplicate');
 
 
 module.exports = {
