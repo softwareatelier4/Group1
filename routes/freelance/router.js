@@ -237,6 +237,7 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // POST freelance/
 router.post('/', function(req, res, next) {
+  // There are tags in the post:
   if (req.body.tags != undefined) {
     var tags = req.body.tags.split(',');
   }
@@ -244,70 +245,75 @@ router.post('/', function(req, res, next) {
   let parameters = req.body;
   delete parameters.tags;
   const newFreelance = new Freelance(parameters);
+
   // Save Freelance to get its id.
   newFreelance.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
       return;
     }
+    
     // Now we can parse, create and save the tags.
-    let tagObjects = [];
     let count = 0;
     if (tags != undefined) {
+      // For every tag, check if it's already in the database or not
       for (let tag of tags) {
-        // Check if this tag was already created.
-        Tag.find({'name' : tag}).exec(function(err, tag) {
-          // Tag already exists.
-          console.log("err: " + err);
-          console.log("tag: " + JSON.stringify(tag));
-          if (tag) {
-            // Add this new freelance to the freelancers that have this tag.
-            console.log("saved: " + JSON.stringify(saved));
-            tag.freelancers.push(saved);
-            console.log("Found duplicate of tag: " + JSON.stringify(tag));
-            newTag.save(function(errTag, savedTag) {
-              if (err) {
-                console.log("error: " + err);
-                res.status(400).json(utils.formatErrorMessage(errTag));
-              }
-              console.log("saved: " + savedTag);
-              saved.tags.push(savedTag);
-              count++;
-              if (tags.length == count) {
-                sendResponse();
-              }
-            });
-          } else {
-            // Tag not present, create it.
-            const newTag = new Tag({
-              tagName: tag,
-            });
-            newTag.freelancers.push(saved);
-            // Save tag and proceed to process response.
-            newTag.save(function(errTag, savedTag) {
-              if (err) {
-                console.log("error: " + err);
-                res.status(400).json(utils.formatErrorMessage(errTag));
-              }
-              console.log("saved: " + savedTag);
-              saved.tags.push(savedTag);
-              count++;
-              if (tags.length == count) {
-                sendResponse();
-              }
-            });
-          }
-        });
+        console.log("THIS IS TAG" + tag);
+        // Asynchronous call for checking for the tag
+        checkIfTagExists(tag);
       }
     } else {
       // If no tag are present, send response immediately.
       sendResponse();
     }
+
+    // Asynchronous call for sending the response
     function sendResponse() {
       saved.save(function(err, saved2) {
         res.status(201).json(saved2);
       });
     }
+
+    // Asynchronous call for checking the tags
+    function checkIfTagExists(givenTag) {
+      Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+        if (err || (foundTag == undefined)) {
+          // Tag is not in the database, add it
+          const newTag = new Tag({
+            tagName: givenTag,
+          });
+          newTag.freelancers.push(saved);
+          // Save tag and proceed to process response.
+          newTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        } else {
+          // Add this new freelance to the freelancers that have this tag.
+          foundTag.freelancers.push(saved);
+          foundTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            // Save tag into freelance list of tags
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        }
+      }); 
+    }
+
   });  
 });
 
