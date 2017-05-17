@@ -20,4 +20,5 @@ module.exports = {
   'Category'  	  : mongoose.model('Category'),
   'User'				  : mongoose.model('User'),
   'Claim'			 		: mongoose.model('Claim'),
+	'Duplicate'			: mongoose.model('Duplicate'),
 }
