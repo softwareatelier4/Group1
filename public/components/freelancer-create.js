@@ -263,8 +263,8 @@ class FreelancerTypeButtons extends React.Component {
   render() {
     return (
       <div id="freelancer-type">
-        <button id="freelancer-other" onClick={showForm}>Add someone else</button>
-        <button id="freelancer-myself" onClick={showForm}>Add yourself</button>
+        <button id="freelancer-other" onClick={showForm}><br/><br/>By choosing this option <br/> you will create a new unclaimed freelancer card.</button>
+        <button id="freelancer-myself" onClick={showForm}><br/><br/>By choosing this option <br/> you will create a freelancer and start the caliming process.</button>
       </div>
     );
   }

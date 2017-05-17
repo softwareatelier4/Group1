@@ -163,3 +163,54 @@ input:focus ~ label {
 input:focus ~ .bar:before, input:focus ~ .bar:after {
   width: 50%;
 }
+
+/* Add buttons */
+
+#freelancer-type {
+  display: flex;
+  justify-content: space-around;
+}
+
+#freelancer-other, #freelancer-myself {
+  width: 500px;
+  height: 200px;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  border: 0px;
+  font-size: 1em;
+  border-bottom: solid 7px var(--home-search-button-border);
+}
+
+#freelancer-other::before {
+  content: "Add someone else: ";
+  font-size: 30px;
+}
+
+#freelancer-myself::before {
+  content: "Add myself: ";
+  font-size: 30px;
+}
+
+#freelancer-other {
+  margin-left: 100px;
+}
+
+#freelancer-myself {
+  margin-right: 100px;
+}
+
+#freelancer-other:hover, #freelancer-myself:hover {
+  background: var(--accent-hover);
+  border-bottom: solid 7px var(--home-search-button-border-hover);
+  cursor: pointer;
+}
+
+#freelancer-other:focus, #freelancer-myself:focus {
+  outline: none;
+}
+
+#freelancer-other:active, #freelancer-myself:active {
+  outline: none;
+  border-bottom: 0;
+  border-top: solid 7px var(--background);
+}
