@@ -84,10 +84,10 @@ router.get('/', function(req, res, next) {
           // key: 'AIzaSyC-6I8PVbi_JXuQqqZSDb4SvHYFC6oOZXM'
           // key: 'AIzaSyAalQlIJ6_Ed2bgK2_FfTtnuoepawVmbsw'
           // key: 'AIzaSyAkznhvPSGSqBjGDlh0wJxSSXShH9HTvww'
-          // key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
+          key: 'AIzaSyAgIwltHqleBdvUyROF_tEdCLl2HCD_ZrM'
           // key: 'AIzaSyCtFrJx4YIiNzA362xJGat0guqBLQ6Ie0w'
           // key: 'AIzaSyDYyfMM5Whkssys3dI1LwgkNW1yWc1-9R4'
-          key: 'AIzaSyCubmhdnWsJ-AQHOJkzOYF4FpNLxtHwsvM'
+          // key: 'AIzaSyCubmhdnWsJ-AQHOJkzOYF4FpNLxtHwsvM'
         });
         // Distance from freelancer location
         googleMapsClient.distanceMatrix({
