@@ -39,6 +39,10 @@ html {
   --input-font-size: 1.2;
   --tag-font-size: 0.7;
   --general-bigger-font-size: 1.2em;
+
+  /* borders */
+  --border-bottom-grey: solid 2px var(--home-search-border);
+  --border-bottom-accent: solid 4px var(--home-search-button-border);
 }
 
 .title {

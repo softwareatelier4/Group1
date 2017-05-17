@@ -109,9 +109,10 @@ body {
 
 #filters > div {
   margin: 0 1em;
+  border-bottom: var(--border-bottom-grey);
 }
 
-#filter-category, #filter-distance, #filter-duration {
+#filter-category, #filter-distance, #filter-duration, #filter-emergency {
   font-size: 0.8em;
   width: 170px;
 }
@@ -120,17 +121,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: var(--box-shadow-material);
-  border-radius: 2px;
 }
 
-#category-label, #max-distance-label, #max-duration-label {
+#category-label, #max-distance-label, #max-duration-label, #max-emergency-label {
   width: 100%;
   padding: 5px 0;
   text-align: center;
   color: var(--basic-white);
   background-color: var(--accent-color);
-  border-radius: 2px 2px 0 0;
 }
 
 #filter-category-dropdown {
@@ -140,12 +138,12 @@ body {
   padding: 5px 30%;
   text-align-last: center;
   font-size: 1em;
-  background-color: white;
+  background-color: var(--basic-white);
   width: 100%;
   outline: none;
   border: none;
-  border-radius: 0 0 2px 2px;
   color: var(--accent-color);
+  border-radius: 0;
 }
 
 #filter-category-dropdown:hover {
@@ -153,17 +151,24 @@ body {
   cursor: pointer;
 }
 
-#filter-distance, #filter-duration {
+#filter-distance, #filter-duration, #filter-emergency {
   display: flex;
   flex-direction: column;
   background-color: var(--basic-white);
-  border-radius: 0 0 2px 2px;
-  box-shadow: var(--box-shadow-material);
+  align-items: center;
 }
 
 #filter-distance-temp, #filter-duration-temp {
   padding: 0 10px;
   height: 50%;
+}
+
+#filter-emergency {
+  width: 100px;
+}
+
+#filter-emergency-temp {
+  margin: 6px;
 }
 
 #freelancer-create-btn {
@@ -183,7 +188,6 @@ body {
 
 #freelancer-create-btn:focus {
   outline: none;
-  background-color: var(--background);
 }
 
 #freelancer-create-btn:active {
