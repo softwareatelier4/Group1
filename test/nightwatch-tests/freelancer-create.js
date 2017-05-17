@@ -45,7 +45,13 @@ module.exports = {
       .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
       .setValue('input[name=first-name]', 'Bilbo Baggins')
       .setValue('input[name=job-title]', 'Tester')
+      .assert.elementNotPresent('div#required-docs li:first-child')
+      .assert.elementNotPresent('div#optional-docs li:first-child')
       .click('select[name="category"] option[value="58cc4b15fc13ae5ec7000123"]')
+      .assert.elementPresent('div#required-docs li:first-child')
+      .assert.elementPresent('div#optional-docs li:first-child')
+      .assert.containsText('div#required-docs li:first-child', 'id')
+      .assert.containsText('div#optional-docs li:first-child', 'other')
       .setValue('input[name=address]', 'USI, Lugano')
       .setValue('input[name=email]', 'test@bilbo.myself')
       // Cannot do the following, since can't figure out how to 'upload' multiple required files with Nightwatch

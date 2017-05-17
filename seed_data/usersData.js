@@ -33,7 +33,7 @@ var usersData = {
       "username"  : "Robb Bis",
       "password"  : "perdonamierastil",
       "email"     : "summonmonster@erastile.er",
-      "freelancer": "58cc4941fc13ae612c00000a"
+      "freelancer": ["58cc4941fc13ae612c00000a"]
     },
     {
       "_id"       : "590c66f0fc13ae73cd000028",
