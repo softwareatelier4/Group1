@@ -110,7 +110,7 @@ describe('CLAIM : ', function(done) {
 
 		});
 
-		it('should fail if freelanceID is empty, null, or undefined', function(done) {
+		it('should fail if UserID is empty, null, or undefined', function(done) {
 			var Freelance = mongoose.model('Freelance');
 			var User = mongoose.model('User');
 
@@ -127,7 +127,7 @@ describe('CLAIM : ', function(done) {
 				let claim = new Claim();
 				claim.freelanceID = freelance._id;
 
-				utils.errorIfNullUndefinedOrEmpty(claim, 'freelanceID', done);
+				utils.errorIfNullUndefinedOrEmpty(claim, 'userID', done);
 				done();
 			});
 		});

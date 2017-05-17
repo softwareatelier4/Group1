@@ -89,7 +89,7 @@ describe('User-put test: ', function() {
       .put('/user/' + seedData[4].data[0].username.toString())
       .set('Accept', 'application/json')
       .send({
-        "freelancer" : "58cc4941fc13ae612c00000a",
+        "freelancer" : ["58cc4941fc13ae612c00000a"],
       })
       .expect(400)
       .end(function(err, res) {

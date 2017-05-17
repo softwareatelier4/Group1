@@ -270,27 +270,24 @@ router.delete('/claim', function(req, res) {
           } else if (!freelancer) {
             res.status(404).json({ error : 'freelancer not found' }); // TESTED
           } else if (freelancer.state !== 'in progress') {
-            res.status(400).json({ error : 'freelancer is not claimed' }); // TESTED
+            res.status(400).json({ error : 'freelancer has not been claimed' }); // TESTED
           } else {
             User.findById(claim.userID, function(err, user) {
+              let freelancerIndex;
               if (err) {
                 res.status(500).json({ error : 'database error while finding user' }); // CANNOT TEST
               } else if (!user) {
                 res.status(404).json({ error : 'user not found' }); // TESTED
-              } else if (!user.freelancer) {
+              } else if ((freelancerIndex = user.freelancer.indexOf(claim.freelanceID)) < 0) {
                 res.status(400).json({ error : 'user is not claiming' }); // TESTED
-              } else if (user.freelancer && !user.claiming) {
-                res.status(400).json({ error : 'user is already associated with a freelancer' }); // TESTED
               } else {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {
                   freelancer.state = 'verified';
                   freelancer.owner = claim.userID;
-                  user.claiming = false;
                 } else if (req.query.choice === 'reject') {
                   freelancer.state = 'not verified';
-                  user.claiming = false;
-                  user.freelancer = undefined;
+                  user.freelancer.splice(freelancerIndex, 1);
                 } else {
                   res.status(400).json({ error : 'invalid choice' }); // TESTED
                 }

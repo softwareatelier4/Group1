@@ -247,19 +247,25 @@ class FreelancerClaim extends React.Component {
 
   render() {
     let bgColor = 'bg-orange';
+    let isLogged = document.getElementById('freelancer-logged-reviews-root');
     let claimBtn = '';
+    let claimDisabled = false;
+    let claimText = 'CLAIM';
     if (this.props.state === 'verified') {
       bgColor = 'bg-green';
       claimBtn = 'hidden';
     } else if (this.props.state === 'in progress') {
       bgColor = 'bg-yellow';
       claimBtn = 'hidden';
+    } else if (!isLogged) {
+      claimDisabled = true;
+      claimText = 'LOGIN TO CLAIM';
     }
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
-          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn}>CLAIM</button>
+          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
         </div>
       </div>
     );
