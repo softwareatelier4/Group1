@@ -280,16 +280,6 @@ function showForm(evt) {
   if(isMyself && !document.getElementById('freelancer-root').getAttribute('data-username')) {
     alert("You need to login to create your own freelancer profile");
     window.location = '/freelance/new';
-  // check no claim in progress
-  } else if(isMyself
-    && document.getElementById('freelancer-root').getAttribute('data-claiming')) {
-    alert("You have a claiming request in progress");
-    window.location = '/freelance/new';
-  // check not already freelancer
-  } else if(isMyself
-    && document.getElementById('freelancer-root').getAttribute('data-user-freelancer')) {
-    alert("You already have your own freelancer profile");
-    window.location = '/freelance/new';
   }
 
   doAjaxAndRenderForm(isMyself);
