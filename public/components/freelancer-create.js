@@ -130,7 +130,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="description" className="job-description" name="job-descritpion" type="text" required/>
+            <input ref="description" className="job-description" name="job-description" type="text" required/>
             <span className="bar"></span>
             <label>
               Job Description
@@ -241,9 +241,11 @@ function renderComponent(data, isMyself) {
       <FreelancerClaimForm />,
       document.getElementById('react-claim-form-root')
     );
+
+    // update required documents based on selected categoy
+    document.getElementById('category-list').addEventListener("change", switchCategory);
   }
 
-  document.getElementById('category-list').addEventListener("change", switchCategory);
 }
 
 /**

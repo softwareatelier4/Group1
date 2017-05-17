@@ -238,10 +238,10 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 // POST freelance/
 router.post('/', function(req, res, next) {
   // There are tags in the post:
-  if (req.body.tags != undefined) {
+  if (req.body.tags) {
     var tags = req.body.tags.split(',');
   }
-  
+
   let parameters = req.body;
   delete parameters.tags;
   const newFreelance = new Freelance(parameters);
@@ -252,14 +252,13 @@ router.post('/', function(req, res, next) {
       res.status(400).json(utils.formatErrorMessage(err));
       return;
     }
-    
+
     // Now we can parse, create and save the tags.
     let count = 0;
     if (tags != undefined) {
       // For every tag, check if it's already in the database or not
       for (let tag of tags) {
-        tag = tag.replace(/\s+/g, '');
-        console.log("THIS IS TAG" + tag);
+        tag = tag.trim();
         // Asynchronous call for checking for the tag
         checkIfTagExists(tag);
       }
@@ -312,10 +311,10 @@ router.post('/', function(req, res, next) {
             }
           });
         }
-      }); 
+      });
     }
 
-  });  
+  });
 });
 
 module.exports = router;
