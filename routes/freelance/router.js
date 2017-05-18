@@ -360,4 +360,22 @@ router.post('/', function(req, res, next) {
   });
 });
 
+
+//remove a freelance
+router.delete('/:freelanceid', function(req, res, next) {
+  Freelance.findById(req.params.freelanceid, function(err, freelance){
+    if (err) return res.status(500).json(utils.formatErrorMessage(err));
+    if (!freelance) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "Not Found"
+      });
+    }
+    freelance.remove(function(err, removed){
+      if (err) return next (err);
+      res.status(204).end();
+    })
+  });
+});
+
 module.exports = router;
