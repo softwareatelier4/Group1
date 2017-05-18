@@ -97,6 +97,14 @@ class ContainerClaims extends React.Component {
     }
     return (
       <div id="admin-claims">
+        <div className="card-claim">
+          <div className="card-claim-row">
+            <div>User</div>
+            <div>Freelancer</div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
         {claims}
       </div>
     );
@@ -335,11 +343,56 @@ class ContainerCategories extends React.Component {
   }
 }
 
+class CardDuplicates extends React.Component {
+  respond() {
+
+  }
+
+  render() {
+    let originalLink = `/freelance/${this.props.original._id}`;
+    let duplicateLink = `/freelance/${this.props.duplicate._id}`;
+    return (
+      <div className="card-claim">
+        <div className="card-claim-row">
+          <div><a href={originalLink} target="_blank">{this.props.original.firstName} {this.props.original.familyName}</a></div>
+          <div><a href={duplicateLink} target="_blank">{this.props.duplicate.firstName} {this.props.duplicate.familyName}</a></div>
+          <button onClick={this.respond.bind(this)}>Accept</button>
+          <button onClick={this.respond.bind(this)}>Reject</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class ContainerDuplicates extends React.Component {
+  render() {
+    let duplicates = [];
+    for (let i = 0; i < this.props.duplicates.length; ++i) {
+      let duplicate = this.props.duplicates[i];
+      duplicates.push(<CardDuplicates _id={duplicate._id} original={duplicate.originalID} duplicate={duplicate.duplicateID} key={i} />);
+    }
+    return (
+      <div id="admin-duplicates">
+        <div className="card-claim">
+          <div className="card-claim-row">
+            <div>Original</div>
+            <div>Duplicate</div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        {duplicates}
+      </div>
+    );
+  }
+}
+
 class AdminView extends React.Component {
   select(pageName) {
     return function() {
       let btns = document.getElementById('admin-menu').children;
       for (let btn of btns) {
+        btn.classList.toggle('selected');
         if (btn.id === `admin-btn-${pageName}`) {
           btn.classList.add('selected');
         } else {
@@ -362,10 +415,12 @@ class AdminView extends React.Component {
         <div id="admin-menu">
           <button id="admin-btn-categories" className="selected" onClick={this.select('categories')}>Categories</button>
           <button id="admin-btn-claims" onClick={this.select('claims')}>Claims</button>
+          <button id="admin-btn-duplicates" onClick={this.select('duplicates')}>Duplicates</button>
         </div>
         <div id="admin-content">
           <ContainerCategories categories={this.props.data.categories} />
           <ContainerClaims claims={this.props.data.claims} />
+          <ContainerDuplicates duplicates={this.props.data.duplicates} />
         </div>
       </div>
     );
@@ -411,10 +466,10 @@ function renderAdminView(data) {
 }
 
 function renderPage() {
-  ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  // g_username = 'admin';
-  // g_password = 'asd';
-  // ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
+  // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
+  g_username = 'admin';
+  g_password = 'asd';
+  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();
