@@ -27,6 +27,7 @@
     "dustjs-linkedin": "~2.7.2",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
+    "fullcalendar": "^3.4.0",
     "method-override": "~2.3.5",
     "mocha-jenkins-reporter": "~0.3.6",
     "mongodb": "~2.2.22",
