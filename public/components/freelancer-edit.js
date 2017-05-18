@@ -312,7 +312,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 class FreelancerEmergencyForm extends React.Component {
   render() {
     return (
-      <div id="edit-schedule">
+      <div>
         <span id="emergency-date-error"></span>
         <FreelancerEmergencyRepetitionForm />
         <hr/>
@@ -325,7 +325,10 @@ class FreelancerEmergencyForm extends React.Component {
 class FreelancerEditView extends React.Component {
   render() {
     return (
-      <FreelancerEmergencyForm />
+			<div id="edit-schedule" className='selected'>
+      	<FreelancerEmergencyForm />
+				<CalendarView />
+			</div>
     );
   }
 }
@@ -541,7 +544,7 @@ function renderCalendar() {
 class FreelancerMainView extends React.Component {
   select(pageName) {
     return function() {
-      let btns = document.getElementById('admin-menu').children;
+      let btns = document.getElementById('edit-menu').children;
       for (let btn of btns) {
         if (btn.id === `edit-btn-${pageName}`) {
           btn.classList.add('selected');
@@ -549,7 +552,7 @@ class FreelancerMainView extends React.Component {
           btn.classList.remove('selected');
         }
       }
-      let pages = document.getElementById('admin-content').children;
+      let pages = document.getElementById('edit-content').children;
       for (let page of pages) {
         if (page.id === `edit-${pageName}`) {
           page.classList.add('selected');
@@ -561,12 +564,12 @@ class FreelancerMainView extends React.Component {
   }
   render() {
     return (
-      <div id="admin-view">
-        <div id="admin-menu">
-          <button id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
-          <button id="edit-btn-schedule" className="selected" onClick={this.select('schedule')}>Edit Schedule</button>
+      <div id="edit-view">
+        <div id="edit-menu">
+          <button className='edit-tab' id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
+          <button className='edit-tab selected' id="edit-btn-schedule" onClick={this.select('schedule')}>Edit Emergency Availability</button>
         </div>
-        <div id="admin-content">
+        <div id="edit-content">
           <CreationForm />
           <FreelancerEditView />
         </div>
@@ -672,6 +675,21 @@ class CreationForm extends React.Component {
 			</div>
     );
   }
+}
+
+class CalendarView extends React.Component {
+	render() {
+		return (
+			<div>
+				<h3>Your emergency schedule:</h3>
+				<ul id="calendar-legend">
+					<li id="calendar-legend-single"> Single dates </li>
+					<li id="calendar-legend-repeated"> Repeated dates </li>
+				</ul>
+				<div id='calendar'></div>
+			</div>
+		);
+	};
 }
 
 /**
