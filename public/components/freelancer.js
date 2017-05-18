@@ -292,6 +292,13 @@ class FreelancerHeader extends React.Component {
       price = "Price range: " + this.props.price.min + " - " + this.props.price.max + " CHF";
     }
 
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
+
     return (
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
@@ -302,6 +309,10 @@ class FreelancerHeader extends React.Component {
           {price}
         </div>
         <span className="freelancer-category">{this.props.category}</span>
+        {isOwner ? (<div className="freelancer-edit">
+          <button id="freelancer-edit-button">Edit</button>
+        </div>) : null}
+              
       </div>
   );
   }
