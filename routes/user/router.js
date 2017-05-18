@@ -110,7 +110,7 @@ router.get('/', function(req, res, next) {
     res.status(401).end();
   }
 
-  User.findById(req.session.user_id).select("-password").exec(function(err, user){
+  User.findById(req.session.user_id).select("-password").populate('freelancer').exec(function(err, user){
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
     } else if (!user) {

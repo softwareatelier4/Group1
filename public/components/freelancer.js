@@ -21,7 +21,7 @@ function renderComponent(data) {
   let listTags;
   if(tags && tags[0] != null) {
     listTags = tags.map((tag, index) =>
-      <li key={index}>
+      <li key={index} data-tagname={tag.tagName}>
         {tag.tagName}
       </li>
     );
@@ -225,7 +225,28 @@ class FreelancerClaimForm extends React.Component {
 
 class FreelancerDuplicateForm extends React.Component {
   render() {
-    return (<div id="freelancer-duplicate-form">DUPLICATE FORM</div>);
+    ajaxRequest('GET', '/user', null, {}, function(user) {
+      if (user === 400 || user === 404) {
+        console.log('Error while retrieving user freelancers');
+      } else {
+        console.log(user.freelancer);
+        for (let freelancer of user.freelancer) {
+          console.log(freelancer);
+          let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+          let freelancerOption = document.createElement('option');
+          freelancerOption.value = freelancer._id;
+          freelancerOption.innerHTML = freelancer.title;
+          duplicateSelection.appendChild(freelancerOption);
+        }
+      }
+    });
+    return (
+      <div id="freelancer-duplicate-form">
+        Original freelancer: &nbsp;
+        <select id="freelancer-duplicate-selection" name="Select original freelancer"></select> &nbsp;
+        <button id="freelancer-duplicate-btn">Report duplicate</button>
+      </div>
+    );
   }
 }
 
