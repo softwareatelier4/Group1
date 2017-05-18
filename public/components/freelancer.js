@@ -15,16 +15,26 @@ function renderComponent(data) {
   if (data.owner) {
     userName = data.owner.username;
   }
+
   const tags = data.tags;
-  const listTags = tags.map((tag, index) =>
-    <li key={index}>
-      {tag.tagName}
-    </li>
-  );
+
+  let listTags;
+  if(tags && tags[0] != null) {
+    listTags = tags.map((tag, index) =>
+      <li key={index}>
+        {tag.tagName}
+      </li>
+    );
+  } else {
+    listTags = [];
+  }
+
   let categoryName = 'Other';
+
   if (data.category) {
     categoryName = data.category.categoryName;
   }
+
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}

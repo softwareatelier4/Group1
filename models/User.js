@@ -18,7 +18,6 @@ const User = exports.User = new mongoose.Schema({
     username    : { type: String, required: true, unique: true },
     password    : { type: String, required: true },
     email				: { type: String, required: true },
-		claiming		: { type: Boolean, default: false},  //TODO: to remove, when the tests are updated
     freelancer	: { type: Array, default: [] },
   },
   {

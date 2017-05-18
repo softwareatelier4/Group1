@@ -10,6 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
 const User = mongoose.model('User');
+const Tag = mongoose.model('Tag');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
@@ -51,11 +52,18 @@ router.get('/edit', function(req, res) {
          } else if ((freelancerIndex = user.freelancer.indexOf(req.query.freelancer)) < 0) { // freelancer not claimed by user
            res.redirect('/');
          } else {
-           res.render('freelancer-edit', {
-             title: "JobAdvisor - Edit Freelancer Profile" ,
-             logged: true,
-             username: user.username,
-             userFreelancer: user.freelancer[freelancerIndex]
+           Freelance.findById(user.freelancer[freelancerIndex]).exec(function(err, freelancer){
+             if(err || !freelancer) {
+               res.sendStatus(501);
+             } else {
+               res.render('freelancer-edit', {
+                 title: "JobAdvisor - Edit Freelancer Profile" ,
+                 logged: true,
+                 username: user.username,
+                 userFreelancer: freelancer._id,
+                 userFreelancerInfo: freelancer.firstName + ' ' + freelancer.familyName + ' (' + freelancer.title + ')',
+               });
+             }
            });
          }
       });
@@ -235,13 +243,84 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // POST freelance/
 router.post('/', function(req, res, next) {
-  const newFreelance = new Freelance(req.body);
+  // There are tags in the post:
+  if (req.body.tags) {
+    var tags = req.body.tags.split(',');
+  }
+
+  let parameters = req.body;
+  delete parameters.tags;
+  const newFreelance = new Freelance(parameters);
+
+  // Save Freelance to get its id.
   newFreelance.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
+      return;
     }
-    res.status(201).json(saved);
-  })
+
+    // Now we can parse, create and save the tags.
+    let count = 0;
+    if (tags != undefined) {
+      // For every tag, check if it's already in the database or not
+      for (let tag of tags) {
+        tag = tag.trim();
+        // Asynchronous call for checking for the tag
+        checkIfTagExists(tag);
+      }
+    } else {
+      // If no tag are present, send response immediately.
+      sendResponse();
+    }
+
+    // Asynchronous call for sending the response
+    function sendResponse() {
+      saved.save(function(err, saved2) {
+        res.status(201).json(saved2);
+      });
+    }
+
+    // Asynchronous call for checking the tags
+    function checkIfTagExists(givenTag) {
+      Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+        if (err || (foundTag == undefined)) {
+          // Tag is not in the database, add it
+          const newTag = new Tag({
+            tagName: givenTag,
+          });
+          newTag.freelancers.push(saved);
+          // Save tag and proceed to process response.
+          newTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        } else {
+          // Add this new freelance to the freelancers that have this tag.
+          foundTag.freelancers.push(saved);
+          foundTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            // Save tag into freelance list of tags
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        }
+      });
+    }
+
+  });
 });
 
 module.exports = router;

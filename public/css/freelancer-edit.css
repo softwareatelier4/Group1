@@ -16,3 +16,31 @@ form#emergency-form-repetition div {
 #emergency-form-repetition-week label {
   padding-right: .5em;
 }
+
+.delete-event {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+div#react-freelancer-emergency-single-list {
+  margin-bottom: 2em;
+}
+
+ul#calendar-legend {
+  list-style-type: disc;
+}
+
+li#calendar-legend-single {
+  color: green;
+}
+
+li#calendar-legend-repeated {
+  color: blue;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin-bottom: 0;
+}

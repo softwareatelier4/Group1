@@ -11,7 +11,7 @@ module.exports = {
       .waitForElementVisible('div#filter-emergency', 1000)
       .click('input[name=filter-emergency-temp]')
       .pause(1000)
-      .waitForElementVisible('.freelancer-card', 3000)
+      .waitForElementVisible('.freelancer-card', 10000)
       .click('input[name=filter-emergency-temp]')
       // custom search
       .waitForElementPresent('input[name=search-what]', 10000)

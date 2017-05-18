@@ -56,7 +56,7 @@ const staticUsers = 6;
 // bind non-static users to Freelance profiles
 for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // var rndf = Math.floor(Math.random() * freelancersSize);
-  users.data[i].freelancer = freelancers.data[i]._id;
+  users.data[i].freelancer = [freelancers.data[i]._id];
   freelancers.data[i].owner = users.data[i]._id;
   freelancers.data[i].status = 'verified';
   // give non-static users an availability schedule
