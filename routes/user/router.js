@@ -99,7 +99,23 @@ router.get('/:username', function(req, res, next) {
       if (req.headers.ajax) {
         res.status(200).json(found).end();
       } else if (req.accepts('text/html')) {
-        res.render('user', user);
+        if(req.session.user_id) { // logged in user
+          // find logged in user
+          User.findById(req.session.user_id).exec(function(err, loggedUser){
+            res.render('user', {
+              title: "JobAdvisor",
+              logged: true,
+              username: loggedUser.username,
+              freelancers: user.freelancers,
+            });
+          });
+        } else { // not logged in
+          res.render('user', {
+            title: "JobAdvisor",
+            logged: false,
+            freelancers: user.freelancers,
+          });
+        }
       } else {
         res.sendStatus(400);
       }
