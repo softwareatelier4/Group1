@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
     <link rel="stylesheet" type="text/css" href="../css/freelancer-edit.css" />
+		<link rel="stylesheet" type="text/css" href="../css/admin.css" />
 
     <!-- calendar -->
     <link rel='stylesheet' href='../css/fullcalendar.css' />
@@ -21,32 +22,13 @@
       <!-- Title -->
       <div id="react-title"></div>
       <!-- Login - show only if not already logged -->
-      {^logged}
-        <div id="react-login"></div>
-        <div id="react-register"></div>
-      {:else}
-        <div id="react-username">{username}</div>
-        <div id="react-logout"></div>
-      {/logged}
+      <div id="react-username">{username}</div>
+      <div id="react-logout"></div>
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>
-    <div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
-      {?logged}
-        <h3>Add emergency availability for {userFreelancerInfo}:</h3>
-        <div id='react-freelancer-edit'></div>
-        <div id='react-freelancer-emergency-single-list'></div>
-
-        <h3>Your emergency schedule:</h3>
-        <ul id="calendar-legend">
-          <li id="calendar-legend-single"> Single dates </li>
-          <li id="calendar-legend-repeated"> Repeated dates </li>
-        </ul>
-        <div id='calendar'></div>
-
-      {:else}
-        <div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
-      {/logged}
+    <div id='root'>
+			<div id='react-freelancer-edit'></div>
     </div>
     <!-- Utils -->
     <script src="../js/ajax.js"></script>

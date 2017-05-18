@@ -312,7 +312,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 class FreelancerEmergencyForm extends React.Component {
   render() {
     return (
-      <div>
+      <div id="edit-schedule">
         <span id="emergency-date-error"></span>
         <FreelancerEmergencyRepetitionForm />
         <hr/>
@@ -339,7 +339,7 @@ function renderError(errorString) {
 }
 
 function renderPage() {
-  ReactDOM.render(<FreelancerEditView />, document.getElementById('react-freelancer-edit'));
+  ReactDOM.render(<FreelancerMainView />, document.getElementById('react-freelancer-edit'));
 };
 
 /**
@@ -536,6 +536,142 @@ function renderCalendar() {
     }
   });
 
+}
+
+class FreelancerMainView extends React.Component {
+  select(pageName) {
+    return function() {
+      let btns = document.getElementById('admin-menu').children;
+      for (let btn of btns) {
+        if (btn.id === `edit-btn-${pageName}`) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      }
+      let pages = document.getElementById('admin-content').children;
+      for (let page of pages) {
+        if (page.id === `edit-${pageName}`) {
+          page.classList.add('selected');
+        } else {
+          page.classList.remove('selected');
+        }
+      }
+    }
+  }
+  render() {
+    return (
+      <div id="admin-view">
+        <div id="admin-menu">
+          <button id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
+          <button id="edit-btn-schedule" className="selected" onClick={this.select('schedule')}>Edit Schedule</button>
+        </div>
+        <div id="admin-content">
+          <CreationForm />
+          <FreelancerEditView />
+        </div>
+      </div>
+    );
+  }
+}
+
+class CreationForm extends React.Component {
+  render() {
+    return (
+			<div id="edit-info">
+        <form onSubmit={this.handleSubmit}>
+
+          <div className="names-input">
+            <div className="group">
+              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
+              <span className="bar"></span>
+               <label>
+                First Name
+              </label>
+            </div>
+
+            <div className="group">
+              <input ref="familyName" className="family-name" name="family-name" type="text"/>
+              <span className="bar"></span>
+               <label>
+                Family Name
+              </label>
+            </div>
+          </div>
+
+          <div className="group">
+            <input ref="title" className="job-title" name="job-title" type="text" required/>
+            <span className="bar"></span>
+             <label>
+              Job Title
+            </label>
+          </div>
+
+          <div className="category-selector">
+            <span className="bar"></span>
+            <label>
+              Job Category
+            </label>
+            <select id="category-list" name="category" ref="category" required>
+              <option value="" selected disabled hidden>Please select a job category</option>
+              {this.props.categories}
+            </select>
+          </div>
+
+          <div className="group">
+            <input ref="description" className="job-description" name="job-description" type="text" required/>
+            <span className="bar"></span>
+            <label>
+              Job Description
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="tags" className="job-tags" name="job-tags" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Job tags (separated by a comma)
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
+            <span className="bar"></span>
+            <label>
+              Picture URL
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="address" className="address" name="address" type="text" required/>
+            <span className="bar"></span>
+            <label>
+              Address
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
+            <span className="bar"></span>
+            <label>
+              Phone
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="email" className="email" name="email" type="email" required/>
+            <span className="bar"></span>
+            <label>
+              Email
+            </label>
+          </div>
+          <div id="react-claim-form-root"></div>
+          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+        </form>
+
+			</div>
+    );
+  }
 }
 
 /**
