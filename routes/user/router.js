@@ -85,42 +85,42 @@ router.get('/logout', function (req, res) {
 
 // GET user/:username
 router.get('/:username', function(req, res, next) {
-  User.findOne({ username : req.params.username }).select("-password").exec(function(err, user){ //TODO populate freelancers
-    if (err) {
-      res.status(400).json(utils.formatErrorMessage(err));
-    } else if (!user) {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Not Found",
-      });
-    } else {
-      let found = Object.create(user);
-      // distinguish between raw and ajax GET request (to render page or return JSON)
-      if (req.headers.ajax) {
-        res.status(200).json(found).end();
-      } else if (req.accepts('text/html')) {
-        if(req.session.user_id) { // logged in user
-          // find logged in user
-          User.findById(req.session.user_id).exec(function(err, loggedUser){
-            res.render('user', {
-              title: "JobAdvisor",
-              logged: true,
-              username: loggedUser.username,
-              freelancers: user.freelancers,
-            });
-          });
-        } else { // not logged in
-          res.render('user', {
-            title: "JobAdvisor",
-            logged: false,
-            freelancers: user.freelancers,
-          });
-        }
+  // distinguish between raw and ajax GET request (to render page or return JSON)
+  if (req.headers.ajax) {
+    User.findOne({ username : req.params.username })
+    .select("-password")
+    .populate("freelancers")
+    .exec(function(err, user) {
+      if (err) {
+        res.status(400).json(utils.formatErrorMessage(err));
+      } else if (!user) {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Not Found",
+        });
       } else {
-        res.sendStatus(400);
+        let found = Object.create(user);
+        res.status(200).json(user).end();
       }
+    });
+  } else if (req.accepts('text/html')) {
+    if(req.session.user_id) { // logged in user
+      User.findById(req.session.user_id).exec(function(err, loggedUser){
+        res.render('user', {
+          title: "JobAdvisor",
+          logged: true,
+          user: loggedUser.username,
+        });
+      });
+    } else { // not logged in
+      res.render('user', {
+        title: "JobAdvisor",
+        logged: false,
+      });
     }
-  });
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 /**

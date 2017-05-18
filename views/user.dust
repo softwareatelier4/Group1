@@ -15,16 +15,16 @@
         <div id="react-login"></div>
         <div id="react-register"></div>
       {:else}
-        <div id="react-username">{username}</div>
+        <div id="react-username">{loggedUser}</div>
         <div id="react-logout"></div>
       {/logged}
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>
-    <div id='root'>
-      <!-- List of the freelancers the user owns -->
-      <div id="react-user-page-container" freelancers="{freelancers}"></div>
-    </div>
+    
+    <!-- User page: shows the username and the list of the owned freelancers -->
+    <div id="react-user-page-root"></div>
+
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
     <script src="../js/Day.js"></script>
@@ -34,6 +34,6 @@
     <script src="../js/browser.min.js"></script>
     <!-- Scripts -->
     <script src="../components/topbar.js" type="text/babel"></script>
-    <script src="../components/userpage-list.js" type="text/babel"></script>
+    <script src="../components/userpage.js" type="text/babel"></script>
   </body>
 </html>
