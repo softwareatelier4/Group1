@@ -158,7 +158,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
 
     if(feedback < 0) return; // error already printed
 
-    if(checkedCount == 0) return renderError("Schedule at least a one day");
+    if(checkedCount == 0) return renderError("Schedule at least one day");
     savedRepeatedDates = savedRepeatedDates.concat(scheduledDays);
     updateDates(true);
 

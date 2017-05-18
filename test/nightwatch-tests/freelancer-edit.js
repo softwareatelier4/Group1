@@ -14,7 +14,7 @@ module.exports = {
       .waitForElementPresent('a#emergency-edit-link', 3000)
       .click('a#emergency-edit-link')
       .waitForElementPresent('div#react-freelancer-edit', 3000)
-      // input single date
+      // input single date normal
       .assert.visible('input[id=emergency-single-date]')
       .assert.visible('input[id=emergency-single-start]')
       .assert.visible('input[id=emergency-single-end]')
@@ -33,12 +33,39 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(500)
       .assert.containsText('span#emergency-date-error', '')
+      // input single date same day
+      .setValue('input[id=emergency-single-date]', '')
+      .setValue('input[id=emergency-single-end]', '')
+      .setValue('input[id=emergency-single-start]', '')
+      .setValue('input[id=emergency-location-single]', '')
+      .setValue('input[id=emergency-single-start]', function toTimeString(date) {
+        date.setHours(date.getHours() + 4);
+      	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+      }(new Date()) )
+      .setValue('input[id=emergency-single-end]', function toTimeString(date) {
+        date.setHours(date.getHours() + 8);
+      	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+      }(new Date()) )
+      .setValue('input[id=emergency-location-single]', 'Milano')
+      .click('input#emergency-single-submit')
+      .pause(500)
+      .assert.containsText('span#emergency-date-error', '')
+
       // test repeated dates
       .assert.visible('input[id=emergency-form-recurrence-day]')
       .assert.visible('input[id=emergency-time-1-start]')
       .assert.visible('input[id=emergency-time-1-end]')
       .assert.visible('input[id=emergency-location-1]')
-      .setValue('input[id=emergency-single-start]', function toTimeString(date) {
+
+      // test ERROR empty selection
+      .setValue('input[id=emergency-repetition-weeks]', '2')
+
+      .click('input#emergency-repetition-submit')
+      .pause(500)
+      .assert.containsText('span#emergency-date-error', 'Schedule at least one day')
+
+      .click('input#emergency-form-recurrence-day')
+      .setValue('input[id=emergency-time-1-start]', function toTimeString(date) {
         date.setMinutes(date.getMinutes() + 25);
       	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
       }(new Date()) )
@@ -46,13 +73,18 @@ module.exports = {
         date.setMinutes(date.getMinutes() + 30);
       	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
       }(new Date()) )
-      .setValue('input[id=emergency-location-single]', 'Lugano')
+      .setValue('input[id=emergency-location-1]', 'Lugano')
       .setValue('input[id=emergency-repetition-weeks]', '4')
       .click('input#emergency-repetition-submit')
       .pause(500)
       .assert.containsText('span#emergency-date-error', '')
-      // test ERROR conflicting date
-      .setValue('input[id=emergency-single-start]', function toTimeString(date) {
+
+      // test ERROR conflicting single date
+      .setValue('input[id=emergency-single-date]', '')
+      .setValue('input[id=emergency-single-end]', '')
+      .setValue('input[id=emergency-single-start]', '')
+      .setValue('input[id=emergency-location-single]', '')
+      .setValue('input[id=emergency-single-date]', function toTimeString(date) {
         date.setMinutes(date.getMinutes() + 10);
       	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
       }(new Date()) )
@@ -65,7 +97,28 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(500)
       .assert.containsText('span#emergency-date-error', 'Date conflicts with existing one')
+
+      // test ERROR conflicting repeated date
+      .click('input#emergency-form-recurrence-day')
+      .setValue('input[id=emergency-time-1-start]', function toTimeString(date) {
+        date.setMinutes(date.getMinutes() + 25);
+      	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+      }(new Date()) )
+      .setValue('input[id=emergency-time-1-end]', function toTimeString(date) {
+        date.setMinutes(date.getMinutes() + 30);
+      	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+      }(new Date()) )
+      .setValue('input[id=emergency-location-1]', 'Lugano')
+      .setValue('input[id=emergency-repetition-weeks]', '2')
+      .click('input#emergency-repetition-submit')
+      .pause(500)
+      .assert.containsText('span#emergency-date-error', 'conflicts with existing dates and was not saved')
+
       // test ERROR past date
+      .setValue('input[id=emergency-single-date]', '')
+      .setValue('input[id=emergency-single-end]', '')
+      .setValue('input[id=emergency-single-start]', '')
+      .setValue('input[id=emergency-location-single]', '')
       .setValue('input[id=emergency-single-start]', function toTimeString(date) {
         date.setMinutes(date.getMinutes());
       	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
