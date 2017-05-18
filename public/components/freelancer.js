@@ -228,19 +228,25 @@ class FreelancerDuplicateForm extends React.Component {
     let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
     let selected = duplicateSelection.options[duplicateSelection.selectedIndex].value;
     if (selected) {
-      console.log(this.props.duplicateid);
-      ajaxRequest('POST', '/duplicate', null, {
-        original: selected,
-        duplicate: this.props.duplicateid
-      }, function() {
-        // TODO
+      ajaxRequest('POST', '/duplicate', {}, {
+        originalID: selected,
+        duplicateID: this.props.duplicateid
+      }, function(res) {
+        let duplicateFormMessage = document.getElementById('freelancer-duplicate-form-message');
+        if (res == '400') {
+          duplicateFormMessage.innerHTML = 'You already submitted a duplicate request for this freelancer';
+        } else if (res == '500') {
+          duplicateFormMessage.innerHTML = 'There has been an error with the database. Try again.';
+        } else {
+          duplicateFormMessage.innerHTML = 'Your request has been submitted. Wait for the response.';
+        }
       });
     }
   }
 
   render() {
     ajaxRequest('GET', '/user', null, {}, (user) => {
-      if (user === 400 || user === 404) {
+      if (user == '400' || user == '404') {
         console.log('Error while retrieving user freelancers');
       } else {
         if (user.freelancer) {
@@ -262,6 +268,7 @@ class FreelancerDuplicateForm extends React.Component {
         Original freelancer: &nbsp;
         <select id="freelancer-duplicate-selection" name="Select original freelancer"></select> &nbsp;
         <button id="freelancer-duplicate-btn" disabled="true">Report duplicate</button>
+        <div id="freelancer-duplicate-form-message"></div>
       </div>
     );
   }
