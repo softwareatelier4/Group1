@@ -52,11 +52,18 @@ router.get('/edit', function(req, res) {
          } else if ((freelancerIndex = user.freelancer.indexOf(req.query.freelancer)) < 0) { // freelancer not claimed by user
            res.redirect('/');
          } else {
-           res.render('freelancer-edit', {
-             title: "JobAdvisor - Edit Freelancer Profile" ,
-             logged: true,
-             username: user.username,
-             userFreelancer: user.freelancer[freelancerIndex]
+           Freelance.findById(user.freelancer[freelancerIndex]).exec(function(err, freelancer){
+             if(err || !freelancer) {
+               res.sendStatus(501);
+             } else {
+               res.render('freelancer-edit', {
+                 title: "JobAdvisor - Edit Freelancer Profile" ,
+                 logged: true,
+                 username: user.username,
+                 userFreelancer: freelancer._id,
+                 userFreelancerInfo: freelancer.firstName + ' ' + freelancer.familyName + ' (' + freelancer.title + ')',
+               });
+             }
            });
          }
       });
