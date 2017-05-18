@@ -73,7 +73,7 @@ class FreelancerSingleDateForm extends React.Component {
         <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
         From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
         in <input type="text" id="emergency-location-single" placeholder="Location" required /><br/>
-        <input type="submit" value="Add single date" />
+        <input type="submit" id="emergency-single-submit" value="Add single date" />
       </form>
     );
   }
@@ -303,7 +303,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
           </label>
         </div>
 
-        <input type="submit" value="Update weekly schedule"/>
+        <input type="submit" id="emergency-repetition-submit" value="Update weekly schedule"/>
       </form>
     );
   }
