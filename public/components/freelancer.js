@@ -224,14 +224,31 @@ class FreelancerClaimForm extends React.Component {
 }
 
 class FreelancerDuplicateForm extends React.Component {
+  reportDuplicate() {
+    let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+    let selected = duplicateSelection.options[duplicateSelection.selectedIndex].value;
+    if (selected) {
+      console.log(this.props.duplicateid);
+      ajaxRequest('POST', '/duplicate', null, {
+        original: selected,
+        duplicate: this.props.duplicateid
+      }, function() {
+        // TODO
+      });
+    }
+  }
+
   render() {
-    ajaxRequest('GET', '/user', null, {}, function(user) {
+    ajaxRequest('GET', '/user', null, {}, (user) => {
       if (user === 400 || user === 404) {
         console.log('Error while retrieving user freelancers');
       } else {
-        console.log(user.freelancer);
+        if (user.freelancer) {
+          let duplicateBtn = document.getElementById('freelancer-duplicate-btn');
+          duplicateBtn.disabled = false;
+          duplicateBtn.onclick = this.reportDuplicate.bind(this);
+        }
         for (let freelancer of user.freelancer) {
-          console.log(freelancer);
           let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
           let freelancerOption = document.createElement('option');
           freelancerOption.value = freelancer._id;
@@ -244,7 +261,7 @@ class FreelancerDuplicateForm extends React.Component {
       <div id="freelancer-duplicate-form">
         Original freelancer: &nbsp;
         <select id="freelancer-duplicate-selection" name="Select original freelancer"></select> &nbsp;
-        <button id="freelancer-duplicate-btn">Report duplicate</button>
+        <button id="freelancer-duplicate-btn" disabled="true">Report duplicate</button>
       </div>
     );
   }
@@ -302,7 +319,7 @@ class FreelancerClaim extends React.Component {
             }
             // Show duplicate form
             duplicateBtn.innerHTML = 'CANCEL';
-            addReactElement(<FreelancerDuplicateForm />, freelancerClaim);
+            addReactElement(<FreelancerDuplicateForm duplicateid={this.props._id} />, freelancerClaim);
           } else {
             this.formVisible = 'none';
             // Hide duplicate form
