@@ -26,6 +26,10 @@ function renderComponent(data) {
 }
 
 class UserPage extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     let freelancersList = [];
     for (var i = 0; i < this.props.freelancers.length; i++) {
