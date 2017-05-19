@@ -203,9 +203,9 @@ class CardCategoryDocuments extends React.Component {
     return (
       <div className="card-category-documents" style={{display: 'none'}}>
         <div className="card-category-add-document">
-          <input id="new-document-name" placeholder="New document name" />
+          <input id="new-document-name" name="new-document-name" placeholder="New document name" />
           <span>required?</span>
-          <input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <input type="checkbox" id="new-document-required" placeholder="required?" />
           <span className="new-document-message"></span>
           <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
         </div>
@@ -274,7 +274,7 @@ class CardCategory extends React.Component {
     return (
       <div className="card-category" data-name={this.props.name} data-_id={this.props._id}>
         <div className="card-category-name">
-          <button onClick={this.editName.bind(this)}>Edit</button>
+          <button class="editCategory" onClick={this.editName.bind(this)}>Edit</button>
           <span onKeyDown={this.editName.bind(this)}>{this.props.name}</span>
         </div>
         <button onClick={this.removeCategory}>Remove</button>
@@ -308,11 +308,11 @@ class ContainerCategories extends React.Component {
           });
         } else {
           let newCategoryMessage = document.getElementById('new-category-message');
-          newCategoryMessage.innerHTML = '<span>Chosen category name already exists</span>';
+          newCategoryMessage.innerHTML = '<span id="addCategoryError">Chosen category name already exists</span>';
         }
       } else {
         let newCategoryMessage = document.getElementById('new-category-message');
-        newCategoryMessage.innerHTML = '<span>No category name given</span>';
+        newCategoryMessage.innerHTML = '<span id="addCategoryError">No category name given</span>';
       }
     }
   }
@@ -325,9 +325,9 @@ class ContainerCategories extends React.Component {
     return (
       <div id="admin-categories" className="selected">
         <div id="new-category" className="card-category">
-          <input id="new-category-input" placeholder="New category name" onKeyDown={this.addCategory}/>
+          <input id="new-category-input" name="new-category" placeholder="New category name" onKeyDown={this.addCategory}/>
           <div id="new-category-message"></div>
-          <button onClick={this.addCategory}>Add</button>
+          <button id="addCategory" onClick={this.addCategory}>Add</button>
         </div>
         {categories}
       </div>
