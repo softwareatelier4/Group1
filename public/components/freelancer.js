@@ -480,11 +480,17 @@ class UserLink extends React.Component {
   }
 
   render() {
-    return (
-      <div id="same-user-freelancers" onClick={this.redirectUserPage(this)}>
-        <span>Other profiles by user {this.props.owner.username}</span>
-      </div>
-    )
+    if (this.props.owner) {
+      return (
+        <div id="same-user-freelancers" onClick={this.redirectUserPage(this)}>
+          <span>Other profiles by user {this.props.owner.username}</span>
+        </div>
+      )
+    } else {
+      return (
+        <div></div>
+      )
+    }
   }
 }
 
