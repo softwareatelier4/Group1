@@ -4,7 +4,7 @@ module.exports = {
   'Login' : function (client) {
     client
       // test homepage
-      .url( config.baseURL + '/')
+      .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#react-login', 3000)
