@@ -40,13 +40,23 @@ module.exports = {
       .setValue('.card-category:last-child input[id=new-document-name]', 'sweet')
       .click('.card-category:last-child input#new-document-required')
       .click('.card-category:last-child button.add-document-btn')
-      .click('.card-category:last-child > .card-category-name > button')
+      .pause(2000)
+      .assert.containsText('.card-category:last-child li:last-child', 'sweet')
+      .assert.containsText('.card-category:last-child li:last-child span:nth-child(2)', 'required')
 
+      // ERROR: no document name given
+      .click('.card-category:last-child button.add-document-btn')
+      .assert.containsText('.card-category:last-child .new-document-message', 'Empty name')
 
+      // ERROR: document already exists
+      .setValue('.card-category:last-child input[id=new-document-name]', 'sweet')
+      .click('.card-category:last-child button.add-document-btn')
+      .assert.containsText('.card-category:last-child .new-document-message', 'Existing name')
 
-
-
-
+      // delete a required document
+      .click('.card-category:last-child li:last-child button')
+      .pause(1000)
+      .assert.containsText('.card-category:last-child ul li:last-child .card-category-document-name', 'other')
 
       .end();
   }
