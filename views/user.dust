@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>{title}</title>
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" type="text/css" href="../css/homepage.css" />
+    <link rel="stylesheet" type="text/css" href="../css/userpage.css" />
   </head>
   <body>
     <div id='topbar'>
@@ -15,15 +15,19 @@
         <div id="react-login"></div>
         <div id="react-register"></div>
       {:else}
-        <div id="react-username">{loggedUser}</div>
+        <div id="react-username">{username}</div>
         <div id="react-logout"></div>
       {/logged}
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
     </div>
-    
+
     <!-- User page: shows the username and the list of the owned freelancers -->
+    {^logged}
     <div id="react-user-page-root"></div>
+    {:else}
+    <div id="react-user-page-root" data-username={username}></div>
+    {/logged}
 
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
