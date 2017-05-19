@@ -18,7 +18,7 @@ const User = exports.User = new mongoose.Schema({
     username    : { type: String, required: true, unique: true },
     password    : { type: String, required: true },
     email				: { type: String, required: true },
-    freelancer	: { type: Array, default: [] },
+    freelancer : [{ type: ObjectID, ref: 'Freelance'}]
   },
   {
     versionKey: false,
