@@ -6,8 +6,7 @@ function renderComponent(data) {
   // call the variable "freelancers" because pls sennó poi non capisco
   // filter user freelancers to just verified
   // sort user freelancers by avgScore
-  let freelancers = data.freelancer;
-  freelancers.filter(function(f) {
+  let freelancers = data.freelancer.filter(function(f) {
     return f.state == 'verified';
   });
   freelancers.sort(function(f1, f2) {
@@ -95,19 +94,27 @@ class FreelancerCard extends React.Component {
   }
   render () {
     return (
-      <div
-        className="freelancer-card"
-        onClick={this.redirectFreelancer(this)}
-        data-category={this.props.category}
-      >
-        <div className="freelancer-card-picture-placeholder"><img src={this.props.urlPicture} /></div>
-        <div className="freelancer-card-info">
-          <h1 className="job-title  ">{this.props.title}</h1>
-          <h2>{this.props.firstName} {this.props.familyName}</h2>
-          <span>Average Score: {this.formatAvgScore(this.props.avgScore)} / 5</span>
-          <span>Price range: {this.formatPrice(this.props.price)}</span>
+      <div className="freelancer-card-container">
+        <div
+          className="freelancer-card"
+          onClick={this.redirectFreelancer(this)}
+          data-category={this.props.category}
+        >
+          <div className="freelancer-card-picture-placeholder">
+            <img src={this.props.urlPicture} />
+          </div>
+          <div className="freelancer-card-info">
+            <h1 className="job-title  ">{this.props.title}</h1>
+            <h2>{this.props.firstName} {this.props.familyName}</h2>
+            <span>
+              Average Score: {this.formatAvgScore(this.props.avgScore)} / 5
+            </span>
+            <span>Price range: {this.formatPrice(this.props.price)}</span>
+          </div>
+          <span className="category" data-category={this.props.categoryID}>
+            {this.props.category}
+          </span>
         </div>
-        <span className="category" data-category={this.props.categoryID}>{this.props.category}</span>
         <EditDelete show={this.props.isOwner} freelancerID={this.props._id}/>
       </div>
     );

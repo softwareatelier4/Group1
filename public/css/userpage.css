@@ -20,9 +20,21 @@
   width: 100%;
   display: flex;
   flex-flow: column;
-  align-items: center;
+  align-items: stretch;
 }
 
+.freelancer-card-container {
+  position: relative;
+  width: 100%;
+  transition: all 0.1s ease;
+}
+
+.freelancer-card-container:hover {
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition: all 0.1s ease;
+}
 
 /* Copied from homepage.css */
 .freelancer-card {
@@ -42,9 +54,6 @@
 .freelancer-card:hover {
   cursor: pointer;
   box-shadow: var(--box-shadow-material-card-hover);
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  transform: scale(1.05);
   transition: all 0.1s ease;
 }
 
@@ -99,35 +108,35 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-.freelancer-card > .freelancer-edit-delete-buttons {
-  display: none;
+.freelancer-card-container > .freelancer-edit-delete-buttons {
   position: absolute;
   top: 0;
-  right: -5vw;
-  width: 5vw;
+  right: 0;
+  width: 7vw;
+  z-index: -1;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 1, 1);
 }
 
-.freelancer-card:hover > .freelancer-edit-delete-buttons {
-  display: initial;
-}
-
-.freelancer-edit-delete-buttons > .freelancer-edit {
-
-}
-
-.freelancer-edit-delete-buttons > .freelancer-delete {
-
+.freelancer-card-container:hover > .freelancer-edit-delete-buttons {
+  -webkit-transform: translateX(6vw);
+  -ms-transform: translateX(6vw);
+  transform: translateX(6vw);
+  z-index: -1;
+  transition: all 0.3s cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
 .modify-button {
-  background-color: var(--home-search-border);
-  color: var(--form-input-border);
+  position: relative;
   width: 5vw;
   height: 4vh;
+  margin: 0 0 1vw 2vw;
   border-radius: 2px;
   border-style: none;
-  margin-bottom: 2px;
   font-size: 15px;
+  background-color: var(--home-search-border);
+  color: var(--form-input-border);
+  box-shadow: var(--box-shadow-material);
+  transition: all 0.1s ease;
 }
 
 .modify-button:hover {
@@ -136,7 +145,11 @@
 }
 
 .modify-button:hover:active {
-  box-shadow: var(--box-shadow-material);
+  box-shadow: var(--box-shadow-material-card-hover);
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  transition: all 0.1s ease;
 }
 
 .modify-button:focus {
