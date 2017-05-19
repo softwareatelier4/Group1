@@ -21,7 +21,7 @@ function renderComponent(data) {
   let listTags;
   if(tags && tags[0] != null) {
     listTags = tags.map((tag, index) =>
-      <li key={index}>
+      <li key={index} data-tagname={tag.tagName} >
         {tag.tagName}
       </li>
     );
