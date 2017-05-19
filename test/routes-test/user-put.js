@@ -29,7 +29,7 @@ describe('User-put test: ', function() {
       .expect(204)
       .end(function() {
         request(app)
-        .get('/user/' + seedData[4].data[0].username.toString())
+        .get('/user/' + seedData[4].data[0].username.toString() + '?ajax=true')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
@@ -52,7 +52,7 @@ describe('User-put test: ', function() {
       .expect(204)
       .end(function() {
         request(app)
-        .get('/user/rick_sanchez')
+        .get('/user/rick_sanchez?ajax=true')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
@@ -104,20 +104,20 @@ describe('User-put test: ', function() {
     // ERROR: non-existing username
     it('should respond with a 404 if the user does not exist', function(done) {
       request(app)
-        .put('/user/a_username_that_is_very_unlikely_to_exist')
-        .set('Accept', 'application/json')
-        .send({
-          "email" : "mehemail",
-        })
-        .expect(404, done);
+      .put('/user/a_username_that_is_very_unlikely_to_exist')
+      .set('Accept', 'application/json')
+      .send({
+        "email" : "mehemail",
+      })
+      .expect(404, done);
     });
 
     // ERROR: unsupported method
     it('should respond with a 405 if the method is not GET, PUT or OPTIONS', function(done) {
       request(app)
-        .head('/user/' + seedData[4].data[0].username.toString())
-        .set('Accept', 'application/json')
-        .expect(405, done);
+      .head('/user/' + seedData[4].data[0].username.toString())
+      .set('Accept', 'application/json')
+      .expect(405, done);
     });
 
   });
