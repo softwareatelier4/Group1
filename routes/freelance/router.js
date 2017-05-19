@@ -323,42 +323,77 @@ router.post('/', function(req, res, next) {
   });
 });
 
+// Delete freelance and all its references in user and tag
 router.delete('/:freelanceid', function(req, res, next) {
   Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
-    let userID = freelance.owner;
     let freelanceID = req.params.freelanceid;
+    let userID = freelance.owner;
+    let tagsArray = freelance.tags;
+
     if (err) {
-      res.status(400).json({error: "error while finding freelancer"});
+      res.status(400).json({error: "Error while finding freelancer"});
     } else if (!freelance) {
-      res.status(400).json({error: "no freelancer found"});
+      res.status(400).json({error: "No freelancer found"});
     } else {
-      // Remove freelance from database
       freelance.remove(function(errFreelance, removedFreelance) {
+        // Remove freelance from database
         if (err) {
-          res.status(400).json({error: "error while removing freelancer"});
+          res.status(400).json({error: "Error while removing freelancer"});
         } else {
+          if (tagsArray != undefined) {
+            var count = 0;
+            for (let tag of tagsArray) {
+              deleteReferenceFromTag(tag);
+            } 
+          } else {
+            deleteReferenceFromUser();
+          }
+        }
+
+        function deleteReferenceFromTag(tag) {
+          Tag.findById(tag).exec(function(errTag, foundTag) {
+            if (err || !foundTag) {
+              res.status(400).json({error: "error when finding tag"});
+            } else {
+              let freelancersTag = foundTag.freelancers;
+              let indexOfTag = freelancersTag.indexOf(freelanceID);
+              freelancersTag.splice(indexOfTag, 1);
+
+              foundTag.save(function(errSavedTag, savedTag) {
+                if (err || !savedTag) {
+                  res.status(400).json({error: "error while saving tag"});
+                } else {
+                  count++;
+                  if (tagsArray.length == count) {
+                    deleteReferenceFromUser();
+                  }
+                }
+              });
+            }
+          });
+        }
+
+        function deleteReferenceFromUser() {
           User.findById(userID).exec(function(errUser, foundUser) {
             if (err) {
               res.status(400).json({error: "error while finding user"});
             } else if (!foundUser) {
-              res.status(400).json({error: "no user found"});
+              res.status(201).json(removedFreelance);
             } else {
               // User has been found, remove reference of freelance from user
               let arrayFreelanceUser = foundUser.freelancer;
               let indexOfFreelance = arrayFreelanceUser.indexOf(freelanceID);
               arrayFreelanceUser.splice(indexOfFreelance, 1);
               foundUser.freelancer = arrayFreelanceUser;
+              
               foundUser.save(function(errUser, savedUser) {
                 if (err || !savedUser) {
                   res.status(400).json({error: "error while saving user"});
                 } else {
                   // User has been updated
-                  // TODO: Remove reference from tag
                   res.status(201).json(removedFreelance);
                 }
               });
-
-              
             }
           });
         }
@@ -366,6 +401,5 @@ router.delete('/:freelanceid', function(req, res, next) {
     }
   });
 });
-
 
 module.exports = router;
