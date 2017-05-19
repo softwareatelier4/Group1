@@ -85,19 +85,53 @@ router.get('/logout', function (req, res) {
 
 // GET user/:username
 router.get('/:username', function(req, res, next) {
-  User.findOne({ username : req.params.username }).select("-password").exec(function(err, user){
-    if (err) {
-      res.status(400).json(utils.formatErrorMessage(err));
-    } else if (!user) {
-      res.status(404).json({
-        statusCode: 404,
-        message: "Not Found",
+  // distinguish between raw and ajax GET request (to render page or return JSON)
+  if (req.query.ajax) {
+    User
+    .findOne({ username : req.params.username })
+    .select('-password')
+    .populate({
+      path: 'freelancer',
+      populate: {
+        path: 'category',
+        model: 'Category',
+      }
+    })
+    .exec(function(err, user) {
+      if (err) {
+        res.status(400).json(utils.formatErrorMessage(err));
+      } else if (!user) {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Not Found",
+        });
+      } else {
+        let found = Object.create(user);
+        res.status(200).json(user).end();
+      }
+    });
+  } else if (req.accepts('text/html')) {
+    if (req.session.user_id) { // logged in user
+      User.findById(req.session.user_id).exec(function(err, loggedUser){
+        if (err) res.sendStatus(500);
+        else if (!loggedUser) res.sendStatus(404);
+        else {
+          res.render('user', {
+            title: "JobAdvisor",
+            logged: true,
+            username: loggedUser.username,
+          });
+        }
       });
-    } else {
-      let found = Object.create(user);
-      res.status(200).json(found).end();
+    } else { // not logged in
+      res.render('user', {
+        title: "JobAdvisor",
+        logged: false,
+      });
     }
-  });
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 /**
