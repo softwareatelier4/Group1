@@ -325,17 +325,42 @@ router.post('/', function(req, res, next) {
 
 router.delete('/:freelanceid', function(req, res, next) {
   Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+    let userID = freelance.owner;
+    let freelanceID = req.params.freelanceid;
     if (err) {
-      res.status(400).json(utils.formatErrorMessage(errTag));
+      res.status(400).json({error: "error while finding freelancer"});
     } else if (!freelance) {
-      res.status(400).json(utils.formatErrorMessage(errTag));
+      res.status(400).json({error: "no freelancer found"});
     } else {
       // Remove freelance from database
-      freelance.remove(function(err, removedFreelance) {
+      freelance.remove(function(errFreelance, removedFreelance) {
         if (err) {
-          res.status(400).json(utils.formatErrorMessage(errTag));
+          res.status(400).json({error: "error while removing freelancer"});
         } else {
-          res.status(201).json(removedFreelance);
+          User.findById(userID).exec(function(errUser, foundUser) {
+            if (err) {
+              res.status(400).json({error: "error while finding user"});
+            } else if (!foundUser) {
+              res.status(400).json({error: "no user found"});
+            } else {
+              // User has been found, remove reference of freelance from user
+              let arrayFreelanceUser = foundUser.freelancer;
+              let indexOfFreelance = arrayFreelanceUser.indexOf(freelanceID);
+              arrayFreelanceUser.splice(indexOfFreelance, 1);
+              foundUser.freelancer = arrayFreelanceUser;
+              foundUser.save(function(errUser, savedUser) {
+                if (err || !savedUser) {
+                  res.status(400).json({error: "error while saving user"});
+                } else {
+                  // User has been updated
+                  // TODO: Remove reference from tag
+                  res.status(201).json(removedFreelance);
+                }
+              });
+
+              
+            }
+          });
         }
       });
     }
