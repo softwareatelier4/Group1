@@ -3,7 +3,7 @@ var config = require('../config');
 module.exports = {
   'Simple search' : function (client) {
     client
-      .url( config.baseURL + '/')
+      .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
       .pause(10000)
