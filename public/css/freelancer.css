@@ -215,6 +215,18 @@ ul.tag-list li {
   color: red;
 }
 
+#same-user-freelancers {
+  padding: 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+
+#same-user-freelancers:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+
 .hidden {
   display: none;
 }
