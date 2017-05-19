@@ -15,7 +15,7 @@ const Tag = mongoose.model('Tag');
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('GET, OPTIONS'));
-router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS, DELETE')); //add delete later
 router.all('/:freelanceid/availability', middleware.supportedMethods('PUT, OPTIONS')); //add delete later
 
 // GET /freelance/new
@@ -322,5 +322,25 @@ router.post('/', function(req, res, next) {
 
   });
 });
+
+router.delete('/:freelanceid', function(req, res, next) {
+  Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+    if (err) {
+      res.status(400).json(utils.formatErrorMessage(errTag));
+    } else if (!freelance) {
+      res.status(400).json(utils.formatErrorMessage(errTag));
+    } else {
+      // Remove freelance from database
+      freelance.remove(function(err, removedFreelance) {
+        if (err) {
+          res.status(400).json(utils.formatErrorMessage(errTag));
+        } else {
+          res.status(201).json(removedFreelance);
+        }
+      });
+    }
+  });
+});
+
 
 module.exports = router;
