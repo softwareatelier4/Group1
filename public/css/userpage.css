@@ -26,6 +26,8 @@
 .freelancer-card-container {
   position: relative;
   width: 100%;
+  margin-bottom: 50px;
+  box-shadow: var(--box-shadow-material);
   transition: all 0.1s ease;
 }
 
@@ -33,6 +35,7 @@
   -webkit-transform: scale(1.05);
   -ms-transform: scale(1.05);
   transform: scale(1.05);
+  box-shadow: var(--box-shadow-material-card-hover);
   transition: all 0.1s ease;
 }
 
@@ -43,17 +46,14 @@
   background-color: var(--accent-color);
   display: flex;
   flex-direction: row;
-  margin-bottom: 50px;
   padding: 20px;
   color: var(--basic-white);
   border-radius: 2px;
-  box-shadow: var(--box-shadow-material);
   transition: all 0.1s ease;
 }
 
 .freelancer-card:hover {
   cursor: pointer;
-  box-shadow: var(--box-shadow-material-card-hover);
   transition: all 0.1s ease;
 }
 
@@ -113,6 +113,7 @@
   top: 0;
   right: 0;
   width: 7vw;
+  height: 100%;
   z-index: -1;
   transition: all 0.3s cubic-bezier(0.4, 0.0, 1, 1);
 }
