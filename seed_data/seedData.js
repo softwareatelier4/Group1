@@ -51,8 +51,14 @@ for (var i = freelancers.data.length - 1; i >= 0; i--) {
   freelancers.data[i].address = locations[rndl];
 }
 
+
 // The first 'staticUsers' users are static and can be used for tests
 const staticUsers = 6;
+
+const emergencyUserIndex = staticUsers - 1;
+users.data[emergencyUserIndex].freelancer.push([freelancers.data[emergencyUserIndex]._id]);
+freelancers.data[emergencyUserIndex].owner = users.data[emergencyUserIndex]._id;
+freelancers.data[emergencyUserIndex].status = 'verified';
 // bind non-static users to Freelance profiles
 for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // var rndf = Math.floor(Math.random() * freelancersSize);
@@ -61,13 +67,13 @@ for (var i = staticUsers, k = 0; i < usersSize; i++) {
   freelancers.data[i].status = 'verified';
   // give non-static users an availability schedule
   for (var j = 0; j < 10; j++, k++) {
-      freelancers.data[i].availability.push({
-        day: new Date(availabilities.data[k].day),
-        begin: new Date(availabilities.data[k].begin),
-        end: new Date(availabilities.data[k].end),
-        location: availabilities.data[k].location
-      });
-    }
+    freelancers.data[i].availability.push({
+      day: new Date(availabilities.data[k].day),
+      begin: new Date(availabilities.data[k].begin),
+      end: new Date(availabilities.data[k].end),
+      location: availabilities.data[k].location
+    });
+  }
 }
 
 // utility function to dump the whole seed data array of a model
