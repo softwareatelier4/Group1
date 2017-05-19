@@ -17,7 +17,8 @@ module.exports = {
 
       // check if login was successful
       .waitForElementPresent('body', 10000)
-      // .assert.containsText('title', 'JobAdvisor - Admin View')
+      .pause(5000)
+      .assert.containsText('#admin-btn-categories', 'Categories')
 
 
 
