@@ -52,6 +52,7 @@ function renderComponent(data) {
       urlPicture = {data.urlPicture}
       _id={data._id}
       state={data.state}
+      owner={data.owner}
     />,
 
     document.getElementById('freelancer-root')
@@ -143,6 +144,7 @@ class FreelancerView extends React.Component {
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
         <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags}/>
+        <UserLink owner={this.props.owner} id={this.props._id} />
       </div>
     );
   }
@@ -459,6 +461,23 @@ class Tags extends React.Component {
       <ul className="tag-list">
         {this.props.tags}
       </ul>
+    )
+  }
+}
+
+class UserLink extends React.Component {
+  // <UserLink owner={this.props.owner} id={this.props._id} />
+  constructor(props) {
+    super(props);
+  }
+
+  filterFreelancers() {
+
+  }
+
+  render() {
+    return (
+      <div id="muahahahah"></div>
     )
   }
 }
