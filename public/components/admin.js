@@ -344,20 +344,41 @@ class ContainerCategories extends React.Component {
 }
 
 class CardDuplicates extends React.Component {
-  respond() {
-
+  sendMessage(choice) {
+    return function(e) {
+      let duplicate = this.props.duplicate;
+      let duplicateCard = e.target.parentNode.parentNode;
+      let message = `We ${choice}ed your request for removing the duplicate profile.`;
+      let query = `?username=${g_username}&password=${g_password}&duplicateid=${duplicate._id}&choice=${choice}&message=${message}`;
+      ajaxRequest('DELETE', `/admin/duplicate${query}`, { ajax : true }, {}, function(res) {
+        if (res === 204) {
+          if (choice === 'accept') {
+            ajaxRequest('DELETE', `/freelance/${duplicate.duplicateID._id}`, { ajax : true }, {}, function(res) {
+              console.log(typeof res);
+              if (typeof res !== 'object') {
+                console.log('ERROR sendig duplicate, freelancer');
+              }
+            });
+          }
+          duplicateCard.parentNode.removeChild(duplicateCard);
+        } else {
+          console.log('ERROR sendig duplicate, duplicate');
+        }
+      });
+    }
   }
 
   render() {
-    let originalLink = `/freelance/${this.props.original._id}`;
-    let duplicateLink = `/freelance/${this.props.duplicate._id}`;
+    let duplicate = this.props.duplicate;
+    let originalLink = `/freelance/${duplicate.originalID._id}`;
+    let duplicateLink = `/freelance/${duplicate.duplicateID._id}`;
     return (
       <div className="card-claim">
         <div className="card-claim-row">
-          <div><a href={originalLink} target="_blank">{this.props.original.firstName} {this.props.original.familyName}</a></div>
-          <div><a href={duplicateLink} target="_blank">{this.props.duplicate.firstName} {this.props.duplicate.familyName}</a></div>
-          <button onClick={this.respond.bind(this)}>Accept</button>
-          <button onClick={this.respond.bind(this)}>Reject</button>
+          <div><a href={originalLink} target="_blank">{duplicate.originalID.firstName} {duplicate.originalID.familyName}</a></div>
+          <div><a href={duplicateLink} target="_blank">{duplicate.duplicateID.firstName} {duplicate.duplicateID.familyName}</a></div>
+          <button onClick={this.sendMessage('accept').bind(this)}>Accept</button>
+          <button onClick={this.sendMessage('reject').bind(this)}>Reject</button>
         </div>
       </div>
     );
@@ -369,7 +390,7 @@ class ContainerDuplicates extends React.Component {
     let duplicates = [];
     for (let i = 0; i < this.props.duplicates.length; ++i) {
       let duplicate = this.props.duplicates[i];
-      duplicates.push(<CardDuplicates _id={duplicate._id} original={duplicate.originalID} duplicate={duplicate.duplicateID} key={i} />);
+      duplicates.push(<CardDuplicates duplicate={duplicate} key={i} />);
     }
     return (
       <div id="admin-duplicates">
