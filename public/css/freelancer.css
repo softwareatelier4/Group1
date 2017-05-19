@@ -185,7 +185,7 @@ ul.tag-list {
 ul.tag-list li {
   padding: 5px 15px;
   margin-right: 10px;
-  background-color: rgba(244, 67, 54, 0.9);
+  background-color: var(--accent-color);
   color: white;
   border-radius: 8px;
   font-size: var(--tag-font-size);
@@ -220,11 +220,39 @@ ul.tag-list li {
   border-top: 1px solid #ddd;
   transition: all 0.1s ease;
 }
-
 #same-user-freelancers:hover {
   cursor: pointer;
   background-color: #eaeaea;
   transition: all 0.1s ease;
+}
+#same-user-freelancers #same-user-freelancers-title {
+  display: block;
+  margin-bottom: 20px;
+}
+#same-user-freelancers > #same-user-freelancers-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+#same-user-freelancers-list > .small-freelancer-card {
+  display: block;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 2px;
+  color: white;
+  background-color: var(--accent-color);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > .small-freelancer-card:hover {
+  color: white;
+  background-color: var(--accent-hover);
+  transform: scale(1.01);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers > #no-other-profiles-message {
+  display: block;
+  color: var(--form-label-color);
+  padding-left: 10px;
 }
 
 .hidden {

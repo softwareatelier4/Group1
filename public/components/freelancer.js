@@ -466,7 +466,6 @@ class Tags extends React.Component {
 }
 
 class UserLink extends React.Component {
-  // <UserLink owner={this.props.owner} id={this.props._id} />
   constructor(props) {
     super(props);
   }
@@ -480,17 +479,88 @@ class UserLink extends React.Component {
   }
 
   render() {
-    if (this.props.owner) {
+
+    // no other profiles except this one
+    if (this.props.owner && this.props.owner.freelancer.length == 0) {
+      console.log("MEMEMEMMEME");
+      let message = "None. Just this one.";
       return (
         <div id="same-user-freelancers" onClick={this.redirectUserPage(this)}>
-          <span>Other profiles by user {this.props.owner.username}</span>
+          <span id="same-users-freelancers-title">
+            Other profiles by user {this.props.owner.username}
+          </span>
+          <span id="no-other-profiles-message">{message}</span>
+        </div>
+      );
+
+    // other profiles present
+    } else if (this.props.owner) {
+
+      // get freelancers, filter for verified and not this same profile
+      let profileID = this.props._id;
+      let userFreelancers = this.props.owner.freelancer.filter(function(f) {
+        return f.state === 'verified' && f._id !== profileID;
+      });
+
+      // add three best freelancers, or less
+      let bestThreeOrLess = [];
+      userFreelancers.sort(function(f1, f2) {
+        return f2.avgScore - f1.avgScore;
+      });
+      for (var i = 0; i < 3 && i < userFreelancers.length; i++) {
+        bestThreeOrLess.push(
+          <SmallFreelancerCard
+            key={i}
+            _id={userFreelancers[i]._id}
+            title={userFreelancers[i].title}
+            firstName={userFreelancers[i].firstName}
+            familyName={userFreelancers[i].familyName}
+            score={userFreelancers[i].avgScore}
+          />
+        );
+      }
+      return (
+        <div id="same-user-freelancers" onClick={this.redirectUserPage(this)}>
+          <div id="same-user-freelancers-title">
+            Other profiles by user {this.props.owner.username}
+          </div>
+          <div id="same-user-freelancers-list">
+            {bestThreeOrLess}
+          </div>
         </div>
       )
+
+    // no owner at all
     } else {
       return (
         <div></div>
       )
     }
+  }
+}
+
+class SmallFreelancerCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  redirectFreelancerProfile(freelanceId) {
+    return function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.location = '/freelance/' + freelanceId;
+    }
+  }
+
+  render() {
+    return (
+      <span
+        className="small-freelancer-card"
+        onClick={this.redirectFreelancerProfile(this.props._id)}
+      >
+        {this.props.title}
+      </span>
+    )
   }
 }
 
