@@ -26,7 +26,7 @@ module.exports = {
         // test sorting
         client.getAttribute('div.freelancer-card:last-child', 'data-distance', function(maxDistance) {
           client.assert.ok(Number(distance.value) <= Number(maxDistance.value));
-        })
+        });
       })
       .setValue('input[name=search-where]', 'Milano')
       .click('button#search-btn')
