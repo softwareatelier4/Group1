@@ -31,5 +31,7 @@ module.exports = {
     .assert.containsText('h1#user-page-title', 'Freelancer profiles owned by Uial')
     .waitForElementVisible('div.freelancer-card', 1000)
     .assert.containsText('h1.job-title', 'Graphic Designer')
+
+    .end();
   }
 };

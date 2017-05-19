@@ -26,6 +26,7 @@
 
 /* Copied from homepage.css */
 .freelancer-card {
+  position: relative;
   width: 100%;
   background-color: var(--accent-color);
   display: flex;
@@ -96,4 +97,48 @@
   background-color: var(--basic-white);
   border-radius: 0 2px 0 10px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.freelancer-card > .freelancer-edit-delete-buttons {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: -5vw;
+  width: 5vw;
+}
+
+.freelancer-card:hover > .freelancer-edit-delete-buttons {
+  display: initial;
+}
+
+.freelancer-edit-delete-buttons > .freelancer-edit {
+
+}
+
+.freelancer-edit-delete-buttons > .freelancer-delete {
+
+}
+
+.modify-button {
+  background-color: var(--home-search-border);
+  color: var(--form-input-border);
+  width: 5vw;
+  height: 4vh;
+  border-radius: 2px;
+  border-style: none;
+  margin-bottom: 2px;
+  font-size: 15px;
+}
+
+.modify-button:hover {
+  background-color: var(--home-search-border-focus);
+  cursor: pointer;
+}
+
+.modify-button:hover:active {
+  box-shadow: var(--box-shadow-material);
+}
+
+.modify-button:focus {
+  outline: none;
 }

@@ -3,11 +3,15 @@ ajaxRequest("GET", window.location + "?ajax=true", {}, {}, renderComponent);
 
 function renderComponent(data) {
 
+  // call the variable "freelancers" because pls sennó poi non capisco
+  // filter user freelancers to just verified
   // sort user freelancers by avgScore
-  // also call the variable "freelancers" because porcoddue sennó poi non capisco
   let freelancers = data.freelancer;
-  freelancers.sort(function(a, b) {
-    return b.avgScore - a.avgScore;
+  freelancers.filter(function(f) {
+    return f.state == 'verified';
+  });
+  freelancers.sort(function(f1, f2) {
+    return f2.avgScore - f1.avgScore;
   });
 
   let username = data.username;
@@ -32,6 +36,7 @@ class UserPage extends React.Component {
 
   render() {
     let freelancersList = [];
+    let isOwner = this.props.user == 'you';
     for (var i = 0; i < this.props.freelancers.length; i++) {
       let freelancer = this.props.freelancers[i];
       let categoryName = 'Other';
@@ -51,6 +56,7 @@ class UserPage extends React.Component {
         price      = {freelancer.price}
         _id        = {freelancer._id}
         key        = {i}
+        isOwner      = {isOwner}
       />);
     }
     return (
@@ -64,6 +70,10 @@ class UserPage extends React.Component {
 
 // Card which displays a reduced version of a freelancer's information
 class FreelancerCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   formatAvgScore(avgScore) {
     if (isNaN(avgScore)) {
       return '-';
@@ -98,7 +108,51 @@ class FreelancerCard extends React.Component {
           <span>Price range: {this.formatPrice(this.props.price)}</span>
         </div>
         <span className="category" data-category={this.props.categoryID}>{this.props.category}</span>
+        <EditDelete show={this.props.isOwner} freelancerID={this.props._id}/>
       </div>
     );
   }
+}
+
+class EditDelete extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  editFreelancer(freelancerID) {
+    return function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      alert("TODO: Edit " + freelancerID)
+    }
+  }
+  deleteFreelancer(freelancerID) {
+    return function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      alert("TODO: Delete " + freelancerID)
+    }
+  }
+
+  render() {
+    if (this.props.show) {
+      return (
+        <div className="freelancer-edit-delete-buttons">
+          <button
+            className="modify-button freelancer-edit"
+            onClick={this.editFreelancer(this.props.freelancerID)}
+          >Edit</button>
+          <button
+            className="modify-button freelancer-delete"
+            onClick={this.deleteFreelancer(this.props.freelancerID)}
+          >Delete</button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="freelancer-edit-delete-buttons"></div>
+      );
+    }
+  }
+
 }
