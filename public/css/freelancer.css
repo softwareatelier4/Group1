@@ -252,6 +252,11 @@ ul.tag-list li {
   background-color: var(--home-search-border-focus);
   transition: all 0.1s ease;
 }
+#same-user-freelancers-list > #small-freelancer-card-more {
+  margin: 0 10px 10px 0;
+  padding: 7px;
+  color: var(--home-search-border);
+}
 .small-freelancer-card > .small-freelancer-card-title {
   padding: 7px;
   white-space: nowrap;
@@ -284,10 +289,21 @@ ul.tag-list li {
   background-color: var(--home-search-border-focus);
   transition: all 0.1s ease;
 }
-#same-user-freelancers > #no-other-profiles-message {
-  display: block;
+#same-user-freelancers-none {
+  padding: 20px 20px 20px 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none > #same-user-freelancers-title-none {
+  margin-right: 10px;
+}
+#same-user-freelancers-none > #no-other-profiles-message {
   color: var(--form-label-color);
-  padding-left: 10px;
 }
 
 .hidden {
