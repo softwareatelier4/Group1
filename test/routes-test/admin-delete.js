@@ -448,6 +448,12 @@ describe('Admin-delete test: ', function() {
 
   });
 
+  describe('DELETE /admin/duplicate', function() {
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+  });
+
 });
 
 function seed(done) {
