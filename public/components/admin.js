@@ -487,10 +487,10 @@ function renderAdminView(data) {
 }
 
 function renderPage() {
-  // ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
-  g_username = 'admin';
-  g_password = 'asd';
-  ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
+  ReactDOM.render(<AdminLogin />, document.getElementById('react-main'));
+  // g_username = 'admin';
+  // g_password = 'asd';
+  // ajaxRequest('GET', `/admin/login?username=${g_username}&password=${g_password}`, { ajax : true }, null, renderAdminView);
 };
 
 renderPage();

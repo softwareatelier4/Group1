@@ -249,24 +249,33 @@ class FreelancerDuplicateForm extends React.Component {
       if (user == '400' || user == '404') {
         console.log('Error while retrieving user freelancers');
       } else {
-        if (user.freelancer) {
+        let freelancers = user.freelancer.filter(function(freelancer) {
+          return freelancer.state === 'verified';
+        });
+        if (freelancers.length > 0) {
           let duplicateBtn = document.getElementById('freelancer-duplicate-btn');
           duplicateBtn.disabled = false;
           duplicateBtn.onclick = this.reportDuplicate.bind(this);
-        }
-        for (let freelancer of user.freelancer) {
+          for (let freelancer of freelancers) {
+            let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+            let freelancerOption = document.createElement('option');
+            freelancerOption.value = freelancer._id;
+            freelancerOption.innerHTML = freelancer.title;
+            duplicateSelection.appendChild(freelancerOption);
+          }
+        } else {
           let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
-          let freelancerOption = document.createElement('option');
-          freelancerOption.value = freelancer._id;
-          freelancerOption.innerHTML = freelancer.title;
-          duplicateSelection.appendChild(freelancerOption);
+          duplicateSelection.disabled = true;
+          let noFreelancer = document.createElement('option');
+          noFreelancer.innerHTML = 'No verified freelancer associated to your profile';
+          duplicateSelection.appendChild(noFreelancer);
         }
       }
     });
     return (
       <div id="freelancer-duplicate-form">
         Original freelancer: &nbsp;
-        <select id="freelancer-duplicate-selection" name="Select original freelancer"></select> &nbsp;
+        <select id="freelancer-duplicate-selection" name="Select original freelancer" defaultValue="default"></select> &nbsp;
         <button id="freelancer-duplicate-btn" disabled="true">Report duplicate</button>
         <div id="freelancer-duplicate-form-message"></div>
       </div>
