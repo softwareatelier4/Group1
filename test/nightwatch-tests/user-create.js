@@ -4,7 +4,7 @@ var config = require('../config');
 module.exports = {
   'User Registration View' : function (client) {
     client
-      .url( config.baseURL + '/')
+      .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
