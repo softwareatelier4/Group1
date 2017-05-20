@@ -21,7 +21,7 @@ function renderComponent(data) {
   let listTags;
   if(tags && tags[0] != null) {
     listTags = tags.map((tag, index) =>
-      <li key={index} data-tagname={tag.tagName} >
+      <li key={index} data-tagname={tag.tagName}>
         {tag.tagName}
       </li>
     );
@@ -158,8 +158,10 @@ class FreelancerClaimForm extends React.Component {
     } else {
       ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claimData) {
         if (claimData._id) {
-          let claimBtn = document.getElementById('freelancer-claim-toggle');
+          let claimBtn = document.getElementById('freelancer-claim-toggle-claim');
           claimBtn.classList.add('hidden');
+          let duplicateBtn = document.getElementById('freelancer-claim-toggle-duplicate');
+          duplicateBtn.classList.add('hidden');
           let freelancerClaim = document.getElementById('freelancer-claim');
           freelancerClaim.className = 'bg-yellow';
           let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
@@ -221,38 +223,131 @@ class FreelancerClaimForm extends React.Component {
   }
 }
 
-class FreelancerClaim extends React.Component {
-  toggleForm(e) {
-    this.isClaiming = false;
-    return function(e) {
-      if (this.props.state === 'not verified') {
-        let claimBtn = document.getElementById('freelancer-claim-toggle');
-        let freelancerClaim = document.getElementById('freelancer-claim');
-        if (!this.isClaiming) {
-          this.isClaiming = true;
-          claimBtn.innerHTML = 'CANCEL';
-
-          let listReqDocs = documents.filter(x => x.required).map((document, index) =>
-              <li key={index}>
-              {document.name}
-              </li>
-            );
-          let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
-              <li key={index}>
-              {document.name}
-              </li>
-            );
-          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
+class FreelancerDuplicateForm extends React.Component {
+  reportDuplicate() {
+    let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+    let selected = duplicateSelection.options[duplicateSelection.selectedIndex].value;
+    if (selected) {
+      ajaxRequest('POST', '/duplicate', {}, {
+        originalID: selected,
+        duplicateID: this.props.duplicateid
+      }, function(res) {
+        let duplicateFormMessage = document.getElementById('freelancer-duplicate-form-message');
+        if (res == '400') {
+          duplicateFormMessage.innerHTML = 'You already submitted a duplicate request for this freelancer';
+        } else if (res == '500') {
+          duplicateFormMessage.innerHTML = 'There has been an error with the database. Try again.';
         } else {
-          this.isClaiming = false;
-          claimBtn.innerHTML = 'CLAIM';
-          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-          if (freelancerClaimForm) {
-            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          duplicateFormMessage.innerHTML = 'Your request has been submitted. Wait for the response.';
+        }
+      });
+    }
+  }
+
+  render() {
+    ajaxRequest('GET', '/user', null, {}, (user) => {
+      if (user == '400' || user == '404') {
+        console.log('Error while retrieving user freelancers');
+      } else {
+        let freelancers = user.freelancer.filter(function(freelancer) {
+          return freelancer.state === 'verified';
+        });
+        if (freelancers.length > 0) {
+          let duplicateBtn = document.getElementById('freelancer-duplicate-btn');
+          duplicateBtn.disabled = false;
+          duplicateBtn.onclick = this.reportDuplicate.bind(this);
+          for (let freelancer of freelancers) {
+            let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+            let freelancerOption = document.createElement('option');
+            freelancerOption.value = freelancer._id;
+            freelancerOption.innerHTML = freelancer.title;
+            duplicateSelection.appendChild(freelancerOption);
+          }
+        } else {
+          let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+          duplicateSelection.disabled = true;
+          let noFreelancer = document.createElement('option');
+          noFreelancer.innerHTML = 'No verified freelancer associated to your profile';
+          duplicateSelection.appendChild(noFreelancer);
+        }
+      }
+    });
+    return (
+      <div id="freelancer-duplicate-form">
+        Original freelancer: &nbsp;
+        <select id="freelancer-duplicate-selection" name="Select original freelancer" defaultValue="default"></select> &nbsp;
+        <button id="freelancer-duplicate-btn" disabled="true">Report duplicate</button>
+        <div id="freelancer-duplicate-form-message"></div>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaim extends React.Component {
+  toggleForm(formName) {
+    this.formVisible = 'none';
+    return function() {
+      if (this.props.state === 'not verified') {
+        let freelancerClaim = document.getElementById('freelancer-claim');
+        let duplicateBtn = document.getElementById('freelancer-claim-toggle-duplicate');
+        let claimBtn = document.getElementById('freelancer-claim-toggle-claim');
+
+        if (formName === 'claim') {
+          if (this.formVisible !== 'claim') {
+            this.formVisible = 'claim';
+            // Hide duplicate form
+            duplicateBtn.innerHTML = 'REPORT DUPLICATE';
+            let freelancerDuplicateForm = document.getElementById('freelancer-duplicate-form');
+            if (freelancerDuplicateForm) {
+              freelancerDuplicateForm.parentNode.removeChild(freelancerDuplicateForm);
+            }
+            // Show claim form
+            claimBtn.innerHTML = 'CANCEL';
+            let listReqDocs = documents.filter(x => x.required).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+            let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+            addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
+          } else {
+            this.formVisible = 'none';
+            // Hide claim form
+            claimBtn.innerHTML = 'CLAIM';
+            claimBtn.innerHTML = 'CLAIM';
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            if (freelancerClaimForm) {
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            }
+          }
+        } else if (formName === 'duplicate') {
+          if (this.formVisible !== 'duplicate') {
+            this.formVisible = 'duplicate';
+            // Hide claim form
+            claimBtn.innerHTML = 'CLAIM';
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            if (freelancerClaimForm) {
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            }
+            // Show duplicate form
+            duplicateBtn.innerHTML = 'CANCEL';
+            addReactElement(<FreelancerDuplicateForm duplicateid={this.props._id} />, freelancerClaim);
+          } else {
+            this.formVisible = 'none';
+            // Hide duplicate form
+            duplicateBtn.innerHTML = 'REPORT DUPLICATE';
+            let freelancerDuplicateForm = document.getElementById('freelancer-duplicate-form');
+            if (freelancerDuplicateForm) {
+              freelancerDuplicateForm.parentNode.removeChild(freelancerDuplicateForm);
+            }
           }
         }
       }
-    }
+    };
   }
 
   render() {
@@ -261,21 +356,29 @@ class FreelancerClaim extends React.Component {
     let claimBtn = '';
     let claimDisabled = false;
     let claimText = 'CLAIM';
+    let duplicateBtn = '';
+    let duplicateDisabled = false;
+    let duplicateText = 'REPORT DUPLICATE';
     if (this.props.state === 'verified') {
       bgColor = 'bg-green';
       claimBtn = 'hidden';
+      duplicateBtn = 'hidden';
     } else if (this.props.state === 'in progress') {
       bgColor = 'bg-yellow';
       claimBtn = 'hidden';
+      duplicateBtn = 'hidden';
     } else if (!isLogged) {
       claimDisabled = true;
       claimText = 'LOGIN TO CLAIM';
+      duplicateDisabled = true;
+      duplicateText = 'LOGIN TO REPORT DUPLICATE'
     }
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
-          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          <button onClick={this.toggleForm('duplicate').bind(this)} id="freelancer-claim-toggle-duplicate" className={claimBtn} disabled={duplicateDisabled}>{duplicateText}</button>
         </div>
       </div>
     );
