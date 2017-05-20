@@ -267,20 +267,76 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 freelance.description = data.description || freelance.description;
                 freelance.address = data.address || freelance.address;
                 freelance.price = data.price || freelance.price;
-                if(data.tags.length > 0) {
-                  freelance.tags = data.tags;
-                  
+                
+                // Asynchronous call for sending the response
+                function sendResponse() {
+                  freelance.save(function(err, updatedfreelance){
+                    if(err){
+                      res.status(500).json({ error : 'error updating freelance' }); // NOT TESTABLE
+                    } else if (!updatedfreelance){
+                      res.status(404).json({ error : 'freelance not found' }); // NOT TESTABLE
+                    } else {
+                      res.status(201).json(updatedfreelance); // TODO: TEST (correct execution)
+                    }
+                  });
                 }
+                // here I suppose that data contains all the tags (old and new )
+                // i.e. the size of 'tags' should be the total number of tags after update
+                if(data.tags) {
+                  // There are tags in the put:
+                  var tags = data.tags.split(',');
 
-                freelance.save(function(err, updatedfreelance){
-                  if(err){
-                    res.status(500).json({ error : 'error updating freelance' }); // NOT TESTABLE
-                  } else if (!updatedfreelance){
-                    res.status(404).json({ error : 'freelance not found' }); // NOT TESTABLE
-                  } else {
-                    res.status(201).json(updatedfreelance); // TODO: TEST (correct execution)
+                  var counter = 0;
+                  for (let tag of tags) {
+                    // Asynchronous call to set the tags.
+                    checkIfTagExists(tag);
                   }
-                });
+
+                  // Asynchronous call for checking the tags
+                  function checkIfTagExists(givenTag) {
+                    Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+                      if (err || (foundTag == undefined)) {
+                        // Tag is not in the database, add it
+                        const newTag = new Tag({
+                          tagName: givenTag,
+                        });
+                        newTag.freelancers.push(req.params.freelanceid);
+                        // Save tag and proceed to process response.
+                        newTag.save(function(errTag, savedTag) {
+                          if (err) {
+                            console.log("Error with saving the tag: " + err);
+                            res.status(400).json(utils.formatErrorMessage(errTag));
+                          }
+                          freelance.tags.push(savedTag);
+                          counter++;
+                          if (tags.length == counter) {
+                            sendResponse();
+                          }
+                        });
+                      } else {
+                        if (foundTag.freelancers.indexOf(req.params.freelanceid) < 0) {
+                          // Add this new freelance to the freelancers that have this tag.
+                          foundTag.freelancers.push(req.params.freelanceid);
+                        }
+                        foundTag.save(function(errTag, savedTag) {
+                          if (err) {
+                            console.log("Error with saving the tag: " + err);
+                            res.status(400).json(utils.formatErrorMessage(errTag));
+                          }
+                          // Save tag into freelance list of tags
+                          freelance.tags.push(savedTag);
+                          counter++;
+                          if (tags.length == counter) {
+                            sendResponse();
+                          }
+                        });
+                      }
+                    });
+                  }
+                // END IF data.tags
+                } else {
+                  sendResponse();
+                }
               }
             });
          }
