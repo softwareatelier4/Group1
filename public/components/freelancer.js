@@ -11,6 +11,10 @@ let documents;
 ajaxRequest("GET", window.location, { ajax: true }, {}, renderComponent);
 
 function renderComponent(data) {
+  if(data == 404) { // redirect to home if freelancer not found
+    window.location = '/';
+  }
+
   // freelancer info
   if (data.owner) {
     userName = data.owner.username;
