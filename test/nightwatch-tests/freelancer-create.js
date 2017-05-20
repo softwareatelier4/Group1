@@ -1,3 +1,4 @@
+'use strict';
 var config = require('../config');
 
 module.exports = {
@@ -27,12 +28,15 @@ module.exports = {
       .setValue('input[name=address]', 'USI, Lugano')
       .setValue('input[name=email]', 'test@night.watch')
       .click('input[name=submit-button]')
+      .pause(500)
       .waitForElementVisible('div.freelancer-view', 10000)
       .assert.containsText('h1.freelancer-header-name', 'Nightwatch')
       .assert.containsText('span.freelancer-category', 'Engineering')
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
       .assert.containsText('a.freelancer-email', 'test@night.watch')
-      .assert.containsText('ul.tag-list li:first-child', 'Nightwatch')
+      .getAttribute('ul.tag-list li:first-child', 'data-tagname', function(value) {
+        client.assert.ok(value.value === 'Nightwatch' || value.value === 'Tester' || value.value === 'Wow')
+      })
       // add yourself
       .url( config.baseURL + '/freelance/new')
       // test alert if not logged in

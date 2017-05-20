@@ -51,6 +51,7 @@ app.use('/category', routers.category);
 app.use('/user', routers.user);
 app.use('/claim', routers.claim);
 app.use('/admin', routers.admin);
+app.use('/duplicate', routers.duplicate);
 
 module.exports = app;
 process.title = 'jobadvisor'

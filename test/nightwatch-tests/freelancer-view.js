@@ -1,3 +1,4 @@
+'use strict';
 var config = require('../config');
 
 module.exports = {
@@ -40,10 +41,12 @@ module.exports = {
       .pause(2000)
       // test empty review not listed
       .assert.hidden('div.review-text')
-      // claim
+      // duplicate form
+      .waitForElementPresent('button#freelancer-claim-toggle-duplicate', 1000)
+      // claim form
       .waitForElementPresent('div#freelancer-claim', 1000)
       .assert.containsText('div#freelancer-claim-status-name', 'NOT VERIFIED')
-      .click('button#freelancer-claim-toggle')
+      .click('button#freelancer-claim-toggle-claim')
       .waitForElementPresent('div#freelancer-claim-form', 5000)
       .click('button#freelancer-claim-btn')
       .pause(2000)
