@@ -216,7 +216,7 @@ ul.tag-list li {
 }
 
 #same-user-freelancers {
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   border-top: 1px solid #ddd;
   transition: all 0.1s ease;
 }
@@ -231,22 +231,57 @@ ul.tag-list li {
 }
 #same-user-freelancers > #same-user-freelancers-list {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start;
 }
 #same-user-freelancers-list > .small-freelancer-card {
-  display: block;
-  margin-right: 10px;
-  padding: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 10px 10px 0;
+  padding: 0;
   border-radius: 2px;
+  background-color: var(--home-search-border);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > .small-freelancer-card:hover {
+  -webkit-transform: scale(1.01);
+  -ms-transform: scale(1.01);
+  transform: scale(1.01);
+  box-shadow: var(--box-shadow-material-card-hover);
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-title {
+  padding: 7px;
+  white-space: nowrap;
   color: white;
   background-color: var(--accent-color);
   transition: all 0.1s ease;
 }
-#same-user-freelancers-list > .small-freelancer-card:hover {
-  color: white;
+.small-freelancer-card:hover > .small-freelancer-card-title {
   background-color: var(--accent-hover);
-  transform: scale(1.01);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-score {
+  padding: 7px 5px 7px 7px;
+  white-space: nowrap;
+  background-color: var(--home-search-border);
+  color: var(--form-input-border);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-score {
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-star {
+  padding: 5px 5px 5px 1px;
+  background-color: var(--home-search-border);
+  color: var(--star-yellow);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-star {
+  background-color: var(--home-search-border-focus);
   transition: all 0.1s ease;
 }
 #same-user-freelancers > #no-other-profiles-message {

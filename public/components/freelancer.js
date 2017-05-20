@@ -515,7 +515,7 @@ class UserLink extends React.Component {
             title={userFreelancers[i].title}
             firstName={userFreelancers[i].firstName}
             familyName={userFreelancers[i].familyName}
-            score={userFreelancers[i].avgScore}
+            rating={userFreelancers[i].avgScore}
           />
         );
       }
@@ -554,12 +554,20 @@ class SmallFreelancerCard extends React.Component {
 
   render() {
     return (
-      <span
+      <div
         className="small-freelancer-card"
         onClick={this.redirectFreelancerProfile(this.props._id)}
       >
-        {this.props.title}
-      </span>
+        <span className="small-freelancer-card-title">
+          {this.props.title}
+        </span>
+        <span className="small-freelancer-card-score">
+          {this.props.rating}
+        </span>
+        <span className="small-freelancer-card-star">
+          &#9733;
+        </span>
+      </div>
     )
   }
 }
