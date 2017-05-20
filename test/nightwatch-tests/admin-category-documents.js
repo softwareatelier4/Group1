@@ -14,10 +14,10 @@ module.exports = {
       .setValue('input[name=username]', 'admin')
       .setValue('input[name=password]', 'asd')
       .click('button#login-form-btn')
+      .pause(1000)
 
       // check if login was successful
       .waitForElementPresent('body', 10000)
-      .pause(1000)
       .assert.containsText('#admin-btn-categories', 'Categories')
 
       // add a Category

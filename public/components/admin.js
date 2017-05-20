@@ -195,7 +195,7 @@ class CardCategoryDocuments extends React.Component {
       let isRequired = (doc.required) ? 'required' : 'not required';
       docs.push(
         <li data-name={doc.name} key={i}>
-          <span id={doc.name} className="card-category-document-name">{doc.name}</span>
+          <span className="card-category-document-name">{doc.name}</span>
           <span className="card-category-document-required">{isRequired}</span>
           <button className="card-category-document-delete-btn" onClick={this.deleteDoc}>x</button>
         </li>
