@@ -242,6 +242,7 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // PUT freelance/:freelanceid/edit/
 router.put('/:freelanceid/edit', function(req, res, next) {
+  // TODO must Add freelance in the tags reference.
   // checks if user is correct
   if(req.session.user_id) {
        User.findById(req.session.user_id).exec(function(err, user){
@@ -266,7 +267,10 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 freelance.description = data.description || freelance.description;
                 freelance.address = data.address || freelance.address;
                 freelance.price = data.price || freelance.price;
-                if(data.tags.length > 0) freelance.tags = data.tags;
+                if(data.tags.length > 0) {
+                  freelance.tags = data.tags;
+                  
+                }
 
                 freelance.save(function(err, updatedfreelance){
                   if(err){

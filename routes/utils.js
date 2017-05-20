@@ -57,4 +57,44 @@ module.exports = {
     });
   },
 
+  // Asynchronous call for checking the tags
+  checkIfTagExists : function(givenTag) {
+    Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+      if (err || (foundTag == undefined)) {
+        // Tag is not in the database, add it
+        const newTag = new Tag({
+          tagName: givenTag,
+        });
+        newTag.freelancers.push(saved);
+        // Save tag and proceed to process response.
+        newTag.save(function(errTag, savedTag) {
+          if (err) {
+            console.log("Error with saving the tag: " + err);
+            res.status(400).json(utils.formatErrorMessage(errTag));
+          }
+          saved.tags.push(savedTag);
+          count++;
+          if (tags.length == count) {
+            sendResponse();
+          }
+        });
+      } else {
+        // Add this new freelance to the freelancers that have this tag.
+        foundTag.freelancers.push(saved);
+        foundTag.save(function(errTag, savedTag) {
+          if (err) {
+            console.log("Error with saving the tag: " + err);
+            res.status(400).json(utils.formatErrorMessage(errTag));
+          }
+          // Save tag into freelance list of tags
+          saved.tags.push(savedTag);
+          count++;
+          if (tags.length == count) {
+            sendResponse();
+          }
+        });
+      }
+    });
+  },
+
 }
