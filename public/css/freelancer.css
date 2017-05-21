@@ -21,6 +21,7 @@
   padding: 20px;
   color: var(--basic-white);
   border-radius: 2px 2px 0px 0px;
+  border-radius: 0;
 }
 
 .picture-placeholder {
@@ -48,12 +49,12 @@
 }
 
 .freelancer-category {
-  color: #F44336;
+  color: var(--accent-color);
   align-self: flex-start;
   margin: -20px;
   padding: 10px;
   background-color: #fff;
-  border-radius: 0 2px 0 10px;
+  border-radius: 0 0 0 10px;
   box-shadow: var(--box-shadow-material);
 }
 
@@ -185,13 +186,14 @@ ul.tag-list {
 ul.tag-list li {
   padding: 5px 15px;
   margin-right: 10px;
-  background-color: rgba(244, 67, 54, 0.9);
+  background-color: var(--accent-color);
   color: white;
   border-radius: 8px;
   font-size: var(--tag-font-size);
 }
 
 #freelancer-claim {
+  border-radius: 2px 2px 0 0;
   padding: 10px;
   display: flex;
   flex-flow: column;
@@ -224,7 +226,12 @@ ul.tag-list li {
 }
 
 .bg-green {
-  background-color: green;
+  background-color: #79b1ed;
+}
+
+.bg-green #freelancer-claim-status {
+  height: 30px;
+  color: var(--basic-white);
 }
 
 .bg-yellow {

@@ -45,7 +45,7 @@ module.exports = {
       .waitForElementPresent('button#freelancer-claim-toggle-duplicate', 1000)
       // claim form
       .waitForElementPresent('div#freelancer-claim', 1000)
-      .assert.containsText('div#freelancer-claim-status-name', 'NOT VERIFIED')
+      .assert.containsText('div#freelancer-claim-status-name', 'Not Verified')
       .click('button#freelancer-claim-toggle-claim')
       .waitForElementPresent('div#freelancer-claim-form', 5000)
       .click('button#freelancer-claim-btn')
@@ -58,7 +58,7 @@ module.exports = {
       //.setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
       // .click('button#freelancer-claim-btn')
       // .pause(2000)
-      // .assert.containsText('div#freelancer-claim-status-name', 'IN PROGRESS')
+      // .assert.containsText('div#freelancer-claim-status-name', 'In Progress')
 
       .end();
   }
