@@ -228,6 +228,52 @@ describe('Freelance-put test: ', function() {
         });
     });
 
+    it('should return 201 for success editing of allowed fields', function(done) {
+      let req = request(app)
+        .put('/freelance/'+ seedData[1].data[0]._id.toString() + '/edit')
+        .set('Accept', 'application/json')
+        .set('Ajax', 'true');
+      req.cookies = Cookies;
+      req.expect(201)
+        .send({
+          phone : "6666",
+          address : "Celiax"
+        })
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("phone", "6666");
+            res.body.should.have.property("address", "Celiax");
+            done();
+          }
+        });
+    });
+
+    it('should not modify not allowed fields', function(done) {
+      let oldName = seedData[1].data[0].firstName;
+      let oldTitle = seedData[1].data[0].title;
+      let req = request(app)
+        .put('/freelance/'+ seedData[1].data[0]._id.toString() + '/edit')
+        .set('Accept', 'application/json')
+        .set('Ajax', 'true');
+      req.cookies = Cookies;
+      req.expect(201)
+        .send({
+          firstName : "Lanaya",
+          title : "GOD"
+        })
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("firstName", oldName);
+            res.body.should.have.property("title", oldTitle);
+            done();
+          }
+        });
+    });
+
 
   });
 
