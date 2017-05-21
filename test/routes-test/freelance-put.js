@@ -274,6 +274,28 @@ describe('Freelance-put test: ', function() {
         });
     });
 
+    it('should add new tags when the request contains new tags', function(done) {
+      let oldName = seedData[1].data[0].firstName;
+      let oldTitle = seedData[1].data[0].title;
+      let req = request(app)
+        .put('/freelance/'+ seedData[1].data[0]._id.toString() + '/edit')
+        .set('Accept', 'application/json')
+        .set('Ajax', 'true');
+      req.cookies = Cookies;
+      req.expect(201)
+        .send({
+          tags : "testingtag1,testing2,testerino3"
+        })
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("tags").with.lengthOf(3);;
+            done();
+          }
+        });
+    });
+
 
   });
 
