@@ -105,7 +105,9 @@ a#title {
   height: 65px;
   background-color: var(--accent-color);
   color: var(--basic-white);
-  border: 0px;
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-color: var(--accent-hover);
   font-size: var(--input-font-size);
   padding: 20px;
 }
@@ -234,24 +236,36 @@ a#title {
 /* Submit button */
 
 .submit-button {
-  background-color: var(--accent-color);
+  /*background-color: var(--accent-color);
   color: var(--basic-white);
   width: 17%;
   border-radius: 2px;
   border-style: none;
-  align-self: flex-end;
+  align-self: flex-end;*/
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px 0;
 }
 
 .submit-button:hover {
-  background-color: var(--home-search-button-border-hover);
-  cursor: pointer;
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
 }
 
 .submit-button:hover:active {
-  box-shadow: var(--box-shadow-material);
+  outline: none;
 }
 
 .submit-button:focus {
+  border-bottom: 0;
+  border-top: solid 2px var(--background);
   outline: none;
 }
 
