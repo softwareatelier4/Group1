@@ -8,23 +8,37 @@
 let userName;
 let documents;
 
-ajaxRequest("GET", window.location, { ajax : true }, {}, renderComponent);
+ajaxRequest("GET", window.location, { ajax: true }, {}, renderComponent);
 
 function renderComponent(data) {
+  if(data == 404) { // redirect to home if freelancer not found
+    window.location = '/';
+  }
+
   // freelancer info
   if (data.owner) {
     userName = data.owner.username;
   }
+
   const tags = data.tags;
-  const listTags = tags.map((tag, index) =>
-    <li key={index}>
-      {tag.tagName}
-    </li>
-  );
+
+  let listTags;
+  if (tags && tags[0] != null) {
+    listTags = tags.map((tag, index) =>
+      <li key={index} data-tagname={tag.tagName}>
+        {tag.tagName}
+      </li>
+    );
+  } else {
+    listTags = [];
+  }
+
   let categoryName = 'Other';
+
   if (data.category) {
     categoryName = data.category.categoryName;
   }
+
   ReactDOM.render(
     <FreelancerView
       first={data.firstName}
@@ -39,7 +53,7 @@ function renderComponent(data) {
       address={data.address}
       email={data.email}
       tags={listTags}
-      urlPicture = {data.urlPicture}
+      urlPicture={data.urlPicture}
       _id={data._id}
       state={data.state}
     />,
@@ -55,7 +69,7 @@ function renderComponent(data) {
 function renderReviews(data) {
   let reviews = data.reviews;
   // sort by date
-  reviews.sort(function(a, b) {
+  reviews.sort(function (a, b) {
     return new Date(b.date) - new Date(a.date);
   });
 
@@ -73,7 +87,7 @@ function renderReviews(data) {
     />
   );
 
-  if(document.getElementById('freelancer-logged-reviews-root')) { // if user logged in, show review form
+  if (document.getElementById('freelancer-logged-reviews-root')) { // if user logged in, show review form
     ReactDOM.render(
       <div className="freelancer-reviews">
         <ReviewForm />
@@ -82,7 +96,7 @@ function renderReviews(data) {
 
       document.getElementById('freelancer-logged-reviews-root')
     );
-  }  else if(document.getElementById('freelancer-reviews-root')) {
+  } else if (document.getElementById('freelancer-reviews-root')) {
     ReactDOM.render(
       <div className="freelancer-reviews">
         <p>Login to be able to write a review</p>
@@ -130,9 +144,9 @@ class FreelancerView extends React.Component {
           avgScore={this.props.avgScore}
           price={this.props.price}
         />
-        <Contact phone={this.props.phone} address={this.props.address} email={this.props.email}/>
+        <Contact phone={this.props.phone} address={this.props.address} email={this.props.email} />
         <div className="freelancer-description">{this.props.description}</div>
-        <Tags tags={this.props.tags}/>
+        <Tags tags={this.props.tags} />
       </div>
     );
   }
@@ -146,10 +160,12 @@ class FreelancerClaimForm extends React.Component {
       let message = document.getElementById('freelancer-claim-form-message');
       message.innerHTML = 'Not enough required files submitted';
     } else {
-      ajaxRequest('POST', '/claim/new', { ajax : true }, { freelancerId : this.props.freelancerid }, function(claimData) {
+      ajaxRequest('POST', '/claim/new', { ajax: true }, { freelancerId: this.props.freelancerid }, function (claimData) {
         if (claimData._id) {
-          let claimBtn = document.getElementById('freelancer-claim-toggle');
+          let claimBtn = document.getElementById('freelancer-claim-toggle-claim');
           claimBtn.classList.add('hidden');
+          let duplicateBtn = document.getElementById('freelancer-claim-toggle-duplicate');
+          duplicateBtn.classList.add('hidden');
           let freelancerClaim = document.getElementById('freelancer-claim');
           freelancerClaim.className = 'bg-yellow';
           let freelancerClaimStatusName = document.getElementById('freelancer-claim-status-name');
@@ -162,9 +178,9 @@ class FreelancerClaimForm extends React.Component {
 
           // Submit files
           let formDataRequired = new FormData(document.getElementById('freelancer-claim-form-form'));
-          ajaxRequest('POST', '/claim/upload', null, formDataRequired, function(status) {
+          ajaxRequest('POST', '/claim/upload', null, formDataRequired, function (status) {
             let formDataOptional = new FormData(document.getElementById('freelancer-claim-form-form-optional'));
-            ajaxRequest('POST', '/claim/uploadopt', null, formDataOptional, function(status) {
+            ajaxRequest('POST', '/claim/uploadopt', null, formDataOptional, function (status) {
               // Delete form
               let freelancerClaimForm = document.getElementById('freelancer-claim-form');
               freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
@@ -191,14 +207,14 @@ class FreelancerClaimForm extends React.Component {
     return (
       <div id="freelancer-claim-form">
         <form id="freelancer-claim-form-form" encType="multipart/form-data" action="/claim/upload" method="post">
-          <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value=""/>
+          <input id="freelancer-claim-form-claimid" type="hidden" name="claimid" value="" />
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <p>Upload these necessary documents:</p>
           <div id="required-docs">{this.props.reqDocs}</div>
           <input id="freelancer-claim-form-files" name="idfile" type="file" multiple="true" />
         </form>
         <form id="freelancer-claim-form-form-optional" encType="multipart/form-data" action="/claim/upload" method="post">
-          <input id="freelancer-claim-form-claimid-optional" type="hidden" name="claimid" value=""/>
+          <input id="freelancer-claim-form-claimid-optional" type="hidden" name="claimid" value="" />
           <input type="hidden" name="freelancerid" value={this.props.freelancerid} />
           <p>Upload any other optional document such as:</p>
           <div id="optional-docs">{this.props.optDocs}</div>
@@ -211,38 +227,131 @@ class FreelancerClaimForm extends React.Component {
   }
 }
 
-class FreelancerClaim extends React.Component {
-  toggleForm(e) {
-    this.isClaiming = false;
-    return function(e) {
-      if (this.props.state === 'not verified') {
-        let claimBtn = document.getElementById('freelancer-claim-toggle');
-        let freelancerClaim = document.getElementById('freelancer-claim');
-        if (!this.isClaiming) {
-          this.isClaiming = true;
-          claimBtn.innerHTML = 'CANCEL';
-
-          let listReqDocs = documents.filter(x => x.required).map((document, index) =>
-              <li key={index}>
-              {document.name}
-              </li>
-            );
-          let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
-              <li key={index}>
-              {document.name}
-              </li>
-            );
-          addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
+class FreelancerDuplicateForm extends React.Component {
+  reportDuplicate() {
+    let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+    let selected = duplicateSelection.options[duplicateSelection.selectedIndex].value;
+    if (selected) {
+      ajaxRequest('POST', '/duplicate', {}, {
+        originalID: selected,
+        duplicateID: this.props.duplicateid
+      }, function(res) {
+        let duplicateFormMessage = document.getElementById('freelancer-duplicate-form-message');
+        if (res == '400') {
+          duplicateFormMessage.innerHTML = 'You already submitted a duplicate request for this freelancer';
+        } else if (res == '500') {
+          duplicateFormMessage.innerHTML = 'There has been an error with the database. Try again.';
         } else {
-          this.isClaiming = false;
-          claimBtn.innerHTML = 'CLAIM';
-          let freelancerClaimForm = document.getElementById('freelancer-claim-form');
-          if (freelancerClaimForm) {
-            freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+          duplicateFormMessage.innerHTML = 'Your request has been submitted. Wait for the response.';
+        }
+      });
+    }
+  }
+
+  render() {
+    ajaxRequest('GET', '/user', null, {}, (user) => {
+      if (user == '400' || user == '404') {
+        console.log('Error while retrieving user freelancers');
+      } else {
+        let freelancers = user.freelancer.filter(function(freelancer) {
+          return freelancer.state === 'verified';
+        });
+        if (freelancers.length > 0) {
+          let duplicateBtn = document.getElementById('freelancer-duplicate-btn');
+          duplicateBtn.disabled = false;
+          duplicateBtn.onclick = this.reportDuplicate.bind(this);
+          for (let freelancer of freelancers) {
+            let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+            let freelancerOption = document.createElement('option');
+            freelancerOption.value = freelancer._id;
+            freelancerOption.innerHTML = freelancer.title;
+            duplicateSelection.appendChild(freelancerOption);
+          }
+        } else {
+          let duplicateSelection = document.getElementById('freelancer-duplicate-selection');
+          duplicateSelection.disabled = true;
+          let noFreelancer = document.createElement('option');
+          noFreelancer.innerHTML = 'No verified freelancer associated to your profile';
+          duplicateSelection.appendChild(noFreelancer);
+        }
+      }
+    });
+    return (
+      <div id="freelancer-duplicate-form">
+        Original freelancer: &nbsp;
+        <select id="freelancer-duplicate-selection" name="Select original freelancer" defaultValue="default"></select> &nbsp;
+        <button id="freelancer-duplicate-btn" disabled="true">Report duplicate</button>
+        <div id="freelancer-duplicate-form-message"></div>
+      </div>
+    );
+  }
+}
+
+class FreelancerClaim extends React.Component {
+  toggleForm(formName) {
+    this.formVisible = 'none';
+    return function() {
+      if (this.props.state === 'not verified') {
+        let freelancerClaim = document.getElementById('freelancer-claim');
+        let duplicateBtn = document.getElementById('freelancer-claim-toggle-duplicate');
+        let claimBtn = document.getElementById('freelancer-claim-toggle-claim');
+
+        if (formName === 'claim') {
+          if (this.formVisible !== 'claim') {
+            this.formVisible = 'claim';
+            // Hide duplicate form
+            duplicateBtn.innerHTML = 'REPORT DUPLICATE';
+            let freelancerDuplicateForm = document.getElementById('freelancer-duplicate-form');
+            if (freelancerDuplicateForm) {
+              freelancerDuplicateForm.parentNode.removeChild(freelancerDuplicateForm);
+            }
+            // Show claim form
+            claimBtn.innerHTML = 'CANCEL';
+            let listReqDocs = documents.filter(x => x.required).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+            let listOptDocs = documents.filter(x => !(x.required)).map((document, index) =>
+              <li key={index}>
+              {document.name}
+              </li>
+            );
+            addReactElement(<FreelancerClaimForm freelancerid={this.props._id} reqDocs={listReqDocs} optDocs={listOptDocs}/>, freelancerClaim);
+          } else {
+            this.formVisible = 'none';
+            // Hide claim form
+            claimBtn.innerHTML = 'CLAIM';
+            claimBtn.innerHTML = 'CLAIM';
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            if (freelancerClaimForm) {
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            }
+          }
+        } else if (formName === 'duplicate') {
+          if (this.formVisible !== 'duplicate') {
+            this.formVisible = 'duplicate';
+            // Hide claim form
+            claimBtn.innerHTML = 'CLAIM';
+            let freelancerClaimForm = document.getElementById('freelancer-claim-form');
+            if (freelancerClaimForm) {
+              freelancerClaimForm.parentNode.removeChild(freelancerClaimForm);
+            }
+            // Show duplicate form
+            duplicateBtn.innerHTML = 'CANCEL';
+            addReactElement(<FreelancerDuplicateForm duplicateid={this.props._id} />, freelancerClaim);
+          } else {
+            this.formVisible = 'none';
+            // Hide duplicate form
+            duplicateBtn.innerHTML = 'REPORT DUPLICATE';
+            let freelancerDuplicateForm = document.getElementById('freelancer-duplicate-form');
+            if (freelancerDuplicateForm) {
+              freelancerDuplicateForm.parentNode.removeChild(freelancerDuplicateForm);
+            }
           }
         }
       }
-    }
+    };
   }
 
   render() {
@@ -251,21 +360,29 @@ class FreelancerClaim extends React.Component {
     let claimBtn = '';
     let claimDisabled = false;
     let claimText = 'CLAIM';
+    let duplicateBtn = '';
+    let duplicateDisabled = false;
+    let duplicateText = 'REPORT DUPLICATE';
     if (this.props.state === 'verified') {
       bgColor = 'bg-green';
       claimBtn = 'hidden';
+      duplicateBtn = 'hidden';
     } else if (this.props.state === 'in progress') {
       bgColor = 'bg-yellow';
       claimBtn = 'hidden';
+      duplicateBtn = 'hidden';
     } else if (!isLogged) {
       claimDisabled = true;
       claimText = 'LOGIN TO CLAIM';
+      duplicateDisabled = true;
+      duplicateText = 'LOGIN TO REPORT DUPLICATE'
     }
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
-          <button onClick={this.toggleForm().bind(this)} id="freelancer-claim-toggle" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          <button onClick={this.toggleForm('duplicate').bind(this)} id="freelancer-claim-toggle-duplicate" className={claimBtn} disabled={duplicateDisabled}>{duplicateText}</button>
         </div>
       </div>
     );
@@ -276,7 +393,7 @@ class FreelancerHeader extends React.Component {
 
   render() {
     let price;
-    if(!this.props.price) {
+    if (!this.props.price) {
       price = "";
     } else {
       price = "Price range: " + this.props.price.min + " - " + this.props.price.max + " CHF";
@@ -286,14 +403,14 @@ class FreelancerHeader extends React.Component {
       <div className="freelancer-header">
         <div className="picture-placeholder"><img src={this.props.urlPicture} /></div>
         <div className="freelancer-header-info">
-          <Name first={this.props.first} last={this.props.last}/>
+          <Name first={this.props.first} last={this.props.last} />
           <span className="freelancer-header-title">{this.props.title}</span>
           <span>{"Average Score: " + this.props.avgScore + "/5 (" + this.props.reviewCount + " reviews)"}</span>
           {price}
         </div>
         <span className="freelancer-category">{this.props.category}</span>
       </div>
-  );
+    );
   }
 }
 
@@ -313,43 +430,53 @@ class ReviewForm extends React.Component {
     formData['text'] = form.elements['comment'].value;
     formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
 
-    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+    ajaxRequest("POST", window.location + "/review", {}, formData, function () {
       /**
        * we discard received data, we get and re-render all reviews and freelance info
        * since we do not update them live, and here we would have to render the component
        * again anyway (new review and new average)
        */
-       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
-         renderComponent(data);
-         // reset form
-         document.getElementById("review-form").reset();
-       });
+      ajaxRequest("GET", window.location, { ajax: true }, {}, function (data) {
+        renderComponent(data);
+        // reset form
+        document.getElementById("review-form").reset();
+      });
     });
   }
 
   generateRadioButtons() {
     const MAX_SCORE = 5;
     let group = [];
-    for(let i = 1; i <= MAX_SCORE; i++) {
+    for (let i = 1; i <= MAX_SCORE; i++) {
       let radio = document.createElement("input");
-      group.push(<span key={i}><input type="radio" name="score" ref="score" id={"score-" + i} value={i} required/><label> {i} </label></span>);
+      group.push(<span key={i}><input type="radio" name="score" ref="score" id={"score-" + i} value={i} required /><label> {i} </label></span>);
     }
     return group;
   }
 
   render() {
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
     return (
-      <div className="review-form">
-        <h3>Post a review</h3>
-        <form id="review-form" onSubmit={this.handleSubmit} method="post">
-          <div className="score-selector">
-            <label>Score: </label>
-            {this.generateRadioButtons()}
-          </div>
-          <textarea className="review-form-comment" name="comment" placeholder="Enter text...">
-          </textarea>
-          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
-        </form>
+      <div>
+        {!isOwner ? (
+          <div className="review-form">
+            <h3>Post a review</h3>
+            <form id="review-form" onSubmit={this.handleSubmit} method="post">
+              <div className="score-selector">
+                <label>Score: </label>
+                {this.generateRadioButtons()}
+              </div>
+              <textarea className="review-form-comment" name="comment" placeholder="Enter text...">
+              </textarea>
+              <input name="submit-button" className="submit-button" type="submit" value="Submit" />
+            </form>
+          </div>)
+          : (null)}
       </div>
     );
   }
@@ -366,15 +493,15 @@ class ReplyForm extends React.Component {
     formData['author'] = document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username');
     formData['score'] = 0;
     formData['reply'] = form.parentNode.parentNode.parentNode.parentNode.getAttribute('data-id');
-    ajaxRequest("POST", window.location + "/review", {}, formData, function() {
+    ajaxRequest("POST", window.location + "/review", {}, formData, function () {
       /**
        * we discard received data, we get and re-render all reviews and freelance info
        * since we do not update them live, and here we would have to render the component
        * again anyway (new review and new average)
        */
-       ajaxRequest("GET", window.location, { ajax : true }, {}, function(data) {
-         renderReviews(data);
-       });
+      ajaxRequest("GET", window.location, { ajax: true }, {}, function (data) {
+        renderReviews(data);
+      });
     });
   }
 
@@ -385,7 +512,7 @@ class ReplyForm extends React.Component {
         <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
           <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
           </textarea>
-          <input name="submit-button" className="submit-button" type="submit" value="Reply"/>
+          <input name="submit-button" className="submit-button" type="submit" value="Reply" />
         </form>
       </div>
     )
@@ -413,7 +540,7 @@ class Review extends React.Component {
       isOwner = false;
     }
     return (
-      <article style={{display: this.props.display}} data-id={this.props.id}>
+      <article style={{ display: this.props.display }} data-id={this.props.id}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
           <span className="review-date">Date: {this.props.date}</span>
@@ -425,18 +552,18 @@ class Review extends React.Component {
             (<div>
               <p className="reply-date">{this.props.reply.date}</p>
               <p className="reply-text">{this.props.reply.text}</p>
-              </div>) : (null)}</span>) :
-          (
-            <div>
-            {this.state.replying ? (<ReplyForm/>) : (null)}
-            {isOwner ? (
-              <button onClick={this.replyToReview.bind(this)}>
-                {this.state.replying ? ("Cancel") : ("Reply")}
-              </button>
-              ) : (null)}
+            </div>) : (null)}</span>) :
+            (
+              <div>
+                {this.state.replying ? (<ReplyForm />) : (null)}
+                {isOwner ? (
+                  <button onClick={this.replyToReview.bind(this)}>
+                    {this.state.replying ? ("Cancel") : ("Reply")}
+                  </button>
+                ) : (null)}
 
-            </div>
-          )}
+              </div>
+            )}
         </div>
       </article>
     );

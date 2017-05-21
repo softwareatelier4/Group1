@@ -10,11 +10,12 @@ const ObjectId = mongoose.Types.ObjectId;
 const Freelance = mongoose.model('Freelance');
 const Review = mongoose.model('Review');
 const User = mongoose.model('User');
+const Tag = mongoose.model('Tag');
 
 // Supported methods.
 router.all('/', middleware.supportedMethods('GET, POST, PUT, OPTIONS'));
 router.all('/new', middleware.supportedMethods('GET, OPTIONS'));
-router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS')); //add delete later
+router.all('/:freelanceid', middleware.supportedMethods('GET, PUT, OPTIONS, DELETE')); //add delete later
 router.all('/:freelanceid/availability', middleware.supportedMethods('PUT, OPTIONS')); //add delete later
 
 // GET /freelance/new
@@ -51,11 +52,18 @@ router.get('/edit', function(req, res) {
          } else if ((freelancerIndex = user.freelancer.indexOf(req.query.freelancer)) < 0) { // freelancer not claimed by user
            res.redirect('/');
          } else {
-           res.render('freelancer-edit', {
-             title: "JobAdvisor - Edit Freelancer Profile" ,
-             logged: true,
-             username: user.username,
-             userFreelancer: user.freelancer[freelancerIndex]
+           Freelance.findById(user.freelancer[freelancerIndex]).exec(function(err, freelancer){
+             if(err || !freelancer) {
+               res.sendStatus(501);
+             } else {
+               res.render('freelancer-edit', {
+                 title: "JobAdvisor - Edit Freelancer Profile" ,
+                 logged: true,
+                 username: user.username,
+                 userFreelancer: freelancer._id,
+                 userFreelancerInfo: freelancer.firstName + ' ' + freelancer.familyName + ' (' + freelancer.title + ')',
+               });
+             }
            });
          }
       });
@@ -235,13 +243,163 @@ router.put('/:freelanceid/availability', function(req, res, next) {
 
 // POST freelance/
 router.post('/', function(req, res, next) {
-  const newFreelance = new Freelance(req.body);
+  // There are tags in the post:
+  if (req.body.tags) {
+    var tags = req.body.tags.split(',');
+  }
+
+  let parameters = req.body;
+  delete parameters.tags;
+  const newFreelance = new Freelance(parameters);
+
+  // Save Freelance to get its id.
   newFreelance.save(function(err, saved) {
     if (err) {
       res.status(400).json(utils.formatErrorMessage(err));
+      return;
     }
-    res.status(201).json(saved);
-  })
+
+    // Now we can parse, create and save the tags.
+    let count = 0;
+    if (tags != undefined) {
+      // For every tag, check if it's already in the database or not
+      for (let tag of tags) {
+        tag = tag.trim();
+        // Asynchronous call for checking for the tag
+        checkIfTagExists(tag);
+      }
+    } else {
+      // If no tag are present, send response immediately.
+      sendResponse();
+    }
+
+    // Asynchronous call for sending the response
+    function sendResponse() {
+      saved.save(function(err, saved2) {
+        res.status(201).json(saved2);
+      });
+    }
+
+    // Asynchronous call for checking the tags
+    function checkIfTagExists(givenTag) {
+      Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+        if (err || (foundTag == undefined)) {
+          // Tag is not in the database, add it
+          const newTag = new Tag({
+            tagName: givenTag,
+          });
+          newTag.freelancers.push(saved);
+          // Save tag and proceed to process response.
+          newTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        } else {
+          // Add this new freelance to the freelancers that have this tag.
+          foundTag.freelancers.push(saved);
+          foundTag.save(function(errTag, savedTag) {
+            if (err) {
+              console.log("Error with saving the tag: " + err);
+              res.status(400).json(utils.formatErrorMessage(errTag));
+            }
+            // Save tag into freelance list of tags
+            saved.tags.push(savedTag);
+            count++;
+            if (tags.length == count) {
+              sendResponse();
+            }
+          });
+        }
+      });
+    }
+
+  });
+});
+
+// Delete freelance and all its references in user and tag
+router.delete('/:freelanceid', function(req, res, next) {
+  Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
+    let freelanceID = req.params.freelanceid;
+    let userID = freelance.owner;
+    let tagsArray = freelance.tags;
+
+    if (err) {
+      res.status(400).json({error: "Error while finding freelancer"});
+    } else if (!freelance) {
+      res.status(400).json({error: "No freelancer found"});
+    } else {
+      freelance.remove(function(errFreelance, removedFreelance) {
+        // Remove freelance from database
+        if (err) {
+          res.status(400).json({error: "Error while removing freelancer"});
+        } else {
+          if (tagsArray != undefined) {
+            var count = 0;
+            for (let tag of tagsArray) {
+              deleteReferenceFromTag(tag);
+            } 
+          } else {
+            deleteReferenceFromUser();
+          }
+        }
+
+        function deleteReferenceFromTag(tag) {
+          Tag.findById(tag).exec(function(errTag, foundTag) {
+            if (err || !foundTag) {
+              res.status(400).json({error: "error when finding tag"});
+            } else {
+              let freelancersTag = foundTag.freelancers;
+              let indexOfTag = freelancersTag.indexOf(freelanceID);
+              freelancersTag.splice(indexOfTag, 1);
+
+              foundTag.save(function(errSavedTag, savedTag) {
+                if (err || !savedTag) {
+                  res.status(400).json({error: "error while saving tag"});
+                } else {
+                  count++;
+                  if (tagsArray.length == count) {
+                    deleteReferenceFromUser();
+                  }
+                }
+              });
+            }
+          });
+        }
+
+        function deleteReferenceFromUser() {
+          User.findById(userID).exec(function(errUser, foundUser) {
+            if (err) {
+              res.status(400).json({error: "error while finding user"});
+            } else if (!foundUser) {
+              res.status(201).json(removedFreelance);
+            } else {
+              // User has been found, remove reference of freelance from user
+              let arrayFreelanceUser = foundUser.freelancer;
+              let indexOfFreelance = arrayFreelanceUser.indexOf(freelanceID);
+              arrayFreelanceUser.splice(indexOfFreelance, 1);
+              foundUser.freelancer = arrayFreelanceUser;
+              
+              foundUser.save(function(errUser, savedUser) {
+                if (err || !savedUser) {
+                  res.status(400).json({error: "error while saving user"});
+                } else {
+                  // User has been updated
+                  res.status(201).json(removedFreelance);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

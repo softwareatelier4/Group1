@@ -97,6 +97,14 @@ class ContainerClaims extends React.Component {
     }
     return (
       <div id="admin-claims">
+        <div className="card-claim">
+          <div className="card-claim-row">
+            <div>User</div>
+            <div>Freelancer</div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
         {claims}
       </div>
     );
@@ -107,6 +115,7 @@ class ContainerClaims extends React.Component {
 
 class CardCategoryDocuments extends React.Component {
   addDoc (e) {
+    event.stopPropagation()
     let docName = e.target.parentNode.children[0];
     let newDocumentMessage = e.target.parentNode.children[3];
     let docRequired = e.target.parentNode.children[2];
@@ -203,9 +212,9 @@ class CardCategoryDocuments extends React.Component {
     return (
       <div className="card-category-documents" style={{display: 'none'}}>
         <div className="card-category-add-document">
-          <input id="new-document-name" placeholder="New document name" />
+          <input id="new-document-name" name="new-document-name" placeholder="New document name" />
           <span>required?</span>
-          <input type="checkbox" id="new-document-required" placeholder="New document name" />
+          <input type="checkbox" id="new-document-required" placeholder="required?" />
           <span className="new-document-message"></span>
           <button className="add-document-btn" onClick={this.addDoc.bind(this)}>add</button>
         </div>
@@ -274,7 +283,7 @@ class CardCategory extends React.Component {
     return (
       <div className="card-category" data-name={this.props.name} data-_id={this.props._id}>
         <div className="card-category-name">
-          <button onClick={this.editName.bind(this)}>Edit</button>
+          <button class="editCategory" onClick={this.editName.bind(this)}>Edit</button>
           <span onKeyDown={this.editName.bind(this)}>{this.props.name}</span>
         </div>
         <button onClick={this.removeCategory}>Remove</button>
@@ -308,11 +317,11 @@ class ContainerCategories extends React.Component {
           });
         } else {
           let newCategoryMessage = document.getElementById('new-category-message');
-          newCategoryMessage.innerHTML = '<span>Chosen category name already exists</span>';
+          newCategoryMessage.innerHTML = '<span id="addCategoryError">Chosen category name already exists</span>';
         }
       } else {
         let newCategoryMessage = document.getElementById('new-category-message');
-        newCategoryMessage.innerHTML = '<span>No category name given</span>';
+        newCategoryMessage.innerHTML = '<span id="addCategoryError">No category name given</span>';
       }
     }
   }
@@ -325,11 +334,76 @@ class ContainerCategories extends React.Component {
     return (
       <div id="admin-categories" className="selected">
         <div id="new-category" className="card-category">
-          <input id="new-category-input" placeholder="New category name" onKeyDown={this.addCategory}/>
+          <input id="new-category-input" name="new-category" placeholder="New category name" onKeyDown={this.addCategory}/>
           <div id="new-category-message"></div>
-          <button onClick={this.addCategory}>Add</button>
+          <button id="addCategory" onClick={this.addCategory}>Add</button>
         </div>
         {categories}
+      </div>
+    );
+  }
+}
+
+class CardDuplicates extends React.Component {
+  sendMessage(choice) {
+    return function(e) {
+      let duplicate = this.props.duplicate;
+      let duplicateCard = e.target.parentNode.parentNode;
+      let message = `We ${choice}ed your request for removing the duplicate profile.`;
+      let query = `?username=${g_username}&password=${g_password}&duplicateid=${duplicate._id}&choice=${choice}&message=${message}`;
+      ajaxRequest('DELETE', `/admin/duplicate${query}`, { ajax : true }, {}, function(res) {
+        if (res === 204) {
+          if (choice === 'accept') {
+            ajaxRequest('DELETE', `/freelance/${duplicate.duplicateID._id}`, { ajax : true }, {}, function(res) {
+              console.log(typeof res);
+              if (typeof res !== 'object') {
+                console.log('ERROR sendig duplicate, freelancer');
+              }
+            });
+          }
+          duplicateCard.parentNode.removeChild(duplicateCard);
+        } else {
+          console.log('ERROR sendig duplicate, duplicate');
+        }
+      });
+    }
+  }
+
+  render() {
+    let duplicate = this.props.duplicate;
+    let originalLink = `/freelance/${duplicate.originalID._id}`;
+    let duplicateLink = `/freelance/${duplicate.duplicateID._id}`;
+    return (
+      <div className="card-claim">
+        <div className="card-claim-row">
+          <div><a href={originalLink} target="_blank">{duplicate.originalID.firstName} {duplicate.originalID.familyName}</a></div>
+          <div><a href={duplicateLink} target="_blank">{duplicate.duplicateID.firstName} {duplicate.duplicateID.familyName}</a></div>
+          <button onClick={this.sendMessage('accept').bind(this)}>Accept</button>
+          <button onClick={this.sendMessage('reject').bind(this)}>Reject</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class ContainerDuplicates extends React.Component {
+  render() {
+    let duplicates = [];
+    for (let i = 0; i < this.props.duplicates.length; ++i) {
+      let duplicate = this.props.duplicates[i];
+      duplicates.push(<CardDuplicates duplicate={duplicate} key={i} />);
+    }
+    return (
+      <div id="admin-duplicates">
+        <div className="card-claim">
+          <div className="card-claim-row">
+            <div>Original</div>
+            <div>Duplicate</div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        {duplicates}
       </div>
     );
   }
@@ -340,6 +414,7 @@ class AdminView extends React.Component {
     return function() {
       let btns = document.getElementById('admin-menu').children;
       for (let btn of btns) {
+        btn.classList.toggle('selected');
         if (btn.id === `admin-btn-${pageName}`) {
           btn.classList.add('selected');
         } else {
@@ -362,10 +437,12 @@ class AdminView extends React.Component {
         <div id="admin-menu">
           <button id="admin-btn-categories" className="selected" onClick={this.select('categories')}>Categories</button>
           <button id="admin-btn-claims" onClick={this.select('claims')}>Claims</button>
+          <button id="admin-btn-duplicates" onClick={this.select('duplicates')}>Duplicates</button>
         </div>
         <div id="admin-content">
           <ContainerCategories categories={this.props.data.categories} />
           <ContainerClaims claims={this.props.data.claims} />
+          <ContainerDuplicates duplicates={this.props.data.duplicates} />
         </div>
       </div>
     );

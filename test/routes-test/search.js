@@ -64,7 +64,7 @@ describe('Search test: ', function() {
       today.setHours(9);
       today.toUTCString()
       request(app)
-        .get(`/search?origin=Bellinzona+Switzerland&date=${today}`)
+        .get(`/search?keyword=Roger%20Willie%20Victor&origin=Bellinzona+Switzerland&date=${today}`)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
