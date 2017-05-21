@@ -22,15 +22,17 @@ module.exports = {
     .waitForElementVisible('h1#user-page-title', 1000)
     .assert.containsText('h1#user-page-title', 'Freelancer profiles owned by you')
     .waitForElementVisible('div.freelancer-card', 1000)
-    .assert.containsText('h1.job-title', 'Recruiting Manager')
+    .assert.containsText('h1.job-title', 'Desktop Support Technician')
+    .assert.containsText('div.freelancer-card-info > h2', 'Michael Williamson')
 
     // Someone else's profile
-    .url( config.baseURL + '/user/Uial')
+    .url( config.baseURL + '/user/Robb Bis')
     .waitForElementVisible('body', 1000)
     .waitForElementVisible('h1#user-page-title', 1000)
-    .assert.containsText('h1#user-page-title', 'Freelancer profiles owned by Uial')
+    .assert.containsText('h1#user-page-title', 'Freelancer profiles owned by Robb Bis')
     .waitForElementVisible('div.freelancer-card', 1000)
-    .assert.containsText('h1.job-title', 'Graphic Designer')
+    .assert.containsText('h1.job-title', 'VP Marketing')
+    .assert.containsText('div.freelancer-card-info > h2', 'Irene Larson')
 
     .end();
   }
