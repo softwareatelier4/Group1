@@ -289,8 +289,9 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                   freelance.tags = [];
 
                   var counter = 0;
+                  tags = tags.map(function(tag) { return tag.trim(); }); // remove spaces
+                  tags = tags.filter(function(tag) { return tag != ''; }); // remove empty tagsß
                   for (let tag of tags) {
-                    tag = tag.trim();
                     // Asynchronous call to set the tags.
                     checkIfTagExists(tag);
                   }
@@ -372,9 +373,10 @@ router.post('/', function(req, res, next) {
     let count = 0;
     if (tags != undefined) {
       // For every tag, check if it's already in the database or not
+      tags = tags.map(function(tag) { return tag.trim(); }); // remove spaces
+      tags = tags.filter(function(tag) { return tag != ''; }); // remove empty tagsß
       for (let tag of tags) {
-        tag = tag.trim();
-        // Asynchronous call for checking for the tag
+        // Asynchronous call to set the tags.
         checkIfTagExists(tag);
       }
     } else {
