@@ -79,35 +79,23 @@ class RegisterForm extends React.Component {
       <form id="register-form" onSubmit={this.handleSubmit}>
 
         <div className="group">
-          <input ref="username" className="username" name="username" type="text" onInput={this.resetValidity} required/>
+          <input ref="username" className="username" name="username" type="text" onInput={this.resetValidity} placeholder="Username" required/>
           <span className="bar"></span>
-          <label>
-            username
-          </label>
         </div>
 
         <div className="group">
-          <input ref="password" className="password" name="password" type="password" onChange={this.checkPassword} required/>
+          <input ref="password" className="password" name="password" type="password" onChange={this.checkPassword} placeholder="Password" required/>
           <span className="bar"></span>
-          <label>
-            password
-          </label>
         </div>
 
         <div className="group">
-          <input className="confirm-password" name="confirm-password" type="password" onKeyUp={this.checkPassword} required/>
+          <input className="confirm-password" name="confirm-password" type="password" onKeyUp={this.checkPassword} placeholder="Confirm password" required/>
           <span className="bar"></span>
-          <label>
-            confirm password
-          </label>
         </div>
 
         <div className="group">
-          <input ref="email" className="email" name="email" type="email" required/>
+          <input ref="email" className="email" name="email" type="email" placeholder="E-mail" required/>
           <span className="bar"></span>
-          <label>
-            email
-          </label>
         </div>
 
         <div className="group">
@@ -120,7 +108,7 @@ class RegisterForm extends React.Component {
 
 
 
-        <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+        <input id="register-submit-btn" name="submit-button" className="submit-button" type="submit" value="Submit"/>
       </form>
     </div>
   )}

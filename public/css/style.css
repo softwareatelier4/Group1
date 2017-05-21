@@ -16,15 +16,15 @@ html {
 /* Global variables */
 * {
   /* Colors */
-  --accent-color: #F44336; /* change hover color accordingly */
-  --accent-hover: #c9372c;
+  --accent-color: #4e96e2; /* change hover color accordingly, old color: #F44336; */
+  --accent-hover: #367ac3; /* Olc color: #c9372c; */
   --basic-white: #fff;
   --basic-white-hover: #d6d3d3;
   --background: #f7f7f7;
   --home-search-border: #c9c9c9;
   --home-search-border-focus: #969696;
-  --home-search-button-border: #d83838;
-  --home-search-button-border-hover: #b72f2f;
+  --home-search-button-border: #266bb4;
+  --home-search-button-border-hover: #1f5690;
   --form-label-color: #999;
   --form-input-border: #757575;
   --login-button-border: #b1b1b1;
@@ -88,16 +88,20 @@ a#title {
 #freelancer-home-btn {
   width: 100%;
   height: 65px;
-  background-color: var(--basic-white);
-  color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: var(--basic-white);
   border: 0px;
-  font-size: 1.2em;
+  font-size: var(--input-font-size);
   padding: 20px;
 }
 
 #freelancer-home-btn:hover {
-  box-shadow: var(--box-shadow-material-hover);
+  background: var(--accent-hover);
   cursor: pointer;
+}
+
+#freelancer-home-btn:focus {
+  outline: none;
 }
 
 #react-register {
