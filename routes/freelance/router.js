@@ -285,6 +285,8 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 if(data.tags) {
                   // There are tags in the put:
                   var tags = data.tags.split(',');
+                  delete freelance.tags;
+                  freelance.tags = [];
 
                   var counter = 0;
                   for (let tag of tags) {
@@ -324,7 +326,9 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                             res.status(400).json(utils.formatErrorMessage(errTag));
                           }
                           // Save tag into freelance list of tags
-                          freelance.tags.push(savedTag);
+                          if(freelance.tags.indexOf(savedTag) < 0){
+                            freelance.tags.push(savedTag);
+                          }
                           counter++;
                           if (tags.length == counter) {
                             sendResponse();
