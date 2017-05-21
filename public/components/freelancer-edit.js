@@ -794,7 +794,6 @@ if(document.getElementById('react-freelancer-edit')) {
 		updateForms(freelancer);
 
     console.log('Saved days', days);
-		console.log(freelance);
     renderCalendar();
   });
 }

@@ -52,9 +52,6 @@ describe('Freelance-delete test: ', function() {
         .end(function(err, res) {
           var freelance = JSON.parse(res.text) || {};
           var user = seedData[4].data[5];
-          console.log("MIAO" + user.freelancer);
-          // assert(user.freelancers, []);
-          // freelance.should.have.property("_id", seedData[4].data[5]._free);
           done();
         });
     });
