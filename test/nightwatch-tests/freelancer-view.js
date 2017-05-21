@@ -66,7 +66,7 @@ module.exports = {
       .assert.hidden('div.review-text')
       .click('button#freelancer-logout-btn')
       .pause(500)
-      .url( config.baseURL + '/freelance/58cc4941fc13ae612c00000a')
+      .url( config.baseURL + '/freelance/58cc4941fc13ae612c00000f')
       .pause(500)
       .setValue('input[name=login-username]', 'Robb Bis')
       .setValue('input[name=login-password]', 'perdonamierastil')
