@@ -35,14 +35,6 @@
 			{?logged}
 				<h3>Edit profile of {userFreelancerInfo}:</h3>
 				<div id='react-freelancer-edit'></div>
-
-				<!-- <h3>Your emergency schedule:</h3>
-				<ul id="calendar-legend">
-					<li id="calendar-legend-single"> Single dates </li>
-					<li id="calendar-legend-repeated"> Repeated dates </li>
-				</ul>
-				<div id='calendar'></div> -->
-
 			{:else}
 				<div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
 			{/logged}
