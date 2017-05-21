@@ -121,6 +121,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: auto;
 }
 
 #category-label, #max-distance-label, #max-duration-label, #max-emergency-label {
@@ -135,11 +136,11 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 5px 30%;
+  padding: 5px;
   text-align-last: center;
   font-size: 1em;
   background-color: var(--basic-white);
-  width: 100%;
+  min-width: 170px;
   outline: none;
   border: none;
   color: var(--accent-color);
