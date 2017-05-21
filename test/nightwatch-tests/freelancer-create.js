@@ -4,7 +4,7 @@ var config = require('../config');
 module.exports = {
   'Freelancer Create View' : function (client) {
     client
-      .url( config.baseURL + '/freelance/new')
+      .url(config.baseURL + '/freelance/new')
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#freelancer-root', 10000)
@@ -35,7 +35,7 @@ module.exports = {
       .assert.containsText('a.freelancer-address', 'USI, Lugano')
       .assert.containsText('a.freelancer-email', 'test@night.watch')
       .getAttribute('ul.tag-list li:first-child', 'data-tagname', function(value) {
-         client.assert.ok(value.value === 'Nightwatch' || value.value === 'Tester' || value.value === 'Wow')
+        client.assert.ok(value.value === 'Nightwatch' || value.value === 'Tester' || value.value === 'Wow')
       })
       // add yourself
       .url( config.baseURL + '/freelance/new')
