@@ -30,6 +30,10 @@ module.exports = {
       .pause(300)
       .waitForElementPresent(".card-claim:last-child > div:last-child > textarea", 1000)
 
+      // move to duplicates
+      .click("button#admin-btn-duplicates")
+      .waitForElementVisible("#admin-duplicates", 1000)
+
       .end();
     }
   };
