@@ -553,7 +553,7 @@ class Review extends React.Component {
             (<div>
               <p className="reply-date">Date: {this.props.reply.date}</p>
               <span className="free-rep">
-                Freelancer replied:
+                {this.props.reply.author} replied:
               </span>
               <p className="reply-text">{this.props.reply.text}</p>
             </div>) : (null)}</span>) :
