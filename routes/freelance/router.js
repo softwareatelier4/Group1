@@ -434,15 +434,14 @@ router.post('/', function(req, res, next) {
 // Delete freelance and all its references in user and tag
 router.delete('/:freelanceid', function(req, res, next) {
   Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
-    let freelanceID = req.params.freelanceid;
-    let userID = freelance.owner;
-    let tagsArray = freelance.tags;
-
     if (err) {
       res.status(400).json({error: "Error while finding freelancer"});
     } else if (!freelance) {
-      res.status(400).json({error: "No freelancer found"});
+      res.status(404).json({error: "No freelancer found"});
     } else {
+      let freelanceID = req.params.freelanceid;
+      let userID = freelance.owner; 
+      let tagsArray = freelance.tags;
       freelance.remove(function(errFreelance, removedFreelance) {
         // Remove freelance from database
         if (err) {
