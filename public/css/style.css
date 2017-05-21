@@ -446,3 +446,136 @@ opacity:  1;
 }
 
 /* End placeholder bullshit */
+
+/* Freelancer availability edit section */
+#freelancer-edit-login-message {
+  text-align: center;
+  color: gray;
+}
+
+#freelancer-modification-message {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: var(--basic-white);
+}
+
+#react-freelancer-edit {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#repeated-dates-label {
+  font-size: var(--general-bigger-font-size);
+
+}
+
+#emergency-form-recurrence-day {
+  margin-right: 20px;
+}
+
+#emergency-form-repetition-week span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 80%;
+}
+
+#emergency-form-repetition-week span label {
+  min-width: 35px;
+}
+
+#emergency-form-repetition-week span input {
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+#emergency-form-repetition-week span input:focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+#emergency-form-repetition-type label {
+  margin-top: 10px;
+}
+
+#emergency-form-repetition-type input[type=radio] {
+  margin-right: 10px;
+}
+
+#emergency-form-repetition-type input[type=text], #emergency-form-repetition-type input[type=date] {
+  font-size: var(--input-font-size);
+}
+
+#emergency-repetition-start-date {
+  margin-left: 20px;
+}
+
+#emergency-repetition-submit {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px;
+}
+
+#emergency-repetition-submit:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
+}
+
+#emergency-repetition-submit:active {
+  outline: none;
+}
+
+#emergency-form-single-date {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#emergency-form-single-date input[type=date], #emergency-form-single-date input[type=text] {
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+#emergency-location-single {
+  width: 150px;
+}
+
+#emergency-single-submit {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px;
+}
+
+#emergency-single-submit:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
+}
+
+#emergency-single-submit:active {
+  outline: none;
+}
+
+/* End freelancer availability edit section */
