@@ -548,7 +548,7 @@ function updateForms(freelancer){
 	document.getElementById('description').value = freelancer.description;
 	let temp = "";
 	for( let tag of freelancer.tags){
-		temp+=tag.tagName+",";
+		temp+=tag.tagName+", ";
 	}
 	document.getElementById('tags').value = temp;
 	document.getElementById('phone').value = freelancer.phone;
@@ -762,14 +762,14 @@ class FreelancerEditForm extends React.Component {
             <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
             <span className="bar"></span>
             <label>
-              Minimum price
+              Min price/hour
             </label>
           </div>
 					<div className="group">
             <input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
             <span className="bar"></span>
             <label>
-              Maximum price
+              Max price/hour
             </label>
           </div>
 
