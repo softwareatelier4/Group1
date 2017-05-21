@@ -323,7 +323,7 @@ class FreelancerEmergencyForm extends React.Component {
   }
 }
 
-class FreelancerEditView extends React.Component {
+class FreelancerEmergencyView extends React.Component {
   render() {
     return (
 			<div id="edit-schedule">
@@ -539,7 +539,21 @@ function renderCalendar() {
       }
     }
   });
+}
 
+class CalendarView extends React.Component {
+	render() {
+		return (
+			<div>
+				<h3>Your emergency schedule:</h3>
+				<ul id="calendar-legend">
+					<li id="calendar-legend-single"> Single dates </li>
+					<li id="calendar-legend-repeated"> Repeated dates </li>
+				</ul>
+				<div id='calendar'></div>
+			</div>
+		);
+	};
 }
 
 class FreelancerMainView extends React.Component {
@@ -571,20 +585,26 @@ class FreelancerMainView extends React.Component {
           <button className='edit-tab' id="edit-btn-schedule" onClick={this.select('schedule')}>Edit Emergency Availability</button>
         </div>
         <div id="edit-content">
-          <CreationForm />
-          <FreelancerEditView />
+          <FreelancerEditForm />
+          <FreelancerEmergencyView />
         </div>
       </div>
     );
   }
 }
 
-class CreationForm extends React.Component {
+class FreelancerEditForm extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderFeedback = this.renderFeedback.bind(this);
 	}
+
+  renderFeedback(feedbackString) {
+    document.getElementById('edit-feedback').innerHTML = feedbackString;
+  }
+
 
 	handleSubmit(evt) {
 		evt.preventDefault();
@@ -598,38 +618,28 @@ class CreationForm extends React.Component {
 		}
 		let form = this;
 		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
+      if(!data.error) {
+        form.renderFeedback("Information updated successfully");
+      } else {
+        console.log(data.error);
+        form.renderFeedback("An error occurred");
+      }
 		});
 	}
-
-
 
   render() {
     return (
 			<div id="edit-info"  className='selected'>
-        <form onSubmit={this.handleSubmit}>
+        <span id="edit-feedback"></span>
+        <form onSubmit={this.handleSubmit} id="freelancer-edit-form">
 
 
           <div className="group">
-            <input ref="description" className="job-description" name="job-description" type="text" id="description"/>
+            <textarea form="freelancer-edit-form" rows="4" cols="50" ref="description" className="job-description" name="job-description" type="text" id="description">
+            </textarea>
             <span className="bar"></span>
             <label>
               Job Description
-            </label>
-          </div>
-
-          <div className="group">
-            <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
-            <span className="bar"></span>
-            <label>
-              Job tags (separated by a comma)
-            </label>
-          </div>
-
-          <div className="group">
-            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
-            <span className="bar"></span>
-            <label>
-              Picture URL
             </label>
           </div>
 
@@ -656,6 +666,23 @@ class CreationForm extends React.Component {
               Email
             </label>
           </div>
+
+          <div className="group">
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
+            <span className="bar"></span>
+            <label>
+              Picture URL
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
+            <span className="bar"></span>
+            <label>
+              Job tags (separated by a comma)
+            </label>
+          </div>
+
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
@@ -664,32 +691,6 @@ class CreationForm extends React.Component {
     );
   }
 }
-
-class CalendarView extends React.Component {
-	render() {
-		return (
-			<div>
-				<h3>Your emergency schedule:</h3>
-				<ul id="calendar-legend">
-					<li id="calendar-legend-single"> Single dates </li>
-					<li id="calendar-legend-repeated"> Repeated dates </li>
-				</ul>
-				<div id='calendar'></div>
-			</div>
-		);
-	};
-}
-
-// function updateInfo() {
-//   // let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
-//   ajaxRequest("PUT", freelancerId + "/edit", {}, emergencyDates, function(status) {
-//     if(status == 204) {
-//       if(rerenderCalendar) renderCalendar();
-//     } else {
-//       console.log(status);
-//     }
-//   });
-// }
 
 /**
  * On load
