@@ -246,7 +246,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Add repeated dates <span id="emergency-repetition-saved-until"></span>:</label>
+          <label>Add repeated dates:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
@@ -591,6 +591,10 @@ class FreelancerMainView extends React.Component {
         } else {
           page.classList.remove('selected');
         }
+      }
+
+      if(pageName == 'schedule') {
+        renderCalendar();
       }
     }
   }
