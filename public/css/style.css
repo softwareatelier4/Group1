@@ -457,6 +457,7 @@ opacity:  1;
   padding: 10px 20px;
   background: var(--accent-color);
   color: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
 }
 
 #react-freelancer-edit {
@@ -467,7 +468,6 @@ opacity:  1;
 
 #repeated-dates-label {
   font-size: var(--general-bigger-font-size);
-
 }
 
 #emergency-form-recurrence-day {
@@ -576,6 +576,26 @@ opacity:  1;
 
 #emergency-single-submit:active {
   outline: none;
+}
+
+#emergency-schedule-message {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#calendar {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#calendar-legend {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+  margin: 0;
 }
 
 /* End freelancer availability edit section */

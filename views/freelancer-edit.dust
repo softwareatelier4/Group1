@@ -38,7 +38,7 @@
         <div id='react-freelancer-edit'></div>
         <div id='react-freelancer-emergency-single-list'></div>
 
-        <h3>Your emergency schedule:</h3>
+        <h3 id="emergency-schedule-message">Your emergency schedule:</h3>
         <ul id="calendar-legend">
           <li id="calendar-legend-single"> Single dates </li>
           <li id="calendar-legend-repeated"> Repeated dates </li>
