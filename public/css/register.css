@@ -1,9 +1,25 @@
 h1 {
   color: var(--accent-color);
+  margin-bottom: 30px;
 }
 
 .register-form {
   margin-left: 40%;
+}
+
+#freelancer-opt-check {
+  display: flex;
+  flex-direction: row;
+}
+#freelancer-opt-check input {
+  width: auto;
+}
+
+#freelancer-opt-check label {
+  flex-grow: 2;
+  font-size: 0.8em;
+  color: var(--accent-color);
+  padding: 12px;
 }
 
 .group {
@@ -38,6 +54,8 @@ h1 {
   outline: none;
   cursor: pointer;
   border-radius: 0;
+  box-shadow: none;
+  padding: 6px 0;
 }
 
 #register-submit-btn:hover {

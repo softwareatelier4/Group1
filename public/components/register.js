@@ -98,7 +98,7 @@ class RegisterForm extends React.Component {
           <span className="bar"></span>
         </div>
 
-        <div className="group">
+        <div className="group" id="freelancer-opt-check">
           <input type="checkbox" className="register-tick" name="register-tick" value="register-tick" />
           <span className="bar"></span>
           <label>
