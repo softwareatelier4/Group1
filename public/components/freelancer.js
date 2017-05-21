@@ -375,12 +375,13 @@ class FreelancerClaim extends React.Component {
       claimDisabled = true;
       claimText = 'LOGIN TO CLAIM';
       duplicateDisabled = true;
-      duplicateText = 'LOGIN TO REPORT DUPLICATE'
+      duplicateText = 'LOGIN TO REPORT DUPLICATE';
     }
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
+          <span id="claim-banner-filler"></span>
           <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
           <button onClick={this.toggleForm('duplicate').bind(this)} id="freelancer-claim-toggle-duplicate" className={claimBtn} disabled={duplicateDisabled}>{duplicateText}</button>
         </div>

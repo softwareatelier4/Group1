@@ -55,7 +55,6 @@
   padding: 10px;
   background-color: #fff;
   border-radius: 0 0 0 10px;
-  box-shadow: var(--box-shadow-material);
 }
 
 .freelancer-header-info > h1, .freelancer-header-info > div, .freelancer-header-info > span {
@@ -207,7 +206,7 @@ ul.tag-list li {
 
 #freelancer-claim-status {
   width: 100%;
-  height: 50px;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -216,7 +215,12 @@ ul.tag-list li {
 #freelancer-claim-form {
   background-color: ghostwhite;
   display: flex;
-  flex-flow: column;
+  flex-wrap: wrap;
+  justify-content: flex-start
+  flex-flow: row;
+  margin-top: 10px;
+  background-color: orange;
+  color: var(--basic-white);
 }
 
 #freelancer-claim-form-message {
@@ -227,8 +231,11 @@ ul.tag-list li {
   display: none;
 }
 
-.bg-orange {
+#freelancer-claim.bg-orange {
   background-color: orange;
+  padding-right: 20px;
+  padding-left: 20px;
+  color: var(--basic-white);
 }
 
 .bg-green {
@@ -242,6 +249,10 @@ ul.tag-list li {
 
 .bg-yellow {
   background-color: yellow;
+}
+
+.bg-yellow #freelancer-claim-status {
+  height: 30px;
 }
 
 .reply-toggle-btn {
@@ -294,4 +305,97 @@ ul.tag-list li {
 
 .free-rep {
   color: var(--accent-color);
+}
+
+#claim-banner-filler {
+  flex-grow: 2;
+}
+
+/* claim buttons */
+
+#freelancer-claim-toggle-claim, #freelancer-claim-toggle-duplicate {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: auto;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: orange;
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
+}
+
+#freelancer-claim-toggle-claim:hover,
+#freelancer-claim-toggle-duplicate:hover,
+#freelancer-claim-btn:hover  {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-claim-toggle-claim:active,
+#freelancer-claim-toggle-duplicate:active,
+#freelancer-claim-toggle-claim:disabled,
+#freelancer-claim-toggle-duplicate:disabled,
+#freelancer-claim-toggle-claim:hover:disabled,
+#freelancer-claim-toggle-duplicate:hover:disabled {
+  margin-top: -4px;
+  border-bottom: 0;
+  border-top: solid 4px orange;
+  background-color: var(--basic-white);
+  cursor: auto;
+}
+
+#freelancer-claim-form-form,
+#freelancer-claim-form-form-optional {
+  flex-basis: 50%;
+  /*padding: 10px;*/
+}
+
+#freelancer-claim-btn {
+  height: 36px;
+  width: 120px;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: orange;
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+#freelancer-claim-btn:active {
+  border-top: solid 4px orange;
+  background-color: var(--basic-white);
+  border-bottom: 0;
+}
+
+#freelancer-claim-form-message {
+  margin: 8px 0 0 15px;
+}
+
+#required-docs,
+#optional-docs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#required-docs li,
+#optional-docs li {
+  background-color: white;
+  border-radius: 8px;
+  list-style: none;
+  color: orange;
+  margin-right: 10px;
+  padding: 5px 15px;
+}
+
+#freelancer-claim-form-files,
+#freelancer-claim-form-optional-files {
+  margin: 10px 0;
 }
