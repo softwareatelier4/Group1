@@ -596,11 +596,8 @@ class CreationForm extends React.Component {
 				formData[field] = this.refs[field].value;
 			}
 		}
-
 		let form = this;
-
-		ajaxRequest("PUT", "/"+freelancerId+"/edit", {}, formData, function(data) {
-			console.log("success!");
+		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
 		});
 	}
 
