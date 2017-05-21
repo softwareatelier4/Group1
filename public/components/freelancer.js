@@ -605,7 +605,6 @@ class UserLink extends React.Component {
       if (loggedUserEl) {
         let loggedUserName = loggedUserEl.getAttribute('data-username');
         if (loggedUserName == this.props.owner.username) {
-          console.log("HERE IT WORKS LOOK");
           who = " you own";
         }
       }
