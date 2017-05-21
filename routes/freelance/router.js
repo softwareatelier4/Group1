@@ -248,7 +248,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
        User.findById(req.session.user_id).exec(function(err, user){
         let freelancerIndex;
          if (err) {
-           res.status(500).json({ error : 'error finding user in database' }); // TODO: TEST (wrong id)
+           res.status(400).json({ error : 'error finding user in database' }); // TODO: TEST (wrong id)
          } else if (!user) {
            res.status(404).json({ error : 'user not found' }); // TODO: TEST (id not existing)
          } else if (!user.freelancer || (freelancerIndex = user.freelancer.indexOf(req.params.freelanceid)) < 0) {
@@ -258,7 +258,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
            // need to make 2 calls instead of 'findAndUpdate' to run the validators in mongo
             Freelance.findById(req.params.freelanceid).exec(function(err, freelance){
               if(err){
-                res.status(500).json({ error : 'error editing freelance data' }); // TODO: TEST (wrong id)
+                res.status(400).json({ error : 'error editing freelance data' }); // TODO: TEST (wrong id)
               } else if (!freelance){
                 res.status(404).json({ error : 'freelance not found for editing' }); // TODO: TEST (id not existing)
               } else {

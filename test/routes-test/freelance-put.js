@@ -6,8 +6,10 @@ var ObjectId   = mongoose.Types.ObjectId;
 var should = require('should');
 var config = require('../config');
 var app = require(config.projectRoot + '/app');
+var seedData = require('../../seed_data/seedData');
 var seedDb = require('../../seed_data/seedDb');
 var utils = require('../../seed_data/utils');
+var freelanceutils = require('./utils');
 var request = require('supertest');
 
 describe('Freelance-put test: ', function() {
@@ -179,6 +181,53 @@ describe('Freelance-put test: ', function() {
       .expect(405)
       .end(done);
     });
+
+  });
+
+  describe('PUT /freelance/:freelanceid/edit', function(){
+    before(seed);
+    after(utils.dropDbAndCloseConnection);
+
+    var Cookies;
+
+    // LOGIN
+    it('app should get answer 202 on POST /user/login with correct username and password', function(done) {
+      request(app)
+      .post('/user/login')
+      .send({
+        "username" : seedData[4].data[5].username, //Robb Bis
+        "password" : seedData[4].data[5].password, //perdonamierastil
+      })
+      .expect(202).end(function(err,res) {
+        var re = new RegExp('; path=/; httponly', 'gi');
+        Cookies = res.headers['set-cookie'].map(function(r) {
+            return r.replace(re, '');
+          }).join("; ");
+        done();
+      });
+    });
+
+    //WRONG
+    it('should return 403 if user is not allowed to edit that freelance', function(done) {
+      let req = request(app)
+        .put('/freelance/'+ seedData[1].data[3]._id.toString() + '/edit')
+        .set('Accept', 'application/json')
+        .set('Ajax', 'true');
+      req.cookies = Cookies;
+      req.expect(403)
+        .send({
+          firstName : "empty"
+        })
+        .end(function(err, res) {
+          if (err) {
+            done(err);
+          } else {
+            res.body.should.have.property("error", "user not allowed to edit");
+            done();
+          }
+        });
+    });
+
 
   });
 
