@@ -261,7 +261,7 @@ describe('Admin-delete test: ', function() {
       req.cookies = Cookies;
       req.expect(201)
       .send({
-        freelancerId : seedData[1].data[0]
+        freelancerId : seedData[1].data[2]
       })
       .end(function(err, res) {
         if (err) {
@@ -313,7 +313,7 @@ describe('Admin-delete test: ', function() {
       req.cookies = Cookies;
       req.expect(201)
       .send({
-        freelancerId : seedData[1].data[0]
+        freelancerId : seedData[1].data[3]
       })
       .end(function(err, res) {
         if (err) {

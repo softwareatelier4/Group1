@@ -4,7 +4,7 @@ var config = require('../config');
 module.exports = {
   'Freelancer Create View' : function (client) {
     client
-      .url( config.baseURL + '/freelance/new')
+      .url(config.baseURL + '/freelance/new')
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#freelancer-root', 10000)
