@@ -94,28 +94,19 @@ class CreationForm extends React.Component {
 
           <div className="names-input">
             <div className="group">
-              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
+              <input ref="firstName" className="first-name" name="first-name" type="text" placeholder="First Name" required/>
               <span className="bar"></span>
-               <label>
-                First Name
-              </label>
             </div>
 
             <div className="group">
-              <input ref="familyName" className="family-name" name="family-name" type="text"/>
+              <input ref="familyName" className="family-name" name="family-name" type="text" placeholder="Family Name"/>
               <span className="bar"></span>
-               <label>
-                Family Name
-              </label>
             </div>
           </div>
 
           <div className="group">
-            <input ref="title" className="job-title" name="job-title" type="text" required/>
+            <input ref="title" className="job-title" name="job-title" type="text" placeholder="Job Title" required/>
             <span className="bar"></span>
-             <label>
-              Job Title
-            </label>
           </div>
 
           <div className="category-selector">
@@ -130,51 +121,33 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="description" className="job-description" name="job-description" type="text" required/>
+            <input ref="description" className="job-description" name="job-description" type="text" placeholder="Job Description" required/>
             <span className="bar"></span>
-            <label>
-              Job Description
-            </label>
           </div>
 
           <div className="group">
-            <input ref="tags" className="job-tags" name="job-tags" type="text"/>
+            <input ref="tags" className="job-tags" name="job-tags" type="text" placeholder="Job tags (separated by a comma)"/>
             <span className="bar"></span>
-            <label>
-              Job tags (separated by a comma)
-            </label>
           </div>
 
           <div className="group">
-            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" placeholder="Picture URL"/>
             <span className="bar"></span>
-            <label>
-              Picture URL
-            </label>
           </div>
 
           <div className="group">
-            <input ref="address" className="address" name="address" type="text" required/>
+            <input ref="address" className="address" name="address" type="text" placeholder="Address" required/>
             <span className="bar"></span>
-            <label>
-              Address
-            </label>
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
+            <input ref="phone" className="phone" name="phone" type="tel" placeholder="Phone Number" pattern='?\+?[0-9]+'/>
             <span className="bar"></span>
-            <label>
-              Phone
-            </label>
           </div>
 
           <div className="group">
-            <input ref="email" className="email" name="email" type="email" required/>
+            <input ref="email" className="email" name="email" type="email" placeholder="E-mail" required/>
             <span className="bar"></span>
-            <label>
-              Email
-            </label>
           </div>
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>

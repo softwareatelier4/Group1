@@ -50,7 +50,7 @@ h1 {
   border: 0;
   background-color: var(--accent-color);
   color: white;
-  border-bottom: solid 4px var(--home-search-button-border);
+  border-bottom: solid 2px var(--home-search-button-border);
   outline: none;
   cursor: pointer;
   border-radius: 0;
@@ -60,12 +60,12 @@ h1 {
 
 #register-submit-btn:hover {
   background-color: var(--accent-hover);
-  border-bottom: solid 4px var(--home-search-button-border-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
 }
 
 #register-submit-btn:active {
   border-bottom: 0;
-  border-top: solid 4px var(--background);
+  border-top: solid 2px var(--background);
 }
 
 #register-submit-btn:focus {
