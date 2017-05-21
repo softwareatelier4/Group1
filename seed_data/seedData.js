@@ -62,9 +62,9 @@ freelancers.data[emergencyUserIndex].status = 'verified';
 // bind non-static users to Freelance profiles
 for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // var rndf = Math.floor(Math.random() * freelancersSize);
-  users.data[i].freelancer = [freelancers.data[i]._id];
-  freelancers.data[i].owner = users.data[i]._id;
-  freelancers.data[i].state = 'verified';
+  users.data[i].freelancer = [freelancers.data[freelancersSize - i]._id];
+  freelancers.data[freelancersSize - i].owner = users.data[i]._id;
+  freelancers.data[freelancersSize - i].state = 'verified';
   // give non-static users an availability schedule
   for (var j = 0; j < 10; j++, k++) {
     freelancers.data[i].availability.push({
