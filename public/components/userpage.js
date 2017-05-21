@@ -130,14 +130,17 @@ class EditDelete extends React.Component {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Edit " + freelancerID)
+      window.location = `/freelance/edit?freelancer=${freelancerID}`;
     }
   }
   deleteFreelancer(freelancerID) {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Delete " + freelancerID)
+      ajaxRequest("DELETE", `/freelance/${freelancerID}`, {}, {}, function(deleted) {
+        if (deleted._id === freelancerID) ajaxRequest("GET", window.location + "?ajax=true", {}, {}, renderComponent);
+        else alert(`Whoops, something went wrong ¯\\_(ツ)_/¯`);
+      });
     }
   }
 
@@ -157,7 +160,7 @@ class EditDelete extends React.Component {
       );
     } else {
       return (
-        <div className="freelancer-edit-delete-buttons"></div>
+        <div></div>
       );
     }
   }
