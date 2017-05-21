@@ -121,24 +121,6 @@ describe('Claim-post test: ', function() {
       });
     });
 
-    // WRONG
-    it('app should get answer 452 on POST /claim/new if user is already claiming', function(done) {
-      let req = request(app).post('/claim/new');
-      req.cookies = Cookies;
-      req.expect(452)
-      .send({
-        freelancerId : seedData[1].data[1]
-      })
-      .end(function(err, res) {
-        if (err) {
-          done(err);
-        } else {
-          res.body.should.have.property("error", "user id already claiming");
-          done();
-        }
-      });
-    });
-
     // NEEDED FOR LOGIN
     it('app should get answer 202 on POST /user/login with correct username and password', function(done) {
       request(app)

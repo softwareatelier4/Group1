@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
           title: "JobAdvisor",
           logged: true,
           username: user.username,
-          userFreelancer: user.freelancer,
+          userFreelancer: user.freelancer[0], // TODO link to list of freelancers
         });
       });
     } else { // not logged in

@@ -199,7 +199,7 @@ describe('Admin-delete test: ', function() {
           if (err) {
             done(err);
           } else {
-            res.body.should.have.property("error", "freelancer is not claimed");
+            res.body.should.have.property("error", "freelancer has not been claimed");
             done();
           }
         });
@@ -237,21 +237,6 @@ describe('Admin-delete test: ', function() {
         });
     });
 
-    // WRONG
-    it('should respond with 400 if user is already associated with a freelancer', function(done) {
-      request(app)
-        .delete(`/admin/claim?username=admin&password=asd&claimid=${seedData[5].data[4]._id}`)
-        .set('Ajax', 'true')
-        .expect(400)
-        .end(function(err, res) {
-          if (err) {
-            done(err);
-          } else {
-            res.body.should.have.property("error", "user is already associated with a freelancer");
-            done();
-          }
-        });
-    });
 
     // LOGIN
     it('app should get answer 202 on POST /user/login with correct username and password', function(done) {

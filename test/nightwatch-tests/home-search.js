@@ -1,9 +1,10 @@
+'use strict';
 var config = require('../config');
 
 module.exports = {
   'Simple search' : function (client) {
     client
-      .url( config.baseURL + '/')
+      .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
       .pause(10000)
@@ -11,7 +12,7 @@ module.exports = {
       .waitForElementVisible('div#filter-emergency', 1000)
       .click('input[name=filter-emergency-temp]')
       .pause(1000)
-      .waitForElementVisible('.freelancer-card', 3000)
+      .waitForElementVisible('.freelancer-card', 10000)
       .click('input[name=filter-emergency-temp]')
       // custom search
       .waitForElementPresent('input[name=search-what]', 10000)
@@ -26,7 +27,7 @@ module.exports = {
         // test sorting
         client.getAttribute('div.freelancer-card:last-child', 'data-distance', function(maxDistance) {
           client.assert.ok(Number(distance.value) <= Number(maxDistance.value));
-        })
+        });
       })
       .setValue('input[name=search-where]', 'Milano')
       .click('button#search-btn')

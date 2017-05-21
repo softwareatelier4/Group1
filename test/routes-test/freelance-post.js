@@ -28,6 +28,9 @@ describe('Freelance-post test: ', function() {
         "familyName" : "Balestra",
         "title" : "Human Being",
         "email" : "user@email.com",
+        "tags" : "ciao, ciao2, ciao3",
+        "description" : "Best description.",
+        "urlPicture" : "https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg",
         "price" : {},
       })
       .expect(201)
@@ -40,6 +43,9 @@ describe('Freelance-post test: ', function() {
           res.body.should.have.property("email", "user@email.com");
           res.body.should.have.property("title", "Human Being");
           res.body.should.have.property("price");
+          res.body.should.have.property("tags");
+          res.body.should.have.property("description");
+          res.body.should.have.property("urlPicture");
           done();
         }
       });

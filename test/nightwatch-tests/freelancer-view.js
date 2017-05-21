@@ -1,3 +1,4 @@
+'use strict';
 var config = require('../config');
 
 module.exports = {
@@ -40,18 +41,25 @@ module.exports = {
       .pause(2000)
       // test empty review not listed
       .assert.hidden('div.review-text')
-      // claim
+      // duplicate form
+      .waitForElementPresent('button#freelancer-claim-toggle-duplicate', 1000)
+      // claim form
       .waitForElementPresent('div#freelancer-claim', 1000)
       .assert.containsText('div#freelancer-claim-status-name', 'NOT VERIFIED')
-      .click('button#freelancer-claim-toggle')
+      .click('button#freelancer-claim-toggle-claim')
       .waitForElementPresent('div#freelancer-claim-form', 5000)
       .click('button#freelancer-claim-btn')
       .pause(2000)
       .assert.containsText('div#freelancer-claim-form-message', 'Not enough required files submitted')
-      .setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
-      .click('button#freelancer-claim-btn')
-      .pause(2000)
-      //.assert.containsText('div#freelancer-claim-status-name', 'IN PROGRESS')
+      // display of correct document types
+      .assert.containsText('div#required-docs li:first-child', 'id')
+      .assert.containsText('div#optional-docs li:last-child', 'other')
+      // Cannot do the following, since can't figure out how to 'upload' multiple required files with Nightwatch
+      //.setValue('input#freelancer-claim-form-files', config.projectRoot + '/README.md')
+      // .click('button#freelancer-claim-btn')
+      // .pause(2000)
+      // .assert.containsText('div#freelancer-claim-status-name', 'IN PROGRESS')
+
       .end();
   }
 };

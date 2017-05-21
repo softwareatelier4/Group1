@@ -14,6 +14,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Category = mongoose.model('Category');
 const Freelance = mongoose.model('Freelance');
 const Claim = mongoose.model('Claim');
+const Duplicate = mongoose.model('Duplicate');
 const User = mongoose.model('User');
 // const nodemailer = require('nodemailer');
 
@@ -43,10 +44,19 @@ router.get('/login', function(req, res) {
           } else if (!claims) {
             res.status(404).json({ error : 'claims not found' }); // TODO: TEST
           } else {
-            res.status(200).json({ // TESTED
-              valid : true,
-              categories : categories,
-              claims : claims
+            Duplicate.find().populate('originalID duplicateID').lean().exec(function(err, duplicates) {
+              if (err) {
+                res.status(500).json({ error : 'database error while finding duplicates' }); // CANNOT TEST
+              } else if (!claims) {
+                res.status(404).json({ error : 'duplicates not found' }); // TODO: TEST
+              } else {
+                res.status(200).json({ // TESTED
+                  valid : true,
+                  categories : categories,
+                  claims : claims,
+                  duplicates : duplicates
+                });
+              }
             });
           }
         });
@@ -270,27 +280,24 @@ router.delete('/claim', function(req, res) {
           } else if (!freelancer) {
             res.status(404).json({ error : 'freelancer not found' }); // TESTED
           } else if (freelancer.state !== 'in progress') {
-            res.status(400).json({ error : 'freelancer is not claimed' }); // TESTED
+            res.status(400).json({ error : 'freelancer has not been claimed' }); // TESTED
           } else {
             User.findById(claim.userID, function(err, user) {
+              let freelancerIndex;
               if (err) {
                 res.status(500).json({ error : 'database error while finding user' }); // CANNOT TEST
               } else if (!user) {
                 res.status(404).json({ error : 'user not found' }); // TESTED
-              } else if (!user.freelancer) {
+              } else if ((freelancerIndex = user.freelancer.indexOf(claim.freelanceID)) < 0) {
                 res.status(400).json({ error : 'user is not claiming' }); // TESTED
-              } else if (user.freelancer && !user.claiming) {
-                res.status(400).json({ error : 'user is already associated with a freelancer' }); // TESTED
               } else {
                 // Update models according to accept/reject
                 if (req.query.choice === 'accept') {
                   freelancer.state = 'verified';
                   freelancer.owner = claim.userID;
-                  user.claiming = false;
                 } else if (req.query.choice === 'reject') {
                   freelancer.state = 'not verified';
-                  user.claiming = false;
-                  user.freelancer = undefined;
+                  user.freelancer.splice(freelancerIndex, 1);
                 } else {
                   res.status(400).json({ error : 'invalid choice' }); // TESTED
                 }
@@ -343,6 +350,50 @@ router.delete('/claim', function(req, res) {
                 }
               }
             });
+          }
+        });
+      }
+    });
+  }
+});
+
+router.delete('/duplicate', function(req, res) {
+  if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
+    res.status(401).json({ error : 'wrong username or password' }); // TODO: TEST
+  } else {
+    Duplicate.findById(req.query.duplicateid, function(err, duplicate) {
+      if (err) {
+        res.status(500).json({ error : 'database error while finding duplicate' }); // TODO: TEST
+      } else if (!duplicate) {
+        res.status(404).json({ error : 'duplicate not found' }); // TODO: TEST
+      } else {
+        duplicate.remove(function(err) {
+          if (err) {
+            res.status(500).json({ error : 'database error while removing duplicate' }); // CANNOT TEST
+          } else {
+            res.sendStatus(204); // TODO: TEST
+            // Sending emails doesn't work on Jenkins
+            // Send email
+            // let transporter = nodemailer.createTransport({
+            //     service: 'Gmail',
+            //     auth: {
+            //         user: 'jobadvisor.group1@gmail.com',
+            //         pass: '-5#x3Y;R;u<fz6}l'
+            //     }
+            // });
+            // let mailOptions = {
+            //   from: 'jobadvisor.group1@gmail.com',
+            //   to: req.query.email,
+            //   subject: 'Duplicate request',
+            //   html: req.query.message
+            // };
+            // transporter.sendMail(mailOptions, function(err, info){
+            //   if(err){
+            //       res.sendStatus(500).json({ error : 'nodemailer error while sending email' }); // CANNOT TEST
+            //   } else {
+            //       res.sendStatus(204); // TODO: TEST
+            //   };
+            // });
           }
         });
       }

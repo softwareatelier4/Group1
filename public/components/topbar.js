@@ -112,6 +112,19 @@ function renderRegisterButton() {
   ReactDOM.render(<RegisterButton />, document.getElementById('react-register'));
 }
 
+/**
+ * Change username to a link (done here to avoid doing it in every .dust)
+ */
+function renderUsernameLink() {
+  let usernameEl = document.getElementById('react-username');
+  let username = usernameEl.innerHTML;
+  usernameEl.innerHTML = "";
+  let usernameLink = document.createElement("A");
+  usernameLink.setAttribute("href", '/user/' + username);
+  usernameLink.innerHTML = username;
+  usernameEl.appendChild(usernameLink);
+}
+
 // call rendering functions
 renderTitle();
 
@@ -125,5 +138,6 @@ if(document.getElementById('react-login')) {
   renderLoginForm();
   renderRegisterButton();
 } else if(document.getElementById('react-logout')) {
+  renderUsernameLink();
   renderLogoutButton();
 }
