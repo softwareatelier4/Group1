@@ -533,6 +533,11 @@ class Review extends React.Component {
     })
   }
 
+  formatDate(date) {
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(date).toLocaleDateString("en-US", options);
+  }
+
   render() {
     let isOwner;
     if (document.getElementById('freelancer-logged-reviews-root') != null) {
@@ -540,18 +545,19 @@ class Review extends React.Component {
     } else {
       isOwner = false;
     }
+
     return (
       <article style={{ display: this.props.display }} data-id={this.props.id}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
-          <span className="review-date">Date: {this.props.date}</span>
+          <span className="review-date">{this.formatDate(this.props.date)}</span>
           <span className="review-score">Score: {this.props.score}/5</span>
         </div>
         <div className="review-text">{this.props.text}</div>
         <div className="reply-container">
           {this.props.reply ? (<span>{this.props.reply ?
             (<div>
-              <p className="reply-date">Date: {this.props.reply.date}</p>
+              <p className="reply-date">{this.formatDate(this.props.reply.date)}</p>
               <span className="free-rep">
                 {this.props.reply.author} replied:
               </span>
