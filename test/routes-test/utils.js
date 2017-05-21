@@ -9,7 +9,7 @@ const assert = require('assert');
 const ObjectId = mongoose.Types.ObjectId;
 
 module.exports.checkFreelanceInfoInResponse = function checkFreelanceInfoInResponse(responseObj, freelance) {
-  var populated = ["reviews", "tags", "category", "avgScore"];
+  var populated = ["reviews", "tags", "category", "avgScore", "owner"];
   Object.keys(freelance).forEach(function(key) {
     if (populated.indexOf(key) == -1) {
       responseObj.should.have.property(key, freelance[key]);
