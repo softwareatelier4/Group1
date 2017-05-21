@@ -133,3 +133,8 @@ button.edit-tab:active {
 #edit-content {
   width: 100%;
 }
+
+#edit-info input{
+	width: 500px;
+	height: 50px;
+}

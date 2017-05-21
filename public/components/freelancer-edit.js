@@ -613,7 +613,7 @@ class CreationForm extends React.Component {
 
 
           <div className="group">
-            <input ref="description" className="job-description" name="job-description" type="text"/>
+            <input ref="description" className="job-description" name="job-description" type="text" id="description"/>
             <span className="bar"></span>
             <label>
               Job Description
@@ -621,7 +621,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="tags" className="job-tags" name="job-tags" type="text"/>
+            <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
             <span className="bar"></span>
             <label>
               Job tags (separated by a comma)
@@ -629,7 +629,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
             <span className="bar"></span>
             <label>
               Picture URL
@@ -637,7 +637,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="address" className="address" name="address" type="text"/>
+            <input ref="address" className="address" name="address" type="text" id="address"/>
             <span className="bar"></span>
             <label>
               Address
@@ -645,7 +645,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+' id="phone"/>
             <span className="bar"></span>
             <label>
               Phone
@@ -653,7 +653,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="email" className="email" name="email" type="email"/>
+            <input ref="email" className="email" name="email" type="email" id="email"/>
             <span className="bar"></span>
             <label>
               Email
@@ -707,7 +707,19 @@ if(document.getElementById('react-freelancer-edit')) {
 
 		freelancer = freelancer;
 
+		document.getElementById('email').value = freelancer.email;
+		document.getElementById('description').value = freelancer.description;
+		let temp = "";
+		for( let tag of freelancer.tags){
+			temp+=tag.tagName+",";
+		}
+		document.getElementById('tags').value = temp;
+		document.getElementById('phone').value = freelancer.phone;
+		document.getElementById('address').value = freelancer.address;
+		document.getElementById('pic').value = freelancer.urlPicture;
+
     console.log('Saved days', days);
+		console.log(freelancer);
     renderCalendar();
   });
 }
