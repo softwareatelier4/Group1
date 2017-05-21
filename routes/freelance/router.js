@@ -267,7 +267,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 freelance.description = data.description || freelance.description;
                 freelance.address = data.address || freelance.address;
                 freelance.price = data.price || freelance.price;
-                
+
                 // Asynchronous call for sending the response
                 function sendResponse() {
                   freelance.save(function(err, updatedfreelance){
@@ -290,6 +290,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
 
                   var counter = 0;
                   for (let tag of tags) {
+                    tag = tag.trim();
                     // Asynchronous call to set the tags.
                     checkIfTagExists(tag);
                   }
@@ -440,7 +441,7 @@ router.delete('/:freelanceid', function(req, res, next) {
       res.status(404).json({error: "No freelancer found"});
     } else {
       let freelanceID = req.params.freelanceid;
-      let userID = freelance.owner; 
+      let userID = freelance.owner;
       let tagsArray = freelance.tags;
       freelance.remove(function(errFreelance, removedFreelance) {
         // Remove freelance from database
@@ -451,7 +452,7 @@ router.delete('/:freelanceid', function(req, res, next) {
             var count = 0;
             for (let tag of tagsArray) {
               deleteReferenceFromTag(tag);
-            } 
+            }
           } else {
             deleteReferenceFromUser();
           }
@@ -492,7 +493,7 @@ router.delete('/:freelanceid', function(req, res, next) {
               let indexOfFreelance = arrayFreelanceUser.indexOf(freelanceID);
               arrayFreelanceUser.splice(indexOfFreelance, 1);
               foundUser.freelancer = arrayFreelanceUser;
-              
+
               foundUser.save(function(errUser, savedUser) {
                 if (err || !savedUser) {
                   res.status(400).json({error: "error while saving user"});
