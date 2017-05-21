@@ -90,6 +90,12 @@ address span {
 
 /* freelancer reviews card */
 
+#login-request-banner {
+  padding: 20px;
+  margin: 0;
+  color: var(--accent-color);
+}
+
 .freelancer-reviews {
   width: 100%;
   margin: 5vh 10vw 10vh 10vw;
@@ -236,4 +242,56 @@ ul.tag-list li {
 
 .bg-yellow {
   background-color: yellow;
+}
+
+.reply-toggle-btn {
+  margin-top: 20px;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  align-self: center;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 80px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  border-bottom: solid 4px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.reply-toggle-btn:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+.reply-toggle-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
+}
+
+.reply-container {
+  margin-left: 24px;
+}
+
+.reply-reply {
+  color: var(--accent-color);
+  font-weight: normal;
+  font-size: 1em;
+  margin: 20px 0;
+}
+
+.reply-date {
+  color: #888;
+}
+
+.reply-text {
+  margin-bottom: 0;
+  border-left: 5px solid var(--accent-color);
+  padding: 10px 20px;
+}
+
+.free-rep {
+  color: var(--accent-color);
 }

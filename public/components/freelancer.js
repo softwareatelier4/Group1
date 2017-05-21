@@ -99,7 +99,7 @@ function renderReviews(data) {
   } else if (document.getElementById('freelancer-reviews-root')) {
     ReactDOM.render(
       <div className="freelancer-reviews">
-        <p>Login to be able to write a review</p>
+        <p id="login-request-banner">Login to be able to write a review</p>
         {listReviews}
       </div>,
 
@@ -508,7 +508,7 @@ class ReplyForm extends React.Component {
   render() {
     return (
       <div className="reply-form">
-        <h5>Post reply:</h5>
+        <h5 className="reply-reply">Post reply:</h5>
         <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
           <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
           </textarea>
@@ -550,14 +550,17 @@ class Review extends React.Component {
         <div className="reply-container">
           {this.props.reply ? (<span>{this.props.reply ?
             (<div>
-              <p className="reply-date">{this.props.reply.date}</p>
+              <p className="reply-date">Date: {this.props.reply.date}</p>
+              <span className="free-rep">
+                Freelancer replied:
+              </span>
               <p className="reply-text">{this.props.reply.text}</p>
             </div>) : (null)}</span>) :
             (
               <div>
                 {this.state.replying ? (<ReplyForm />) : (null)}
                 {isOwner ? (
-                  <button onClick={this.replyToReview.bind(this)}>
+                  <button className="reply-toggle-btn" onClick={this.replyToReview.bind(this)}>
                     {this.state.replying ? ("Cancel") : ("Reply")}
                   </button>
                 ) : (null)}
