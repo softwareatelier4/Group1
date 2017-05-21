@@ -23,8 +23,8 @@ html {
   --background: #f7f7f7;
   --home-search-border: #c9c9c9;
   --home-search-border-focus: #969696;
-  --home-search-button-border: #266bb4;
-  --home-search-button-border-hover: #1f5690;
+  --home-search-button-border: #327ed0;
+  --home-search-button-border-hover: #2362a6;
   --form-label-color: #999;
   --form-input-border: #757575;
   --login-button-border: #b1b1b1;
@@ -72,13 +72,28 @@ html {
 #title {
   font-size: 3em;
   text-align: center;
-  color: white;
+  color: var(--basic-white);
   margin-left: 20px;
   padding: 5px 0;
 }
 
 #react-username {
-  color: white;
+  display: flex;
+}
+
+#react-username a {
+  align-self: center;
+  color: var(--basic-white);
+  text-decoration: none;
+  font-size: 1.5em;
+  width: 100%;
+  height: 100%;
+  line-height: 65px;
+  padding: 0 10px 0 10px;
+}
+
+#react-username a:hover {
+  background: var(--accent-hover);
 }
 
 a#title {
@@ -165,6 +180,54 @@ a#title {
 }
 #topbar-filler-left {
   flex-grow: 1;
+}
+
+#react-logout {
+  display: flex;
+}
+
+#freelancer-logout-btn {
+  align-self: center;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 80px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+#freelancer-logout-btn:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-logout-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
+
+#emergency-link-container {
+  display: flex;
+}
+
+#emergency-edit-link {
+  color: var(--basic-white);
+  font-size: 1.2em;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  line-height: 65px;
+  padding: 0 10px 0 10px;
+}
+
+#emergency-edit-link:hover {
+  background: var(--accent-hover);
 }
 /* End topbar */
 
