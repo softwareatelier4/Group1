@@ -58,7 +58,7 @@ const staticUsers = 6;
 const emergencyUserIndex = staticUsers - 1;
 users.data[emergencyUserIndex].freelancer.push([freelancers.data[emergencyUserIndex]._id]);
 freelancers.data[emergencyUserIndex].owner = users.data[emergencyUserIndex]._id;
-freelancers.data[emergencyUserIndex].status = 'verified';
+freelancers.data[emergencyUserIndex].state = 'verified';
 // bind non-static users to Freelance profiles
 for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // var rndf = Math.floor(Math.random() * freelancersSize);

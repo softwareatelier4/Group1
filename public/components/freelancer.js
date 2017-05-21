@@ -288,6 +288,29 @@ class FreelancerDuplicateForm extends React.Component {
 }
 
 class FreelancerClaim extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.gotoEdit = this.gotoEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  gotoEdit() {
+    window.location = '/freelance/edit?freelancer=' + window.location.href.split('/')[4];
+  }
+
+  handleDelete() {
+    if(confirm('Are you sure you want to delete this freelancer profile?')) {
+      ajaxRequest('DELETE', window.location.href, {}, {}, function(data) {
+        if(data._id) {
+          window.location = '/'; // deletion ok, redirect to home
+        } else {
+          console.log(data); // error
+        }
+      })
+    }
+  }
+
   toggleForm(formName) {
     this.formVisible = 'none';
     return function() {
@@ -377,11 +400,27 @@ class FreelancerClaim extends React.Component {
       duplicateDisabled = true;
       duplicateText = 'LOGIN TO REPORT DUPLICATE'
     }
+
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
+
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
           <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          {isOwner ? (
+            <div>
+              <button id="freelancer-edit-button" onClick={this.gotoEdit}>Edit Freelancer</button>
+              <button id="freelancer-delete-button" onClick={this.handleDelete}>Delete Freelancer</button>
+            </div>
+          ) : null}
+
+
           <button onClick={this.toggleForm('duplicate').bind(this)} id="freelancer-claim-toggle-duplicate" className={claimBtn} disabled={duplicateDisabled}>{duplicateText}</button>
         </div>
       </div>
@@ -416,10 +455,6 @@ class FreelancerHeader extends React.Component {
           {price}
         </div>
         <span className="freelancer-category">{this.props.category}</span>
-        {isOwner ? (<div className="freelancer-edit">
-          <button id="freelancer-edit-button">Edit</button>
-        </div>) : null}
-              
       </div>
     );
   }
