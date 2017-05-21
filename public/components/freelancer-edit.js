@@ -1,6 +1,7 @@
 
 let savedSingleDates = [];
 let savedRepeatedDates = [];
+let freelancer;
 let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
 
 const SINGLE_DATES_COLOR = 'green';
@@ -325,7 +326,7 @@ class FreelancerEmergencyForm extends React.Component {
 class FreelancerEditView extends React.Component {
   render() {
     return (
-			<div id="edit-schedule" className='selected'>
+			<div id="edit-schedule">
       	<FreelancerEmergencyForm />
 				<CalendarView />
 			</div>
@@ -566,8 +567,8 @@ class FreelancerMainView extends React.Component {
     return (
       <div id="edit-view">
         <div id="edit-menu">
-          <button className='edit-tab' id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
-          <button className='edit-tab selected' id="edit-btn-schedule" onClick={this.select('schedule')}>Edit Emergency Availability</button>
+          <button className='edit-tab selected' id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
+          <button className='edit-tab' id="edit-btn-schedule" onClick={this.select('schedule')}>Edit Emergency Availability</button>
         </div>
         <div id="edit-content">
           <CreationForm />
@@ -579,50 +580,40 @@ class FreelancerMainView extends React.Component {
 }
 
 class CreationForm extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(evt) {
+		evt.preventDefault();
+
+		// create freelancer
+		const formData = {};
+		for (const field in this.refs) {
+ 			if(this.refs[field].value !== ""){
+				formData[field] = this.refs[field].value;
+			}
+		}
+
+		let form = this;
+
+		ajaxRequest("PUT", "/"+freelancerId+"/edit", {}, formData, function(data) {
+			console.log("success!");
+		});
+	}
+
+
+
   render() {
     return (
-			<div id="edit-info">
+			<div id="edit-info"  className='selected'>
         <form onSubmit={this.handleSubmit}>
 
-          <div className="names-input">
-            <div className="group">
-              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
-              <span className="bar"></span>
-               <label>
-                First Name
-              </label>
-            </div>
-
-            <div className="group">
-              <input ref="familyName" className="family-name" name="family-name" type="text"/>
-              <span className="bar"></span>
-               <label>
-                Family Name
-              </label>
-            </div>
-          </div>
 
           <div className="group">
-            <input ref="title" className="job-title" name="job-title" type="text" required/>
-            <span className="bar"></span>
-             <label>
-              Job Title
-            </label>
-          </div>
-
-          <div className="category-selector">
-            <span className="bar"></span>
-            <label>
-              Job Category
-            </label>
-            <select id="category-list" name="category" ref="category" required>
-              <option value="" selected disabled hidden>Please select a job category</option>
-              {this.props.categories}
-            </select>
-          </div>
-
-          <div className="group">
-            <input ref="description" className="job-description" name="job-description" type="text" required/>
+            <input ref="description" className="job-description" name="job-description" type="text"/>
             <span className="bar"></span>
             <label>
               Job Description
@@ -646,7 +637,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="address" className="address" name="address" type="text" required/>
+            <input ref="address" className="address" name="address" type="text"/>
             <span className="bar"></span>
             <label>
               Address
@@ -662,7 +653,7 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="email" className="email" name="email" type="email" required/>
+            <input ref="email" className="email" name="email" type="email"/>
             <span className="bar"></span>
             <label>
               Email
@@ -692,6 +683,17 @@ class CalendarView extends React.Component {
 	};
 }
 
+// function updateInfo() {
+//   // let emergencyDates = savedSingleDates.concat(savedRepeatedDates);
+//   ajaxRequest("PUT", freelancerId + "/edit", {}, emergencyDates, function(status) {
+//     if(status == 204) {
+//       if(rerenderCalendar) renderCalendar();
+//     } else {
+//       console.log(status);
+//     }
+//   });
+// }
+
 /**
  * On load
  */
@@ -702,6 +704,8 @@ if(document.getElementById('react-freelancer-edit')) {
     let days = freelancer.availability;
     savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
     savedSingleDates = days.filter((day) => { return !day.isRepeated; });
+
+		freelancer = freelancer;
 
     console.log('Saved days', days);
     renderCalendar();
