@@ -60,6 +60,9 @@ users.data[emergencyUserIndex].freelancer.push([freelancers.data[emergencyUserIn
 freelancers.data[emergencyUserIndex].owner = users.data[emergencyUserIndex]._id;
 freelancers.data[emergencyUserIndex].status = 'verified';
 // bind non-static users to Freelance profiles
+// non-static users get Freelancers starting from the bottom of array
+// this way starting from top of freelancers array are free to use with static users
+// same idea as Stack-Heap in memory
 for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // var rndf = Math.floor(Math.random() * freelancersSize);
   users.data[i].freelancer = [freelancers.data[freelancersSize - i]._id];
@@ -68,10 +71,10 @@ for (var i = staticUsers, k = 0; i < usersSize; i++) {
   // give non-static users an availability schedule
   for (var j = 0; j < 10; j++, k++) {
     freelancers.data[i].availability.push({
-      day: new Date(availabilities.data[k%30].day),
-      begin: new Date(availabilities.data[k%30].begin),
-      end: new Date(availabilities.data[k%30].end),
-      location: availabilities.data[k%30].location
+      day: new Date(availabilities.data[k%availabilitySize].day),
+      begin: new Date(availabilities.data[k%availabilitySize].begin),
+      end: new Date(availabilities.data[k%availabilitySize].end),
+      location: availabilities.data[k%availabilitySize].location
     });
   }
 }
