@@ -1,7 +1,7 @@
 
 let savedSingleDates = [];
 let savedRepeatedDates = [];
-let freelancer;
+let freelance = {};
 let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
 
 const SINGLE_DATES_COLOR = 'green';
@@ -541,6 +541,23 @@ function renderCalendar() {
   });
 }
 
+function updateForms(freelancer){
+	freelance = freelancer;
+
+	document.getElementById('email').value = freelancer.email;
+	document.getElementById('description').value = freelancer.description;
+	let temp = "";
+	for( let tag of freelancer.tags){
+		temp+=tag.tagName+",";
+	}
+	document.getElementById('tags').value = temp;
+	document.getElementById('phone').value = freelancer.phone;
+	document.getElementById('address').value = freelancer.address;
+	document.getElementById('pic').value = freelancer.urlPicture;
+	document.getElementById('pricemin').value = freelancer.price.min;
+	document.getElementById('pricemax').value = freelancer.price.max;
+}
+
 class CalendarView extends React.Component {
 	render() {
 		return (
@@ -611,15 +628,69 @@ class FreelancerEditForm extends React.Component {
 
 		// create freelancer
 		const formData = {};
+		let price = {};
 		for (const field in this.refs) {
- 			if(this.refs[field].value !== ""){
-				formData[field] = this.refs[field].value;
+ 			if(this.refs[field].value !== "" && field !== "price-min" &&
+			field !== "price-max" && freelance[field] != this.refs[field].value){
+					formData[field] = this.refs[field].value;
+			} else if (field === "price-min" && freelance.price.min != this.refs[field].value ){
+				if(!(isNaN(this.refs[field].value))){
+					price.min = Number(this.refs[field].value);
+				} else{
+					console.log("Please insert a number.");
+				}
+			} else if (field === "price-max" && freelance.price.max != this.refs[field].value ){
+				if(!(isNaN(this.refs[field].value))){
+					price.max = Number(this.refs[field].value);
+				} else{
+					console.log("Please insert a number.");
+				}
 			}
 		}
+		if(price.hasOwnProperty('min')){
+			if(price.hasOwnProperty('max')){
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			} else {
+				price.max = freelance.price.max;
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			}
+		} else if(price.hasOwnProperty('max')){
+			if(price.hasOwnProperty('min')){
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			} else {
+				price.min = Number(freelance.price.min);
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+
+				formData.price = price;
+			}
+		}
+		console.log(formData);
 		let form = this;
 		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
       if(!data.error) {
         form.renderFeedback("Information updated successfully");
+				ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+					updateForms(freelancer);
+			  });
       } else {
         console.log(data.error);
         form.renderFeedback("An error occurred");
@@ -652,7 +723,7 @@ class FreelancerEditForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+' id="phone"/>
+            <input ref="phone" className="phone" name="phone" type="tel"  id="phone"/>
             <span className="bar"></span>
             <label>
               Phone
@@ -683,6 +754,22 @@ class FreelancerEditForm extends React.Component {
             </label>
           </div>
 
+					<div className="group">
+            <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <span className="bar"></span>
+            <label>
+              Minimum price
+            </label>
+          </div>
+					<div className="group">
+            <input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+            <span className="bar"></span>
+            <label>
+              Maximum price
+            </label>
+          </div>
+
+
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
@@ -691,6 +778,7 @@ class FreelancerEditForm extends React.Component {
     );
   }
 }
+
 
 /**
  * On load
@@ -703,21 +791,10 @@ if(document.getElementById('react-freelancer-edit')) {
     savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
     savedSingleDates = days.filter((day) => { return !day.isRepeated; });
 
-		freelancer = freelancer;
-
-		document.getElementById('email').value = freelancer.email;
-		document.getElementById('description').value = freelancer.description;
-		let temp = "";
-		for( let tag of freelancer.tags){
-			temp+=tag.tagName+",";
-		}
-		document.getElementById('tags').value = temp;
-		document.getElementById('phone').value = freelancer.phone;
-		document.getElementById('address').value = freelancer.address;
-		document.getElementById('pic').value = freelancer.urlPicture;
+		updateForms(freelancer);
 
     console.log('Saved days', days);
-		console.log(freelancer);
+		console.log(freelance);
     renderCalendar();
   });
 }

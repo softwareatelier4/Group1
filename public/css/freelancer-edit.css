@@ -138,3 +138,13 @@ button.edit-tab:active {
 	width: 500px;
 	height: 50px;
 }
+
+input#pricemin{
+	width: 100px;
+	height: 50px;
+}
+
+input#pricemax{
+	width: 100px;
+	height: 50px;
+}

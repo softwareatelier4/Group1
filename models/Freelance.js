@@ -73,7 +73,13 @@ Freelance.pre('save', function (next) {
 			if (this.price.min < 0) {
 				this.price.min = 0;
 			} else if (this.price.max < 0 || this.price.max < this.price.min) {
+				let temp = this.price.max;
 				this.price.max = this.price.min;
+				this.price.min = this.price.max;
+			} else if (this.price.min > this.price.max){
+				let temp = this.price.max;
+				this.price.max = this.price.min;
+				this.price.min = this.price.max;
 			}
 		} else {
 			this.price = { min: 0, max: 0 };
