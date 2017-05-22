@@ -109,31 +109,13 @@ describe('Claim-post test: ', function() {
       req.cookies = Cookies;
       req.expect(201)
       .send({
-        freelancerId : seedData[1].data[0]
+        freelancerId : seedData[1].data[2]
       })
       .end(function(err, res) {
         if (err) {
           done(err);
         } else {
           res.body.should.have.property("_id");
-          done();
-        }
-      });
-    });
-
-    // WRONG
-    it('app should get answer 452 on POST /claim/new if user is already claiming', function(done) {
-      let req = request(app).post('/claim/new');
-      req.cookies = Cookies;
-      req.expect(452)
-      .send({
-        freelancerId : seedData[1].data[1]
-      })
-      .end(function(err, res) {
-        if (err) {
-          done(err);
-        } else {
-          res.body.should.have.property("error", "user id already claiming");
           done();
         }
       });
@@ -162,7 +144,7 @@ describe('Claim-post test: ', function() {
       req.cookies = Cookies;
       req.expect(453)
       .send({
-        freelancerId : seedData[1].data[0]
+        freelancerId : seedData[1].data[2]
       })
       .end(function(err, res) {
         if (err) {

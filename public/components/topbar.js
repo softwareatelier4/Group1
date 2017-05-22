@@ -62,9 +62,9 @@ class LoginForm extends React.Component {
   render () {
     return (
       <form id="login-form" onSubmit={this.handleSubmit}>
-        <input ref="login-username" name="login-username" type="text" placeholder="username" required/>
-        <input ref="login-password" name="login-password" type="password" placeholder="password" required/>
-        <input ref="login-submit" name="login-submit" className="login-submit" type="submit" value="Login"/>
+        <input id="login-username" ref="login-username" name="login-username" type="text" placeholder="username" required/>
+        <input id="login-password" ref="login-password" name="login-password" type="password" placeholder="password" required/>
+        <input id="login-submit" ref="login-submit" name="login-submit" className="login-submit" type="submit" value="Login"/>
       </form>
     );
   }
@@ -112,6 +112,19 @@ function renderRegisterButton() {
   ReactDOM.render(<RegisterButton />, document.getElementById('react-register'));
 }
 
+/**
+ * Change username to a link (done here to avoid doing it in every .dust)
+ */
+function renderUsernameLink() {
+  let usernameEl = document.getElementById('react-username');
+  let username = usernameEl.innerHTML;
+  usernameEl.innerHTML = "";
+  let usernameLink = document.createElement("A");
+  usernameLink.setAttribute("href", '/user/' + username);
+  usernameLink.innerHTML = username;
+  usernameEl.appendChild(usernameLink);
+}
+
 // call rendering functions
 renderTitle();
 
@@ -125,5 +138,6 @@ if(document.getElementById('react-login')) {
   renderLoginForm();
   renderRegisterButton();
 } else if(document.getElementById('react-logout')) {
+  renderUsernameLink();
   renderLogoutButton();
 }

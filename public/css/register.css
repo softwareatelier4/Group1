@@ -1,0 +1,72 @@
+h1 {
+  color: var(--accent-color);
+  margin-bottom: 30px;
+}
+
+.register-form {
+  margin-left: 40%;
+}
+
+#freelancer-opt-check {
+  display: flex;
+  flex-direction: row;
+}
+#freelancer-opt-check input {
+  width: auto;
+}
+
+#freelancer-opt-check label {
+  flex-grow: 2;
+  font-size: 0.8em;
+  color: var(--accent-color);
+  padding: 12px;
+}
+
+.group {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 280px;
+}
+
+.group input {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  height: 35px;
+  font-size: var(--input-font-size);
+  width: 100%;
+}
+
+.group input:focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+#register-submit-btn {
+  width: 280px;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px 0;
+}
+
+#register-submit-btn:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
+}
+
+#register-submit-btn:active {
+  border-bottom: 0;
+  border-top: solid 2px var(--background);
+}
+
+#register-submit-btn:focus {
+}

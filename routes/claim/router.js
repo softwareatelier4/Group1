@@ -56,8 +56,6 @@ router.post('/new', function(req, res) {
         res.status(500).json({ error : 'database error while finding user' }); // TODO: TEST
       } else if (!user) {
         res.status(404).json({ error : 'user not found' });  // TODO: TEST
-      } else if (user.freelancer) {
-        res.status(452).json({ error : 'user id already claiming' }); // TESTED
       } else {
         Freelance.findById(req.body.freelancerId, function(err, freelancer) {
           if (err) {
@@ -67,8 +65,7 @@ router.post('/new', function(req, res) {
           } else if (freelancer.state !== 'not verified') {
             res.status(453).json({ error : 'freelancer id already verified' }); // TESTED
           } else {
-            user.freelancer = req.body.freelancerId;
-            user.claiming = true;
+            user.freelancer.push(freelancer._id);
             user.save(function(err) {
               if (err) {
                 res.status(500).json({ error : 'database error while saving user' });  // CANNOT TEST
@@ -80,7 +77,7 @@ router.post('/new', function(req, res) {
                   } else {
                     let newClaim = new Claim({
                       userID : req.session.user_id,
-                      freelanceID : req.body.freelancerId,
+                      freelanceID : freelancer._id,
                     });
                     newClaim.save(function(err, claim) {
                       if (err) {

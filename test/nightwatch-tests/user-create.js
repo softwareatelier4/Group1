@@ -1,9 +1,10 @@
+'use strict';
 var config = require('../config');
 
 module.exports = {
   'User Registration View' : function (client) {
     client
-      .url( config.baseURL + '/')
+      .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
@@ -19,7 +20,7 @@ module.exports = {
       .assert.visible('input[name=password]')
       .assert.visible('input[name=confirm-password]')
       .assert.visible('input[name=email]')
-      .setValue('input[name=username]', 'nightwatch-user')
+      .setValue('input[name=username]', 'nightwatch-user42')
       .setValue('input[name=password]', 'test')
       .setValue('input[name=confirm-password]', 'test')
       .setValue('input[name=email]', 'test@night.watch')
@@ -30,8 +31,8 @@ module.exports = {
       .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
-      .assert.containsText('div#react-username', 'nightwatch-user')
       .waitForElementPresent('div#freelancer-root', 10000)
+      .assert.containsText('div#react-username', 'nightwatch-user42')
       .assert.containsText('h1#freelancer-form-title', 'Create your own freelancer profile')
       // logout
       .click('button#freelancer-logout-btn')
@@ -49,7 +50,7 @@ module.exports = {
       .assert.visible('input[name=password]')
       .assert.visible('input[name=confirm-password]')
       .assert.visible('input[name=email]')
-      .setValue('input[name=username]', 'nightwatch-user2')
+      .setValue('input[name=username]', 'nightwatch-user52')
       .setValue('input[name=password]', 'test')
       .setValue('input[name=confirm-password]', 'test')
       .setValue('input[name=email]', 'test@night.watch')
@@ -58,7 +59,7 @@ module.exports = {
       .pause(1000)
       .waitForElementVisible('body', 1000)
       .waitForElementPresent('div#topbar', 1000)
-      .assert.containsText('div#react-username', 'nightwatch-user2')
+      .assert.containsText('div#react-username', 'nightwatch-user52')
       .waitForElementPresent('div#react-search-container', 10000)
       .assert.visible('input[name=search-what]')
       .assert.visible('input[name=search-where]')
@@ -78,7 +79,7 @@ module.exports = {
       .assert.visible('input[name=password]')
       .assert.visible('input[name=confirm-password]')
       .assert.visible('input[name=email]')
-      .setValue('input[name=username]', 'nightwatch-user2')
+      .setValue('input[name=username]', 'nightwatch-user42')
       .setValue('input[name=password]', 'test')
       .setValue('input[name=confirm-password]', 'test')
       .setValue('input[name=email]', 'test@night.watch')

@@ -21,6 +21,7 @@
   padding: 20px;
   color: var(--basic-white);
   border-radius: 2px 2px 0px 0px;
+  border-radius: 0;
 }
 
 .picture-placeholder {
@@ -48,13 +49,12 @@
 }
 
 .freelancer-category {
-  color: #F44336;
+  color: var(--accent-color);
   align-self: flex-start;
   margin: -20px;
   padding: 10px;
   background-color: #fff;
-  border-radius: 0 2px 0 10px;
-  box-shadow: var(--box-shadow-material);
+  border-radius: 0 0 0 10px;
 }
 
 .freelancer-header-info > h1, .freelancer-header-info > div, .freelancer-header-info > span {
@@ -88,6 +88,12 @@ address span {
 
 
 /* freelancer reviews card */
+
+#login-request-banner {
+  padding: 20px;
+  margin: 0;
+  color: var(--accent-color);
+}
 
 .freelancer-reviews {
   width: 100%;
@@ -185,13 +191,14 @@ ul.tag-list {
 ul.tag-list li {
   padding: 5px 15px;
   margin-right: 10px;
-  background-color: rgba(244, 67, 54, 0.9);
+  background-color: var(--accent-color);
   color: white;
   border-radius: 8px;
   font-size: var(--tag-font-size);
 }
 
 #freelancer-claim {
+  border-radius: 2px 2px 0 0;
   padding: 10px;
   display: flex;
   flex-flow: column;
@@ -199,7 +206,7 @@ ul.tag-list li {
 
 #freelancer-claim-status {
   width: 100%;
-  height: 50px;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -208,25 +215,283 @@ ul.tag-list li {
 #freelancer-claim-form {
   background-color: ghostwhite;
   display: flex;
-  flex-flow: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-flow: row;
+  margin-top: 10px;
+  background-color: orange;
+  color: var(--basic-white);
 }
 
 #freelancer-claim-form-message {
   color: red;
 }
 
+#same-user-freelancers {
+  padding: 20px 20px 10px 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers #same-user-freelancers-title {
+  display: block;
+  margin-bottom: 20px;
+}
+#same-user-freelancers > #same-user-freelancers-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+#same-user-freelancers-list > .small-freelancer-card {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 10px 10px 0;
+  padding: 0;
+  --the-border-radius: 6px;
+  border-radius: var(--the-border-radius);
+  background-color: var(--home-search-border);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > .small-freelancer-card:hover {
+  /*-webkit-transform: scale(1.01);*/
+  /*-ms-transform: scale(1.01);*/
+  /*transform: scale(1.01);*/
+  /*box-shadow: var(--box-shadow-material-card-hover);*/
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > #small-freelancer-card-more {
+  margin: 0 10px 10px 0;
+  padding: 7px;
+  color: var(--home-search-border);
+}
+.small-freelancer-card > .small-freelancer-card-title {
+  padding: 7px;
+  border-radius: var(--the-border-radius) 0 0 var(--the-border-radius);
+  white-space: nowrap;
+  color: white;
+  background-color: var(--accent-color);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-title {
+  background-color: var(--accent-hover);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-score {
+  padding: 7px 5px 7px 7px;
+  border-radius: 0 var(--the-border-radius) var(--the-border-radius) 0;
+  white-space: nowrap;
+  background-color: var(--home-search-border);
+  color: var(--form-input-border);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-score {
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-star {
+  padding: 5px 5px 5px 1px;
+  border-radius: 0 var(--the-border-radius) var(--the-border-radius) 0;
+  background-color: var(--home-search-border);
+  color: var(--star-yellow);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-star {
+  background-color: var(--home-search-border-focus);
+  color: var(--star-yellow-hover);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none {
+  padding: 20px 20px 20px 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none > #same-user-freelancers-title-none {
+  margin-right: 10px;
+}
+#same-user-freelancers-none > #no-other-profiles-message {
+  color: var(--form-label-color);
+}
+
 .hidden {
   display: none;
 }
 
-.bg-orange {
+#freelancer-claim.bg-orange {
   background-color: orange;
+  padding-right: 20px;
+  padding-left: 20px;
+  color: var(--basic-white);
 }
 
 .bg-green {
-  background-color: green;
+  background-color: #79b1ed;
+}
+
+.bg-green #freelancer-claim-status {
+  height: 30px;
+  color: var(--basic-white);
 }
 
 .bg-yellow {
   background-color: yellow;
+}
+
+.bg-yellow #freelancer-claim-status {
+  height: 30px;
+}
+
+.reply-toggle-btn {
+  margin-top: 20px;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  align-self: center;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 80px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  border-bottom: solid 4px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.reply-toggle-btn:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+.reply-toggle-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
+}
+
+.reply-container {
+  margin-left: 24px;
+}
+
+.reply-reply {
+  color: var(--accent-color);
+  font-weight: normal;
+  font-size: 1em;
+  margin: 20px 0;
+}
+
+.reply-date {
+  color: #888;
+}
+
+.reply-text {
+  margin-bottom: 0;
+  border-left: 5px solid var(--accent-color);
+  padding: 10px 20px;
+}
+
+.free-rep {
+  color: var(--accent-color);
+}
+
+#claim-banner-filler {
+  flex-grow: 2;
+}
+
+/* claim buttons */
+
+#freelancer-claim-toggle-claim, #freelancer-claim-toggle-duplicate {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: auto;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: orange;
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
+}
+
+#freelancer-claim-toggle-claim:hover,
+#freelancer-claim-toggle-duplicate:hover,
+#freelancer-claim-btn:hover  {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-claim-toggle-claim:active,
+#freelancer-claim-toggle-duplicate:active,
+#freelancer-claim-toggle-claim:disabled,
+#freelancer-claim-toggle-duplicate:disabled,
+#freelancer-claim-toggle-claim:hover:disabled,
+#freelancer-claim-toggle-duplicate:hover:disabled {
+  margin-top: -4px;
+  border-bottom: 0;
+  border-top: solid 4px orange;
+  background-color: var(--basic-white);
+  cursor: auto;
+}
+
+#freelancer-claim-form-form,
+#freelancer-claim-form-form-optional {
+  flex-basis: 50%;
+  /*padding: 10px;*/
+}
+
+#freelancer-claim-btn {
+  height: 36px;
+  width: 120px;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: orange;
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+#freelancer-claim-btn:active {
+  border-top: solid 4px orange;
+  background-color: var(--basic-white);
+  border-bottom: 0;
+}
+
+#freelancer-claim-form-message {
+  margin: 8px 0 0 15px;
+}
+
+#required-docs,
+#optional-docs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#required-docs li,
+#optional-docs li {
+  background-color: white;
+  border-radius: 8px;
+  list-style: none;
+  color: orange;
+  margin-right: 10px;
+  padding: 5px 15px;
+}
+
+#freelancer-claim-form-files,
+#freelancer-claim-form-optional-files {
+  margin: 10px 0;
 }

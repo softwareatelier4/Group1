@@ -53,4 +53,48 @@ function toTimeString(date) {
 	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
 }
 
-const dayStrings = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
+/**
+ * Parses day.begin and day.end as Dates and returns object containing them
+ * @param  {Day} day to parse
+ * @return {Object}
+ */
+function parseInterval(day) {
+	return {
+		begin: new Date(day.begin),
+		end: new Date(day.end)
+	}
+}
+
+/**
+ * Checks if two Days have overlapping intervals
+ * @param  {Day} day1
+ * @param  {Day} day2
+ * @return {Boolean}
+ */
+function areOverlapping(day1, day2) {
+	day1 = parseInterval(day1);
+	day2 = parseInterval(day2);
+
+	// e.g. a = [0, 10], b = [0, 5]
+	let includes = function(a, b) {
+		return a.begin <= b.begin && a.end >= b.end;
+	}
+	// inverse of includes
+	// e.g. a = [0, 5], b = [0, 10]
+	let isIncluded = function(a, b) {
+		return includes(b, a);
+	}
+	// e.g. a = [0, 6], b = [5, 10]
+	let precedes = function(a, b) {
+		return a.begin <= b.begin && a.end >= b.begin && a.end <= b.end;
+	}
+	// inverse of precedes
+	// e.g. a = [5, 10], b = [0, 6]
+	let succedes = function(a, b) {
+		return precedes(b, a);
+	}
+
+	return includes(day1, day2) || isIncluded(day1, day2) || precedes(day1, day2) || succedes(day1, day2);
+}
+
+const dayStrings = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
