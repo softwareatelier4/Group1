@@ -21,6 +21,8 @@ var claims = require('./claimsData');
 var claimsSize = claims.data.length;
 var availabilities = require('./availabilityData');
 var availabilitySize = availabilities.data.length;
+var duplicates = require('./duplicatesData');
+var duplicatesSize = duplicates.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
@@ -96,5 +98,6 @@ seedData.push(tags);        // 2
 seedData.push(categories);  // 3
 seedData.push(users);       // 4
 seedData.push(claims);      // 5
+seedData.push(duplicates);  // 6
 
 module.exports = seedData;

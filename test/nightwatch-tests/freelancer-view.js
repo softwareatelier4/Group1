@@ -17,8 +17,8 @@ module.exports = {
       .waitForElementPresent('div#freelancer-reviews-root', 1000)
       // login
       .waitForElementPresent('div#react-login', 1000)
-      .setValue('input[name=login-username]', 'MrSatan')
-      .setValue('input[name=login-password]', '666')
+      .setValue('input[name=login-username]', 'Robb Elkson')
+      .setValue('input[name=login-password]', 'perdonamierastil')
       .click('input[name=login-submit]')
       // check review form visible
       .waitForElementPresent('div#freelancer-logged-reviews-root', 5000)
@@ -31,7 +31,7 @@ module.exports = {
       .setValue('textarea[name=comment]', 'Nightwatch is the best reviewer')
       .click('input[name=submit-button]')
       .pause(2000)
-      .assert.containsText('span.review-author', 'MrSatan')
+      .assert.containsText('span.review-author', 'Robb')
       .assert.containsText('div.review-text', 'Nightwatch is the best reviewer')
       // submit empty review
       .assert.visible('input[name=score]')
@@ -43,6 +43,11 @@ module.exports = {
       .assert.hidden('div.review-text')
       // duplicate form
       .waitForElementPresent('button#freelancer-claim-toggle-duplicate', 1000)
+      // .click('button#freelancer-claim-toggle-duplicate')
+      // .waitForElementVisible('div#freelancer-duplicate-form', 5000)
+      // .click("button#freelancer-duplicate-btn")
+      // .pause(500)
+      // .assert.containsText('div#freelancer-duplicate-form-message', 'Your request has been submitted. Wait for the response.')
       // claim form
       .waitForElementPresent('div#freelancer-claim', 1000)
       // .assert.containsText('div#freelancer-claim-status-name', 'VERIFIED')
