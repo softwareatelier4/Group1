@@ -89,13 +89,22 @@ router.get('/:freelanceid', function(req, res, next) {
   if (ObjectId.isValid(req.params.freelanceid)) {
     // distinguish between raw and ajax GET request (to render page or return JSON)
     if(req.headers.ajax) {
-      Freelance.findById(req.params.freelanceid).populate({
+      Freelance.findById(req.params.freelanceid)
+      .populate({
         path: 'reviews',
         populate: {
           path: 'reply',
           model: 'Review',
         }
-      }).populate('tags category owner').exec(function(err, freelance) {
+      })
+      .populate({
+        path: 'owner',
+        populate: {
+          path: 'freelancer',
+          model: 'Freelance',
+        }
+      })
+      .populate('tags category').exec(function(err, freelance) {
         if (err) {
           res.status(400).json(utils.formatErrorMessage(err));
         } else if (!freelance) {

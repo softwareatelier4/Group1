@@ -72,7 +72,7 @@ class FreelancerSingleDateForm extends React.Component {
     return (
       <form id="emergency-form-single-date" onSubmit={this.handleSubmit}>
         <label>Add specific date(s):</label>
-        <input type="date" id="emergency-single-date" defaultValue={new Date().toLocaleString().slice(0,10)}/>
+        <input type="date" id="emergency-single-date" defaultValue={new Date().toJSON().slice(0,10)}/>
         From <input type="time" id="emergency-single-start" required/> to <input type="time" id="emergency-single-end" required/>
         in <input type="text" id="emergency-location-single" placeholder="Location" required /><br/>
         <input type="submit" id="emergency-single-submit" value="Add single date" />

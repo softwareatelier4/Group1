@@ -104,8 +104,8 @@ class FreelancerCard extends React.Component {
             <img src={this.props.urlPicture} />
           </div>
           <div className="freelancer-card-info">
-            <h1 className="job-title  ">{this.props.title}</h1>
-            <h2>{this.props.firstName} {this.props.familyName}</h2>
+            <h1 className="job-title" data-job-title={this.props.title}>{this.props.title}</h1>
+            <h2 data-name={this.props.firstName + ' ' + this.props.familyName}>{this.props.firstName} {this.props.familyName}</h2>
             <span>
               Average Score: {this.formatAvgScore(this.props.avgScore)} / 5
             </span>
@@ -130,14 +130,17 @@ class EditDelete extends React.Component {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Edit " + freelancerID)
+      window.location = `/freelance/edit?freelancer=${freelancerID}`;
     }
   }
   deleteFreelancer(freelancerID) {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Delete " + freelancerID)
+      ajaxRequest("DELETE", `/freelance/${freelancerID}`, {}, {}, function(deleted) {
+        if (deleted._id === freelancerID) ajaxRequest("GET", window.location + "?ajax=true", {}, {}, renderComponent);
+        else alert(`Whoops, something went wrong ¯\\_(ツ)_/¯`);
+      });
     }
   }
 
@@ -157,7 +160,7 @@ class EditDelete extends React.Component {
       );
     } else {
       return (
-        <div className="freelancer-edit-delete-buttons"></div>
+        <div></div>
       );
     }
   }

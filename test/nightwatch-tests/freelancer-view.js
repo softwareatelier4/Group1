@@ -78,6 +78,7 @@ module.exports = {
       .dismissAlert()
       .click('button#freelancer-edit-button') // cancel delete
       .waitForElementPresent('#edit-btn-schedule', 1000)
+
       .end();
   }
 };
