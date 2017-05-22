@@ -31,8 +31,12 @@ module.exports = {
     .waitForElementVisible('h1#user-page-title', 1000)
     .assert.containsText('h1#user-page-title', 'Freelancer profiles owned by Robb Bis')
     .waitForElementVisible('div.freelancer-card', 1000)
-    .assert.containsText('h1.job-title', 'VP Marketing')
-    .assert.containsText('div.freelancer-card-info > h2', 'Irene Larson')
+    .getAttribute('h1.job-title', 'data-job-title', function(jobTitle) {
+      client.getAttribute('div.freelancer-card-info > h2', 'data-name', function(name) {
+        client.assert.ok((jobTitle.value === 'Pharmacist' && name.value === 'Fred Carter')
+        || (jobTitle.value === 'VP Marketing' && name.value === 'Irene Larson'));
+      })
+    })
 
     // Back to my own profile, click "edit"
     .waitForElementVisible('div#react-username a', 3000)

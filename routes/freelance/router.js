@@ -249,6 +249,116 @@ router.put('/:freelanceid/availability', function(req, res, next) {
   }
 });
 
+// PUT freelance/:freelanceid/edit/
+router.put('/:freelanceid/edit', function(req, res, next) {
+  // TODO must Add freelance in the tags reference.
+  // checks if user is correct
+  if(req.session.user_id) {
+       User.findById(req.session.user_id).exec(function(err, user){
+        let freelancerIndex;
+         if (err) {
+           res.status(400).json({ error : 'error finding user in database' }); // TODO: TEST (wrong id)
+         } else if (!user) {
+           res.status(404).json({ error : 'user not found' }); // TODO: TEST (id not existing)
+         } else if (!user.freelancer || (freelancerIndex = user.freelancer.indexOf(req.params.freelanceid)) < 0) {
+           res.status(403).json({ error : 'user not allowed to edit' }); // TODO: TEST (user not owner)
+         } else {
+           let data = req.body
+           // need to make 2 calls instead of 'findAndUpdate' to run the validators in mongo
+            Freelance.findById(req.params.freelanceid).exec(function(err, freelance){
+              if(err){
+                res.status(400).json({ error : 'error editing freelance data' }); // TODO: TEST (wrong id)
+              } else if (!freelance){
+                res.status(404).json({ error : 'freelance not found for editing' }); // TODO: TEST (id not existing)
+              } else {
+                freelance.phone = data.phone || freelance.phone;
+                freelance.email = data.email || freelance.email;
+                freelance.description = data.description || freelance.description;
+                freelance.address = data.address || freelance.address;
+                freelance.price = data.price || freelance.price;
+
+                // Asynchronous call for sending the response
+                function sendResponse() {
+                  freelance.save(function(err, updatedfreelance){
+                    if(err){
+                      res.status(500).json({ error : 'error updating freelance' }); // NOT TESTABLE
+                    } else if (!updatedfreelance){
+                      res.status(404).json({ error : 'freelance not found' }); // NOT TESTABLE
+                    } else {
+                      res.status(201).json(updatedfreelance); // TODO: TEST (correct execution)
+                    }
+                  });
+                }
+                // here I suppose that data contains all the tags (old and new )
+                // i.e. the size of 'tags' should be the total number of tags after update
+                if(data.tags) {
+                  // There are tags in the put:
+                  var tags = data.tags.split(',');
+                  delete freelance.tags;
+                  freelance.tags = [];
+
+                  var counter = 0;
+                  tags = tags.map(function(tag) { return tag.trim(); }); // remove spaces
+                  tags = tags.filter(function(tag) { return tag != ''; }); // remove empty tagsß
+                  for (let tag of tags) {
+                    // Asynchronous call to set the tags.
+                    checkIfTagExists(tag);
+                  }
+
+                  // Asynchronous call for checking the tags
+                  function checkIfTagExists(givenTag) {
+                    Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+                      if (err || (foundTag == undefined)) {
+                        // Tag is not in the database, add it
+                        const newTag = new Tag({
+                          tagName: givenTag,
+                        });
+                        newTag.freelancers.push(req.params.freelanceid);
+                        // Save tag and proceed to process response.
+                        newTag.save(function(errTag, savedTag) {
+                          if (err) {
+                            console.log("Error with saving the tag: " + err);
+                            res.status(400).json(utils.formatErrorMessage(errTag));
+                          }
+                          freelance.tags.push(savedTag);
+                          counter++;
+                          if (tags.length == counter) {
+                            sendResponse();
+                          }
+                        });
+                      } else {
+                        if (foundTag.freelancers.indexOf(req.params.freelanceid) < 0) {
+                          // Add this new freelance to the freelancers that have this tag.
+                          foundTag.freelancers.push(req.params.freelanceid);
+                        }
+                        foundTag.save(function(errTag, savedTag) {
+                          if (err) {
+                            console.log("Error with saving the tag: " + err);
+                            res.status(400).json(utils.formatErrorMessage(errTag));
+                          }
+                          // Save tag into freelance list of tags
+                          if(freelance.tags.indexOf(savedTag) < 0){
+                            freelance.tags.push(savedTag);
+                          }
+                          counter++;
+                          if (tags.length == counter) {
+                            sendResponse();
+                          }
+                        });
+                      }
+                    });
+                  }
+                // END IF data.tags
+                } else {
+                  sendResponse();
+                }
+              }
+            });
+         }
+      });
+    }
+});
+
 
 // POST freelance/
 router.post('/', function(req, res, next) {
@@ -272,9 +382,10 @@ router.post('/', function(req, res, next) {
     let count = 0;
     if (tags != undefined) {
       // For every tag, check if it's already in the database or not
+      tags = tags.map(function(tag) { return tag.trim(); }); // remove spaces
+      tags = tags.filter(function(tag) { return tag != ''; }); // remove empty tagsß
       for (let tag of tags) {
-        tag = tag.trim();
-        // Asynchronous call for checking for the tag
+        // Asynchronous call to set the tags.
         checkIfTagExists(tag);
       }
     } else {
@@ -335,15 +446,14 @@ router.post('/', function(req, res, next) {
 // Delete freelance and all its references in user and tag
 router.delete('/:freelanceid', function(req, res, next) {
   Freelance.findById(req.params.freelanceid).exec(function(err, freelance) {
-    let freelanceID = req.params.freelanceid;
-    let userID = freelance.owner;
-    let tagsArray = freelance.tags;
-
     if (err) {
       res.status(400).json({error: "Error while finding freelancer"});
     } else if (!freelance) {
-      res.status(400).json({error: "No freelancer found"});
+      res.status(404).json({error: "No freelancer found"});
     } else {
+      let freelanceID = req.params.freelanceid;
+      let userID = freelance.owner;
+      let tagsArray = freelance.tags;
       freelance.remove(function(errFreelance, removedFreelance) {
         // Remove freelance from database
         if (err) {
@@ -353,7 +463,7 @@ router.delete('/:freelanceid', function(req, res, next) {
             var count = 0;
             for (let tag of tagsArray) {
               deleteReferenceFromTag(tag);
-            } 
+            }
           } else {
             deleteReferenceFromUser();
           }
@@ -394,7 +504,7 @@ router.delete('/:freelanceid', function(req, res, next) {
               let indexOfFreelance = arrayFreelanceUser.indexOf(freelanceID);
               arrayFreelanceUser.splice(indexOfFreelance, 1);
               foundUser.freelancer = arrayFreelanceUser;
-              
+
               foundUser.save(function(errUser, savedUser) {
                 if (err || !savedUser) {
                   res.status(400).json({error: "error while saving user"});

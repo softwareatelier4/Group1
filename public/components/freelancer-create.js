@@ -27,9 +27,20 @@ class CreationForm extends React.Component {
 
     // create freelancer
     const formData = {};
+		let price = {};
     for (const field in this.refs) {
-      formData[field] = this.refs[field].value;
+			if(field !== "price-max" && field !== "price-min"){
+				formData[field] = this.refs[field].value;
+			} else if(field === "price-max" && !(isNaN(this.refs[field].value))){
+				price.max = Number(this.refs[field].value);
+			} else if(field === "price-min" && !(isNaN(this.refs[field].value))){
+				price.min = Number(this.refs[field].value);
+			}
     }
+
+		if(price.hasOwnProperty('min') && price.hasOwnProperty('max')){
+			formData.price = price;
+		}
 
     let form = this;
     ajaxRequest("POST", "/freelance", {}, formData, function(data) {
@@ -176,6 +187,24 @@ class CreationForm extends React.Component {
               Email
             </label>
           </div>
+
+					<div className="group">
+						<input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+						<span className="bar"></span>
+						<label>
+							Minimum price
+						</label>
+					</div>
+
+					<div className="group">
+						<input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+						<span className="bar"></span>
+						<label>
+							Maximum price
+						</label>
+					</div>
+
+
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
         </form>
