@@ -7,13 +7,13 @@ module.exports = {
     .url( config.baseURL + '/')
     .useCss()
     .waitForElementVisible('body', 1000)
-    .waitForElementPresent('div#topbar', 1000)
-    .waitForElementPresent('div#react-login', 3000)
+    .waitForElementVisible('div#topbar', 1000)
+    .waitForElementVisible('div#react-login', 3000)
     .setValue('input[name=login-username]', 'Dolben')
     .setValue('input[name=login-password]', 'fooly')
     .click('input[name=login-submit]')
     .pause(1000)
-    .waitForElementPresent('div#react-username a', 3000)
+    .waitForElementVisible('div#react-username a', 3000)
     .click('div#react-username a')
     .pause(1000)
 
@@ -37,6 +37,31 @@ module.exports = {
         || (jobTitle.value === 'VP Marketing' && name.value === 'Irene Larson'));
       })
     })
+
+    // Back to my own profile, click "edit"
+    .waitForElementVisible('div#react-username a', 3000)
+    .click('div#react-username a')
+    .pause(1000)
+    .moveToElement('div.freelancer-card-container', 0, 0)
+    .pause(1000)
+    .assert.visible('button.freelancer-edit')
+    .click('button.freelancer-edit')
+    .pause(1000)
+    .waitForElementVisible('body', 1000)
+    .assert.containsText('div#root > h3:first-child', 'Edit profile of Michael Williamson (Desktop Support Technician):')
+
+    // Back to my own profile, click "delete"
+    .waitForElementVisible('div#react-username a', 3000)
+    .click('div#react-username a')
+    .pause(1000)
+    .moveToElement('div.freelancer-card-container', 0, 0)
+    .pause(1000)
+    .assert.visible('button.freelancer-delete')
+    .click('button.freelancer-delete')
+    .acceptAlert()
+    .pause(1000)
+    .assert.elementNotPresent('div.freelancer-card-container')
+
     .end();
   }
 };
