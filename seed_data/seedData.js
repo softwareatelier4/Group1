@@ -60,7 +60,7 @@ const staticUsers = 6;
 const emergencyUserIndex = staticUsers - 1;
 users.data[emergencyUserIndex].freelancer.push([freelancers.data[emergencyUserIndex]._id]);
 freelancers.data[emergencyUserIndex].owner = users.data[emergencyUserIndex]._id;
-freelancers.data[emergencyUserIndex].status = 'verified';
+freelancers.data[emergencyUserIndex].state = 'verified';
 // bind non-static users to Freelance profiles
 // non-static users get Freelancers starting from the bottom of array
 // this way starting from top of freelancers array are free to use with static users
