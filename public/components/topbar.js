@@ -62,9 +62,9 @@ class LoginForm extends React.Component {
   render () {
     return (
       <form id="login-form" onSubmit={this.handleSubmit}>
-        <input ref="login-username" name="login-username" type="text" placeholder="username" required/>
-        <input ref="login-password" name="login-password" type="password" placeholder="password" required/>
-        <input ref="login-submit" name="login-submit" className="login-submit" type="submit" value="Login"/>
+        <input id="login-username" ref="login-username" name="login-username" type="text" placeholder="username" required/>
+        <input id="login-password" ref="login-password" name="login-password" type="password" placeholder="password" required/>
+        <input id="login-submit" ref="login-submit" name="login-submit" className="login-submit" type="submit" value="Login"/>
       </form>
     );
   }

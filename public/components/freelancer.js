@@ -100,7 +100,7 @@ function renderReviews(data) {
   } else if (document.getElementById('freelancer-reviews-root')) {
     ReactDOM.render(
       <div className="freelancer-reviews">
-        <p>Login to be able to write a review</p>
+        <p id="login-request-banner">Login to be able to write a review</p>
         {listReviews}
       </div>,
 
@@ -400,7 +400,7 @@ class FreelancerClaim extends React.Component {
       claimDisabled = true;
       claimText = 'LOGIN TO CLAIM';
       duplicateDisabled = true;
-      duplicateText = 'LOGIN TO REPORT DUPLICATE'
+      duplicateText = 'LOGIN TO REPORT DUPLICATE';
     }
 
     let isOwner;
@@ -414,6 +414,7 @@ class FreelancerClaim extends React.Component {
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
+          <span id="claim-banner-filler"></span>
           <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
           {isOwner ? (
             <div>
@@ -556,7 +557,7 @@ class ReplyForm extends React.Component {
   render() {
     return (
       <div className="reply-form">
-        <h5>Post reply:</h5>
+        <h5 className="reply-reply">Post reply:</h5>
         <form id="review-form" onSubmit={this.handleSubmitReply} method="post">
           <textarea className="review-form-comment" name="comment" placeholder="Enter reply...">
           </textarea>
@@ -580,6 +581,11 @@ class Review extends React.Component {
     })
   }
 
+  formatDate(date) {
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(date).toLocaleDateString("en-US", options);
+  }
+
   render() {
     let isOwner;
     if (document.getElementById('freelancer-logged-reviews-root') != null) {
@@ -587,25 +593,29 @@ class Review extends React.Component {
     } else {
       isOwner = false;
     }
+
     return (
       <article style={{ display: this.props.display }} data-id={this.props.id}>
         <div className="review-header">
           <span className="review-author">{this.props.author}</span>
-          <span className="review-date">Date: {this.props.date}</span>
+          <span className="review-date">{this.formatDate(this.props.date)}</span>
           <span className="review-score">Score: {this.props.score}/5</span>
         </div>
         <div className="review-text">{this.props.text}</div>
         <div className="reply-container">
           {this.props.reply ? (<span>{this.props.reply ?
             (<div>
-              <p className="reply-date">{this.props.reply.date}</p>
+              <p className="reply-date">{this.formatDate(this.props.reply.date)}</p>
+              <span className="free-rep">
+                {this.props.reply.author} replied:
+              </span>
               <p className="reply-text">{this.props.reply.text}</p>
             </div>) : (null)}</span>) :
             (
               <div>
                 {this.state.replying ? (<ReplyForm />) : (null)}
                 {isOwner ? (
-                  <button onClick={this.replyToReview.bind(this)}>
+                  <button className="reply-toggle-btn" onClick={this.replyToReview.bind(this)}>
                     {this.state.replying ? ("Cancel") : ("Reply")}
                   </button>
                 ) : (null)}

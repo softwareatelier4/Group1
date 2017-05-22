@@ -25,7 +25,7 @@ module.exports = {
       .waitForElementVisible("#admin-claims", 1000)
 
       // show message box
-      .assert.containsText(".card-claim:last-child > div > div:first-child > a", "Robb Elkson")
+      .assert.containsText(".card-claim:last-child > div > div:first-child > a", "Robb")
       .click(".card-claim:last-child > div > button:last-child")
       .pause(300)
       .waitForElementPresent(".card-claim:last-child > div:last-child > textarea", 1000)

@@ -40,7 +40,6 @@ class FreelancerSingleDateForm extends React.Component {
     }
 
     if(startDate < Date.now()) {
-      console.log(startDate, Date.now());
       return renderError("Past dates are not valid");
     }
 
@@ -247,7 +246,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Add repeated dates:</label>
+          <label id="repeated-dates-label">Add repeated dates:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
@@ -297,7 +296,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
             <input type="date" id="emergency-repetition-start-date" defaultValue={new Date().toJSON().slice(0,10)}/>
           </label>
           <label><input type="radio" name="emergency-repetition-type" value="weeks" defaultChecked={true} onChange={this.onRadioChange} />
-            <input type="text" id="emergency-repetition-weeks" placeholder="For a number of weeks" required/>
+            <input type="text" id="emergency-repetition-weeks" placeholder="Number of weeks" required/>
           </label>
           <label>
             <input type="radio" name="emergency-repetition-type" value="until" onChange={this.onRadioChange} />

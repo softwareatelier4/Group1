@@ -31,14 +31,15 @@
 			{/logged}
       <!-- Create -->
       <div id="react-freelancer-create-btn"></div>
+      <div id="react-freelancer-home-btn"></div>
     </div>
 		<div id='root' {?userFreelancer} data-user-freelancer={userFreelancer} {/userFreelancer}>
 			{?logged}
-				<h3>Edit profile of {userFreelancerInfo}:</h3>
+				<h3 id="freelancer-modification-message">Edit profile of {userFreelancerInfo}:</h3>
 				<div id='react-freelancer-edit'></div>
-			{:else}
-				<div>LOGIN TO EDIT YOUR FREELANCER PROFILE</div>
-			{/logged}
+      {:else}
+        <h1 id="freelancer-edit-login-message">Please login in order to edit the information of your freelancer</h1>
+      {/logged}
     </div>
     <!-- Utils -->
     <script src="../js/ajax.js"></script>

@@ -104,38 +104,97 @@ body {
 #filters {
   display: flex;
   flex-flow: row;
-  justify-content: left;
+  justify-content: space-between;
 }
 
 #filters > div {
   margin: 0 1em;
+  border-bottom: var(--border-bottom-grey);
 }
 
-#filter-category-dropdown, #filter-location-dropdown {
-  background-color: white;
-  margin: 0 18px;
-  width: 100px;
+#filter-category, #filter-distance, #filter-duration, #filter-emergency {
+  font-size: 0.8em;
+  width: 170px;
+}
+
+#filter-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+}
+
+#category-label, #max-distance-label, #max-duration-label, #max-emergency-label {
+  width: 100%;
+  padding: 5px 0;
+  text-align: center;
+  color: var(--basic-white);
+  background-color: var(--accent-color);
+}
+
+#filter-category-dropdown {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 5px;
+  text-align-last: center;
+  font-size: 1em;
+  background-color: var(--basic-white);
+  min-width: 170px;
   outline: none;
+  border: none;
+  color: var(--accent-color);
+  border-radius: 0;
+}
+
+#filter-category-dropdown:hover {
+  background-color: var(--basic-white-hover);
+  cursor: pointer;
+}
+
+#filter-distance, #filter-duration, #filter-emergency {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--basic-white);
+  align-items: center;
+}
+
+#filter-distance-temp, #filter-duration-temp {
+  padding: 0 10px;
+  height: 50%;
+}
+
+#filter-emergency {
+  width: 100px;
+}
+
+#filter-emergency-temp {
+  margin: 6px;
 }
 
 #freelancer-create-btn {
   width: 100%;
   height: 65px;
-  background-color: var(--basic-white);
-  color: var(--accent-color);
-  border: 0px;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-color: var(--accent-hover);
   font-size: var(--input-font-size);
   padding: 20px;
 }
 
 #freelancer-create-btn:hover {
-  box-shadow: var(--box-shadow-material-hover);
+  background: var(--accent-hover);
   cursor: pointer;
 }
 
 #freelancer-create-btn:focus {
   outline: none;
-  background-color: var(--background);
+}
+
+#freelancer-create-btn:active {
+
 }
 
 
@@ -220,5 +279,4 @@ body {
   padding: 10px;
   background-color: var(--basic-white);
   border-radius: 0 2px 0 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }

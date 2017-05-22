@@ -27,7 +27,7 @@
     {^logged}
     <div id="react-user-page-root"></div>
     {:else}
-    <div id="react-user-page-root" data-username={username}></div>
+    <div id="react-user-page-root" data-username='{username}'></div>
     {/logged}
 
     <!-- Utils -->

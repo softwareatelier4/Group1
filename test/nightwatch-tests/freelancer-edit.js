@@ -58,7 +58,7 @@ module.exports = {
       .assert.containsText('span#emergency-date-error', '')
 
       // test repeated dates
-      .assert.visible('input[id=emergency-form-recurrence-day]')
+      .waitForElementPresent('input[id=emergency-form-recurrence-day]', 1000)
       .assert.visible('input[id=emergency-time-1-start]')
       .assert.visible('input[id=emergency-time-1-end]')
       .assert.visible('input[id=emergency-location-1]')

@@ -46,8 +46,8 @@ module.exports = {
     .pause(1000)
     .assert.visible('button.freelancer-edit')
     .click('button.freelancer-edit')
-    .pause(1000)
-    .waitForElementVisible('body', 1000)
+    .pause(10000)
+    .waitForElementVisible('div#root', 1000)
     .assert.containsText('div#root > h3:first-child', 'Edit profile of Michael Williamson (Desktop Support Technician):')
 
     // Back to my own profile, click "delete"
