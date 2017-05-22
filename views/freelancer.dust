@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/freelancer.css">
@@ -19,11 +20,6 @@
       {:else}
         <div id="react-username">{username}</div>
         <div id="react-logout"></div>
-        <div id="emergency-link-container">
-          {?userFreelancer}
-            <a id="emergency-edit-link" href="/freelance/edit?freelancer={userFreelancer}">Edit your emergency availability</a>
-          {/userFreelancer}
-        </div>
       {/logged}
       <!-- Create -->
       <div id="react-freelancer-home-btn"></div>
@@ -34,7 +30,7 @@
     {^logged}
       <div id='freelancer-reviews-root' ></div>
     {:else}
-      <div id='freelancer-logged-reviews-root' data-username={username}></div>
+      <div id='freelancer-logged-reviews-root' data-username='{username}'></div>
     {/logged}
 
     <!-- Utils -->

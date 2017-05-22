@@ -56,6 +56,7 @@ function renderComponent(data) {
       urlPicture={data.urlPicture}
       _id={data._id}
       state={data.state}
+      owner={data.owner}
     />,
 
     document.getElementById('freelancer-root')
@@ -147,6 +148,7 @@ class FreelancerView extends React.Component {
         <Contact phone={this.props.phone} address={this.props.address} email={this.props.email} />
         <div className="freelancer-description">{this.props.description}</div>
         <Tags tags={this.props.tags} />
+        <UserLink owner={this.props.owner} thisFreelancerID={this.props._id} />
       </div>
     );
   }
@@ -288,6 +290,29 @@ class FreelancerDuplicateForm extends React.Component {
 }
 
 class FreelancerClaim extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.gotoEdit = this.gotoEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  gotoEdit() {
+    window.location = '/freelance/edit?freelancer=' + window.location.href.split('/')[4];
+  }
+
+  handleDelete() {
+    if(confirm('Are you sure you want to delete this freelancer profile?')) {
+      ajaxRequest('DELETE', window.location.href, {}, {}, function(data) {
+        if(data._id) {
+          window.location = '/'; // deletion ok, redirect to home
+        } else {
+          console.log(data); // error
+        }
+      })
+    }
+  }
+
   toggleForm(formName) {
     this.formVisible = 'none';
     return function() {
@@ -377,12 +402,28 @@ class FreelancerClaim extends React.Component {
       duplicateDisabled = true;
       duplicateText = 'LOGIN TO REPORT DUPLICATE';
     }
+
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
+    }
+
     return (
       <div id="freelancer-claim" className={bgColor}>
         <div id="freelancer-claim-status">
           <div id="freelancer-claim-status-name">{this.props.state.toUpperCase()}</div>
           <span id="claim-banner-filler"></span>
           <button onClick={this.toggleForm('claim').bind(this)} id="freelancer-claim-toggle-claim" className={claimBtn} disabled={claimDisabled}>{claimText}</button>
+          {isOwner ? (
+            <div>
+              <button id="freelancer-edit-button" onClick={this.gotoEdit}>Edit Freelancer</button>
+              <button id="freelancer-delete-button" onClick={this.handleDelete}>Delete Freelancer</button>
+            </div>
+          ) : null}
+
+
           <button onClick={this.toggleForm('duplicate').bind(this)} id="freelancer-claim-toggle-duplicate" className={claimBtn} disabled={duplicateDisabled}>{duplicateText}</button>
         </div>
       </div>
@@ -398,6 +439,13 @@ class FreelancerHeader extends React.Component {
       price = "";
     } else {
       price = "Price range: " + this.props.price.min + " - " + this.props.price.max + " CHF";
+    }
+
+    let isOwner;
+    if (document.getElementById('freelancer-logged-reviews-root') != null) {
+      isOwner = (document.getElementById('freelancer-logged-reviews-root').getAttribute('data-username') == userName);
+    } else {
+      isOwner = false;
     }
 
     return (
@@ -586,6 +634,133 @@ class Tags extends React.Component {
       <ul className="tag-list">
         {this.props.tags}
       </ul>
+    )
+  }
+}
+
+class UserLink extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  redirectUserPage(userlink) {
+    return function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.location = '/user/' + userlink.props.owner.username;
+    }
+  }
+
+  render() {
+
+    // there is an owner
+    if (this.props.owner) {
+      let who = " by user " + this.props.owner.username;
+      let loggedUserEl = document.getElementById('freelancer-logged-reviews-root');
+      console.log(loggedUserEl);
+      if (loggedUserEl) {
+        let loggedUserName = loggedUserEl.getAttribute('data-username');
+        if (loggedUserName == this.props.owner.username) {
+          who = " you own";
+        }
+      }
+
+      // get freelancers, filter for verified and not this same profile
+      let thisFreelancerID = this.props.thisFreelancerID;
+      let userFreelancers = this.props.owner.freelancer.filter(function(f) {
+        return f.state === 'verified' && f._id !== thisFreelancerID;
+      });
+
+      // if no other profiles to show
+      if (userFreelancers.length == 0) {
+        let message = "None. Just this one.";
+        return (
+          <div id="same-user-freelancers-none" onClick={this.redirectUserPage(this)}>
+            <span id="same-user-freelancers-title-none">
+              Other profiles {who}
+            </span>
+            <span id="no-other-profiles-message">{message}</span>
+          </div>
+        );
+
+      // other profiles to show
+      } else {
+        // add three best freelancers, or less
+        let bestThreeOrLess = [];
+        userFreelancers.sort(function(f1, f2) {
+          return f2.avgScore - f1.avgScore;
+        });
+        var i = 0;
+        for (; i < 3 && i < userFreelancers.length; i++) {
+          bestThreeOrLess.push(
+            <SmallFreelancerCard
+              key={i}
+              _id={userFreelancers[i]._id}
+              title={userFreelancers[i].title}
+              firstName={userFreelancers[i].firstName}
+              familyName={userFreelancers[i].familyName}
+              rating={userFreelancers[i].avgScore}
+            />
+          );
+        }
+        let some = userFreelancers.length - i;
+        if (some > 0) {
+          bestThreeOrLess.push(
+            <div id="small-freelancer-card-more" key={i+1}>
+              and {some} more...
+            </div>
+          );
+        }
+        return (
+          <div id="same-user-freelancers" onClick={this.redirectUserPage(this)}>
+            <div id="same-user-freelancers-title">
+              Other profiles {who}
+            </div>
+            <div id="same-user-freelancers-list">
+              {bestThreeOrLess}
+            </div>
+          </div>
+        )
+      }
+
+    // no owner at all
+    } else {
+      return (
+        <div></div>
+      )
+    }
+  }
+}
+
+class SmallFreelancerCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  redirectFreelancerProfile(freelanceId) {
+    return function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.location = '/freelance/' + freelanceId;
+    }
+  }
+
+  render() {
+    return (
+      <div
+        className="small-freelancer-card"
+        onClick={this.redirectFreelancerProfile(this.props._id)}
+      >
+        <span className="small-freelancer-card-title">
+          {this.props.title}
+        </span>
+        <span className="small-freelancer-card-score">
+          {this.props.rating}
+        </span>
+        <span className="small-freelancer-card-star">
+          &#9733;
+        </span>
+      </div>
     )
   }
 }

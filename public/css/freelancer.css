@@ -227,6 +227,102 @@ ul.tag-list li {
   color: red;
 }
 
+#same-user-freelancers {
+  padding: 20px 20px 10px 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers #same-user-freelancers-title {
+  display: block;
+  margin-bottom: 20px;
+}
+#same-user-freelancers > #same-user-freelancers-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+#same-user-freelancers-list > .small-freelancer-card {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0 10px 10px 0;
+  padding: 0;
+  --the-border-radius: 6px;
+  border-radius: var(--the-border-radius);
+  background-color: var(--home-search-border);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > .small-freelancer-card:hover {
+  /*-webkit-transform: scale(1.01);*/
+  /*-ms-transform: scale(1.01);*/
+  /*transform: scale(1.01);*/
+  /*box-shadow: var(--box-shadow-material-card-hover);*/
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-list > #small-freelancer-card-more {
+  margin: 0 10px 10px 0;
+  padding: 7px;
+  color: var(--home-search-border);
+}
+.small-freelancer-card > .small-freelancer-card-title {
+  padding: 7px;
+  border-radius: var(--the-border-radius) 0 0 var(--the-border-radius);
+  white-space: nowrap;
+  color: white;
+  background-color: var(--accent-color);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-title {
+  background-color: var(--accent-hover);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-score {
+  padding: 7px 5px 7px 7px;
+  border-radius: 0 var(--the-border-radius) var(--the-border-radius) 0;
+  white-space: nowrap;
+  background-color: var(--home-search-border);
+  color: var(--form-input-border);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-score {
+  background-color: var(--home-search-border-focus);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card > .small-freelancer-card-star {
+  padding: 5px 5px 5px 1px;
+  border-radius: 0 var(--the-border-radius) var(--the-border-radius) 0;
+  background-color: var(--home-search-border);
+  color: var(--star-yellow);
+  transition: all 0.1s ease;
+}
+.small-freelancer-card:hover > .small-freelancer-card-star {
+  background-color: var(--home-search-border-focus);
+  color: var(--star-yellow-hover);
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none {
+  padding: 20px 20px 20px 20px;
+  border-top: 1px solid #ddd;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none:hover {
+  cursor: pointer;
+  background-color: #eaeaea;
+  transition: all 0.1s ease;
+}
+#same-user-freelancers-none > #same-user-freelancers-title-none {
+  margin-right: 10px;
+}
+#same-user-freelancers-none > #no-other-profiles-message {
+  color: var(--form-label-color);
+}
+
 .hidden {
   display: none;
 }

@@ -359,19 +359,19 @@ router.delete('/claim', function(req, res) {
 
 router.delete('/duplicate', function(req, res) {
   if (adminUsername !== req.query.username || adminPassword !== req.query.password) {
-    res.status(401).json({ error : 'wrong username or password' }); // TODO: TEST
+    res.status(401).json({ error : 'wrong username or password' }); // TESTED
   } else {
     Duplicate.findById(req.query.duplicateid, function(err, duplicate) {
       if (err) {
-        res.status(500).json({ error : 'database error while finding duplicate' }); // TODO: TEST
+        res.status(500).json({ error : 'database error while finding duplicate' }); // TESTED
       } else if (!duplicate) {
-        res.status(404).json({ error : 'duplicate not found' }); // TODO: TEST
+        res.status(404).json({ error : 'duplicate not found' }); // TESTED
       } else {
         duplicate.remove(function(err) {
           if (err) {
             res.status(500).json({ error : 'database error while removing duplicate' }); // CANNOT TEST
           } else {
-            res.sendStatus(204); // TODO: TEST
+            res.sendStatus(204); // TESTED
             // Sending emails doesn't work on Jenkins
             // Send email
             // let transporter = nodemailer.createTransport({

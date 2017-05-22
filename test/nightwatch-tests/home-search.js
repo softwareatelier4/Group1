@@ -7,6 +7,9 @@ module.exports = {
       .url(config.baseURL + '/')
       .useCss()
       .waitForElementVisible('body', 1000)
+      .setValue('input[name=search-what]', 'VP')
+      .click('button#search-btn')
+
       .pause(10000)
       // emergency checkbox
       .waitForElementVisible('div#filter-emergency', 1000)
@@ -16,7 +19,6 @@ module.exports = {
       .click('input[name=filter-emergency-temp]')
       // custom search
       .waitForElementPresent('input[name=search-what]', 10000)
-      .setValue('input[name=search-what]', 'VP')
       .waitForElementPresent('input[name=search-where]', 10000)
       .waitForElementVisible('div#freelancers-container', 10000)
       .waitForElementVisible('div.freelancer-card', 1000)
