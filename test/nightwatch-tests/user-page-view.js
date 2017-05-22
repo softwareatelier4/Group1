@@ -48,7 +48,7 @@ module.exports = {
     .click('button.freelancer-edit')
     .pause(1000)
     .waitForElementVisible('body', 1000)
-    .assert.containsText('div#root > h3:first-child', 'Add emergency availability for Michael Williamson (Desktop Support Technician):')
+    .assert.containsText('div#root > h3:first-child', 'Edit profile of Michael Williamson (Desktop Support Technician):')
 
     // Back to my own profile, click "delete"
     .waitForElementVisible('div#react-username a', 3000)
