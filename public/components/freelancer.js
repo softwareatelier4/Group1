@@ -8,7 +8,7 @@
 let userName;
 let documents;
 
-ajaxRequest("GET", window.location, { ajax: true }, {}, renderComponent);
+ajaxRequest("GET", window.location + '?ajax=true', {}, {}, renderComponent);
 
 function renderComponent(data) {
   if(data == 404) { // redirect to home if freelancer not found
@@ -485,7 +485,7 @@ class ReviewForm extends React.Component {
        * since we do not update them live, and here we would have to render the component
        * again anyway (new review and new average)
        */
-      ajaxRequest("GET", window.location, { ajax: true }, {}, function (data) {
+      ajaxRequest("GET", window.location + '?ajax=true', {}, {}, function (data) {
         renderComponent(data);
         // reset form
         document.getElementById("review-form").reset();
@@ -548,7 +548,7 @@ class ReplyForm extends React.Component {
        * since we do not update them live, and here we would have to render the component
        * again anyway (new review and new average)
        */
-      ajaxRequest("GET", window.location, { ajax: true }, {}, function (data) {
+      ajaxRequest("GET", window.location + '?ajax=true', {}, {}, function (data) {
         renderReviews(data);
       });
     });

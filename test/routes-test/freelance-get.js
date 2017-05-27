@@ -20,9 +20,8 @@ describe('Freelance-get test: ', function() {
 
     it('should list the freelance with correct data', function(done) {
       request(app)
-        .get('/freelance/' + seedData[1].data[0]._id.toString())
+        .get('/freelance/' + seedData[1].data[0]._id.toString() + '?ajax=true')
         .set('Accept', 'application/json')
-        .set('Ajax', 'true')
         .expect('Content-Type', /json/, 'it should respond with json')
         .expect(200)
         .end(function(err, res) {
@@ -34,25 +33,22 @@ describe('Freelance-get test: ', function() {
 
     it('should respond with a 404 if the freelance does not exist', function(done) {
       request(app)
-        .get('/freelance/' + ObjectId().toString())
+        .get('/freelance/' + ObjectId().toString() + '?ajax=true')
         .set('Accept', 'application/json')
-        .set('Ajax', 'true')
         .expect(404, done);
     });
 
     it('should respond with a 400 if the given freelance ID is not valid', function(done) {
       request(app)
-        .get('/freelance/' + 'literally_anything_which_is_not_in_the_correct_format')
+        .get('/freelance/' + 'literally_anything_which_is_not_in_the_correct_format?ajax=true')
         .set('Accept', 'application/json')
-        .set('Ajax', 'true')
         .expect(400, done);
     });
 
     it('should respond with a 405 if the method is not GET, PUT, or OPTIONS', function(done) {
       request(app)
-        .head('/freelance/' + seedData[1].data[0]._id.toString()) // valid id
+        .head('/freelance/' + seedData[1].data[0]._id.toString() + '?ajax=true') // valid id
         .set('Accept', 'application/json')
-        .set('Ajax', 'true')
         .expect(405, done);
     });
 
