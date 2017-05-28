@@ -177,3 +177,9 @@ input.submit-button {
 #freelancer-modification-message {
   font-weight: lighter;
 }
+
+#emergency-form-repetition-week input:focus ~ label {
+    top: -0px;
+    color: var(--form-label-color);
+    font-size: var(--input-font-size);
+}
