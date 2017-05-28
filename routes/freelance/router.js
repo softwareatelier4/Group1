@@ -88,7 +88,7 @@ router.get('/edit', function(req, res) {
 router.get('/:freelanceid', function(req, res, next) {
   if (ObjectId.isValid(req.params.freelanceid)) {
     // distinguish between raw and ajax GET request (to render page or return JSON)
-    if(req.headers.ajax) {
+    if(req.query.ajax) {
       Freelance.findById(req.params.freelanceid)
       .populate({
         path: 'reviews',

@@ -692,7 +692,7 @@ class FreelancerEditForm extends React.Component {
 		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
       if(!data.error) {
         form.renderFeedback("Information updated successfully");
-				ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+				ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
 					updateForms(freelancer);
 			  });
       } else {
@@ -790,7 +790,7 @@ class FreelancerEditForm extends React.Component {
 if(document.getElementById('react-freelancer-edit')) {
   renderPage();
   // get and render saved days
-  ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+  ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
     let days = freelancer.availability;
     savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
     savedSingleDates = days.filter((day) => { return !day.isRepeated; });
