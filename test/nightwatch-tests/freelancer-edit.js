@@ -41,7 +41,8 @@ module.exports = {
       .setValue('input[id=emergency-location-single]', 'Milano')
       .click('input#emergency-single-submit')
       .pause(1000)
-      .assert.containsText('span#emergency-date-error', '')
+      .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == ''); })
+      // .assert.containsText('span#emergency-date-error', '')
 
       // input single date same day
       .setValue('input[id=emergency-single-start]', function toTimeString(date) {
@@ -55,7 +56,8 @@ module.exports = {
       .setValue('input[id=emergency-location-single]', 'Milano')
       .click('input#emergency-single-submit')
       .pause(1000)
-      .assert.containsText('span#emergency-date-error', '')
+      .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == ''); })
+      // .assert.containsText('span#emergency-date-error', '')
 
       // test repeated dates
       .waitForElementPresent('input[id=emergency-form-recurrence-day]', 1000)
@@ -67,7 +69,9 @@ module.exports = {
       .setValue('input[id=emergency-repetition-weeks]', '2')
       .click('input#emergency-repetition-submit')
       .pause(500)
-      .assert.containsText('span#emergency-date-error', 'Schedule at least one day')
+      .getAttribute('#react-freelancer-edit', 'data-error-repetition', function(error) { client.assert.ok(error.value == 'empty'); })
+      // .assert.containsText('span#emergency-date-error', 'Schedule at least one day')
+      //
       // test repetition input ok
       .setValue('input[id=emergency-repetition-weeks]', '')
       .click('input#emergency-form-recurrence-day')
@@ -82,9 +86,9 @@ module.exports = {
       }(new Date()) )
       .setValue('input[id=emergency-location-1]', 'Lugano')
       .setValue('input[id=emergency-repetition-weeks]', '4')
+      .getAttribute('#react-freelancer-edit', 'data-error-repetition', function(error) { client.assert.ok(error.value == ''); })
       .click('input#emergency-repetition-submit')
       .pause(500)
-      .assert.containsText('span#emergency-date-error', '')
 
       // test ERROR conflicting single date
       .setValue('input[id=emergency-single-start]', function toTimeString(date) {
@@ -98,7 +102,8 @@ module.exports = {
       .setValue('input[id=emergency-location-single]', 'Milano')
       .click('input#emergency-single-submit')
       .pause(500)
-      .assert.containsText('span#emergency-date-error', 'Date conflicts with existing one')
+      .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == 'conflict'); })
+      // .assert.containsText('span#emergency-date-error', 'Date conflicts with existing one')
 
       // test ERROR conflicting repeated date
       .click('input#emergency-form-recurrence-day')
@@ -114,7 +119,8 @@ module.exports = {
       .setValue('input[id=emergency-location-1]', 'Lugano')
       .click('input#emergency-repetition-submit')
       .pause(500)
-      .assert.containsText('span#emergency-date-error', 'conflicts with existing dates and was not saved')
+      .getAttribute('#react-freelancer-edit', 'data-error-repetition', function(error) { client.assert.ok(error.value == 'conflict'); })
+      // .assert.containsText('span#emergency-date-error', 'conflicts with existing dates and was not saved')
 
       // test ERROR past date
       .setValue('input[id=emergency-single-date]', '')
@@ -122,7 +128,7 @@ module.exports = {
       .setValue('input[id=emergency-single-start]', '')
       .setValue('input[id=emergency-location-single]', '')
       .setValue('input[id=emergency-single-start]', function toTimeString(date) {
-        date.setMinutes(date.getMinutes());
+        date.setMinutes(date.getMinutes() - 1);
       	return ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
       }(new Date()) )
       .setValue('input[id=emergency-single-end]', function toTimeString(date) {
@@ -131,7 +137,9 @@ module.exports = {
       }(new Date()) )
       .setValue('input[id=emergency-location-single]', 'Milano')
       .click('input#emergency-single-submit')
-      .assert.containsText('span#emergency-date-error', 'Past dates are not valid')
+      .pause(5000)
+      .getAttribute('#react-freelancer-edit', 'data-error', function(error) { console.log(error.value);client.assert.ok(error.value == 'past_interval'); })
+      // .assert.containsText('span#emergency-date-error', 'Past dates are not valid')
       .end();
   }
 };
