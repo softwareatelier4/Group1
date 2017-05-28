@@ -104,8 +104,8 @@ class FreelancerCard extends React.Component {
             <img src={this.props.urlPicture} />
           </div>
           <div className="freelancer-card-info">
-            <h1 className="job-title  ">{this.props.title}</h1>
-            <h2>{this.props.firstName} {this.props.familyName}</h2>
+            <h1 className="job-title" data-job-title={this.props.title}>{this.props.title}</h1>
+            <h2 data-name={this.props.firstName + ' ' + this.props.familyName}>{this.props.firstName} {this.props.familyName}</h2>
             <span>
               Average Score: {this.formatAvgScore(this.props.avgScore)} / 5
             </span>
@@ -115,7 +115,7 @@ class FreelancerCard extends React.Component {
             {this.props.category}
           </span>
         </div>
-        <EditDelete show={this.props.isOwner} freelancerID={this.props._id}/>
+        <EditDelete show={this.props.isOwner} freelancer={this.props}/>
       </div>
     );
   }
@@ -126,18 +126,23 @@ class EditDelete extends React.Component {
     super(props);
   }
 
-  editFreelancer(freelancerID) {
+  editFreelancer(freelancer) {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Edit " + freelancerID)
+      window.location = `/freelance/edit?freelancer=${freelancer._id}`;
     }
   }
-  deleteFreelancer(freelancerID) {
+  deleteFreelancer(freelancer) {
     return function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      alert("TODO: Delete " + freelancerID)
+      if (confirm(`Are you sure you want to delete the profile for ${freelancer.firstName} ${freelancer.familyName} (${freelancer.title})?`)) {
+        ajaxRequest("DELETE", `/freelance/${freelancer._id}`, {}, {}, function(deleted) {
+          if (deleted._id === freelancer._id) ajaxRequest("GET", window.location + "?ajax=true", {}, {}, renderComponent);
+          else alert(`Whoops, something went wrong ¯\\_(ツ)_/¯`);
+        });
+      }
     }
   }
 
@@ -147,17 +152,17 @@ class EditDelete extends React.Component {
         <div className="freelancer-edit-delete-buttons">
           <button
             className="modify-button freelancer-edit"
-            onClick={this.editFreelancer(this.props.freelancerID)}
+            onClick={this.editFreelancer(this.props.freelancer)}
           >Edit</button>
           <button
             className="modify-button freelancer-delete"
-            onClick={this.deleteFreelancer(this.props.freelancerID)}
+            onClick={this.deleteFreelancer(this.props.freelancer)}
           >Delete</button>
         </div>
       );
     } else {
       return (
-        <div className="freelancer-edit-delete-buttons"></div>
+        <div></div>
       );
     }
   }

@@ -21,6 +21,8 @@ var claims = require('./claimsData');
 var claimsSize = claims.data.length;
 var availabilities = require('./availabilityData');
 var availabilitySize = availabilities.data.length;
+var duplicates = require('./duplicatesData');
+var duplicatesSize = duplicates.data.length;
 
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
@@ -58,7 +60,7 @@ const staticUsers = 6;
 const emergencyUserIndex = staticUsers - 1;
 users.data[emergencyUserIndex].freelancer.push([freelancers.data[emergencyUserIndex]._id]);
 freelancers.data[emergencyUserIndex].owner = users.data[emergencyUserIndex]._id;
-freelancers.data[emergencyUserIndex].status = 'verified';
+freelancers.data[emergencyUserIndex].state = 'verified';
 // bind non-static users to Freelance profiles
 // non-static users get Freelancers starting from the bottom of array
 // this way starting from top of freelancers array are free to use with static users
@@ -96,5 +98,6 @@ seedData.push(tags);        // 2
 seedData.push(categories);  // 3
 seedData.push(users);       // 4
 seedData.push(claims);      // 5
+seedData.push(duplicates);  // 6
 
 module.exports = seedData;

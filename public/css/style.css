@@ -16,16 +16,20 @@ html {
 /* Global variables */
 * {
   /* Colors */
-  --accent-color: #F44336; /* change hover color accordingly */
-  --accent-hover: #c9372c;
+  --accent-color: #4e96e2; /* change hover color accordingly, old color: #F44336; */
+  --accent-hover: #367ac3; /* Olc color: #c9372c; */
   --basic-white: #fff;
+  --basic-white-hover: #d6d3d3;
   --background: #f7f7f7;
   --home-search-border: #c9c9c9;
   --home-search-border-focus: #969696;
-  --home-search-button-border: #d83838;
-  --home-search-button-border-hover: #b72f2f;
+  --home-search-button-border: #327ed0;
+  --home-search-button-border-hover: #2362a6;
   --form-label-color: #999;
   --form-input-border: #757575;
+  --login-button-border: #b1b1b1;
+  --star-yellow: #FFEB3B;
+  --star-yellow-hover: #FBC02D;
 
   /* Shadows */
   --box-shadow-material: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -37,6 +41,10 @@ html {
   --input-font-size: 1.2;
   --tag-font-size: 0.7;
   --general-bigger-font-size: 1.2em;
+
+  /* borders */
+  --border-bottom-grey: solid 2px var(--home-search-border);
+  --border-bottom-accent: solid 4px var(--home-search-button-border);
 }
 
 .title {
@@ -46,17 +54,10 @@ html {
   text-align: center;
 }
 
-#topbar{
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  background-color: var(--accent-color);
-  margin-bottom: 50px;
-}
-
 #react-title {
   display: flex;
   flex-direction: column;
+  margin-right: 20px;
 }
 
 /* Topbar */
@@ -73,13 +74,28 @@ html {
 #title {
   font-size: 3em;
   text-align: center;
-  color: white;
+  color: var(--basic-white);
   margin-left: 20px;
   padding: 5px 0;
 }
 
 #react-username {
-  color: white;
+  display: flex;
+}
+
+#react-username a {
+  align-self: center;
+  color: var(--basic-white);
+  text-decoration: none;
+  font-size: 1.5em;
+  width: 100%;
+  height: 100%;
+  line-height: 65px;
+  padding: 0 10px 0 10px;
+}
+
+#react-username a:hover {
+  background: var(--accent-hover);
 }
 
 a#title {
@@ -89,56 +105,499 @@ a#title {
 #freelancer-home-btn {
   width: 100%;
   height: 65px;
-  background-color: var(--basic-white);
-  color: var(--accent-color);
-  border: 0px;
-  font-size: 1.2em;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-color: var(--accent-hover);
+  font-size: var(--input-font-size);
   padding: 20px;
 }
 
 #freelancer-home-btn:hover {
-  box-shadow: var(--box-shadow-material-hover);
+  background: var(--accent-hover);
   cursor: pointer;
+}
+
+#freelancer-home-btn:focus {
+  outline: none;
+}
+
+#react-register {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+#login-form {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#login-username, #login-password {
+  padding: 10px 10px 5px 5px;
+  border: none;
+  border-bottom: solid 2px var(--basic-white);
+  transition: border 0.3s;
+  outline: none;
+  width: 35%;
+  height: auto;
+  font-size: var(--input-font-size);
+  background: var(--accent-color);
+  color: var(--basic-white);
+}
+
+#login-submit, #user-register-btn  {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 80px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+#login-submit:hover, #user-register-btn:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#login-submit:active, #user-register-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
+
+#user-register-btn {
+  margin-left: 30px;
+}
+
+#topbar-filler-right {
+  flex-grow: 2;
+}
+#topbar-filler-left {
+  flex-grow: 1;
+}
+
+#react-logout {
+  display: flex;
+}
+
+#freelancer-logout-btn {
+  align-self: center;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: 80px;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+#freelancer-logout-btn:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-logout-btn:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
+
+#emergency-link-container {
+  display: flex;
+}
+
+#emergency-edit-link {
+  color: var(--basic-white);
+  font-size: 1.2em;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  line-height: 65px;
+  padding: 0 10px 0 10px;
+}
+
+#emergency-edit-link:hover {
+  background: var(--accent-hover);
 }
 /* End topbar */
 
 /* Submit button */
 
 .submit-button {
-  background-color: var(--accent-color);
+  /*background-color: var(--accent-color);
   color: var(--basic-white);
   width: 17%;
   border-radius: 2px;
   border-style: none;
-  align-self: flex-end;
+  align-self: flex-end;*/
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px 0;
 }
 
 .submit-button:hover {
-  background-color: var(--home-search-button-border-hover);
-  cursor: pointer;
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
 }
 
 .submit-button:hover:active {
-  box-shadow: var(--box-shadow-material);
+  outline: none;
 }
 
 .submit-button:focus {
+  border-bottom: 0;
+  border-top: solid 2px var(--background);
   outline: none;
 }
 
 /* End submit button */
 
-/* Freelancer claim form */
+/* Sliders */
 
-/*#freelancer-claim-form-form {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
 }
 
-#freelancer-claim-form-form * {
-  width: 50%;
-  font-size: 0.8em;
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Slider Thumb */
+
+/* Chrome */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 8px;
+  border-radius: 2px;
+  background: var(--accent-color);
+  cursor: pointer;
+  margin-top: -9px;
+}
+
+input[type=range]::-webkit-slider-thumb:active {
+  box-shadow: var(--box-shadow-material);
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  background: var(--accent-hover);
+}
+
+/* Firefox */
+input[type=range]::-moz-range-thumb {
+  height: 18px;
+  width: 8px;
+  border-radius: 2px;
+  background: var(--accent-color);
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb:active {
+  box-shadow: var(--box-shadow-material);
+}
+
+input[type=range]::-moz-range-thumb:hover {
+  background: var(--accent-hover);
+}
+
+/* IE */
+input[type=range]::-ms-thumb {
+  height: 18px;
+  width: 8px;
+  border-radius: 2px;
+  background: var(--accent-color);
+  cursor: pointer;
+}
+
+input[type=range]::-ms-thumb:active {
+  box-shadow: var(--box-shadow-material);
+}
+
+input[type=range]::-ms-thumb:hover {
+  background: var(--accent-hover);
+}
+
+/* Track */
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: #000;
+  border-radius: 1.3px;
+  border: 0.2px solid #7e7e7e;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+
+/*input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #2a6495;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type=range]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #367ebd;
 }*/
 
-/* End freelancer claim form */
+/* End sliders */
+
+/* Placeholder bullshit color change */
+
+#login-username::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: var(--basic-white);
+}
+
+#login-username:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color: var(--basic-white);
+opacity:  1;
+}
+
+#login-username::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: var(--basic-white);
+   opacity:  1;
+}
+
+#login-username:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: var(--basic-white);
+}
+
+#login-password::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: var(--basic-white);
+}
+
+#login-password:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color: var(--basic-white);
+opacity:  1;
+}
+
+#login-password::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: var(--basic-white);
+   opacity:  1;
+}
+
+#login-password:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: var(--basic-white);
+}
+
+/* End placeholder bullshit */
+
+/* Freelancer availability edit section */
+#freelancer-edit-login-message {
+  text-align: center;
+  color: gray;
+}
+
+#freelancer-modification-message {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#react-freelancer-edit {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#repeated-dates-label {
+  font-size: var(--general-bigger-font-size);
+}
+
+#emergency-form-recurrence-day {
+  margin-right: 20px;
+}
+
+#emergency-form-repetition-week span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  width: 80%;
+}
+
+#emergency-form-repetition-week span label {
+  min-width: 35px;
+}
+
+#emergency-form-repetition-week span input {
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+#emergency-form-repetition-week span input:focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+#emergency-form-repetition-type label {
+  margin-top: 10px;
+}
+
+#emergency-form-repetition-type input[type=radio] {
+  margin-right: 10px;
+}
+
+#emergency-form-repetition-type input[type=text], #emergency-form-repetition-type input[type=date] {
+  font-size: var(--input-font-size);
+}
+
+#emergency-repetition-start-date {
+  margin-left: 20px;
+}
+
+#emergency-repetition-submit {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px;
+}
+
+#emergency-repetition-submit:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
+}
+
+#emergency-repetition-submit:active {
+  outline: none;
+}
+
+#emergency-form-single-date {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#emergency-form-single-date input[type=date], #emergency-form-single-date input[type=text] {
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+#emergency-location-single {
+  width: 150px;
+}
+
+#emergency-single-submit {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 2px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 6px;
+}
+
+#emergency-single-submit:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 2px var(--home-search-button-border-hover);
+}
+
+#emergency-single-submit:active {
+  outline: none;
+}
+
+#emergency-schedule-message {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#calendar {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+}
+
+#calendar-legend {
+  padding: 10px 20px;
+  background: var(--basic-white);
+  box-shadow: var(--box-shadow-material);
+  margin: 0;
+}
+
+/* End freelancer availability edit section */

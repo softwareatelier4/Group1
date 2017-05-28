@@ -10,7 +10,7 @@
   margin: 10vh 10vw 5vh;
   width: auto;
   box-shadow: var(--box-shadow-material);
-  border-radius: 2px;
+  border-radius: 0;
   background-color: var(--basic-white);
 }
 
@@ -19,7 +19,7 @@
   color: var(--basic-white);
   background-color: var(--accent-color);
   font-weight: 100;
-  border-radius: 2px 2px 0 0;
+  border-radius: 0;
   text-align: center;
 }
 
@@ -94,15 +94,20 @@ select:focus {
 
 input {
   font-size: 18px;
-  padding: 10px 10px 10px 5px;
   display: block;
   width: 100%;
   border: none;
-  border-bottom: 1px solid var(--form-input-border);
+  border-bottom: 2px solid var(--home-search-border);
 }
 
 input:focus {
   outline:none;
+  border-bottom: 2px solid var(--home-search-border-focus);
+}
+
+.submit-button {
+  width: 20%;
+  margin: 0 0 0 80%;
 }
 
 /* LABEL ======================================= */
@@ -112,7 +117,7 @@ label {
   font-size: var(--input-font-size);
 }
 
-.group label {
+/*.group label {
   font-weight: normal;
   position: absolute;
   pointer-events: none;
@@ -121,7 +126,7 @@ label {
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
-}
+}*/
 
 /* active state */
 
@@ -139,7 +144,7 @@ input:focus ~ label {
   width: 100%;
 }
 
-.bar:before, .bar:after {
+/*.bar:before, .bar:after {
   content: '';
   height: 2px;
   width: 0;
@@ -149,7 +154,7 @@ input:focus ~ label {
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
-}
+}*/
 
 .bar:before {
   left: 50%;
@@ -163,4 +168,55 @@ input:focus ~ label {
 
 input:focus ~ .bar:before, input:focus ~ .bar:after {
   width: 50%;
+}
+
+/* Add buttons */
+
+#freelancer-type {
+  display: flex;
+  justify-content: space-around;
+}
+
+#freelancer-other, #freelancer-myself {
+  width: 500px;
+  height: 200px;
+  background-color: var(--accent-color);
+  color: var(--basic-white);
+  border: 0px;
+  font-size: 1em;
+  border-bottom: solid 7px var(--home-search-button-border);
+}
+
+#freelancer-other::before {
+  content: "Add someone else: ";
+  font-size: 30px;
+}
+
+#freelancer-myself::before {
+  content: "Add myself: ";
+  font-size: 30px;
+}
+
+#freelancer-other {
+  margin-left: 100px;
+}
+
+#freelancer-myself {
+  margin-right: 100px;
+}
+
+#freelancer-other:hover, #freelancer-myself:hover {
+  background: var(--accent-hover);
+  border-bottom: solid 7px var(--home-search-button-border-hover);
+  cursor: pointer;
+}
+
+#freelancer-other:focus, #freelancer-myself:focus {
+  outline: none;
+}
+
+#freelancer-other:active, #freelancer-myself:active {
+  outline: none;
+  border-bottom: 0;
+  border-top: solid 7px var(--background);
 }

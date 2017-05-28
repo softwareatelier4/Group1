@@ -44,3 +44,107 @@ h3 {
   font-size: 1.5em;
   margin-bottom: 0;
 }
+
+input {
+  padding: 10px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+}
+
+input.focus,
+input:focus {
+  border-bottom: solid 2px var(--home-search-border-focus);
+  outline: none;
+}
+
+button.edit-tab {
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: solid 4px var(--home-search-button-border);
+  outline: none;
+  cursor: pointer;
+}
+
+button.edit-tab:hover {
+  background-color: var(--accent-hover);
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+button.edit-tab:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--background);
+}
+
+#react-main {
+  display: flex;
+  justify-content: center;
+}
+
+#edit-view {
+  width: 100%;
+  margin-bottom: 50px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+#edit-content > div {
+  display: none;
+}
+
+#edit-content > div.selected {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+#edit-menu {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 30px;
+}
+
+#edit-menu > button {
+  flex: 1;
+  height: 50px;
+  border-bottom: solid 4px var(--accent-color);
+}
+
+#edit-menu > button:hover {
+  flex: 1;
+  border-bottom: solid 4px var(--accent-hover);
+}
+
+#edit-menu > button:active {
+  border-top: 0;
+  border-bottom: solid 4px var(--accent-hover);
+}
+
+#edit-menu > button.selected {
+  border-bottom: solid 4px var(--home-search-button-border-hover);
+}
+
+#edit-content {
+  width: 100%;
+}
+
+#edit-info input{
+	width: 500px;
+	height: 50px;
+}
+
+input#pricemin{
+	width: 100px;
+	height: 50px;
+}
+
+input#pricemax{
+	width: 100px;
+	height: 50px;
+}

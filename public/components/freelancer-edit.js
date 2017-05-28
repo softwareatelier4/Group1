@@ -1,6 +1,7 @@
 
 let savedSingleDates = [];
 let savedRepeatedDates = [];
+let freelance = {};
 let freelancerId = document.getElementById('root').getAttribute('data-user-freelancer');
 
 const SINGLE_DATES_COLOR = 'green';
@@ -245,7 +246,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
     return (
       <form id="emergency-form-repetition" onSubmit={this.handleSubmit}>
         <div id="emergency-form-repetition-week">
-          <label>Add repeated dates <span id="emergency-repetition-saved-until"></span>:</label>
+          <label id="repeated-dates-label">Add repeated dates:</label>
           <span>
             <input type="checkbox" name="recurrence-days" ref="recurrence-days" id="emergency-form-recurrence-day" onClick={this.updateCheck} onChange={this.onCheckChange} value="1" />
             <label>Mo</label>
@@ -295,7 +296,7 @@ class FreelancerEmergencyRepetitionForm extends React.Component {
             <input type="date" id="emergency-repetition-start-date" defaultValue={new Date().toJSON().slice(0,10)}/>
           </label>
           <label><input type="radio" name="emergency-repetition-type" value="weeks" defaultChecked={true} onChange={this.onRadioChange} />
-            <input type="text" id="emergency-repetition-weeks" placeholder="For a number of weeks" required/>
+            <input type="text" id="emergency-repetition-weeks" placeholder="Number of weeks" required/>
           </label>
           <label>
             <input type="radio" name="emergency-repetition-type" value="until" onChange={this.onRadioChange} />
@@ -322,10 +323,13 @@ class FreelancerEmergencyForm extends React.Component {
   }
 }
 
-class FreelancerEditView extends React.Component {
+class FreelancerEmergencyView extends React.Component {
   render() {
     return (
-      <FreelancerEmergencyForm />
+			<div id="edit-schedule">
+      	<FreelancerEmergencyForm />
+				<CalendarView />
+			</div>
     );
   }
 }
@@ -339,7 +343,7 @@ function renderError(errorString) {
 }
 
 function renderPage() {
-  ReactDOM.render(<FreelancerEditView />, document.getElementById('react-freelancer-edit'));
+  ReactDOM.render(<FreelancerMainView />, document.getElementById('react-freelancer-edit'));
 };
 
 /**
@@ -535,8 +539,250 @@ function renderCalendar() {
       }
     }
   });
-
 }
+
+function updateForms(freelancer){
+	freelance = freelancer;
+
+	document.getElementById('email').value = freelancer.email;
+	document.getElementById('description').value = freelancer.description;
+	let temp = "";
+	for( let tag of freelancer.tags){
+		temp+=tag.tagName+", ";
+	}
+	document.getElementById('tags').value = temp;
+	document.getElementById('phone').value = freelancer.phone;
+	document.getElementById('address').value = freelancer.address;
+	document.getElementById('pic').value = freelancer.urlPicture;
+	document.getElementById('pricemin').value = freelancer.price.min;
+	document.getElementById('pricemax').value = freelancer.price.max;
+}
+
+class CalendarView extends React.Component {
+	render() {
+		return (
+			<div>
+				<h3>Your emergency schedule:</h3>
+				<ul id="calendar-legend">
+					<li id="calendar-legend-single"> Single dates </li>
+					<li id="calendar-legend-repeated"> Repeated dates </li>
+				</ul>
+				<div id='calendar'></div>
+			</div>
+		);
+	};
+}
+
+class FreelancerMainView extends React.Component {
+  select(pageName) {
+    return function() {
+      let btns = document.getElementById('edit-menu').children;
+      for (let btn of btns) {
+        if (btn.id === `edit-btn-${pageName}`) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      }
+      let pages = document.getElementById('edit-content').children;
+      for (let page of pages) {
+        if (page.id === `edit-${pageName}`) {
+          page.classList.add('selected');
+        } else {
+          page.classList.remove('selected');
+        }
+      }
+
+      if(pageName == 'schedule') {
+        renderCalendar();
+      }
+    }
+  }
+  render() {
+    return (
+      <div id="edit-view">
+        <div id="edit-menu">
+          <button className='edit-tab selected' id="edit-btn-info"  onClick={this.select('info')}>Edit Profile Information</button>
+          <button className='edit-tab' id="edit-btn-schedule" onClick={this.select('schedule')}>Edit Emergency Availability</button>
+        </div>
+        <div id="edit-content">
+          <FreelancerEditForm />
+          <FreelancerEmergencyView />
+        </div>
+      </div>
+    );
+  }
+}
+
+class FreelancerEditForm extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderFeedback = this.renderFeedback.bind(this);
+	}
+
+  renderFeedback(feedbackString) {
+    document.getElementById('edit-feedback').innerHTML = feedbackString;
+  }
+
+
+	handleSubmit(evt) {
+		evt.preventDefault();
+
+		// create freelancer
+		const formData = {};
+		let price = {};
+		for (const field in this.refs) {
+ 			if(this.refs[field].value !== "" && field !== "price-min" &&
+			field !== "price-max" && freelance[field] != this.refs[field].value){
+					formData[field] = this.refs[field].value;
+			} else if (field === "price-min" && freelance.price.min != this.refs[field].value ){
+				if(!(isNaN(this.refs[field].value))){
+					price.min = Number(this.refs[field].value);
+				} else{
+					console.log("Please insert a number.");
+				}
+			} else if (field === "price-max" && freelance.price.max != this.refs[field].value ){
+				if(!(isNaN(this.refs[field].value))){
+					price.max = Number(this.refs[field].value);
+				} else{
+					console.log("Please insert a number.");
+				}
+			}
+		}
+		if(price.hasOwnProperty('min')){
+			if(price.hasOwnProperty('max')){
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			} else {
+				price.max = freelance.price.max;
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			}
+		} else if(price.hasOwnProperty('max')){
+			if(price.hasOwnProperty('min')){
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+				formData.price = price;
+			} else {
+				price.min = Number(freelance.price.min);
+				if(price.max < price.min){
+					let temp = price.max;
+					price.max = price.min;
+					price.min = temp;
+				}
+
+				formData.price = price;
+			}
+		}
+
+		let form = this;
+		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
+      if(!data.error) {
+        form.renderFeedback("Information updated successfully");
+				ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
+					updateForms(freelancer);
+			  });
+      } else {
+        console.log(data.error);
+        form.renderFeedback("An error occurred");
+      }
+		});
+	}
+
+  render() {
+    return (
+			<div id="edit-info"  className='selected'>
+        <span id="edit-feedback"></span>
+        <form onSubmit={this.handleSubmit} id="freelancer-edit-form">
+
+
+          <div className="group">
+            <textarea form="freelancer-edit-form" rows="4" cols="50" ref="description" className="job-description" name="job-description" type="text" id="description">
+            </textarea>
+            <span className="bar"></span>
+            <label>
+              Job Description
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="address" className="address" name="address" type="text" id="address"/>
+            <span className="bar"></span>
+            <label>
+              Address
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="phone" className="phone" name="phone" type="tel"  id="phone"/>
+            <span className="bar"></span>
+            <label>
+              Phone
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="email" className="email" name="email" type="email" id="email"/>
+            <span className="bar"></span>
+            <label>
+              Email
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
+            <span className="bar"></span>
+            <label>
+              Picture URL
+            </label>
+          </div>
+
+          <div className="group">
+            <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
+            <span className="bar"></span>
+            <label>
+              Job tags (separated by a comma)
+            </label>
+          </div>
+
+					<div className="group">
+            <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <span className="bar"></span>
+            <label>
+              Min price/hour
+            </label>
+          </div>
+					<div className="group">
+            <input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+            <span className="bar"></span>
+            <label>
+              Max price/hour
+            </label>
+          </div>
+
+
+          <div id="react-claim-form-root"></div>
+          <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+        </form>
+
+			</div>
+    );
+  }
+}
+
 
 /**
  * On load
@@ -544,10 +790,12 @@ function renderCalendar() {
 if(document.getElementById('react-freelancer-edit')) {
   renderPage();
   // get and render saved days
-  ajaxRequest('GET', freelancerId, { ajax: true }, {}, function(freelancer) {
+  ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
     let days = freelancer.availability;
     savedRepeatedDates = days.filter((day) => { return day.isRepeated; });
     savedSingleDates = days.filter((day) => { return !day.isRepeated; });
+
+		updateForms(freelancer);
 
     console.log('Saved days', days);
     renderCalendar();

@@ -198,6 +198,8 @@ button:active {
 .card-claim button {
   border: 1px solid black;
   padding: 0;
+  padding: 5px;
+  margin-left: 5px;
 }
 
 .card-claim button:hover,

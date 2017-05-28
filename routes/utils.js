@@ -57,4 +57,45 @@ module.exports = {
     });
   },
 
+  // Asynchronous call for updating tags
+  // @param givenTag    : String name of the Tag
+  // @param freelance   : Object freelancer as returned from mongoose
+  // @param done        : Callback function to be called at the end
+  // if tag does not exists it creates it
+  // if 'freelance' is not undefined it is added to the found tag
+  // done(savedTag) is called at the end of successful execution
+  
+  // TODO move here boilerplate code from freelance/router.js
+  updateFreelancerTags : function(givenTag, freelance, done) {
+    Tag.findOne({'tagName' : givenTag}).exec(function(err, foundTag) {
+      if (err || (foundTag == undefined)) {
+        // Tag is not in the database, add it
+        const newTag = new Tag({
+          tagName: givenTag,
+        });
+        if (!(freelance == undefined)) newTag.freelancers.push(freelance);
+        // Save tag and proceed to process response.
+        newTag.save(function(errTag, savedTag) {
+          if (errTag) {
+            console.log("Error with saving the tag: " + errTag);
+            res.status(400).json(formatErrorMessage(errTag));
+          } else {
+            done(savedTag);
+          }
+        });
+      } else {
+        // Add this new freelance to the freelancers that have this tag.
+        if (!(freelance == undefined)) foundTag.freelancers.push(freelance);
+        foundTag.save(function(errTag, savedTag) {
+          if (err) {
+            console.log("Error with saving the tag: " + err);
+            res.status(400).json(utils.formatErrorMessage(errTag));
+          }else {
+            done(savedTag);
+          }
+        });
+      }
+    });
+  },
+
 }
