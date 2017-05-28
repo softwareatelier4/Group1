@@ -495,3 +495,19 @@ ul.tag-list li {
 #freelancer-claim-form-optional-files {
   margin: 10px 0;
 }
+
+#freelancer-claim-status div button {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: auto;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
+}
