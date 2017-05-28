@@ -183,3 +183,18 @@ input.submit-button {
     color: var(--form-label-color);
     font-size: var(--input-font-size);
 }
+
+span#edit-feedback {
+  text-align: right;
+  float: right;
+  display: block;
+  margin: 25px 10px 0 0;
+}
+
+.edit-success {
+  color: green;
+}
+
+.edit-fail {
+  color: red;
+}

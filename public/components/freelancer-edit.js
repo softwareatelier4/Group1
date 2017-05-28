@@ -622,8 +622,10 @@ class FreelancerEditForm extends React.Component {
     this.renderFeedback = this.renderFeedback.bind(this);
 	}
 
-  renderFeedback(feedbackString) {
-    document.getElementById('edit-feedback').innerHTML = feedbackString;
+  renderFeedback(feedbackString, success) {
+    let feedbackSpan = document.getElementById('edit-feedback');
+    feedbackSpan.className = (success)? 'edit-success' : 'edit-fail';
+    feedbackSpan.innerHTML = feedbackString;
   }
 
 
@@ -691,13 +693,13 @@ class FreelancerEditForm extends React.Component {
 		let form = this;
 		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
       if(!data.error) {
-        form.renderFeedback("Information updated successfully");
+        form.renderFeedback("Information updated successfully", true);
 				ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
 					updateForms(freelancer);
 			  });
       } else {
         console.log(data.error);
-        form.renderFeedback("An error occurred");
+        form.renderFeedback("An error occurred", false);
       }
 		});
 	}
@@ -705,7 +707,6 @@ class FreelancerEditForm extends React.Component {
   render() {
     return (
 			<div id="edit-info"  className='selected'>
-        <span id="edit-feedback"></span>
         <form onSubmit={this.handleSubmit} id="freelancer-edit-form">
 
 
@@ -775,6 +776,7 @@ class FreelancerEditForm extends React.Component {
 
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+          <span id="edit-feedback"></span>
         </form>
 
 			</div>
