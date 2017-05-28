@@ -434,12 +434,8 @@ class FreelancerEmergencyView extends React.Component {
 }
 
 /**
- * Helper and rendering functions
+ * Rendering functions
  */
-
-function renderError(errorString) {
-  document.getElementById('emergency-date-error').innerHTML = errorString;
-}
 
 function renderPage() {
   ReactDOM.render(<FreelancerMainView />, document.getElementById('react-freelancer-edit'));

@@ -42,7 +42,6 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(1000)
       .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == ''); })
-      // .assert.containsText('span#emergency-date-error', '')
 
       // input single date same day
       .setValue('input[id=emergency-single-start]', function toTimeString(date) {
@@ -57,7 +56,6 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(1000)
       .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == ''); })
-      // .assert.containsText('span#emergency-date-error', '')
 
       // test repeated dates
       .waitForElementPresent('input[id=emergency-form-recurrence-day]', 1000)
@@ -70,8 +68,7 @@ module.exports = {
       .click('input#emergency-repetition-submit')
       .pause(500)
       .getAttribute('#react-freelancer-edit', 'data-error-repetition', function(error) { client.assert.ok(error.value == 'empty'); })
-      // .assert.containsText('span#emergency-date-error', 'Schedule at least one day')
-      //
+
       // test repetition input ok
       .setValue('input[id=emergency-repetition-weeks]', '')
       .click('input#emergency-form-recurrence-day')
@@ -103,7 +100,6 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(500)
       .getAttribute('#react-freelancer-edit', 'data-error', function(error) { client.assert.ok(error.value == 'conflict'); })
-      // .assert.containsText('span#emergency-date-error', 'Date conflicts with existing one')
 
       // test ERROR conflicting repeated date
       .click('input#emergency-form-recurrence-day')
@@ -120,7 +116,6 @@ module.exports = {
       .click('input#emergency-repetition-submit')
       .pause(500)
       .getAttribute('#react-freelancer-edit', 'data-error-repetition', function(error) { client.assert.ok(error.value == 'conflict'); })
-      // .assert.containsText('span#emergency-date-error', 'conflicts with existing dates and was not saved')
 
       // test ERROR past date
       .setValue('input[id=emergency-single-date]', '')
@@ -139,7 +134,6 @@ module.exports = {
       .click('input#emergency-single-submit')
       .pause(5000)
       .getAttribute('#react-freelancer-edit', 'data-error', function(error) { console.log(error.value);client.assert.ok(error.value == 'past_interval'); })
-      // .assert.containsText('span#emergency-date-error', 'Past dates are not valid')
       .end();
   }
 };
