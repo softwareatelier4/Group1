@@ -56,7 +56,7 @@ input {
 
 input.focus,
 input:focus {
-  border-bottom: solid 2px var(--home-search-border-focus);
+  border-bottom: solid 2px var(--home-search-border-focus) !important;
   outline: none;
 }
 
@@ -135,16 +135,45 @@ button.edit-tab:active {
 }
 
 #edit-info input{
-	width: 500px;
-	height: 50px;
+  width: 100%;
+  height: 30px;
+  display: block;
+  margin-bottom: 2px;
+  margin-top: 20px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+  padding: 0;
 }
 
-input#pricemin{
-	width: 100px;
-	height: 50px;
+label {
+  color: var(--form-label-color);
+  font-size: var(--input-font-size);
 }
 
-input#pricemax{
-	width: 100px;
-	height: 50px;
+input:focus ~ label {
+    top: -20px;
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+input.submit-button {
+    width: 20% !important;
+    float: right;
+    font-size: var(--input-font-size);
+    border: 0;
+    background-color: var(--accent-color);
+    color: white;
+    border-bottom: solid 2px var(--home-search-button-border) !important;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 6px 0;
+}
+
+#freelancer-modification-message {
+  font-weight: lighter;
 }

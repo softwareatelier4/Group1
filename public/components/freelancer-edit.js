@@ -710,8 +710,7 @@ class FreelancerEditForm extends React.Component {
 
 
           <div className="group">
-            <textarea form="freelancer-edit-form" rows="4" cols="50" ref="description" className="job-description" name="job-description" type="text" id="description">
-            </textarea>
+            <input form="freelancer-edit-form" ref="description" className="job-description" name="job-description" type="text" id="description" />
             <span className="bar"></span>
             <label>
               Job Description
