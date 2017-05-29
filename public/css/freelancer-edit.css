@@ -159,7 +159,7 @@ button.edit-tab:active {
   font-size: var(--input-font-size);
 }
 
-input:focus ~ label {
+#edit-info input:focus ~ label {
     font-size: 14px;
     color: var(--accent-color);
 }
