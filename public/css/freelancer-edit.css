@@ -139,7 +139,6 @@ button.edit-tab:active {
   height: 30px;
   display: block;
   margin-bottom: 2px;
-  margin-top: 20px;
   border: none;
   border-bottom: solid 2px var(--home-search-border);
   transition: border 0.3s;
@@ -148,13 +147,19 @@ button.edit-tab:active {
   padding: 0;
 }
 
-label {
+.group {
+  position: relative;
+  margin-bottom: 45px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#edit-info label {
   color: var(--form-label-color);
   font-size: var(--input-font-size);
 }
 
 input:focus ~ label {
-    top: -20px;
     font-size: 14px;
     color: var(--accent-color);
 }

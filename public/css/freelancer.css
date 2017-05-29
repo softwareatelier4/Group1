@@ -445,6 +445,18 @@ ul.tag-list li {
   cursor: auto;
 }
 
+#freelancer-edit-button:hover,
+#freelancer-delete-button:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-edit-button:active,
+#freelancer-delete-button:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
+
 #freelancer-claim-form-form,
 #freelancer-claim-form-form-optional {
   flex-basis: 50%;

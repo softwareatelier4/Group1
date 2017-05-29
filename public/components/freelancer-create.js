@@ -105,18 +105,21 @@ class CreationForm extends React.Component {
 
           <div className="names-input">
             <div className="group">
-              <input ref="firstName" className="first-name" name="first-name" type="text" placeholder="First Name" required/>
+              <input ref="firstName" className="first-name" name="first-name" type="text" required/>
+              <label for="first-name">First Name</label>
               <span className="bar"></span>
             </div>
 
             <div className="group">
-              <input ref="familyName" className="family-name" name="family-name" type="text" placeholder="Family Name"/>
+              <input ref="familyName" className="family-name" name="family-name" type="text" />
+              <label for="family-name">Family Name</label>
               <span className="bar"></span>
             </div>
           </div>
 
           <div className="group">
-            <input ref="title" className="job-title" name="job-title" type="text" placeholder="Job Title" required/>
+            <input ref="title" className="job-title" name="job-title" type="text" required/>
+            <label for="job-title">Job Title</label>
             <span className="bar"></span>
           </div>
 
@@ -132,49 +135,52 @@ class CreationForm extends React.Component {
           </div>
 
           <div className="group">
-            <input ref="description" className="job-description" name="job-description" type="text" placeholder="Job Description" required/>
+            <input ref="description" className="job-description" name="job-description" type="text" required/>
+            <label for="job-description">Job Description</label>
             <span className="bar"></span>
           </div>
 
           <div className="group">
-            <input ref="tags" className="job-tags" name="job-tags" type="text" placeholder="Job tags (separated by a comma)"/>
+            <input ref="tags" className="job-tags" name="job-tags" type="text" />
+            <label for="job-tags">Job tags (separated by a comma)</label>
             <span className="bar"></span>
           </div>
 
           <div className="group">
-            <input ref="urlPicture" className="picture-url" name="picture-url" type="text" placeholder="Picture URL"/>
+            <input ref="urlPicture" className="picture-url" name="picture-url" type="text"/>
+            <label for="picture-url">Picture URL</label>
             <span className="bar"></span>
           </div>
 
           <div className="group">
-            <input ref="address" className="address" name="address" type="text" placeholder="Address" required/>
+            <input ref="address" className="address" name="address" type="text" required/>
+            <label for="address">Address</label>
             <span className="bar"></span>
           </div>
 
           <div className="group">
-            <input ref="phone" className="phone" name="phone" type="tel" placeholder="Phone Number" pattern='?\+?[0-9]+'/>
+            <input ref="phone" className="phone" name="phone" type="tel" pattern='?\+?[0-9]+'/>
+            <label for="phone">Phone Number</label>
             <span className="bar"></span>
           </div>
 
           <div className="group">
-            <input ref="email" className="email" name="email" type="email" placeholder="E-mail" required/>
+            <input ref="email" className="email" name="email" type="email" required/>
+            <label for="email">E-mail</label>
             <span className="bar"></span>
           </div>
 
 					<div className="group">
-						<input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <label for="price-min">Minimum price</label>
 						<span className="bar"></span>
-						<label>
-							Minimum price
-						</label>
+
 					</div>
 
 					<div className="group">
 						<input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+            <label for="price-max"> Maximum price</label>
 						<span className="bar"></span>
-						<label>
-							Maximum price
-						</label>
 					</div>
 
 

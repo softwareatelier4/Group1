@@ -712,65 +712,49 @@ class FreelancerEditForm extends React.Component {
 
           <div className="group">
             <input form="freelancer-edit-form" ref="description" className="job-description" name="job-description" type="text" id="description" />
+            <label for="job-description">Job Description</label>
             <span className="bar"></span>
-            <label>
-              Job Description
-            </label>
           </div>
 
           <div className="group">
             <input ref="address" className="address" name="address" type="text" id="address"/>
+            <label for="address">Address</label>
             <span className="bar"></span>
-            <label>
-              Address
-            </label>
           </div>
 
           <div className="group">
             <input ref="phone" className="phone" name="phone" type="tel"  id="phone"/>
+            <label for="phone">Phone Number</label>
             <span className="bar"></span>
-            <label>
-              Phone
-            </label>
           </div>
 
           <div className="group">
             <input ref="email" className="email" name="email" type="email" id="email"/>
+            <label for="email">E-mail</label>
             <span className="bar"></span>
-            <label>
-              Email
-            </label>
           </div>
 
           <div className="group">
             <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
+            <label for="picture-url">Picture URL</label>
             <span className="bar"></span>
-            <label>
-              Picture URL
-            </label>
           </div>
 
           <div className="group">
             <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
+            <label for="job-tags">Job tags (separated by a comma)</label>
             <span className="bar"></span>
-            <label>
-              Job tags (separated by a comma)
-            </label>
           </div>
 
 					<div className="group">
             <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <label for="price-min">Minimum price per hour</label>
             <span className="bar"></span>
-            <label>
-              Min price/hour
-            </label>
           </div>
 					<div className="group">
             <input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+            <label for="price-max"> Maximum price per hour</label>
             <span className="bar"></span>
-            <label>
-              Max price/hour
-            </label>
           </div>
 
 
