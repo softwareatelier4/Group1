@@ -733,8 +733,10 @@ class FreelancerEditForm extends React.Component {
     this.renderFeedback = this.renderFeedback.bind(this);
 	}
 
-  renderFeedback(feedbackString) {
-    document.getElementById('edit-feedback').innerHTML = feedbackString;
+  renderFeedback(feedbackString, success) {
+    let feedbackSpan = document.getElementById('edit-feedback');
+    feedbackSpan.className = (success)? 'edit-success' : 'edit-fail';
+    feedbackSpan.innerHTML = feedbackString;
   }
 
 
@@ -802,13 +804,13 @@ class FreelancerEditForm extends React.Component {
 		let form = this;
 		ajaxRequest("PUT", "/freelance/"+freelancerId+"/edit", {}, formData, function(data) {
       if(!data.error) {
-        form.renderFeedback("Information updated successfully");
+        form.renderFeedback("Information updated successfully", true);
 				ajaxRequest('GET', freelancerId + '?ajax=true', {}, {}, function(freelancer) {
 					updateForms(freelancer);
 			  });
       } else {
         console.log(data.error);
-        form.renderFeedback("An error occurred");
+        form.renderFeedback("An error occurred", false);
       }
 		});
 	}
@@ -816,77 +818,60 @@ class FreelancerEditForm extends React.Component {
   render() {
     return (
 			<div id="edit-info"  className='selected'>
-        <span id="edit-feedback"></span>
         <form onSubmit={this.handleSubmit} id="freelancer-edit-form">
 
 
           <div className="group">
-            <textarea form="freelancer-edit-form" rows="4" cols="50" ref="description" className="job-description" name="job-description" type="text" id="description">
-            </textarea>
+            <input form="freelancer-edit-form" ref="description" className="job-description" name="job-description" type="text" id="description" />
+            <label for="job-description">Job Description</label>
             <span className="bar"></span>
-            <label>
-              Job Description
-            </label>
           </div>
 
           <div className="group">
             <input ref="address" className="address" name="address" type="text" id="address"/>
+            <label for="address">Address</label>
             <span className="bar"></span>
-            <label>
-              Address
-            </label>
           </div>
 
           <div className="group">
             <input ref="phone" className="phone" name="phone" type="tel"  id="phone"/>
+            <label for="phone">Phone Number</label>
             <span className="bar"></span>
-            <label>
-              Phone
-            </label>
           </div>
 
           <div className="group">
             <input ref="email" className="email" name="email" type="email" id="email"/>
+            <label for="email">E-mail</label>
             <span className="bar"></span>
-            <label>
-              Email
-            </label>
           </div>
 
           <div className="group">
             <input ref="urlPicture" className="picture-url" name="picture-url" type="text" id="pic"/>
+            <label for="picture-url">Picture URL</label>
             <span className="bar"></span>
-            <label>
-              Picture URL
-            </label>
           </div>
 
           <div className="group">
             <input ref="tags" className="job-tags" name="job-tags" type="text" id="tags"/>
+            <label for="job-tags">Job tags (separated by a comma)</label>
             <span className="bar"></span>
-            <label>
-              Job tags (separated by a comma)
-            </label>
           </div>
 
 					<div className="group">
             <input ref="price-min" className="price-min" name="price-min" type="text" id="pricemin"/>
+            <label for="price-min">Minimum price per hour</label>
             <span className="bar"></span>
-            <label>
-              Min price/hour
-            </label>
           </div>
 					<div className="group">
             <input ref="price-max" className="price-max" name="price-max" type="text" id="pricemax"/>
+            <label for="price-max"> Maximum price per hour</label>
             <span className="bar"></span>
-            <label>
-              Max price/hour
-            </label>
           </div>
 
 
           <div id="react-claim-form-root"></div>
           <input name="submit-button" className="submit-button" type="submit" value="Submit"/>
+          <span id="edit-feedback"></span>
         </form>
 
 			</div>
