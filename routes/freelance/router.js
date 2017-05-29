@@ -276,6 +276,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 freelance.description = data.description || freelance.description;
                 freelance.address = data.address || freelance.address;
                 freelance.price = data.price || freelance.price;
+                freelance.urlPicture = data.urlPicture || freelance.urlPicture;
 
                 // Asynchronous call for sending the response
                 function sendResponse() {

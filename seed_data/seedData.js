@@ -24,6 +24,10 @@ var availabilitySize = availabilities.data.length;
 var duplicates = require('./duplicatesData');
 var duplicatesSize = duplicates.data.length;
 
+//checks for Demo
+var args = process.argv.slice(2);
+if(args[0] == "demo") claims.data = claims.data.slice(3);
+
 //set the category
 for (var i = freelancers.data.length - 1; i >= 0; i--) {
   var n = Math.floor(Math.random() * catSize);

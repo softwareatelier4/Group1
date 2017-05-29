@@ -33,7 +33,7 @@ describe('CATEGORY : ', function(done) {
 
     before(function(done) {
       // drop db
-      utils.dropDb(function(err) {
+      utils.connectAndDropDb(function(err) {
         if (err) return done(err);
         done();
       });
