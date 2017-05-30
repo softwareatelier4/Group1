@@ -34,6 +34,9 @@
       <!-- Freelancers -->
       <div id="react-freelancers-container"></div>
     </div>
+
+    <a id="contact-us" class="submit-button" href="mailto:jobadvisor.group1@gmail.com">Contact us!</a>
+
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
     <script src="../js/Day.js"></script>
