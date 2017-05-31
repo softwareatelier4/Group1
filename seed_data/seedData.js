@@ -35,6 +35,9 @@ for (var i = freelancers.data.length - 1; i >= 0; i--) {
   freelancers.data[i]['category'] = rndId;
   categories.data[n].freelancers.push(freelancers.data[i]['_id']);
 }
+
+freelancers.data[48].category = '58cc4b15fc13ae5ec7000128';
+
 // bind reviews
 for (var i = reviewsSize - 1; i >= 0; i--) {
   var id = reviews.data[i]['_id'];
