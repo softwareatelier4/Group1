@@ -445,6 +445,18 @@ ul.tag-list li {
   cursor: auto;
 }
 
+#freelancer-edit-button:hover,
+#freelancer-delete-button:hover {
+  background-color: var(--background);
+  border-bottom: solid 4px var(--login-button-border);
+}
+
+#freelancer-edit-button:active,
+#freelancer-delete-button:active {
+  border-bottom: 0;
+  border-top: solid 4px var(--accent-color);
+}
+
 #freelancer-claim-form-form,
 #freelancer-claim-form-form-optional {
   flex-basis: 50%;
@@ -494,4 +506,20 @@ ul.tag-list li {
 #freelancer-claim-form-files,
 #freelancer-claim-form-optional-files {
   margin: 10px 0;
+}
+
+#freelancer-claim-status div button {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  width: auto;
+  height: auto;
+  font-size: var(--input-font-size);
+  border: 0;
+  background-color: var(--basic-white);
+  color: var(--accent-color);
+  border-bottom: solid 4px var(--home-search-border);
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 10px;
 }

@@ -35,6 +35,8 @@
       <div>Already registered as {username}</div>
     {/logged}
 
+    <a id="contact-us" class="submit-button" href="mailto:jobadvisor.group1@gmail.com">Contact us!</a>
+
     <!-- Utils -->
     <script src="../js/ajax.js"></script>
 

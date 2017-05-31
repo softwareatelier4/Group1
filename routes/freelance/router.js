@@ -88,7 +88,7 @@ router.get('/edit', function(req, res) {
 router.get('/:freelanceid', function(req, res, next) {
   if (ObjectId.isValid(req.params.freelanceid)) {
     // distinguish between raw and ajax GET request (to render page or return JSON)
-    if(req.headers.ajax) {
+    if(req.query.ajax) {
       Freelance.findById(req.params.freelanceid)
       .populate({
         path: 'reviews',
@@ -276,6 +276,7 @@ router.put('/:freelanceid/edit', function(req, res, next) {
                 freelance.description = data.description || freelance.description;
                 freelance.address = data.address || freelance.address;
                 freelance.price = data.price || freelance.price;
+                freelance.urlPicture = data.urlPicture || freelance.urlPicture;
 
                 // Asynchronous call for sending the response
                 function sendResponse() {

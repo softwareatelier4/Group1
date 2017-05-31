@@ -56,7 +56,7 @@ input {
 
 input.focus,
 input:focus {
-  border-bottom: solid 2px var(--home-search-border-focus);
+  border-bottom: solid 2px var(--home-search-border-focus) !important;
   outline: none;
 }
 
@@ -135,16 +135,71 @@ button.edit-tab:active {
 }
 
 #edit-info input{
-	width: 500px;
-	height: 50px;
+  width: 100%;
+  height: 30px;
+  display: block;
+  margin-bottom: 2px;
+  border: none;
+  border-bottom: solid 2px var(--home-search-border);
+  transition: border 0.3s;
+  outline: none;
+  font-size: var(--input-font-size);
+  padding: 0;
 }
 
-input#pricemin{
-	width: 100px;
-	height: 50px;
+.group {
+  position: relative;
+  margin-bottom: 45px;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
-input#pricemax{
-	width: 100px;
-	height: 50px;
+#edit-info label {
+  color: var(--form-label-color);
+  font-size: var(--input-font-size);
+}
+
+#edit-info input:focus ~ label {
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+input.submit-button {
+    width: 20% !important;
+    float: right;
+    font-size: var(--input-font-size);
+    border: 0;
+    background-color: var(--accent-color);
+    color: white;
+    border-bottom: solid 2px var(--home-search-button-border) !important;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 6px 0;
+}
+
+#freelancer-modification-message {
+  font-weight: lighter;
+}
+
+#emergency-form-repetition-week input:focus ~ label {
+    top: -0px;
+    color: var(--form-label-color);
+    font-size: var(--input-font-size);
+}
+
+span#edit-feedback {
+  text-align: right;
+  float: right;
+  display: block;
+  margin: 25px 10px 0 0;
+}
+
+.edit-success {
+  color: green;
+}
+
+.edit-fail {
+  color: red;
 }
